@@ -1,11 +1,13 @@
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import { useAuth, supabase as _supabase } from '@digihire/shared';
+import { supabase as _supabase } from '@digihire/shared';
 import { motion } from 'motion/react';
 import { Building2, Mail, Lock, User, Phone, ArrowRight } from 'lucide-react';
 import { Button, Input } from '@digihire/shared';
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 const supabase = _supabase as any;
+const REDIRECT_URL = `${window.location.origin}/verify-email`;
 
 export default function Signup() {
   const [formData, setFormData] = useState({
@@ -13,7 +15,6 @@ export default function Signup() {
   });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
-  const { signUp } = useAuth();
   const navigate = useNavigate();
 
   const handleSignup = async (e: React.FormEvent) => {
@@ -22,20 +23,20 @@ export default function Signup() {
     setLoading(true);
     setError('');
     try {
-      const { data: signUpData, error: signUpErr } = await supabase.auth.signUp({
+      const { error: signUpErr } = await supabase.auth.signUp({
         email: formData.email,
         password: formData.password,
         options: {
+          emailRedirectTo: REDIRECT_URL,
           data: {
             account_type: 'brand',
             full_name: formData.contactName,
             company_name: formData.companyName,
-            phone: formData.phoneNumber
-          }
-        }
+            phone: formData.phoneNumber,
+          },
+        },
       });
       if (signUpErr) throw signUpErr;
-
       navigate('/verify-email');
     } catch (err: unknown) {
       setError(err instanceof Error ? err.message : 'Failed to create account');

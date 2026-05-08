@@ -1,18 +1,18 @@
 import { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import { useAuth, supabase as _supabase } from '@digihire/shared';
+import { supabase as _supabase } from '@digihire/shared';
 import { motion } from 'motion/react';
 import { Mail, Lock, User, Phone, ArrowRight } from 'lucide-react';
 import { Button, Input } from '@digihire/shared';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const supabase = _supabase as any;
+const REDIRECT_URL = `${window.location.origin}/verify-email`;
 
 export default function Signup() {
   const [formData, setFormData] = useState({ fullName: '', email: '', phoneNumber: '', password: '', confirmPassword: '' });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
-  const { signUp } = useAuth();
   const navigate = useNavigate();
 
   const handleSignup = async (e: React.FormEvent) => {
@@ -21,19 +21,19 @@ export default function Signup() {
     setLoading(true);
     setError('');
     try {
-      const { data: signUpData, error: signUpErr } = await signUp(formData.email, formData.password, formData.fullName, undefined, 'talent');
+      const { error: signUpErr } = await supabase.auth.signUp({
+        email: formData.email,
+        password: formData.password,
+        options: {
+          emailRedirectTo: REDIRECT_URL,
+          data: {
+            account_type: 'talent',
+            full_name: formData.fullName,
+            phone: formData.phoneNumber,
+          },
+        },
+      });
       if (signUpErr) throw signUpErr;
-      const newUser = signUpData?.user;
-      if (newUser) {
-        const { error: upsertErr } = await supabase.from('talent_profiles').upsert({
-          id: newUser.id,
-          full_name: formData.fullName,
-          phone: formData.phoneNumber,
-          status: 'incomplete',
-          profile_completion: 0,
-        });
-        if (upsertErr) throw upsertErr;
-      }
       navigate('/verify-email');
     } catch (err: unknown) {
       setError(err instanceof Error ? err.message : 'Failed to create account');
