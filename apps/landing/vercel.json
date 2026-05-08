@@ -1,5 +1,16 @@
 {
+  "installCommand": "npm install",
+  "buildCommand": "npm run build:landing",
+  "outputDirectory": "dist",
   "rewrites": [
-    { "source": "/admin/:path*", "destination": "${ADMIN_VERCEL_URL}/admin/:path*" }
+    { "source": "/about", "destination": "/about.html" },
+    { "source": "/blog", "destination": "/blog.html" },
+    { "source": "/contact", "destination": "/contact.html" },
+    { "source": "/events", "destination": "/events.html" },
+    { "source": "/dashboard/:path*", "destination": "/app.html" },
+    { "source": "/login", "destination": "/app.html" },
+    { "source": "/join-now", "destination": "/app.html" },
+    { "source": "/admin/:path*", "destination": "${ADMIN_VERCEL_URL}/admin/:path*" },
+    { "source": "/onboarding/:path*", "destination": "/app.html" }
   ]
 }
