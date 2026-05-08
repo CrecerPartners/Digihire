@@ -1,6 +1,6 @@
 {
-  "installCommand": "cd ../.. && npm install",
-  "buildCommand": "cd ../.. && npm run build:brands",
+  "installCommand": "npm install",
+  "buildCommand": "npm run build:brands",
   "outputDirectory": "apps/brands/dist",
   "rewrites": [
     { "source": "/((?!assets/).*)", "destination": "/index.html" }
