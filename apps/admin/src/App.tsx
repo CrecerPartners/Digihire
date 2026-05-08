@@ -50,7 +50,7 @@ export default function App() {
           <TooltipProvider>
             <Toaster />
             <Sonner />
-            <BrowserRouter basename="/admin">
+            <BrowserRouter>
               <Routes>
                 <Route path="/login" element={<AdminLogin />} />
                 <Route element={<AdminProtectedRoute><AdminLayout /></AdminProtectedRoute>}>
