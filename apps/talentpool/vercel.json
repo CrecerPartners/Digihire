@@ -1,7 +1,7 @@
 {
   "installCommand": "cd ../.. && npm install",
   "buildCommand": "cd ../.. && npm run build:talentpool",
-  "outputDirectory": "dist",
+  "outputDirectory": "apps/talentpool/dist",
   "rewrites": [
     { "source": "/((?!assets/).*)", "destination": "/index.html" }
   ]
