@@ -29,7 +29,7 @@ export default function Signup() {
         options: {
           emailRedirectTo: REDIRECT_URL,
           data: {
-            account_type: 'brand',
+            account_types: ['brand'],
             full_name: formData.contactName,
             company_name: formData.companyName,
             phone: formData.phoneNumber,

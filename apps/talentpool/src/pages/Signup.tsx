@@ -27,7 +27,7 @@ export default function Signup() {
         options: {
           emailRedirectTo: REDIRECT_URL,
           data: {
-            account_type: 'talent',
+            account_types: ['talent'],
             full_name: formData.fullName,
             phone: formData.phoneNumber,
           },
