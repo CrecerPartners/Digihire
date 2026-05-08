@@ -78,25 +78,22 @@ create trigger on_auth_user_created
   for each row execute procedure public.handle_new_user_signup();
 
 -- =============================================================================
--- Helper function: check if a user has a specific role (used by admin app)
--- This extends the existing has_role() RPC to also understand account_types
+-- Helper: check if a user holds a non-system role (brand / talent / voltsquad)
+-- NOTE: Admin/moderator/user roles are managed by the app_role enum in
+--       user_roles and checked via the existing public.has_role() RPC.
+--       This helper is only for the product-level roles stored in metadata.
 -- =============================================================================
-create or replace function public.user_has_role(_user_id uuid, _role text)
+create or replace function public.user_has_product_role(_user_id uuid, _role text)
 returns boolean
 language sql
 stable security definer set search_path = public
 as $$
-  select exists (
-    -- Check the user_roles table (admin assignments)
-    select 1 from public.user_roles
-    where user_id = _user_id and role = _role
-  )
-  or (
-    -- Check account_types array in user metadata
-    select
-      (raw_user_meta_data -> 'account_types') ? _role
-      or (raw_user_meta_data ->> 'account_type') = _role
-    from auth.users
-    where id = _user_id
-  );
+  select
+    coalesce(
+      (raw_user_meta_data -> 'account_types') ? _role,
+      (raw_user_meta_data ->> 'account_type') = _role,
+      false
+    )
+  from auth.users
+  where id = _user_id;
 $$;
