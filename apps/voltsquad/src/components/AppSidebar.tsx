@@ -51,7 +51,7 @@ export function AppSidebar() {
 
   const allNavItems = [...navItems];
   if (isAdmin) {
-    allNavItems.push({ title: "Admin Panel", url: "/admin", icon: ShieldCheck });
+    allNavItems.push({ title: "Admin Panel", url: "https://admin.digihire.io", icon: ShieldCheck });
   }
 
   return (
@@ -77,18 +77,25 @@ export function AppSidebar() {
                 <SidebarMenuItem key={item.title}>
                   <SidebarMenuButton
                     asChild
-                    isActive={location.pathname === item.url || (item.url !== "/dashboard" && location.pathname.startsWith(item.url))}
+                    isActive={!item.url.startsWith("http") && (location.pathname === item.url || (item.url !== "/dashboard" && location.pathname.startsWith(item.url)))}
                     tooltip={item.title}
                   >
-                    <NavLink
-                      to={item.url}
-                      end={item.url === "/dashboard"}
-                      className="hover:bg-sidebar-accent"
-                      activeClassName="bg-sidebar-accent text-primary font-medium"
-                    >
-                      <item.icon className="h-4 w-4" />
-                      {!collapsed && <span>{item.title}</span>}
-                    </NavLink>
+                    {item.url.startsWith("http") ? (
+                      <a href={item.url} className="hover:bg-sidebar-accent">
+                        <item.icon className="h-4 w-4" />
+                        {!collapsed && <span>{item.title}</span>}
+                      </a>
+                    ) : (
+                      <NavLink
+                        to={item.url}
+                        end={item.url === "/dashboard"}
+                        className="hover:bg-sidebar-accent"
+                        activeClassName="bg-sidebar-accent text-primary font-medium"
+                      >
+                        <item.icon className="h-4 w-4" />
+                        {!collapsed && <span>{item.title}</span>}
+                      </NavLink>
+                    )}
                   </SidebarMenuButton>
                 </SidebarMenuItem>
               ))}
