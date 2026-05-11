@@ -228,7 +228,7 @@ export default function LandingPage() {
           <span className="mb-4 inline-block rounded-full bg-primary/10 px-4 py-1 text-sm font-semibold text-primary">
             brands.digihire.io
           </span>
-          <h1 className="font-display text-4xl font-bold leading-tight md:text-5xl lg:text-6xl">
+          <h1 className="font-display text-4xl font-medium leading-tight md:text-5xl lg:text-6xl text-slate-800">
             Hire High-Performing
             <br className="hidden md:block" /> Sales Talent.
           </h1>
@@ -242,7 +242,7 @@ export default function LandingPage() {
             <Button
               onClick={scrollToForm}
               size="lg"
-              className="volt-gradient border-0 px-8 text-base font-semibold shadow-lg hover:opacity-90"
+              className="bg-sky-600 hover:bg-sky-700 text-white border-0 px-8 text-base shadow-lg transition-all"
             >
               Hire Sales Talent <ArrowRight className="ml-2 h-5 w-5" />
             </Button>
@@ -282,7 +282,7 @@ export default function LandingPage() {
       {/* ── Who You Can Hire ─────────────────────────── */}
       <section className="mx-auto max-w-6xl px-4 py-16 md:py-24">
         <div className="mb-12 text-center">
-          <h2 className="font-display text-3xl font-bold md:text-4xl">Who You Can Hire</h2>
+          <h2 className="font-display text-3xl md:text-4xl text-slate-800">Who You Can Hire</h2>
           <p className="mt-3 text-muted-foreground">Sales talent built for revenue, not just resumes.</p>
         </div>
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
@@ -304,7 +304,7 @@ export default function LandingPage() {
       <section className="border-y border-border bg-muted/30">
         <div className="mx-auto max-w-6xl px-4 py-16 md:py-24">
           <div className="mb-12 text-center">
-            <h2 className="font-display text-3xl font-bold md:text-4xl">Flexible Hiring Models</h2>
+            <h2 className="font-display text-3xl md:text-4xl text-slate-800">Flexible Hiring Models</h2>
             <p className="mt-3 text-muted-foreground">Flexible hiring models to match your growth stage.</p>
           </div>
           <div className="grid gap-6 md:grid-cols-2">
@@ -312,9 +312,9 @@ export default function LandingPage() {
               <Card key={model.number} className="border-border/60 bg-card/80 transition-all hover:shadow-lg hover:-translate-y-1">
                 <CardContent className="p-6">
                   <div className="mb-4 flex items-center gap-4">
-                    <span className="font-display text-4xl font-black text-primary/20">{model.number}</span>
+                    <span className="font-display text-4xl font-medium text-sky-600/30">{model.number}</span>
                     <div>
-                      <h3 className="font-display text-lg font-bold leading-snug">{model.title}</h3>
+                      <h3 className="font-display text-lg leading-snug text-slate-800">{model.title}</h3>
                     </div>
                   </div>
                   <p className="mb-4 text-sm text-muted-foreground">{model.subtitle}</p>
@@ -338,7 +338,7 @@ export default function LandingPage() {
         <div className="grid gap-10 md:grid-cols-2 md:gap-16 md:items-center">
           <div>
             <span className="mb-3 inline-block text-sm font-semibold text-primary">Why Crecer?</span>
-            <h2 className="font-display text-3xl font-bold leading-snug md:text-4xl">
+            <h2 className="font-display text-3xl leading-snug md:text-4xl text-slate-800">
               More than recruitment. We deliver sales execution.
             </h2>
             <ul className="mt-8 space-y-4">
@@ -353,7 +353,7 @@ export default function LandingPage() {
             </ul>
           </div>
           <div className="rounded-2xl border border-border/60 bg-muted/30 p-8">
-            <h3 className="font-display mb-5 text-xl font-bold">Who This Is For</h3>
+            <h3 className="font-display mb-5 text-xl text-slate-800">Who This Is For</h3>
             <ul className="space-y-3">
               {whoForItems.map((item) => (
                 <li key={item} className="flex items-center gap-3 text-sm">
@@ -367,9 +367,9 @@ export default function LandingPage() {
       </section>
 
       {/* ── Final CTA Banner ─────────────────────────── */}
-      <section className="volt-gradient">
+      <section className="bg-sky-600">
         <div className="mx-auto max-w-3xl px-4 py-16 text-center">
-          <h2 className="font-display text-3xl font-bold text-primary-foreground md:text-4xl">
+          <h2 className="font-display text-3xl text-primary-foreground md:text-4xl">
             Ready to scale your sales team?
           </h2>
           <p className="mt-4 text-base text-primary-foreground/80">
@@ -401,7 +401,7 @@ export default function LandingPage() {
           <span className="mb-3 inline-block rounded-full bg-primary/10 px-4 py-1 text-sm font-semibold text-primary">
             Get Started
           </span>
-          <h2 className="font-display text-3xl font-bold">Hire Sales Talent</h2>
+          <h2 className="font-display text-3xl text-slate-800">Hire Sales Talent</h2>
           <p className="mt-3 text-muted-foreground">Tell us about your needs and we'll be in touch within 24–48 hours.</p>
         </div>
 
@@ -410,12 +410,12 @@ export default function LandingPage() {
             <div className="mx-auto mb-6 flex h-16 w-16 items-center justify-center rounded-full bg-primary/10">
               <CheckCircle2 className="h-8 w-8 text-primary" />
             </div>
-            <h3 className="font-display text-2xl font-bold">Request Submitted!</h3>
+            <h3 className="font-display text-2xl text-slate-800">Request Submitted!</h3>
             <p className="mt-3 text-muted-foreground">
               Our team will review your request and get back to you within 24–48 hours.
             </p>
             <Button
-              className="volt-gradient mt-8 border-0 font-semibold"
+              className="bg-sky-600 hover:bg-sky-700 text-white mt-8 border-0"
               onClick={() => { setForm(initialForm); setSubmitted(false); }}
             >
               Submit Another Request
@@ -607,8 +607,7 @@ export default function LandingPage() {
               <Button
                 type="submit"
                 disabled={submitting}
-                size="lg"
-                className="volt-gradient w-full border-0 text-base font-semibold shadow-lg hover:opacity-90 disabled:opacity-60"
+                className="bg-sky-600 hover:bg-sky-700 text-white w-full border-0 text-base shadow-lg transition-all disabled:opacity-60"
               >
                 {submitting ? "Submitting..." : "Submit & Talk to Sales"}
                 {!submitting && <ArrowRight className="ml-2 h-5 w-5" />}
@@ -625,7 +624,7 @@ export default function LandingPage() {
       <footer className="border-t border-border bg-background">
         <div className="mx-auto flex max-w-6xl flex-col items-center gap-4 px-4 py-8 md:flex-row md:justify-between">
           <Link to="/" className="flex items-center gap-2 font-display font-bold">
-            <div className="flex h-7 w-7 items-center justify-center rounded-lg volt-gradient">
+            <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-sky-600">
               <Building2 className="h-3.5 w-3.5 text-primary-foreground" />
             </div>
             DigiHire

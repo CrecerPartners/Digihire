@@ -15,8 +15,7 @@ export default function Navbar() {
       <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
         <div className="flex items-center gap-10">
           <Link to="/" className="flex items-center gap-2">
-            <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-sky-500 text-white font-bold text-xl">D</div>
-            <span className="text-xl font-bold tracking-tight text-slate-800">digihire.io</span>
+            <img src="/assets/logo-color.png" alt="DigiHire Logo" className="h-8 w-auto object-contain" />
           </Link>
           {user && (
             <div className="hidden md:flex items-center gap-6">
