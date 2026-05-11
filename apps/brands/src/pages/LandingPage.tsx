@@ -219,43 +219,49 @@ export default function LandingPage() {
       <Navbar />
 
       {/* ── Hero ─────────────────────────────────────── */}
-      <section className="relative overflow-hidden">
+      <section className="relative overflow-hidden bg-[#06111F] text-white">
         <div className="pointer-events-none absolute inset-0">
-          <div className="absolute -top-40 -left-40 h-[500px] w-[500px] rounded-full bg-primary/5 blur-3xl" />
-          <div className="absolute top-20 right-0 h-[300px] w-[300px] rounded-full bg-primary/4 blur-3xl" />
+          <div className="absolute -top-40 -left-40 h-[500px] w-[500px] rounded-full bg-[#00C2FF]/10 blur-3xl" />
+          <div className="absolute top-20 right-0 h-[300px] w-[300px] rounded-full bg-[#00C2FF]/10 blur-3xl" />
         </div>
-        <div className="relative mx-auto max-w-4xl px-4 py-16 text-center md:py-28">
-          <span className="mb-4 inline-block rounded-full bg-primary/10 px-4 py-1 text-sm font-semibold text-primary">
-            brands.digihire.io
-          </span>
-          <h1 className="font-display text-4xl font-medium leading-tight md:text-5xl lg:text-6xl text-slate-800">
-            Hire High-Performing
-            <br className="hidden md:block" /> Sales Talent.
-          </h1>
-          <p className="mx-auto mt-5 max-w-2xl text-lg text-muted-foreground">
-            Close more deals faster with pre-vetted, ready-to-perform sales talent you can hire instantly.
-          </p>
-          <p className="mx-auto mt-3 max-w-2xl text-base text-muted-foreground/80">
-            Hire, deploy, and manage high-performing sales talent without the hiring headache. We help businesses recruit, outsource, and build sales teams across B2B, tech, and commercial sales roles.
-          </p>
-          <div className="mt-10 flex flex-wrap items-center justify-center gap-4">
-            <Button
-              onClick={scrollToForm}
-              size="lg"
-              className="bg-sky-600 hover:bg-sky-700 text-white border-0 px-8 text-base shadow-lg transition-all"
-            >
-              Hire Sales Talent <ArrowRight className="ml-2 h-5 w-5" />
-            </Button>
-            <Button
-              variant="outline"
-              size="lg"
-              className="px-8 text-base font-semibold"
-              asChild
-            >
-              <a href="mailto:hire@digihire.io">
-                <Phone className="mr-2 h-4 w-4" /> Talk to Our Team
-              </a>
-            </Button>
+        <div className="relative mx-auto max-w-6xl px-4 py-16 md:py-28 flex flex-col md:flex-row items-center gap-12">
+          <div className="flex-1 text-center md:text-left">
+            <span className="mb-4 inline-block rounded-full bg-[#00C2FF]/20 px-4 py-1 text-sm font-semibold text-[#00C2FF]">
+              brands.digihire.io
+            </span>
+            <h1 className="font-display text-4xl font-bold leading-tight md:text-5xl lg:text-6xl text-white">
+              Hire High-Performing
+              <br className="hidden md:block" /> Sales Talent.
+            </h1>
+            <p className="mt-5 max-w-xl text-lg text-slate-300 md:mx-0 mx-auto">
+              Close more deals faster with pre-vetted, ready-to-perform sales talent you can hire instantly.
+            </p>
+            <p className="mt-3 max-w-xl text-base text-slate-400 md:mx-0 mx-auto">
+              Hire, deploy, and manage high-performing sales talent without the hiring headache. We help businesses recruit, outsource, and build sales teams across B2B, tech, and commercial sales roles.
+            </p>
+            <div className="mt-10 flex flex-wrap items-center justify-center md:justify-start gap-4">
+              <Button
+                onClick={scrollToForm}
+                size="lg"
+                className="bg-[#00C2FF] text-slate-900 border-0 px-8 text-base font-bold shadow-[0_4px_24px_rgba(0,194,255,0.4)] hover:bg-[#33CFFF] hover:shadow-[0_6px_28px_rgba(0,194,255,0.5)] transition-all"
+              >
+                Hire Sales Talent <ArrowRight className="ml-2 h-5 w-5" />
+              </Button>
+              <Button
+                variant="outline"
+                size="lg"
+                className="px-8 text-base font-semibold border-white/20 text-white hover:bg-white/10"
+                asChild
+              >
+                <a href="mailto:hire@digihire.io">
+                  <Phone className="mr-2 h-4 w-4" /> Talk to Our Team
+                </a>
+              </Button>
+            </div>
+          </div>
+          <div className="flex-1 w-full relative">
+            <img src="/2.png" alt="Sales Talent" className="w-full h-auto rounded-2xl shadow-2xl relative z-10" />
+            <div className="absolute -bottom-6 -right-6 h-full w-full rounded-2xl border-2 border-[#00C2FF]/30 z-0" />
           </div>
         </div>
       </section>
@@ -352,16 +358,20 @@ export default function LandingPage() {
               ))}
             </ul>
           </div>
-          <div className="rounded-2xl border border-border/60 bg-muted/30 p-8">
-            <h3 className="font-display mb-5 text-xl text-slate-800">Who This Is For</h3>
-            <ul className="space-y-3">
-              {whoForItems.map((item) => (
-                <li key={item} className="flex items-center gap-3 text-sm">
-                  <CheckCircle2 className="h-4 w-4 shrink-0 text-primary" />
-                  <span>{item}</span>
-                </li>
-              ))}
-            </ul>
+            <div className="rounded-2xl border border-border/60 bg-muted/30 p-8">
+              <h3 className="font-display mb-5 text-xl text-slate-800">Who This Is For</h3>
+              <ul className="space-y-3">
+                {whoForItems.map((item) => (
+                  <li key={item} className="flex items-center gap-3 text-sm">
+                    <CheckCircle2 className="h-4 w-4 shrink-0 text-primary" />
+                    <span>{item}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+            <div className="mt-8">
+              <img src="/3.png" alt="Sales Performance" className="w-full h-64 object-cover rounded-2xl shadow-md border border-border/50" />
+            </div>
           </div>
         </div>
       </section>
@@ -379,7 +389,7 @@ export default function LandingPage() {
             <Button
               onClick={scrollToForm}
               size="lg"
-              className="bg-background text-foreground px-8 font-semibold hover:bg-background/90"
+              className="bg-[#00C2FF] text-slate-900 border-0 px-8 text-base font-bold shadow-[0_4px_24px_rgba(0,194,255,0.4)] hover:bg-[#33CFFF] hover:shadow-[0_6px_28px_rgba(0,194,255,0.5)] transition-all"
             >
               Hire Sales Talent <ArrowRight className="ml-2 h-4 w-4" />
             </Button>
@@ -607,7 +617,7 @@ export default function LandingPage() {
               <Button
                 type="submit"
                 disabled={submitting}
-                className="bg-sky-600 hover:bg-sky-700 text-white w-full border-0 text-base shadow-lg transition-all disabled:opacity-60"
+                className="bg-[#00C2FF] text-slate-900 w-full border-0 text-base font-bold shadow-[0_4px_24px_rgba(0,194,255,0.4)] hover:bg-[#33CFFF] hover:shadow-[0_6px_28px_rgba(0,194,255,0.5)] transition-all disabled:opacity-60"
               >
                 {submitting ? "Submitting..." : "Submit & Talk to Sales"}
                 {!submitting && <ArrowRight className="ml-2 h-5 w-5" />}
@@ -623,11 +633,8 @@ export default function LandingPage() {
       {/* ── Footer ───────────────────────────────────── */}
       <footer className="border-t border-border bg-background">
         <div className="mx-auto flex max-w-6xl flex-col items-center gap-4 px-4 py-8 md:flex-row md:justify-between">
-          <Link to="/" className="flex items-center gap-2 font-display font-bold">
-            <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-sky-600">
-              <Building2 className="h-3.5 w-3.5 text-primary-foreground" />
-            </div>
-            DigiHire
+          <Link to="/" className="flex items-center">
+            <img src="/assets/logo-color.png" alt="DigiHire Logo" className="h-6 w-auto object-contain" />
           </Link>
           <p className="text-xs text-muted-foreground">© {new Date().getFullYear()} Crecer Partners · DigiHire</p>
         </div>
