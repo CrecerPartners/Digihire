@@ -374,6 +374,7 @@ export default function LandingPage() {
               ))}
             </ul>
           </div>
+          <div>
             <div className="rounded-2xl border border-border/60 bg-muted/30 p-8">
               <h3 className="font-display mb-5 text-xl text-slate-800">Who This Is For</h3>
               <ul className="space-y-3">
