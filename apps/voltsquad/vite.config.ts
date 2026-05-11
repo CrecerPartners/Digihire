@@ -15,4 +15,12 @@ export default defineConfig({
       "@digihire/shared": path.resolve(__dirname, "../../packages/shared/src"),
     },
   },
+  build: {
+    rollupOptions: {
+      input: {
+        main: path.resolve(__dirname, 'index.html'),
+        app: path.resolve(__dirname, 'app.html')
+      }
+    }
+  }
 });

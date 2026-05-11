@@ -3,6 +3,7 @@
   "buildCommand": "npm run build:voltsquad",
   "outputDirectory": "apps/voltsquad/dist",
   "rewrites": [
-    { "source": "/((?!assets/).*)", "destination": "/index.html" }
+    { "source": "/", "destination": "/index.html" },
+    { "source": "/((?!assets/).*)", "destination": "/app.html" }
   ]
 }
