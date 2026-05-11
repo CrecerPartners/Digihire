@@ -25,7 +25,6 @@ import { NativeSplash } from "@/components/native/NativeSplash";
 import LandingPage from "@/pages/former/LandingPage";
 import AboutStudents from "@/pages/AboutStudents";
 import AboutBrands from "@/pages/AboutBrands";
-import Hire from "@/pages/Hire";
 import Login from "@/pages/Login";
 import ForgotPassword from "@/pages/ForgotPassword";
 import ResetPassword from "@/pages/ResetPassword";
@@ -165,7 +164,6 @@ const App = () => {
           <Route path="/about/sellers" element={<NativeBlockRoute><AboutStudents /></NativeBlockRoute>} />
           <Route path="/about/students" element={<Navigate to="/about/sellers" replace />} />
           <Route path="/about/brands" element={<NativeBlockRoute><AboutBrands /></NativeBlockRoute>} />
-          <Route path="/hire" element={<NativeBlockRoute><Hire /></NativeBlockRoute>} />
           <Route path="/login" element={<Login />} />
           <Route path="/join-now" element={<Login />} />
           <Route path="/forgot-password" element={<ForgotPassword />} />

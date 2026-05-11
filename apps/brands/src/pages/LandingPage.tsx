@@ -1,6 +1,6 @@
 import { useState, useRef } from "react";
 import { Link } from "react-router-dom";
-import { LandingNavbar } from "@/components/LandingNavbar";
+import Navbar from "@/components/Navbar";
 import { Button } from "@digihire/shared";
 import { Card, CardContent } from "@digihire/shared";
 import {
@@ -179,7 +179,7 @@ function MultiCheckbox({
   );
 }
 
-export default function Hire() {
+export default function LandingPage() {
   const formRef = useRef<HTMLDivElement>(null);
   const [form, setForm] = useState<FormData>(initialForm);
   const [submitting, setSubmitting] = useState(false);
@@ -216,7 +216,7 @@ export default function Hire() {
 
   return (
     <div className="min-h-screen bg-background">
-      <LandingNavbar />
+      <Navbar />
 
       {/* ── Hero ─────────────────────────────────────── */}
       <section className="relative overflow-hidden">
@@ -226,7 +226,7 @@ export default function Hire() {
         </div>
         <div className="relative mx-auto max-w-4xl px-4 py-16 text-center md:py-28">
           <span className="mb-4 inline-block rounded-full bg-primary/10 px-4 py-1 text-sm font-semibold text-primary">
-            Digihire.io/hire
+            brands.digihire.io
           </span>
           <h1 className="font-display text-4xl font-bold leading-tight md:text-5xl lg:text-6xl">
             Hire High-Performing

@@ -8,6 +8,7 @@ import Login from './pages/Login';
 import Signup from './pages/Signup';
 import VerifyEmail from './pages/VerifyEmail';
 import BrandDashboard from './pages/brand/BrandDashboard';
+import LandingPage from './pages/LandingPage';
 
 const queryClient = new QueryClient({
   defaultOptions: { queries: { gcTime: 1000 * 60 * 60 * 24, staleTime: 1000 * 60 * 5 } },
@@ -23,6 +24,7 @@ export default function App() {
             <Toaster />
             <BrowserRouter>
               <Routes>
+                <Route path="/" element={<LandingPage />} />
                 <Route path="/login" element={<Login />} />
                 <Route path="/signup" element={<Signup />} />
                 <Route path="/verify-email" element={<VerifyEmail />} />
