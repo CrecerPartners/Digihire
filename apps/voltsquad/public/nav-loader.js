@@ -60,6 +60,7 @@
         }
         
         var isVoltsquad = window.location.hostname.includes('voltsquad');
+        var isBrands = window.location.hostname.includes('brands');
         var isLoggedIn = false;
         try {
           for (var i = 0; i < localStorage.length; i++) {
@@ -75,10 +76,13 @@
         if (btnLaunch) {
           if (isLoggedIn) {
             btnLaunch.innerHTML = 'Dashboard';
-            btnLaunch.href = '/dashboard';
+            btnLaunch.href = isBrands ? '/brand' : '/dashboard';
           } else if (isVoltsquad) {
             btnLaunch.innerHTML = 'Login as VoltSquad';
             btnLaunch.href = '/login';
+          } else if (isBrands) {
+            btnLaunch.innerHTML = 'Hire Sales Talent';
+            btnLaunch.href = '#hire-form';
           }
         }
         
@@ -86,10 +90,13 @@
         if (mobileLaunch) {
           if (isLoggedIn) {
             mobileLaunch.innerHTML = 'Dashboard';
-            mobileLaunch.href = '/dashboard';
+            mobileLaunch.href = isBrands ? '/brand' : '/dashboard';
           } else if (isVoltsquad) {
             mobileLaunch.innerHTML = 'Login as VoltSquad';
             mobileLaunch.href = '/login';
+          } else if (isBrands) {
+            mobileLaunch.innerHTML = 'Hire Sales Talent';
+            mobileLaunch.href = '#hire-form';
           }
         }
         var nav = document.getElementById('navbar');
