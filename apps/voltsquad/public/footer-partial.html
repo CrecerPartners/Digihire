@@ -1,0 +1,146 @@
+<style>
+  #site-footer {
+    background: #06111F;
+    border-top: 1px solid rgba(0,194,255,0.1);
+    padding: 56px 0 28px;
+    font-family: 'CenturyGothic', sans-serif;
+  }
+  #site-footer .footer-container {
+    max-width: 1140px; margin: 0 auto; padding: 0 28px;
+  }
+  #site-footer .footer-grid {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr 1fr 1fr;
+    gap: 40px; margin-bottom: 48px;
+  }
+  #site-footer .footer-logo-wrap { margin-bottom: 16px; }
+  #site-footer .footer-logo-wrap a { display: inline-flex; }
+  #site-footer .footer-logo-wrap img { height: 32px; width: auto; display: block; }
+  #site-footer .footer-tagline {
+    font-size: 13px; color: #7A9CC5; line-height: 1.65;
+    max-width: 220px; margin-bottom: 20px;
+  }
+  #site-footer .footer-socials { display: flex; gap: 8px; }
+  #site-footer .footer-social {
+    width: 34px; height: 34px; border-radius: 8px;
+    background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1);
+    color: #7A9CC5; display: flex; align-items: center; justify-content: center;
+    font-size: 13px; text-decoration: none; transition: all 0.2s;
+  }
+  #site-footer .footer-social:hover {
+    border-color: rgba(0,194,255,0.4); color: #00C2FF;
+  }
+  #site-footer .footer-col-title {
+    font-size: 11px; font-weight: 800; letter-spacing: 0.08em;
+    text-transform: uppercase; color: rgba(255,255,255,0.3); margin-bottom: 16px;
+  }
+  #site-footer .footer-col-links {
+    list-style: none; display: flex; flex-direction: column; gap: 10px;
+    padding: 0; margin: 0;
+  }
+  #site-footer .footer-col-links a {
+    font-size: 14px; color: #7A9CC5; text-decoration: none; transition: color 0.2s;
+  }
+  #site-footer .footer-col-links a:hover { color: #ffffff; }
+  #site-footer .footer-bottom {
+    padding-top: 24px; border-top: 1px solid rgba(255,255,255,0.06);
+    display: flex; flex-wrap: wrap; align-items: center;
+    justify-content: space-between; gap: 16px;
+  }
+  #site-footer .footer-copy { font-size: 12px; color: rgba(255,255,255,0.3); }
+  #site-footer .footer-locations { display: flex; flex-wrap: wrap; gap: 20px; }
+  #site-footer .footer-location-item {
+    display: flex; align-items: center; gap: 6px;
+    font-size: 12px; color: rgba(255,255,255,0.3);
+  }
+  #site-footer .footer-location-item svg {
+    width: 13px; height: 13px; flex-shrink: 0;
+    stroke: currentColor; fill: none;
+  }
+
+  @media (max-width: 960px) {
+    #site-footer .footer-grid { grid-template-columns: 1fr 1fr 1fr; }
+    #site-footer .footer-grid > :first-child { grid-column: 1 / -1; }
+  }
+  @media (max-width: 600px) {
+    #site-footer { padding: 44px 0 24px; }
+    #site-footer .footer-grid { grid-template-columns: 1fr 1fr; gap: 28px; }
+  }
+</style>
+
+<footer id="site-footer">
+  <div class="footer-container">
+    <div class="footer-grid">
+      <div>
+        <div class="footer-logo-wrap">
+          <a href="/">
+            <img src="/assets/logo-white.png" alt="DigiHire" />
+          </a>
+        </div>
+        <p class="footer-tagline">Africa's premier sales ecosystem connecting brands, talent, and opportunity.</p>
+        <div class="footer-socials">
+          <a href="#" class="footer-social" aria-label="X / Twitter">𝕏</a>
+          <a href="#" class="footer-social" aria-label="LinkedIn">in</a>
+          <a href="#" class="footer-social" aria-label="Facebook">f</a>
+          <a href="#" class="footer-social" aria-label="Instagram">ig</a>
+        </div>
+      </div>
+
+      <div>
+        <p class="footer-col-title">Company</p>
+        <ul class="footer-col-links">
+          <li><a href="/about">About Us</a></li>
+          <li><a href="/contact">Contact</a></li>
+          <li><a href="/events">Events</a></li>
+          <li><a href="/blog">Blog</a></li>
+        </ul>
+      </div>
+
+      <div>
+        <p class="footer-col-title">Solutions</p>
+        <ul class="footer-col-links">
+          <li><a href="/voltsquad">VoltSquad</a></li>
+          <li><a href="#">Sales Recruitment</a></li>
+          <li><a href="/digihire/sales-activations">Activations &amp; Field Marketing</a></li>
+          <li><a href="#">Sales Academy</a></li>
+        </ul>
+      </div>
+
+      <div>
+        <p class="footer-col-title">Talent</p>
+        <ul class="footer-col-links">
+          <li><a href="#">Join the Talent Pool</a></li>
+          <li><a href="#">Sales Academy</a></li>
+          <li><a href="/voltsquad">VoltSquad</a></li>
+        </ul>
+      </div>
+
+      <div>
+        <p class="footer-col-title">Brands</p>
+        <ul class="footer-col-links">
+          <li><a href="/voltsquad">VoltSquad</a></li>
+          <li><a href="#">Sales Recruitment</a></li>
+          <li><a href="/digihire/sales-activations">Activations &amp; Field Marketing</a></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      <p class="footer-copy">© 2025 DigiHire Africa Ltd. All rights reserved.</p>
+      <div class="footer-locations">
+        <div class="footer-location-item">
+          <svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+          <span>Lagos, Nigeria</span>
+        </div>
+        <div class="footer-location-item">
+          <svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+          <span>Accra, Ghana</span>
+        </div>
+        <div class="footer-location-item">
+          <svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+          <span>Nairobi, Kenya</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</footer>

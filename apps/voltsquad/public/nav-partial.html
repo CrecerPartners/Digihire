@@ -1,0 +1,736 @@
+<style>
+  :root {
+    --cyan-ghost: rgba(0,194,255,0.07);
+    --cyan-glow:  rgba(0,194,255,0.20);
+  }
+
+  #navbar {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 200;
+    background: transparent;
+    border-bottom: 1px solid transparent;
+    transition:
+      top 0.45s cubic-bezier(0.34,1.56,0.64,1),
+      left 0.45s cubic-bezier(0.34,1.56,0.64,1),
+      right 0.45s cubic-bezier(0.34,1.56,0.64,1),
+      background 0.3s ease,
+      border-radius 0.45s ease,
+      box-shadow 0.3s ease,
+      border-color 0.3s ease;
+  }
+  #navbar.scrolled {
+    top: 14px; left: 20%; right: 20%;
+    background: rgba(255,255,255,0.78);
+    backdrop-filter: blur(22px);
+    -webkit-backdrop-filter: blur(22px);
+    border-radius: 999px;
+    border-bottom: 1px solid rgba(255,255,255,0.55);
+    box-shadow: 0 8px 32px rgba(0,0,0,0.12), 0 2px 8px rgba(0,0,0,0.06),
+                inset 0 1px 0 rgba(255,255,255,0.9);
+  }
+  #navbar .nav-inner {
+    display: flex; align-items: center; justify-content: space-between;
+    height: 72px; max-width: 1340px; width: 100%; margin: 0 auto; padding: 0 28px;
+    transition: height 0.3s ease, padding 0.3s ease;
+  }
+  #navbar.scrolled .nav-inner { height: 54px; padding: 0 24px; }
+
+  #navbar .nav-left { display: flex; align-items: center; gap: 0; }
+  #navbar .nav-logo {
+    display: flex; align-items: center; gap: 0;
+    text-decoration: none; flex-shrink: 0; margin-right: 32px;
+  }
+  #navbar .nav-logo-img { height: 36px; width: auto; display: block; transition: opacity 0.3s; }
+  #navbar .nav-logo-img.logo-white { opacity: 1; }
+  #navbar .nav-logo-img.logo-color { opacity: 0; position: absolute; }
+  #navbar.scrolled .nav-logo-img.logo-white { opacity: 0; }
+  #navbar.scrolled .nav-logo-img.logo-color { opacity: 1; }
+  #navbar .nav-logo-wrap-img { position: relative; display: flex; align-items: center; }
+
+  #navbar .nav-links { display: flex; align-items: center; gap: 2px; list-style: none; padding: 0; margin: 0; }
+  #navbar .nav-links a {
+    font-size: 14px; color: rgba(255,255,255,0.82); text-decoration: none;
+    font-weight: 500; padding: 6px 14px; border-radius: 6px;
+    transition: color 0.2s, background 0.2s;
+  }
+  #navbar .nav-links a:hover { color: #ffffff; background: rgba(255,255,255,0.10); }
+  #navbar.scrolled .nav-links a { color: #374151; }
+  #navbar.scrolled .nav-links a:hover { color: var(--navy); background: rgba(0,0,0,0.05); }
+  #navbar.scrolled .btn-get-started { color: #1E293B; border-color: #CBD5E1; }
+  #navbar.scrolled .btn-get-started:hover { background: rgba(0,0,0,0.04); border-color: #94A3B8; }
+
+  #navbar .nav-actions { display: flex; align-items: center; gap: 10px; }
+
+  #navbar .btn-get-started {
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 9px 18px; border-radius: 8px; cursor: pointer;
+    font-family: 'CenturyGothic', sans-serif; font-size: 14px; font-weight: 700;
+    border: 1.5px solid rgba(255,255,255,0.45); background: transparent;
+    color: #ffffff; text-decoration: none; transition: all 0.2s;
+    white-space: nowrap;
+  }
+  #navbar .btn-get-started:hover { border-color: rgba(255,255,255,0.8); background: rgba(255,255,255,0.08); }
+  #navbar .btn-get-started svg { width: 14px; height: 14px; transition: transform 0.2s; }
+  #navbar .btn-get-started:hover svg { transform: rotate(180deg); }
+
+  #navbar .nav-dropdown-wrap { position: relative; }
+  #navbar .nav-dropdown {
+    position: absolute; top: calc(100% + 10px); right: 0;
+    background: #ffffff; border: 1px solid #E2ECF5;
+    border-radius: 16px; padding: 20px 20px 16px; min-width: 210px; z-index: 300;
+    box-shadow: 0 16px 48px rgba(0,0,0,0.12);
+    opacity: 0; visibility: hidden; transform: translateY(-6px);
+    transition: opacity 0.2s ease, transform 0.2s ease, visibility 0.2s;
+  }
+  #navbar .nav-dropdown-wrap:hover .nav-dropdown,
+  #navbar .nav-dropdown-wrap:focus-within .nav-dropdown {
+    opacity: 1; visibility: visible; transform: translateY(0);
+  }
+  #navbar .dd-section-label {
+    font-size: 10px; font-weight: 800; letter-spacing: 0.1em;
+    text-transform: uppercase; color: #9AAFC7; margin-bottom: 6px;
+  }
+  #navbar .nav-dropdown a {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 9px 0; text-decoration: none;
+    font-size: 14px; color: #374151; font-weight: 500;
+    transition: color 0.15s;
+  }
+  #navbar .nav-dropdown a:hover { color: var(--cyan); }
+  #navbar .nav-dropdown a .dd-arrow { font-size: 13px; color: #C0CCDA; transition: color 0.15s; }
+  #navbar .nav-dropdown a:hover .dd-arrow { color: var(--cyan); }
+  #navbar .nav-dropdown-divider { height: 1px; background: #EEF2F8; margin: 14px 0; }
+
+  #navbar .btn-launch {
+    display: inline-flex; align-items: center; gap: 7px;
+    padding: 10px 20px; border-radius: 8px; cursor: pointer;
+    font-family: 'CenturyGothic', sans-serif; font-size: 14px; font-weight: 800;
+    border: none; background: var(--cyan); color: var(--navy);
+    text-decoration: none; transition: all 0.22s ease;
+    white-space: nowrap; letter-spacing: 0.01em;
+    box-shadow: 0 3px 16px rgba(0,194,255,0.35);
+  }
+  #navbar .btn-launch:hover {
+    background: #33CFFF;
+    box-shadow: 0 5px 24px rgba(0,194,255,0.5);
+    transform: translateY(-1px);
+  }
+
+  #navbar .nav-mega-wrap { position: static; }
+  #navbar .nav-mega-trigger {
+    display: inline-flex; align-items: center; gap: 5px;
+    font-size: 14px; color: rgba(255,255,255,0.82); text-decoration: none;
+    font-weight: 500; padding: 6px 14px; border-radius: 6px;
+    transition: color 0.2s, background 0.2s; cursor: pointer;
+    border: none; background: transparent; font-family: 'CenturyGothic', sans-serif;
+  }
+  #navbar .nav-mega-trigger:hover,
+  #navbar .nav-mega-wrap:hover .nav-mega-trigger,
+  #navbar .nav-mega-wrap:focus-within .nav-mega-trigger {
+    color: var(--cyan) !important; background: var(--cyan-ghost) !important;
+  }
+  #navbar .nav-mega-trigger svg { width: 13px; height: 13px; transition: transform 0.25s; }
+  #navbar .nav-mega-wrap:hover .nav-mega-trigger svg,
+  #navbar .nav-mega-wrap:focus-within .nav-mega-trigger svg { transform: rotate(180deg); }
+  #navbar.scrolled .nav-mega-trigger { color: #374151; }
+
+  #navbar .nav-mega {
+    position: fixed; left: 32px; top: 76px;
+    width: min(1000px, 72vw);
+    background: #ffffff; border-radius: 20px;
+    border: 1px solid #E8EEF5;
+    box-shadow: 0 24px 64px rgba(0,0,0,0.13), 0 4px 16px rgba(0,0,0,0.06);
+    z-index: 190;
+    opacity: 0; visibility: hidden; transform: translateY(-10px);
+    transition: opacity 0.25s ease, transform 0.25s ease, visibility 0.25s;
+    overflow: hidden;
+    display: grid; grid-template-columns: 320px 1fr;
+  }
+  #navbar .nav-mega-wrap:hover .nav-mega,
+  #navbar .nav-mega-wrap:focus-within .nav-mega {
+    opacity: 1; visibility: visible; transform: translateY(0);
+  }
+  #navbar.scrolled .nav-mega { top: 82px; }
+
+  #navbar .mega-left {
+    background: var(--navy);
+    padding: 32px 32px 28px;
+    display: flex; flex-direction: column; gap: 0;
+  }
+  #navbar .mega-headline {
+    font-family: 'CenturyGothic', sans-serif; font-size: 18px; font-weight: 800;
+    color: #ffffff; line-height: 1.3; letter-spacing: -0.02em; margin-bottom: 12px;
+  }
+  #navbar .mega-headline em { color: var(--cyan); font-style: normal; }
+  #navbar .mega-body {
+    font-size: 13px; color: rgba(255,255,255,0.58);
+    line-height: 1.65; margin-bottom: 18px; flex: 1;
+  }
+  #navbar .mega-learn {
+    display: inline-flex; align-items: center; gap: 5px;
+    font-size: 13px; font-weight: 700; color: var(--cyan);
+    text-decoration: none; font-family: 'CenturyGothic', sans-serif; transition: gap 0.2s;
+    margin-bottom: 24px;
+  }
+  #navbar .mega-learn:hover { gap: 9px; }
+
+  #navbar .mega-visual-svg {
+    border-radius: 14px; overflow: hidden;
+    background: linear-gradient(135deg, var(--navy-2) 0%, var(--navy-4) 100%);
+    border: 1px solid rgba(0,194,255,0.12);
+    flex: 1; min-height: 180px;
+    position: relative; display: flex; align-items: center; justify-content: center;
+  }
+  @keyframes ringPulse {
+    0%   { transform: translate(-50%,-50%) scale(1); opacity: 0.5; }
+    100% { transform: translate(-50%,-50%) scale(2.2); opacity: 0; }
+  }
+  #navbar .mv-ring {
+    position: absolute; top: 50%; left: 50%;
+    width: 48px; height: 48px; border-radius: 50%;
+    border: 1.5px solid rgba(0,194,255,0.4);
+    animation: ringPulse 2.2s ease-out infinite;
+  }
+  #navbar .mv-ring:nth-child(2) { animation-delay: 0.7s; }
+  #navbar .mv-ring:nth-child(3) { animation-delay: 1.4s; }
+  #navbar .mv-center {
+    position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%);
+    width: 44px; height: 44px; border-radius: 50%;
+    background: var(--cyan); z-index: 2;
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'CenturyGothic', sans-serif; font-size: 9px; font-weight: 800; color: var(--navy);
+    text-align: center; line-height: 1.1;
+    box-shadow: 0 0 0 6px rgba(0,194,255,0.15);
+  }
+  #navbar .mv-node {
+    position: absolute;
+    width: 34px; height: 34px; border-radius: 50%;
+    background: var(--navy-3); border: 2px solid rgba(0,194,255,0.3);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 14px; z-index: 2;
+    transition: transform 0.3s, border-color 0.3s;
+    color: rgba(0,194,255,0.7);
+  }
+  #navbar .mv-node:hover { transform: scale(1.15) !important; border-color: var(--cyan); }
+  #navbar .mv-svg { position: absolute; inset: 0; width: 100%; height: 100%; }
+
+  #navbar .mega-right {
+    padding: 28px 28px 24px;
+    display: flex; flex-direction: column; gap: 20px;
+  }
+  #navbar .mega-top-row {
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px;
+  }
+  #navbar .mega-info-card {
+    padding: 18px 16px; border-radius: 12px;
+    border: 1px solid #EEF2F8; text-decoration: none;
+    transition: border-color 0.18s, background 0.18s, box-shadow 0.18s;
+    display: flex; flex-direction: column; gap: 6px;
+  }
+  #navbar .mega-info-card:hover {
+    border-color: rgba(0,194,255,0.3);
+    background: #F7FBFF;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.05);
+  }
+  #navbar .mic-icon {
+    width: 32px; height: 32px; border-radius: 8px; margin-bottom: 4px;
+    display: flex; align-items: center; justify-content: center; font-size: 15px;
+  }
+  #navbar .mic-icon.i1 { background: #E6F4FF; color: #0096C7; }
+  #navbar .mic-icon.i2 { background: #FFF5E6; color: #B86800; }
+  #navbar .mic-icon.i3 { background: #E8FDF5; color: #00875A; }
+  #navbar .mic-title {
+    font-family: 'CenturyGothic', sans-serif; font-size: 13px; font-weight: 800;
+    color: #0D1B33;
+  }
+  #navbar .mic-desc { font-size: 12px; color: #6B849E; line-height: 1.5; flex: 1; }
+  #navbar .mic-cta {
+    display: inline-flex; align-items: center; gap: 4px;
+    font-size: 12px; font-weight: 700; color: var(--cyan);
+    font-family: 'CenturyGothic', sans-serif; margin-top: 6px;
+    transition: gap 0.15s;
+  }
+  #navbar .mega-info-card:hover .mic-cta { gap: 7px; }
+
+  #navbar .mega-divider { height: 1px; background: #EEF2F8; }
+
+  #navbar .mega-feat-row {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 12px;
+  }
+  #navbar .mega-feat-card {
+    border-radius: 14px; padding: 20px 20px 18px;
+    text-decoration: none; position: relative; overflow: hidden;
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+  #navbar .mega-feat-card:hover { transform: translateY(-2px); box-shadow: 0 12px 32px rgba(0,0,0,0.10); }
+  #navbar .mfc-voltsquad {
+    background: linear-gradient(135deg, var(--navy) 0%, var(--navy-3) 100%);
+    border: 1px solid rgba(0,194,255,0.2);
+  }
+  #navbar .mfc-voltsquad::before {
+    content: ''; position: absolute;
+    top: -30px; right: -30px; width: 120px; height: 120px; border-radius: 50%;
+    background: radial-gradient(circle, rgba(0,194,255,0.25) 0%, transparent 70%);
+  }
+  #navbar .mfc-volt-badge {
+    display: inline-flex; align-items: center; gap: 5px;
+    background: var(--cyan); color: var(--navy);
+    font-size: 10px; font-weight: 800; padding: 3px 9px; border-radius: 5px;
+    font-family: 'CenturyGothic', sans-serif; letter-spacing: 0.04em;
+    margin-bottom: 10px;
+  }
+  #navbar .mfc-volt-badge .lucide { width: 10px; height: 10px; }
+  #navbar .mfc-title {
+    font-family: 'CenturyGothic', sans-serif; font-size: 14px; font-weight: 800;
+    margin-bottom: 6px;
+  }
+  #navbar .mfc-voltsquad .mfc-title { color: #ffffff; }
+  #navbar .mfc-voltsquad .mfc-desc  { font-size: 12px; color: rgba(255,255,255,0.58); line-height: 1.55; margin-bottom: 12px; }
+  #navbar .mfc-cta {
+    display: inline-flex; align-items: center; gap: 4px;
+    font-size: 12px; font-weight: 700;
+    font-family: 'CenturyGothic', sans-serif; transition: gap 0.15s;
+  }
+  #navbar .mfc-voltsquad .mfc-cta { color: var(--cyan); }
+  #navbar .mega-feat-card:hover .mfc-cta { gap: 7px; }
+
+  #navbar .mfc-solutions {
+    background: #F4F8FF;
+    border: 1px solid #E2ECF5;
+  }
+  #navbar .mfc-sol-badge {
+    display: inline-flex; align-items: center; gap: 5px;
+    background: rgba(0,194,255,0.12); color: var(--cyan-dim);
+    font-size: 10px; font-weight: 800; padding: 3px 9px; border-radius: 5px;
+    font-family: 'CenturyGothic', sans-serif; letter-spacing: 0.04em;
+    margin-bottom: 10px;
+  }
+  #navbar .mfc-sol-badge .lucide { width: 10px; height: 10px; }
+  #navbar .mfc-solutions .mfc-title { color: #0D1B33; }
+  #navbar .mfc-solutions .mfc-desc  { font-size: 12px; color: #6B849E; line-height: 1.55; margin-bottom: 12px; }
+  #navbar .mfc-solutions .mfc-cta   { color: var(--cyan-dim); }
+
+  #navbar .brands-mega { grid-template-columns: 320px 1fr; }
+  #navbar .mega-feat-highlight {
+    margin-top: 20px;
+    background: linear-gradient(135deg, var(--navy-2) 0%, var(--navy-3) 100%);
+    border: 1px solid rgba(0,194,255,0.2);
+    border-radius: 14px;
+    padding: 20px 20px 18px;
+    position: relative; overflow: hidden;
+    flex: 1;
+  }
+  #navbar .mega-feat-highlight::before {
+    content: '';
+    position: absolute; top: -30px; right: -30px;
+    width: 110px; height: 110px; border-radius: 50%;
+    background: radial-gradient(circle, rgba(0,194,255,0.2) 0%, transparent 70%);
+  }
+  #navbar .feat-badge {
+    display: inline-flex; align-items: center; gap: 5px;
+    background: var(--cyan); color: var(--navy);
+    font-size: 9px; font-weight: 800; padding: 3px 9px; border-radius: 5px;
+    font-family: 'CenturyGothic', sans-serif; letter-spacing: 0.06em;
+    margin-bottom: 8px;
+  }
+  #navbar .feat-product {
+    font-family: 'CenturyGothic', sans-serif; font-size: 16px; font-weight: 800;
+    color: #ffffff; margin-bottom: 8px;
+  }
+  #navbar .feat-desc {
+    font-size: 12px; color: rgba(255,255,255,0.58); line-height: 1.6;
+    margin-bottom: 14px;
+  }
+  #navbar .feat-cta {
+    display: inline-flex; align-items: center; gap: 4px;
+    font-size: 12px; font-weight: 700; color: var(--cyan);
+    font-family: 'CenturyGothic', sans-serif; text-decoration: none;
+    transition: gap 0.15s;
+  }
+  #navbar .feat-cta:hover { gap: 8px; }
+
+  #navbar .feat-action-btn {
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 8px 16px; border-radius: 7px; margin-top: 10px;
+    font-size: 12px; font-weight: 800;
+    background: var(--cyan); color: var(--navy);
+    text-decoration: none; font-family: 'CenturyGothic', sans-serif;
+    transition: background 0.2s, transform 0.15s, box-shadow 0.15s;
+    box-shadow: 0 2px 8px rgba(0,194,255,0.3);
+  }
+  #navbar .feat-action-btn:hover { background: #33CFFF; transform: translateY(-1px); box-shadow: 0 4px 14px rgba(0,194,255,0.45); }
+
+  #navbar .brands-right {
+    padding: 28px 28px 24px;
+    display: flex; flex-direction: column; gap: 12px;
+  }
+  #navbar .brand-supp-card {
+    padding: 20px 20px 18px; border-radius: 12px;
+    border: 1px solid #EEF2F8; text-decoration: none;
+    display: flex; flex-direction: column; gap: 6px;
+    transition: border-color 0.18s, background 0.18s, box-shadow 0.18s;
+    flex: 1;
+  }
+  #navbar .brand-supp-card:hover {
+    border-color: rgba(0,194,255,0.3);
+    background: #F7FBFF;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.05);
+  }
+  #navbar .bsc-icon {
+    width: 34px; height: 34px; border-radius: 9px; margin-bottom: 4px;
+    display: flex; align-items: center; justify-content: center; font-size: 16px;
+  }
+  #navbar .bsc-icon.i1 { background: #E6F4FF; color: #0096C7; }
+  #navbar .bsc-icon.i2 { background: #E8FDF5; color: #00875A; }
+  #navbar .bsc-title {
+    font-family: 'CenturyGothic', sans-serif; font-size: 13px; font-weight: 800;
+    color: #0D1B33;
+  }
+  #navbar .bsc-desc { font-size: 12px; color: #6B849E; line-height: 1.55; flex: 1; }
+  #navbar .bsc-cta {
+    display: inline-flex; align-items: center; gap: 4px;
+    font-size: 12px; font-weight: 700; color: var(--cyan);
+    font-family: 'CenturyGothic', sans-serif; margin-top: 6px;
+    transition: gap 0.15s;
+  }
+
+  @media (max-width: 960px) {
+    #navbar .nav-links { display: none; }
+    #navbar .nav-actions { display: none; }
+    #navbar.scrolled { left: 12px; right: 12px; }
+  }
+
+  /* ── MOBILE HAMBURGER ─────────────────────────── */
+  #navbar .nav-hamburger {
+    display: none;
+    background: transparent; border: none; cursor: pointer;
+    padding: 6px; border-radius: 6px; line-height: 0;
+    color: rgba(255,255,255,0.9);
+    transition: color 0.2s, background 0.2s;
+  }
+  #navbar.scrolled .nav-hamburger { color: #1E3A5F; }
+  #navbar .nav-hamburger:hover { background: rgba(255,255,255,0.1); }
+  #navbar.scrolled .nav-hamburger:hover { background: rgba(0,0,0,0.05); }
+  @media (max-width: 960px) {
+    #navbar .nav-hamburger { display: flex; align-items: center; justify-content: center; }
+  }
+
+  /* ── MOBILE OVERLAY MENU ──────────────────────── */
+  .nav-mobile-overlay {
+    position: fixed; inset: 0; z-index: 198;
+    background: #06111F;
+    transform: translateX(100%);
+    transition: transform 0.38s cubic-bezier(0.4,0,0.2,1);
+    display: flex; flex-direction: column;
+    overflow: hidden;
+  }
+  .nav-mobile-overlay.nm-open { transform: translateX(0); }
+
+  .nm-top {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 0 24px; height: 68px; flex-shrink: 0;
+    border-bottom: 1px solid rgba(0,194,255,0.1);
+  }
+  .nm-close-btn {
+    background: transparent; border: none; cursor: pointer;
+    color: rgba(255,255,255,0.65); padding: 6px; border-radius: 6px;
+    display: flex; transition: color 0.2s, background 0.2s;
+  }
+  .nm-close-btn:hover { color: #fff; background: rgba(255,255,255,0.08); }
+
+  .nm-body {
+    flex: 1; overflow-y: auto;
+    padding: 8px 24px 32px;
+    display: flex; flex-direction: column;
+  }
+
+  .nm-section { border-bottom: 1px solid rgba(255,255,255,0.07); }
+  .nm-trigger {
+    display: flex; align-items: center; justify-content: space-between;
+    width: 100%; background: transparent; border: none; cursor: pointer;
+    padding: 18px 0; text-align: left;
+    font-family: 'CenturyGothic', sans-serif; font-size: 17px; font-weight: 700;
+    color: rgba(255,255,255,0.85); transition: color 0.2s;
+  }
+  .nm-trigger:hover { color: #00C2FF; }
+  .nm-trigger svg { width: 16px; height: 16px; flex-shrink: 0; transition: transform 0.25s; }
+  .nm-trigger.nm-active { color: #00C2FF; }
+  .nm-trigger.nm-active svg { transform: rotate(180deg); }
+
+  .nm-submenu {
+    max-height: 0; overflow: hidden;
+    transition: max-height 0.32s ease, padding-bottom 0.32s ease;
+    padding-bottom: 0;
+  }
+  .nm-submenu.nm-open { max-height: 400px; padding-bottom: 10px; }
+
+  .nm-sub-item {
+    display: block; padding: 10px 14px; margin: 3px 0;
+    font-family: 'CenturyGothic', sans-serif; font-size: 14px; font-weight: 500;
+    color: rgba(255,255,255,0.55); text-decoration: none;
+    border-left: 2px solid rgba(0,194,255,0.18); border-radius: 0 6px 6px 0;
+    transition: color 0.2s, border-color 0.2s, background 0.2s;
+  }
+  .nm-sub-item:hover {
+    color: #00C2FF; border-left-color: #00C2FF;
+    background: rgba(0,194,255,0.06);
+  }
+
+  .nm-actions {
+    margin-top: auto; padding-top: 28px;
+    display: flex; flex-direction: column; gap: 12px;
+  }
+  .nm-btn-outline {
+    display: flex; align-items: center; justify-content: center;
+    padding: 14px; border-radius: 10px; text-decoration: none;
+    font-family: 'CenturyGothic', sans-serif; font-size: 15px; font-weight: 700;
+    border: 1.5px solid rgba(255,255,255,0.25); background: transparent;
+    color: rgba(255,255,255,0.85); transition: all 0.2s;
+  }
+  .nm-btn-outline:hover { border-color: #00C2FF; color: #00C2FF; }
+  .nm-btn-cyan {
+    display: flex; align-items: center; justify-content: center; gap: 8px;
+    padding: 14px; border-radius: 10px; text-decoration: none;
+    font-family: 'CenturyGothic', sans-serif; font-size: 15px; font-weight: 800;
+    background: #00C2FF; color: #06111F; border: none;
+    transition: background 0.22s;
+  }
+  .nm-btn-cyan:hover { background: #33CFFF; }
+</style>
+
+<nav id="navbar">
+  <div class="nav-inner">
+    <div class="nav-left">
+      <a href="/" class="nav-logo">
+        <div class="nav-logo-wrap-img">
+          <img src="/assets/logo-white.png" alt="DigiHire" class="nav-logo-img logo-white" />
+          <img src="/assets/logo-color.png" alt="DigiHire" class="nav-logo-img logo-color" />
+        </div>
+      </a>
+      <ul class="nav-links">
+        <li class="nav-mega-wrap">
+          <button class="nav-mega-trigger">
+            Why DigiHire?
+            <svg viewBox="0 0 16 16" fill="none"><path d="M4 6l4 4 4-4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </button>
+          <div class="nav-mega">
+            <div class="mega-left">
+              <h3 class="mega-headline">Building the sales network where <em>brands, talent,</em> and opportunity connect.</h3>
+              <p class="mega-body">DigiHire helps brands grow through structured sales campaigns, recruitment, activations, and training — while helping sales talent access gigs, jobs, and career-building opportunities.</p>
+              <a href="/about" class="mega-learn">Learn more <span>→</span></a>
+              <div class="mega-visual-svg">
+                <div class="mv-ring"></div>
+                <div class="mv-ring"></div>
+                <div class="mv-ring"></div>
+                <div class="mv-center">DIGI<br>HIRE</div>
+                <div class="mv-node" style="top:18%;left:18%;"><i data-lucide="building-2" class="lucide ic-md"></i></div>
+                <div class="mv-node" style="top:18%;right:18%;"><i data-lucide="target" class="lucide ic-md"></i></div>
+                <div class="mv-node" style="bottom:18%;left:18%;"><i data-lucide="user" class="lucide ic-md"></i></div>
+                <div class="mv-node" style="bottom:18%;right:18%;"><i data-lucide="zap" class="lucide ic-md"></i></div>
+                <svg class="mv-svg" viewBox="0 0 280 200" preserveAspectRatio="none">
+                  <line x1="140" y1="100" x2="55" y2="45"  stroke="rgba(0,194,255,0.25)" stroke-width="1" stroke-dasharray="4 4"/>
+                  <line x1="140" y1="100" x2="225" y2="45" stroke="rgba(0,194,255,0.25)" stroke-width="1" stroke-dasharray="4 4"/>
+                  <line x1="140" y1="100" x2="55" y2="155" stroke="rgba(0,194,255,0.25)" stroke-width="1" stroke-dasharray="4 4"/>
+                  <line x1="140" y1="100" x2="225" y2="155" stroke="rgba(0,194,255,0.25)" stroke-width="1" stroke-dasharray="4 4"/>
+                </svg>
+              </div>
+            </div>
+            <div class="mega-right">
+              <div class="mega-top-row">
+                <a href="/about" class="mega-info-card">
+                  <div class="mic-icon i1"><i data-lucide="info" class="lucide ic-md"></i></div>
+                  <p class="mic-title">About Us</p>
+                  <p class="mic-desc">Get to know who we are, what we are building, and how Digihire helps brands and sales talent grow together.</p>
+                  <span class="mic-cta">Learn more →</span>
+                </a>
+                <a href="/blog" class="mega-info-card">
+                  <div class="mic-icon i2"><i data-lucide="book-open" class="lucide ic-md"></i></div>
+                  <p class="mic-title">Blogs</p>
+                  <p class="mic-desc">Insights, strategies, and stories on sales, growth, activations, hiring, and the future of work.</p>
+                  <span class="mic-cta">Learn more →</span>
+                </a>
+                <a href="/events" class="mega-info-card">
+                  <div class="mic-icon i3"><i data-lucide="calendar" class="lucide ic-md"></i></div>
+                  <p class="mic-title">Events</p>
+                  <p class="mic-desc">Stay connected to our latest events, campaigns, activations, training sessions, and community experiences.</p>
+                  <span class="mic-cta">Learn more →</span>
+                </a>
+              </div>
+              <div class="mega-divider"></div>
+              <div class="mega-feat-row">
+                <a href="/voltsquad" class="mega-feat-card mfc-voltsquad">
+                  <span class="mfc-volt-badge"><i data-lucide="zap" class="lucide"></i> VoltSquad</span>
+                  <p class="mfc-title">Campaign Marketplace</p>
+                  <p class="mfc-desc">Our campaign marketplace for sales talent, built to help brands launch structured campaigns and help sellers earn through real sales opportunities.</p>
+                  <span class="mfc-cta">Explore VoltSquad →</span>
+                </a>
+                <a href="/" class="mega-feat-card mfc-solutions">
+                  <span class="mfc-sol-badge"><i data-lucide="link-2" class="lucide"></i> Solutions</span>
+                  <p class="mfc-title">Wider Solutions</p>
+                  <p class="mfc-desc">Explore Digihire's wider solutions, from sales recruitment and outsourcing to field activations, merchandising support, and practical sales training.</p>
+                  <span class="mfc-cta">See all solutions →</span>
+                </a>
+              </div>
+            </div>
+          </div>
+        </li>
+
+        <li class="nav-mega-wrap">
+          <button class="nav-mega-trigger">
+            Brands
+            <svg viewBox="0 0 16 16" fill="none"><path d="M4 6l4 4 4-4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </button>
+          <div class="nav-mega brands-mega">
+            <div class="mega-left">
+              <h3 class="mega-headline">Launch campaigns, hire sales talent, and activate markets with <em>Digihire.</em></h3>
+              <p class="mega-body">Digihire helps brands grow through structured sales campaigns, end-to-end sales recruitment, and field activations designed to drive visibility, traction, and revenue.</p>
+              <div class="mega-feat-highlight">
+                <span class="feat-badge"><i data-lucide="star" class="lucide" style="width:9px;height:9px"></i> FEATURED</span>
+                <p class="feat-product">VoltSquad</p>
+                <p class="feat-desc">Launch structured sales campaigns through VoltSquad. Activate sellers across target audiences and locations, drive users or sales, and grow through performance-based selling.</p>
+                <a href="/voltsquad" class="feat-cta">Launch on VoltSquad →</a>
+                <a href="/voltsquad" class="feat-action-btn">
+                  Explore VoltSquad
+                  <svg viewBox="0 0 16 16" fill="none" width="11" height="11"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                </a>
+              </div>
+            </div>
+            <div class="mega-right brands-right">
+              <a href="/" class="brand-supp-card">
+                <div class="bsc-icon i1"><i data-lucide="users" class="lucide ic-lg"></i></div>
+                <p class="bsc-title">Sales Recruitment</p>
+                <p class="bsc-desc">Hire the right sales talent for your business, from tech sales and B2B sales to field reps, closers, SDRs, merchandisers, and contract sales roles.</p>
+                <span class="bsc-cta">Learn more →</span>
+              </a>
+              <a href="/digihire/sales-activations" class="brand-supp-card">
+                <div class="bsc-icon i2"><i data-lucide="map-pin" class="lucide ic-lg"></i></div>
+                <p class="bsc-title">Activations & Field Marketing</p>
+                <p class="bsc-desc">Take your product to the field through mall activations, high-traffic area campaigns, neighbourhood outreach, and temporary field support built for visibility and traction.</p>
+                <span class="bsc-cta">Learn more →</span>
+              </a>
+            </div>
+          </div>
+        </li>
+
+        <li class="nav-mega-wrap">
+          <button class="nav-mega-trigger">
+            For Talents
+            <svg viewBox="0 0 16 16" fill="none"><path d="M4 6l4 4 4-4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </button>
+          <div class="nav-mega brands-mega">
+            <div class="mega-left">
+              <h3 class="mega-headline">Work with brands. Earn through sales. Grow with <em>Digihire.</em></h3>
+              <p class="mega-body">Access sales gigs, commission-based campaigns, job opportunities, and practical training built for people who want to earn more and build real career value through sales.</p>
+              <div class="mega-feat-highlight">
+                <span class="feat-badge"><i data-lucide="star" class="lucide" style="width:9px;height:9px"></i> FEATURED</span>
+                <p class="feat-product">VoltSquad</p>
+                <p class="feat-desc">Campaign marketplace for sales talent. Join active brand campaigns, promote products and apps, earn commissions, track your wallet, set revenue targets, and grow your income through real sales opportunities.</p>
+                <a href="/voltsquad" class="feat-cta">Join VoltSquad →</a>
+              </div>
+            </div>
+            <div class="mega-right brands-right">
+              <a href="/" class="brand-supp-card">
+                <div class="bsc-icon i1"><i data-lucide="user-plus" class="lucide ic-lg"></i></div>
+                <p class="bsc-title">Enter Our Talent Pool</p>
+                <p class="bsc-desc">Create your profile, upload your CV, and get discovered for part-time, full-time, and project-based sales roles with brands hiring through Digihire.</p>
+                <span class="bsc-cta">Learn more →</span>
+              </a>
+              <a href="/" class="brand-supp-card">
+                <div class="bsc-icon i2"><i data-lucide="graduation-cap" class="lucide ic-lg"></i></div>
+                <p class="bsc-title">Sales Academy</p>
+                <p class="bsc-desc">Learn practical sales skills, get certified, and gain hands-on experience that prepares you for stronger opportunities, internships, and long-term career growth.</p>
+                <span class="bsc-cta">Learn more →</span>
+              </a>
+            </div>
+          </div>
+        </li>
+      </ul>
+    </div>
+
+    <div class="nav-actions">
+      <button class="nav-hamburger" id="nav-hamburger-btn" aria-label="Open menu">
+        <svg viewBox="0 0 24 24" fill="none" width="22" height="22" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+          <path d="M3 7h18M3 12h18M3 17h18"/>
+        </svg>
+      </button>
+      <div class="nav-dropdown-wrap">
+        <a href="/login?role=talent" class="btn-get-started">
+          Get Started
+          <svg viewBox="0 0 16 16" fill="none"><path d="M4 6l4 4 4-4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </a>
+        <div class="nav-dropdown">
+          <p class="dd-section-label">Talent</p>
+          <a href="/login?role=talent"><span>Log in</span><span class="dd-arrow">›</span></a>
+          <a href="/join-now?role=talent"><span>Sign up</span><span class="dd-arrow">›</span></a>
+          <div class="nav-dropdown-divider"></div>
+          <p class="dd-section-label">Brand</p>
+          <a href="/login?role=brand"><span>Log in</span><span class="dd-arrow">›</span></a>
+          <a href="/join-now?role=brand"><span>Sign up</span><span class="dd-arrow">›</span></a>
+        </div>
+      </div>
+      <a href="/login?role=brand" class="btn-launch">
+        Launch a Campaign
+        <svg viewBox="0 0 16 16" fill="none" width="14" height="14"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </a>
+    </div>
+  </div>
+</nav>
+
+<div class="nav-mobile-overlay" id="nav-mobile-overlay" aria-hidden="true">
+  <div class="nm-top">
+    <a href="/" style="display:flex;align-items:center;line-height:0;">
+      <img src="/assets/logo-white.png" alt="DigiHire" style="height:30px;width:auto;" />
+    </a>
+    <button class="nm-close-btn" id="nm-close-btn" aria-label="Close menu">
+      <svg viewBox="0 0 24 24" fill="none" width="22" height="22" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+        <path d="M18 6L6 18M6 6l12 12"/>
+      </svg>
+    </button>
+  </div>
+
+  <div class="nm-body">
+    <div class="nm-section">
+      <button class="nm-trigger" data-nm-target="nm-why">
+        Why DigiHire?
+        <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6l4 4 4-4"/></svg>
+      </button>
+      <div class="nm-submenu" id="nm-why">
+        <a href="/about" class="nm-sub-item">About Us</a>
+        <a href="/blog" class="nm-sub-item">Blog</a>
+        <a href="/events" class="nm-sub-item">Events</a>
+        <a href="/voltsquad" class="nm-sub-item">VoltSquad</a>
+      </div>
+    </div>
+
+    <div class="nm-section">
+      <button class="nm-trigger" data-nm-target="nm-brands">
+        Brands
+        <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6l4 4 4-4"/></svg>
+      </button>
+      <div class="nm-submenu" id="nm-brands">
+        <a href="/voltsquad" class="nm-sub-item">VoltSquad</a>
+        <a href="#" class="nm-sub-item">Sales Recruitment</a>
+        <a href="/digihire/sales-activations" class="nm-sub-item">Activations &amp; Field Marketing</a>
+      </div>
+    </div>
+
+    <div class="nm-section">
+      <button class="nm-trigger" data-nm-target="nm-talents">
+        For Talents
+        <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6l4 4 4-4"/></svg>
+      </button>
+      <div class="nm-submenu" id="nm-talents">
+        <a href="/voltsquad" class="nm-sub-item">VoltSquad</a>
+        <a href="#" class="nm-sub-item">Enter Talent Pool</a>
+        <a href="#" class="nm-sub-item">Sales Academy</a>
+      </div>
+    </div>
+
+    <div class="nm-actions">
+      <a href="/login?role=talent" class="nm-btn-outline">Get Started</a>
+      <a href="/login?role=brand" class="nm-btn-cyan">
+        Launch a Campaign
+        <svg viewBox="0 0 16 16" fill="none" width="14" height="14" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8h10M9 4l4 4-4 4"/></svg>
+      </a>
+    </div>
+  </div>
+</div>
