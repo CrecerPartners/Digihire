@@ -1,6 +1,5 @@
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import { Link } from "react-router-dom";
-import Navbar from "@/components/Navbar";
 import { Button } from "@digihire/shared";
 import { Card, CardContent } from "@digihire/shared";
 import {
@@ -186,6 +185,23 @@ export default function LandingPage() {
   const [submitted, setSubmitted] = useState(false);
   const [error, setError] = useState("");
 
+  useEffect(() => {
+    const navScript = document.createElement("script");
+    navScript.src = "/nav-loader.js";
+    navScript.async = true;
+    document.body.appendChild(navScript);
+
+    const footerScript = document.createElement("script");
+    footerScript.src = "/footer-loader.js";
+    footerScript.async = true;
+    document.body.appendChild(footerScript);
+
+    return () => {
+      document.body.removeChild(navScript);
+      document.body.removeChild(footerScript);
+    };
+  }, []);
+
   const scrollToForm = () => {
     formRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
   };
@@ -216,7 +232,7 @@ export default function LandingPage() {
 
   return (
     <div className="min-h-screen bg-background">
-      <Navbar />
+      <div id="nav-root"></div>
 
       {/* ── Hero ─────────────────────────────────────── */}
       <section className="relative overflow-hidden bg-[#06111F] text-white">
@@ -631,14 +647,7 @@ export default function LandingPage() {
       </section>
 
       {/* ── Footer ───────────────────────────────────── */}
-      <footer className="border-t border-border bg-background">
-        <div className="mx-auto flex max-w-6xl flex-col items-center gap-4 px-4 py-8 md:flex-row md:justify-between">
-          <Link to="/" className="flex items-center">
-            <img src="/assets/logo-color.png" alt="DigiHire Logo" className="h-6 w-auto object-contain" />
-          </Link>
-          <p className="text-xs text-muted-foreground">© {new Date().getFullYear()} Crecer Partners · DigiHire</p>
-        </div>
-      </footer>
+      <div id="footer-root"></div>
     </div>
   );
 }
