@@ -21,8 +21,8 @@ export function DashboardLayout() {
   const initials = (profile?.name || "?").split(" ").map(n => n[0]).join("").toUpperCase();
 
   const handleLogout = async () => {
-    await signOut();
-    navigate("/login");
+    await signOut({ skipRedirect: true });
+    navigate("/login", { replace: true });
   };
 
   return (
