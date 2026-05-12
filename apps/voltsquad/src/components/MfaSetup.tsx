@@ -117,7 +117,11 @@ export function MfaSetup() {
           </div>
 
           <div className="flex justify-center flex-col items-center gap-4">
-            <div className="bg-white p-3 rounded-xl border-4 border-white shadow-sm" dangerouslySetInnerHTML={{ __html: mfaQr }} />
+            <img
+              src={`data:image/svg+xml;base64,${btoa(unescape(encodeURIComponent(mfaQr)))}`}
+              alt="Scan this QR code with your authenticator app"
+              className="w-48 h-48"
+            />
             
             <div className="w-full space-y-2">
               <label className="text-xs font-medium">Can't scan? Enter this secret manually:</label>
