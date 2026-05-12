@@ -3,7 +3,7 @@ import { Card, CardContent } from "@digihire/shared";
 import { Button } from "@digihire/shared";
 import { Input } from "@digihire/shared";
 import { Textarea } from "@digihire/shared";
-import { useReviews, useSubmitReview } from "@digihire/shared";
+import { useReviews, useSubmitReview, useAuth } from "@digihire/shared";
 import { Star, Send, Loader2 } from "lucide-react";
 import { toast } from "sonner";
 
@@ -27,6 +27,7 @@ function StarRating({ value, onChange, readonly = false, size = 16 }: { value: n
 export function ReviewSection({ productId }: { productId: string }) {
   const { data: reviews = [], isLoading } = useReviews(productId);
   const submitReview = useSubmitReview();
+  const { user } = useAuth();
   const [name, setName] = useState("");
   const [rating, setRating] = useState(0);
   const [comment, setComment] = useState("");
@@ -56,20 +57,24 @@ export function ReviewSection({ productId }: { productId: string }) {
       </div>
 
       {/* Submit form */}
-      <Card className="border-border/50">
-        <CardContent className="p-4 space-y-3">
-          <p className="text-sm font-medium">Leave a review</p>
-          <StarRating value={rating} onChange={setRating} />
-          <Input value={name} onChange={e => setName(e.target.value)} placeholder="Your name" className="bg-secondary border-border" />
-          <Textarea value={comment} onChange={e => setComment(e.target.value)} placeholder="Write your review (optional)" className="bg-secondary border-border resize-none" rows={2} />
-          <Button size="sm" onClick={handleSubmit} disabled={submitReview.isPending} className="volt-gradient">
-            {submitReview.isPending ? <Loader2 className="h-3.5 w-3.5 mr-1.5 animate-spin" /> : <Send className="h-3.5 w-3.5 mr-1.5" />}
-            Submit Review
-          </Button>
-        </CardContent>
-      </Card>
+      {!user ? (
+        <p className="text-sm text-muted-foreground">Please sign in to leave a review.</p>
+      ) : (
+        <Card className="border-border/50">
+          <CardContent className="p-4 space-y-3">
+            <p className="text-sm font-medium">Leave a review</p>
+            <StarRating value={rating} onChange={setRating} />
+            <Input value={name} onChange={e => setName(e.target.value)} placeholder="Your name" className="bg-secondary border-border" />
+            <Textarea value={comment} onChange={e => setComment(e.target.value)} placeholder="Write your review (optional)" className="bg-secondary border-border resize-none" rows={2} />
+            <Button size="sm" onClick={handleSubmit} disabled={submitReview.isPending} className="volt-gradient">
+              {submitReview.isPending ? <Loader2 className="h-3.5 w-3.5 mr-1.5 animate-spin" /> : <Send className="h-3.5 w-3.5 mr-1.5" />}
+              Submit Review
+            </Button>
+          </CardContent>
+        </Card>
+      )}
 
-      {/* Review list */}
+            {/* Review list */}
       {isLoading ? (
         <div className="flex justify-center py-6"><Loader2 className="h-5 w-5 animate-spin text-primary" /></div>
       ) : reviews.length === 0 ? (

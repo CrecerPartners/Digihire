@@ -44,7 +44,7 @@ export function DashboardLayout() {
             <div className="flex items-center gap-2">
               {/* Mobile: Volt logo — Desktop: sidebar trigger */}
               {isMobile ? (
-                <Link to="/" className="flex items-center">
+                <Link to="/dashboard" className="flex items-center">
                   <img
                     src="/assets/logo-color.png"
                     alt="DigiHire"
