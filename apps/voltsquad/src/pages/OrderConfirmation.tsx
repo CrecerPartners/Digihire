@@ -30,9 +30,7 @@ const OrderConfirmation = () => {
 
         if (order) {
           // It might take a moment for the edge function to finish fulfilling the items
-          // So we do a slight delay, or just fetch immediately (most times edge functions are fast enough)
-          // For a robust app, we might poll, but for now a direct fetch is fine.
-          setTimeout(async () => {
+          const timer = setTimeout(async () => {
             const { data: items } = await supabase
               .from("order_items")
               .select("id, delivery_details, products(name)")
@@ -40,7 +38,8 @@ const OrderConfirmation = () => {
               .not("delivery_details", "is", null);
             
             if (items) setDeliveryItems(items);
-          }, 2000); 
+          }, 2000);
+          return () => clearTimeout(timer);
         }
       };
       fetchDelivery();
