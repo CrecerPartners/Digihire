@@ -49,7 +49,10 @@
   }
 
   function boot(root) {
-    fetch('/nav-partial.html')
+    var scriptEl = document.currentScript || document.querySelector('script[src*="nav-loader"]');
+    var base = (scriptEl && scriptEl.getAttribute('data-base')) || '/';
+    var navUrl = base.replace(/\/$/, '') + '/nav-partial.html';
+    fetch(navUrl)
       .then(function (r) { return r.text(); })
       .then(function (html) {
         root.innerHTML = html;
