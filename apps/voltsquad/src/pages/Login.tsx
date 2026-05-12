@@ -98,7 +98,6 @@ const Login = () => {
             setMfaFactorId(totpFactor.id);
             setStep("mfa");
             isProcessingLogin.current = false;
-            setLoading(false);
             return;
           }
 
