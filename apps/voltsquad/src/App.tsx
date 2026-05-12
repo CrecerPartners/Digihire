@@ -212,11 +212,17 @@ const useNativeAuthCallback = () => {
     const setupListener = async () => {
       handler = await CapApp.addListener('appUrlOpen', async (data: { url: string }) => {
         // Handle the deep link
-        const url = new URL(data.url);
-        
+        const parsedUrl = new URL(data.url);
+
+        // Validate deep-link origin to prevent forged deep links
+        const allowedHosts = ["digihire.io", "voltsquad.app", "supabase.co", "localhost"];
+        if (!allowedHosts.some(h => parsedUrl.hostname === h || parsedUrl.hostname.endsWith("." + h))) {
+          return; // reject forged deep links
+        }
+
         // Check if it's a Supabase callback
-        if (url.hash && url.hash.includes('access_token')) {
-          const hash = url.hash.substring(1);
+        if (parsedUrl.hash && parsedUrl.hash.includes('access_token')) {
+          const hash = parsedUrl.hash.substring(1);
           const params = new URLSearchParams(hash);
           const accessToken = params.get('access_token');
           const refreshToken = params.get('refresh_token');
@@ -226,10 +232,12 @@ const useNativeAuthCallback = () => {
               access_token: accessToken,
               refresh_token: refreshToken,
             });
-            
-            if (!error) {
-              window.location.href = '/dashboard';
+
+            if (error) {
+              window.location.href = '/login';
+              return;
             }
+            window.location.href = '/dashboard';
           }
         }
       });
