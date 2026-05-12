@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { Button } from "@digihire/shared";
 import { Input } from "@digihire/shared";
 import { Card, CardContent } from "@digihire/shared";
+import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from "@digihire/shared";
 import { supabase } from "@digihire/shared";
 import { Loader2, QrCode, ShieldCheck, Copy, CheckCircle2 } from "lucide-react";
 import { toast } from "sonner";
@@ -14,6 +15,7 @@ export function MfaSetup() {
   const [mfaCode, setMfaCode] = useState("");
   const [loading, setLoading] = useState(false);
   const [step, setStep] = useState<"initial" | "setup">("initial");
+  const [showDisableConfirm, setShowDisableConfirm] = useState(false);
 
   useEffect(() => {
     checkMfaStatus();
@@ -65,7 +67,6 @@ export function MfaSetup() {
   };
 
   const handleUnenroll = async () => {
-    if (!confirm("Are you sure you want to disable Authenticator 2FA? This will reduce your account security.")) return;
     setLoading(true);
     try {
       const { data } = await supabase.auth.mfa.listFactors();
@@ -100,10 +101,30 @@ export function MfaSetup() {
             <p className="text-xs text-muted-foreground">Your wallet and login are secured with TOTP.</p>
           </div>
         </div>
-        <Button variant="outline" size="sm" onClick={handleUnenroll} disabled={loading} className="text-destructive hover:bg-destructive/10 border-destructive/20">
+        <Button variant="outline" size="sm" onClick={() => setShowDisableConfirm(true)} disabled={loading} className="text-destructive hover:bg-destructive/10 border-destructive/20">
           Disable
         </Button>
       </div>
+
+      <AlertDialog open={showDisableConfirm} onOpenChange={setShowDisableConfirm}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Disable Two-Factor Authentication?</AlertDialogTitle>
+            <AlertDialogDescription>
+              This will remove Authenticator 2FA from your account. Your login and wallet withdrawals will no longer require a verification code, reducing your account security.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <AlertDialogAction
+              onClick={() => { setShowDisableConfirm(false); handleUnenroll(); }}
+              className="bg-destructive hover:bg-destructive/90 text-destructive-foreground"
+            >
+              Yes, disable 2FA
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     );
   }
 
