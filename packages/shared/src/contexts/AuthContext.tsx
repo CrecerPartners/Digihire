@@ -106,10 +106,7 @@ export function AuthProvider({ children, signOutRedirect }: { children: ReactNod
     return { error: error as Error | null };
   };
 
-  const resendLoginOtp = async (email: string) => {
-    const { error } = await supabase.auth.signInWithOtp({ email, options: { shouldCreateUser: false } });
-    return { error: error as Error | null };
-  };
+  const resendLoginOtp = sendLoginOtp;
 
   return (
     <AuthContext.Provider value={{ session, user, loading, signUp, signIn, signOut, verifyOtp, resendSignupOtp, sendLoginOtp, resendLoginOtp }}>

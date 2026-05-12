@@ -4,7 +4,7 @@ import { Button } from "@digihire/shared";
 import { Input } from "@digihire/shared";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@digihire/shared";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@digihire/shared";
-import { Zap, Gift, ArrowLeft, Eye, EyeOff } from "lucide-react";
+import { Gift, ArrowLeft, Eye, EyeOff } from "lucide-react";
 import { ThemeToggle } from "@/components/ThemeToggle";
 import { useAuth } from "@digihire/shared";
 import { toast } from "sonner";
@@ -180,8 +180,8 @@ const Login = () => {
             <MfaVerification
               factorId={mfaFactorId}
               onVerify={() => navigate("/dashboard", { replace: true })}
-              onBack={() => {
-                signOut();
+              onBack={async () => {
+                await signOut({ skipRedirect: true });
                 setStep("form");
               }}
             />
