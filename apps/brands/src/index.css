@@ -203,3 +203,95 @@
     font-family: 'CenturyGothic', sans-serif;
   }
 }
+
+@layer utilities {
+  .vs-btn-cyan {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 14px 32px;
+    border-radius: 10px;
+    background: #00C2FF;
+    color: #06111F;
+    font-size: 15px;
+    font-weight: 700;
+    border: none;
+    text-decoration: none;
+    cursor: pointer;
+    transition: all 0.22s ease;
+    box-shadow: 0 4px 20px rgba(0,194,255,0.35);
+    white-space: nowrap;
+  }
+  .vs-btn-cyan:hover {
+    background: #33CFFF;
+    transform: translateY(-1px);
+    box-shadow: 0 6px 28px rgba(0,194,255,0.5);
+  }
+  .vs-btn-outline-white {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 14px 32px;
+    border-radius: 10px;
+    background: transparent;
+    color: #fff;
+    font-size: 15px;
+    font-weight: 700;
+    border: 1.5px solid rgba(255,255,255,0.35);
+    text-decoration: none;
+    cursor: pointer;
+    transition: all 0.22s ease;
+    white-space: nowrap;
+  }
+  .vs-btn-outline-white:hover {
+    border-color: #fff;
+    background: rgba(255,255,255,0.08);
+  }
+  .vs-btn-outline-navy {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 14px 32px;
+    border-radius: 10px;
+    background: transparent;
+    color: #06111F;
+    font-size: 15px;
+    font-weight: 700;
+    border: 1.5px solid rgba(0,0,0,0.18);
+    text-decoration: none;
+    cursor: pointer;
+    transition: all 0.22s ease;
+    white-space: nowrap;
+  }
+  .vs-btn-outline-navy:hover {
+    border-color: #00C2FF;
+    color: #00C2FF;
+  }
+
+  .reveal {
+    opacity: 0;
+    transform: translateY(28px);
+    transition: opacity 0.65s ease, transform 0.65s ease;
+  }
+  .reveal.in {
+    opacity: 1;
+    transform: none;
+  }
+
+  .stagger-grid > * {
+    opacity: 0;
+    transform: translateY(22px);
+    transition: opacity 0.55s ease, transform 0.55s ease;
+  }
+  .stagger-grid.in > *:nth-child(1) { opacity: 1; transform: none; transition-delay: 0s; }
+  .stagger-grid.in > *:nth-child(2) { opacity: 1; transform: none; transition-delay: 0.08s; }
+  .stagger-grid.in > *:nth-child(3) { opacity: 1; transform: none; transition-delay: 0.16s; }
+  .stagger-grid.in > *:nth-child(4) { opacity: 1; transform: none; transition-delay: 0.24s; }
+  .stagger-grid.in > *:nth-child(5) { opacity: 1; transform: none; transition-delay: 0.32s; }
+  .stagger-grid.in > *:nth-child(6) { opacity: 1; transform: none; transition-delay: 0.40s; }
+}
+
+/* Landing page overrides — match voltsquad.html typographic weight */
+.brands-landing * {
+  font-weight: 400;
+}

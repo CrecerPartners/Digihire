@@ -1,7 +1,4 @@
-import { useState, useRef, useEffect } from "react";
-import { Link } from "react-router-dom";
-import { Button } from "@digihire/shared";
-import { Card, CardContent } from "@digihire/shared";
+import { useRef, useEffect, useState } from "react";
 import {
   ArrowRight,
   Zap,
@@ -10,79 +7,88 @@ import {
   Briefcase,
   Target,
   Globe,
-  CheckCircle2,
+  CheckCircle,
   Phone,
-  Building2,
-  Rocket,
   ShieldCheck,
   Clock,
-  ChevronRight,
+  Building2,
+  UserCheck,
+  ClipboardList,
+  Settings,
 } from "lucide-react";
+
+/* ── CSS vars matched from voltsquad.html ── */
+const V = {
+  navy:       "#06111F",
+  navy1:      "#0B1D33",
+  cyan:       "#00C2FF",
+  cyanDim:    "#0096C7",
+  cyanSoft:   "#33CFFF",
+  cyanBorder: "rgba(0,194,255,0.18)",
+  cyanBg:     "rgba(0,194,255,0.08)",
+  grayBg:     "#F4F8FF",
+  border:     "#E2EBF5",
+  subText:    "#6B849E",
+  bodyText:   "#3E5A7A",
+};
+
+/* ── Scroll-reveal hook ── */
+function useReveal() {
+  useEffect(() => {
+    const obs = new IntersectionObserver(
+      (entries) => entries.forEach((e) => { if (e.isIntersecting) { e.target.classList.add("in"); obs.unobserve(e.target); } }),
+      { threshold: 0.12 }
+    );
+    document.querySelectorAll(".reveal, .stagger-grid").forEach((el) => obs.observe(el));
+    return () => obs.disconnect();
+  }, []);
+}
 
 const talentTypes = [
   { icon: TrendingUp, label: "B2B Sales Executives" },
-  { icon: Zap, label: "Tech Sales & SaaS Sales Reps" },
-  { icon: Target, label: "Closers & Account Executives" },
-  { icon: Briefcase, label: "Business Development Reps (BDRs)" },
-  { icon: Users, label: "SDRs & Lead Qualification Teams" },
-  { icon: Globe, label: "Field & External Sales Agents" },
+  { icon: Zap,        label: "Tech Sales & SaaS Sales Reps" },
+  { icon: Target,     label: "Closers & Account Executives" },
+  { icon: Briefcase,  label: "Business Development Reps (BDRs)" },
+  { icon: Users,      label: "SDRs & Lead Qualification Teams" },
+  { icon: Globe,      label: "Field & External Sales Agents" },
 ];
 
 const hiringModels = [
   {
-    number: "01",
-    title: "Direct Hire (Full-Time Recruitment)",
-    subtitle: "Build your internal sales team with vetted, full-time talent.",
-    points: [
-      "End-to-end recruitment",
-      "Role scoping & candidate screening",
-      "Interview coordination & placement",
-      "Ideal for long-term sales growth",
-    ],
+    num: "01", icon: UserCheck,
+    title: "Direct Hire",
+    sub:   "Build your internal sales team with vetted, full-time talent.",
+    points: ["End-to-end recruitment", "Role scoping & candidate screening", "Interview coordination & placement", "Ideal for long-term sales growth"],
   },
   {
-    number: "02",
+    num: "02", icon: ClipboardList,
     title: "Contract Sales Teams",
-    subtitle: "Deploy sales talent on a flexible, short-term or project basis.",
-    points: [
-      "Fixed-term or performance-based contracts",
-      "Great for launches, pilots, or market entry",
-      "Scale up or down without long-term risk",
-    ],
+    sub:   "Deploy sales talent on a flexible, short-term or project basis.",
+    points: ["Fixed-term or performance-based contracts", "Great for launches, pilots, or market entry", "Scale up or down without long-term risk"],
   },
   {
-    number: "03",
-    title: "Sales Outsourcing (End-to-End)",
-    subtitle: "We deploy and manage sales teams for you.",
-    points: [
-      "Fully outsourced sales teams",
-      "Performance tracking & reporting",
-      "Ongoing management and optimization",
-      "Best for companies that want execution, not oversight",
-    ],
+    num: "03", icon: Globe,
+    title: "Sales Outsourcing",
+    sub:   "We deploy and manage complete sales teams for you.",
+    points: ["Fully outsourced sales teams", "Performance tracking & reporting", "Ongoing management and optimization", "Best for companies that want execution"],
   },
   {
-    number: "04",
+    num: "04", icon: Settings,
     title: "External Sales Force Management",
-    subtitle: "Already have external or distributed sales agents? We manage them.",
-    points: [
-      "Sales process setup",
-      "CRM & reporting structure",
-      "Performance management",
-      "Optimization and scaling",
-    ],
+    sub:   "Already have distributed sales agents? We manage them.",
+    points: ["Sales process setup", "CRM & reporting structure", "Performance management", "Optimization and scaling"],
   },
 ];
 
 const whyPoints = [
   { icon: ShieldCheck, text: "Pre-vetted, sales-ready talent" },
-  { icon: Briefcase, text: "Experience across B2B, tech, and commercial sales" },
-  { icon: Target, text: "Flexible hiring and outsourcing models" },
-  { icon: Clock, text: "Faster deployment than traditional hiring" },
-  { icon: Globe, text: "Support across African and international markets" },
+  { icon: Briefcase,   text: "Experience across B2B, tech, and commercial sales" },
+  { icon: Target,      text: "Flexible hiring and outsourcing models" },
+  { icon: Clock,       text: "Faster deployment than traditional hiring" },
+  { icon: Globe,       text: "Support across African and international markets" },
 ];
 
-const whoForItems = [
+const whoFor = [
   "B2B companies",
   "Tech & SaaS businesses",
   "Marketplaces & platforms",
@@ -90,7 +96,25 @@ const whoForItems = [
   "Enterprises expanding into new markets",
 ];
 
-const brands = ["KoboGo", "Sabi Microfinance Bank", "GingerMe"];
+const brandLogos = [
+  { src: "/sabi.png",            alt: "Sabi Microfinance Bank" },
+  { src: "/ginger.png",          alt: "GingerMe" },
+  { src: "/jumia.png",           alt: "Jumia" },
+  { src: "/konga.png",           alt: "Konga" },
+  { src: "/breet.png",           alt: "Breet" },
+  { src: "/ezipay.png",          alt: "Ezipay" },
+  { src: "/cardtonic.png",       alt: "Cardtonic" },
+  { src: "/blakskill.png",       alt: "BlakSkill" },
+  { src: "/british-council.png", alt: "British Council" },
+  { src: "/hp.png",              alt: "HP" },
+];
+
+const stats = [
+  { value: "500+", label: "Sales professionals placed" },
+  { value: "50+",  label: "Companies served" },
+  { value: "90%",  label: "Retention rate" },
+  { value: "14d",  label: "Avg. time to hire" },
+];
 
 const TALENT_OPTIONS = [
   "B2B Sales Executives",
@@ -111,66 +135,37 @@ const HIRING_MODEL_OPTIONS = [
 ];
 
 interface FormData {
-  fullName: string;
-  workEmail: string;
-  companyName: string;
-  role: string;
-  businessType: string;
-  companyStage: string;
-  talentTypes: string[];
-  hiringModels: string[];
-  teamSize: string;
-  startDate: string;
+  fullName: string; workEmail: string; companyName: string; role: string;
+  businessType: string; companyStage: string; talentTypes: string[];
+  hiringModels: string[]; teamSize: string; startDate: string;
 }
-
-const initialForm: FormData = {
-  fullName: "",
-  workEmail: "",
-  companyName: "",
-  role: "",
-  businessType: "",
-  companyStage: "",
-  talentTypes: [],
-  hiringModels: [],
-  teamSize: "",
-  startDate: "",
+const blank: FormData = {
+  fullName: "", workEmail: "", companyName: "", role: "",
+  businessType: "", companyStage: "", talentTypes: [], hiringModels: [], teamSize: "", startDate: "",
 };
 
-function MultiCheckbox({
-  options,
-  selected,
-  onChange,
-}: {
-  options: string[];
-  selected: string[];
-  onChange: (val: string[]) => void;
-}) {
-  const toggle = (opt: string) => {
-    onChange(
-      selected.includes(opt) ? selected.filter((s) => s !== opt) : [...selected, opt]
-    );
-  };
+function Checkbox({ options, selected, onChange }: { options: string[]; selected: string[]; onChange: (v: string[]) => void }) {
+  const toggle = (o: string) => onChange(selected.includes(o) ? selected.filter(s => s !== o) : [...selected, o]);
   return (
-    <div className="grid gap-2 sm:grid-cols-2">
-      {options.map((opt) => {
-        const checked = selected.includes(opt);
+    <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10 }}>
+      {options.map(o => {
+        const on = selected.includes(o);
         return (
-          <label
-            key={opt}
-            className={`flex cursor-pointer items-center gap-3 rounded-lg border p-3 text-sm transition-all ${
-              checked
-                ? "border-primary bg-primary/5 text-foreground"
-                : "border-border bg-muted/30 text-muted-foreground hover:border-primary/40 hover:bg-muted/50"
-            }`}
-          >
-            <span
-              className={`flex h-4 w-4 shrink-0 items-center justify-center rounded border transition-all ${
-                checked ? "border-primary bg-primary" : "border-border"
-              }`}
-            >
-              {checked && <CheckCircle2 className="h-3 w-3 text-primary-foreground" />}
+          <label key={o} onClick={() => toggle(o)} style={{
+            display: "flex", alignItems: "center", gap: 10, padding: "10px 14px",
+            borderRadius: 10, border: `1px solid ${on ? V.cyan : V.border}`,
+            background: on ? V.cyanBg : "#fff", cursor: "pointer",
+            fontSize: 14, color: on ? V.navy : V.bodyText, transition: "all .2s",
+          }}>
+            <span style={{
+              width: 18, height: 18, borderRadius: "50%", flexShrink: 0,
+              background: on ? V.cyan : "transparent",
+              border: `1.5px solid ${on ? V.cyan : V.border}`,
+              display: "flex", alignItems: "center", justifyContent: "center",
+            }}>
+              {on && <CheckCircle size={11} color={V.navy} />}
             </span>
-            {opt}
+            {o}
           </label>
         );
       })}
@@ -179,476 +174,406 @@ function MultiCheckbox({
 }
 
 export default function LandingPage() {
-  const formRef = useRef<HTMLDivElement>(null);
-  const [form, setForm] = useState<FormData>(initialForm);
+  const formRef   = useRef<HTMLDivElement>(null);
+  const [form, setForm]         = useState<FormData>(blank);
   const [submitting, setSubmitting] = useState(false);
-  const [submitted, setSubmitted] = useState(false);
-  const [error, setError] = useState("");
+  const [submitted, setSubmitted]   = useState(false);
+  const [error, setError]           = useState("");
+  useReveal();
 
   useEffect(() => {
-    const navScript = document.createElement("script");
-    navScript.src = "/nav-loader.js";
-    navScript.async = true;
-    document.body.appendChild(navScript);
-
-    const footerScript = document.createElement("script");
-    footerScript.src = "/footer-loader.js";
-    footerScript.async = true;
-    document.body.appendChild(footerScript);
-
-    return () => {
-      document.body.removeChild(navScript);
-      document.body.removeChild(footerScript);
-    };
+    const n = document.createElement("script"); n.src = "/nav-loader.js"; n.async = true; document.body.appendChild(n);
+    const f = document.createElement("script"); f.src = "/footer-loader.js"; f.async = true; document.body.appendChild(f);
+    return () => { document.body.removeChild(n); document.body.removeChild(f); };
   }, []);
 
-  const scrollToForm = () => {
-    formRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+  const scrollToForm = () => formRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+  const set = (k: keyof FormData) => (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) =>
+    setForm(p => ({ ...p, [k]: e.target.value }));
+
+  const submit = async (e: React.FormEvent) => {
+    e.preventDefault(); setError("");
+    if (!form.fullName || !form.workEmail || !form.companyName || !form.role) { setError("Please fill in all required fields."); return; }
+    if (!form.talentTypes.length) { setError("Please select at least one talent type."); return; }
+    if (!form.hiringModels.length) { setError("Please select at least one hiring model."); return; }
+    setSubmitting(true);
+    await new Promise(r => setTimeout(r, 900));
+    setSubmitting(false); setSubmitted(true);
   };
 
-  const set = (field: keyof FormData) => (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) =>
-    setForm((prev) => ({ ...prev, [field]: e.target.value }));
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setError("");
-    if (!form.fullName || !form.workEmail || !form.companyName || !form.role) {
-      setError("Please fill in all required fields.");
-      return;
-    }
-    if (form.talentTypes.length === 0) {
-      setError("Please select at least one talent type.");
-      return;
-    }
-    if (form.hiringModels.length === 0) {
-      setError("Please select at least one hiring model.");
-      return;
-    }
-    setSubmitting(true);
-    await new Promise((r) => setTimeout(r, 900));
-    setSubmitting(false);
-    setSubmitted(true);
+  const inputStyle: React.CSSProperties = {
+    width: "100%", padding: "11px 16px", borderRadius: 10,
+    border: `1px solid ${V.border}`, fontSize: 14, color: V.navy,
+    background: "#fff", outline: "none", fontFamily: "CenturyGothic, sans-serif",
+    transition: "border-color .2s",
+  };
+  const labelStyle: React.CSSProperties = { display: "block", fontSize: 13, color: V.bodyText, marginBottom: 6 };
+  const legendStyle: React.CSSProperties = {
+    display: "flex", alignItems: "center", gap: 8, fontSize: 11, fontWeight: 800,
+    letterSpacing: "0.1em", textTransform: "uppercase", color: V.cyanDim, marginBottom: 16,
+  };
+  const legendNum: React.CSSProperties = {
+    width: 22, height: 22, borderRadius: 6, background: V.cyanBg,
+    border: `1px solid ${V.cyanBorder}`, color: V.cyanDim,
+    display: "flex", alignItems: "center", justifyContent: "center", fontSize: 11,
   };
 
   return (
-    <div className="min-h-screen bg-background">
-      <div id="nav-root"></div>
+    <div className="brands-landing" style={{ fontFamily: "CenturyGothic, sans-serif", background: "#fff", color: V.navy, overflowX: "hidden" }}>
+      <div id="nav-root" />
 
-      {/* ── Hero ─────────────────────────────────────── */}
-      <section className="relative overflow-hidden bg-[#06111F] text-white">
-        <div className="pointer-events-none absolute inset-0">
-          <div className="absolute -top-40 -left-40 h-[500px] w-[500px] rounded-full bg-[#00C2FF]/10 blur-3xl" />
-          <div className="absolute top-20 right-0 h-[300px] w-[300px] rounded-full bg-[#00C2FF]/10 blur-3xl" />
-        </div>
-        <div className="relative mx-auto max-w-6xl px-4 py-16 md:py-28 flex flex-col md:flex-row items-center gap-12">
-          <div className="flex-1 text-center md:text-left">
-            <span className="mb-4 inline-block rounded-full bg-[#00C2FF]/20 px-4 py-1 text-sm font-semibold text-[#00C2FF]">
-              brands.digihire.io
+      {/* ══ HERO ══════════════════════════════════════════ */}
+      <section style={{ background: V.navy, padding: "160px 0 110px", position: "relative", overflow: "hidden", textAlign: "center" }}>
+        <div style={{ position: "absolute", inset: 0, background: "radial-gradient(ellipse 80% 60% at 50% 0%, rgba(0,194,255,0.14) 0%, transparent 70%)", pointerEvents: "none" }} />
+        <div style={{ maxWidth: 1140, margin: "0 auto", padding: "0 28px", position: "relative" }}>
+          <div className="reveal">
+            <span style={{
+              display: "inline-flex", alignItems: "center", gap: 8,
+              fontSize: 12, letterSpacing: "0.08em", textTransform: "uppercase",
+              color: V.cyan, background: V.cyanBg,
+              border: `1px solid rgba(0,194,255,0.22)`, borderRadius: 999,
+              padding: "8px 16px", marginBottom: 24,
+            }}>
+              <Building2 size={14} /> brands.digihire.io
             </span>
-            <h1 className="font-display text-4xl font-bold leading-tight md:text-5xl lg:text-6xl text-white">
-              Hire High-Performing
-              <br className="hidden md:block" /> Sales Talent.
+
+            <h1 style={{
+              fontFamily: "CenturyGothic, sans-serif",
+              fontSize: "clamp(34px, 5.5vw, 64px)",
+              color: "#fff", lineHeight: 1.08, letterSpacing: "-0.025em",
+              marginBottom: 20, maxWidth: 860, marginLeft: "auto", marginRight: "auto",
+            }}>
+              Hire High-Performing{" "}
+              <em style={{ color: V.cyan, fontStyle: "normal" }}>Sales Talent.</em>
             </h1>
-            <p className="mt-5 max-w-xl text-lg text-slate-300 md:mx-0 mx-auto">
-              Close more deals faster with pre-vetted, ready-to-perform sales talent you can hire instantly.
+
+            <p style={{ fontSize: "clamp(16px, 1.9vw, 19px)", color: "rgba(255,255,255,0.82)", maxWidth: 620, margin: "0 auto 16px", lineHeight: 1.55 }}>
+              Close more deals faster with pre-vetted, ready-to-perform sales talent.
             </p>
-            <p className="mt-3 max-w-xl text-base text-slate-400 md:mx-0 mx-auto">
-              Hire, deploy, and manage high-performing sales talent without the hiring headache. We help businesses recruit, outsource, and build sales teams across B2B, tech, and commercial sales roles.
+            <p style={{ fontSize: "clamp(14px, 1.6vw, 16px)", color: "rgba(255,255,255,0.6)", maxWidth: 640, margin: "0 auto 44px", lineHeight: 1.75 }}>
+              Hire, deploy, and manage high-performing sales talent without the headache. We help businesses recruit, outsource, and build sales teams across B2B, tech, and commercial sales roles.
             </p>
-            <div className="mt-10 flex flex-wrap items-center justify-center md:justify-start gap-4">
-              <Button
-                onClick={scrollToForm}
-                size="lg"
-                className="bg-[#00C2FF] text-slate-900 border-0 px-8 text-base font-bold shadow-[0_4px_24px_rgba(0,194,255,0.4)] hover:bg-[#33CFFF] hover:shadow-[0_6px_28px_rgba(0,194,255,0.5)] transition-all"
-              >
-                Hire Sales Talent <ArrowRight className="ml-2 h-5 w-5" />
-              </Button>
-              <Button
-                variant="outline"
-                size="lg"
-                className="px-8 text-base font-semibold border-white/20 text-white hover:bg-white/10"
-                asChild
-              >
-                <a href="mailto:hire@digihire.io">
-                  <Phone className="mr-2 h-4 w-4" /> Talk to Our Team
-                </a>
-              </Button>
+
+            <div style={{ display: "flex", gap: 14, justifyContent: "center", flexWrap: "wrap", marginBottom: 64 }}>
+              <button onClick={scrollToForm} className="vs-btn-cyan">
+                Hire Sales Talent <ArrowRight size={16} />
+              </button>
+              <a href="mailto:hire@digihire.io" className="vs-btn-outline-white">
+                <Phone size={15} /> Talk to Our Team
+              </a>
             </div>
-          </div>
-          <div className="flex-1 w-full relative">
-            <img src="/2.png" alt="Sales Talent" className="w-full h-auto rounded-2xl shadow-2xl relative z-10" />
-            <div className="absolute -bottom-6 -right-6 h-full w-full rounded-2xl border-2 border-[#00C2FF]/30 z-0" />
+
+            <div style={{ maxWidth: 900, margin: "0 auto", borderRadius: 20, overflow: "hidden", border: `1px solid rgba(0,194,255,0.18)` }}>
+              <img src="/hero-sales.png" alt="Sales Talent" style={{ width: "100%", height: "auto", display: "block" }} />
+            </div>
           </div>
         </div>
       </section>
 
-      {/* ── Brands ───────────────────────────────────── */}
-      <section className="border-y border-border bg-muted/20">
-        <div className="mx-auto max-w-5xl px-4 py-10">
-          <p className="mb-6 text-center text-xs font-semibold uppercase tracking-widest text-muted-foreground">
+      {/* ══ BRANDS STRIP ══════════════════════════════════ */}
+      <section style={{ background: "#fff", borderBottom: `1px solid ${V.border}`, padding: "48px 0" }}>
+        <div style={{ maxWidth: 1140, margin: "0 auto", padding: "0 28px", textAlign: "center" }}>
+          <p style={{ fontSize: 11, letterSpacing: "0.1em", textTransform: "uppercase", color: V.subText, marginBottom: 32 }}>
             Brands we've worked with
           </p>
-          <div className="flex flex-wrap items-center justify-center gap-6 md:gap-12">
-            {brands.map((brand) => (
-              <div
-                key={brand}
-                className="rounded-xl border border-border/60 bg-card px-6 py-3 text-sm font-bold text-foreground/70 shadow-sm"
-              >
-                {brand}
+          <div style={{ display: "flex", flexWrap: "wrap", gap: 24, justifyContent: "center", alignItems: "center" }}>
+            {brandLogos.map(({ src, alt }) => (
+              <div key={alt} style={{
+                padding: "14px 24px", borderRadius: 12, border: `1px solid ${V.border}`,
+                background: V.grayBg, display: "flex", alignItems: "center", justifyContent: "center",
+                height: 64, minWidth: 100,
+              }}>
+                <img
+                  src={src}
+                  alt={alt}
+                  style={{ height: 32, width: "auto", maxWidth: 120, objectFit: "contain", display: "block", filter: "grayscale(1)", opacity: 0.65, transition: "filter .2s, opacity .2s" }}
+                  onMouseEnter={e => { (e.currentTarget as HTMLImageElement).style.filter = "grayscale(0)"; (e.currentTarget as HTMLImageElement).style.opacity = "1"; }}
+                  onMouseLeave={e => { (e.currentTarget as HTMLImageElement).style.filter = "grayscale(1)"; (e.currentTarget as HTMLImageElement).style.opacity = "0.65"; }}
+                />
               </div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* ── Who You Can Hire ─────────────────────────── */}
-      <section className="mx-auto max-w-6xl px-4 py-16 md:py-24">
-        <div className="mb-12 text-center">
-          <h2 className="font-display text-3xl md:text-4xl text-slate-800">Who You Can Hire</h2>
-          <p className="mt-3 text-muted-foreground">Sales talent built for revenue, not just resumes.</p>
-        </div>
-        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-          {talentTypes.map(({ icon: Icon, label }) => (
-            <div
-              key={label}
-              className="flex items-center gap-4 rounded-xl border border-border/60 bg-card p-5 shadow-sm transition-all hover:border-primary/30 hover:shadow-md hover:-translate-y-0.5"
-            >
-              <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-primary/10 text-primary">
-                <Icon className="h-5 w-5" />
+      {/* ══ STATS ══════════════════════════════════════════ */}
+      <section style={{ background: V.grayBg, padding: "64px 0", borderBottom: `1px solid ${V.border}` }}>
+        <div style={{ maxWidth: 1140, margin: "0 auto", padding: "0 28px" }}>
+          <div className="reveal" style={{ display: "grid", gridTemplateColumns: "repeat(4,1fr)", gap: 32, textAlign: "center" }}>
+            {stats.map(s => (
+              <div key={s.label}>
+                <p style={{ fontFamily: "CenturyGothic, sans-serif", fontSize: "clamp(28px,3vw,40px)", color: V.cyan, lineHeight: 1.1 }}>{s.value}</p>
+                <p style={{ fontSize: 14, color: V.subText, marginTop: 6 }}>{s.label}</p>
               </div>
-              <span className="font-semibold text-foreground">{label}</span>
-            </div>
-          ))}
+            ))}
+          </div>
         </div>
       </section>
 
-      {/* ── Hiring Models ────────────────────────────── */}
-      <section className="border-y border-border bg-muted/30">
-        <div className="mx-auto max-w-6xl px-4 py-16 md:py-24">
-          <div className="mb-12 text-center">
-            <h2 className="font-display text-3xl md:text-4xl text-slate-800">Flexible Hiring Models</h2>
-            <p className="mt-3 text-muted-foreground">Flexible hiring models to match your growth stage.</p>
+      {/* ══ WHO YOU CAN HIRE ══════════════════════════════ */}
+      <section style={{ background: "#fff", padding: "110px 0" }}>
+        <div style={{ maxWidth: 1140, margin: "0 auto", padding: "0 28px" }}>
+          <div className="reveal" style={{ textAlign: "center", marginBottom: 56 }}>
+            <p style={{ fontSize: 11, letterSpacing: "0.1em", textTransform: "uppercase", color: V.cyanDim, marginBottom: 10 }}>Talent Roster</p>
+            <h2 style={{ fontFamily: "CenturyGothic, sans-serif", fontSize: "clamp(26px,3.5vw,40px)", color: V.navy, marginBottom: 14, letterSpacing: "-0.02em" }}>Who You Can Hire</h2>
+            <p style={{ fontSize: 16, color: V.subText, maxWidth: 520, margin: "0 auto" }}>Sales talent built for revenue, not just resumes.</p>
           </div>
-          <div className="grid gap-6 md:grid-cols-2">
-            {hiringModels.map((model) => (
-              <Card key={model.number} className="border-border/60 bg-card/80 transition-all hover:shadow-lg hover:-translate-y-1">
-                <CardContent className="p-6">
-                  <div className="mb-4 flex items-center gap-4">
-                    <span className="font-display text-4xl font-medium text-sky-600/30">{model.number}</span>
-                    <div>
-                      <h3 className="font-display text-lg leading-snug text-slate-800">{model.title}</h3>
+          <div className="stagger-grid" style={{ display: "grid", gridTemplateColumns: "repeat(3,1fr)", gap: 20 }}>
+            {talentTypes.map(({ icon: Icon, label }) => (
+              <div key={label} style={{
+                display: "flex", alignItems: "center", gap: 14,
+                padding: "22px 24px", borderRadius: 18,
+                border: `1px solid ${V.border}`, background: "#fff",
+                transition: "transform .28s ease, box-shadow .28s ease, border-color .28s ease",
+              }}
+                onMouseEnter={e => { (e.currentTarget as HTMLDivElement).style.borderColor = V.cyanBorder; (e.currentTarget as HTMLDivElement).style.boxShadow = "0 16px 48px rgba(6,17,31,0.08)"; (e.currentTarget as HTMLDivElement).style.transform = "translateY(-3px)"; }}
+                onMouseLeave={e => { (e.currentTarget as HTMLDivElement).style.borderColor = V.border; (e.currentTarget as HTMLDivElement).style.boxShadow = "none"; (e.currentTarget as HTMLDivElement).style.transform = "none"; }}
+              >
+                <div style={{ width: 42, height: 42, borderRadius: 11, background: V.cyanBg, border: `1px solid ${V.cyanBorder}`, display: "flex", alignItems: "center", justifyContent: "center", color: V.cyanDim, flexShrink: 0 }}>
+                  <Icon size={18} />
+                </div>
+                <span style={{ fontSize: 15, color: V.navy }}>{label}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ══ HIRING MODELS ═════════════════════════════════ */}
+      <section style={{ background: V.grayBg, padding: "110px 0" }}>
+        <div style={{ maxWidth: 1140, margin: "0 auto", padding: "0 28px" }}>
+          <div className="reveal" style={{ textAlign: "center", marginBottom: 56 }}>
+            <p style={{ fontSize: 11, letterSpacing: "0.1em", textTransform: "uppercase", color: V.cyanDim, marginBottom: 10 }}>Hiring Models</p>
+            <h2 style={{ fontFamily: "CenturyGothic, sans-serif", fontSize: "clamp(26px,3.5vw,40px)", color: V.navy, marginBottom: 14, letterSpacing: "-0.02em" }}>Flexible Hiring Models</h2>
+            <p style={{ fontSize: 16, color: V.subText, maxWidth: 520, margin: "0 auto" }}>Match your growth stage with the right model.</p>
+          </div>
+          <div className="stagger-grid" style={{ display: "grid", gridTemplateColumns: "repeat(2,1fr)", gap: 24 }}>
+            {hiringModels.map(m => (
+              <div key={m.num} style={{
+                background: "#fff", border: `1px solid ${V.border}`, borderRadius: 28,
+                overflow: "hidden", transition: "transform .28s ease, box-shadow .28s ease, border-color .28s ease",
+              }}
+                onMouseEnter={e => { (e.currentTarget as HTMLDivElement).style.borderColor = V.cyanBorder; (e.currentTarget as HTMLDivElement).style.boxShadow = "0 24px 60px rgba(6,17,31,0.1)"; (e.currentTarget as HTMLDivElement).style.transform = "translateY(-4px)"; }}
+                onMouseLeave={e => { (e.currentTarget as HTMLDivElement).style.borderColor = V.border; (e.currentTarget as HTMLDivElement).style.boxShadow = "none"; (e.currentTarget as HTMLDivElement).style.transform = "none"; }}
+              >
+                <div style={{ padding: "32px 32px 28px" }}>
+                  <div style={{ display: "flex", alignItems: "center", gap: 14, marginBottom: 14 }}>
+                    <div style={{ width: 40, height: 40, borderRadius: 10, background: V.cyanBg, border: `1px solid ${V.cyanBorder}`, display: "flex", alignItems: "center", justifyContent: "center", color: V.cyanDim }}>
+                      <m.icon size={18} />
                     </div>
+                    <span style={{ fontSize: 12, letterSpacing: "0.08em", color: V.cyanDim, background: V.cyanBg, border: `1px solid ${V.cyanBorder}`, borderRadius: 8, padding: "4px 10px" }}>{m.num}</span>
                   </div>
-                  <p className="mb-4 text-sm text-muted-foreground">{model.subtitle}</p>
-                  <ul className="space-y-2">
-                    {model.points.map((pt) => (
-                      <li key={pt} className="flex items-start gap-2 text-sm">
-                        <ChevronRight className="mt-0.5 h-4 w-4 shrink-0 text-primary" />
-                        <span>{pt}</span>
+                  <h3 style={{ fontFamily: "CenturyGothic, sans-serif", fontSize: 20, color: V.navy, marginBottom: 10, letterSpacing: "-0.015em" }}>{m.title}</h3>
+                  <p style={{ fontSize: 14, color: V.subText, lineHeight: 1.7, marginBottom: 16 }}>{m.sub}</p>
+                  <ul style={{ listStyle: "none", display: "flex", flexDirection: "column", gap: 8 }}>
+                    {m.points.map(pt => (
+                      <li key={pt} style={{ display: "flex", alignItems: "flex-start", gap: 10, fontSize: 14, color: V.bodyText }}>
+                        <span style={{ width: 20, height: 20, borderRadius: "50%", background: V.cyanBg, border: `1px solid ${V.cyanBorder}`, color: V.cyanDim, display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0, marginTop: 1 }}>
+                          <CheckCircle size={11} />
+                        </span>
+                        {pt}
                       </li>
                     ))}
                   </ul>
-                </CardContent>
-              </Card>
+                </div>
+              </div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* ── Why Crecer ───────────────────────────────── */}
-      <section className="mx-auto max-w-5xl px-4 py-16 md:py-24">
-        <div className="grid gap-10 md:grid-cols-2 md:gap-16 md:items-center">
-          <div>
-            <span className="mb-3 inline-block text-sm font-semibold text-primary">Why Crecer?</span>
-            <h2 className="font-display text-3xl leading-snug md:text-4xl text-slate-800">
-              More than recruitment. We deliver sales execution.
-            </h2>
-            <ul className="mt-8 space-y-4">
-              {whyPoints.map(({ icon: Icon, text }) => (
-                <li key={text} className="flex items-center gap-3">
-                  <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-primary/10 text-primary">
-                    <Icon className="h-4 w-4" />
-                  </div>
-                  <span className="text-sm font-medium">{text}</span>
-                </li>
-              ))}
-            </ul>
+      {/* ══ WHY CRECER (benefits split) ═══════════════════ */}
+      <section style={{ background: "#fff", padding: "110px 0" }}>
+        <div style={{ maxWidth: 1140, margin: "0 auto", padding: "0 28px" }}>
+          <div className="reveal" style={{ textAlign: "center", marginBottom: 56 }}>
+            <p style={{ fontSize: 11, letterSpacing: "0.1em", textTransform: "uppercase", color: V.cyanDim, marginBottom: 10 }}>Why Crecer?</p>
+            <h2 style={{ fontFamily: "CenturyGothic, sans-serif", fontSize: "clamp(26px,3.5vw,40px)", color: V.navy, marginBottom: 14, letterSpacing: "-0.02em" }}>More than recruitment. We deliver sales execution.</h2>
+            <p style={{ fontSize: 16, color: V.subText, maxWidth: 540, margin: "0 auto" }}>Two outcomes — structured to help you build and grow your sales team.</p>
           </div>
-          <div>
-            <div className="rounded-2xl border border-border/60 bg-muted/30 p-8">
-              <h3 className="font-display mb-5 text-xl text-slate-800">Who This Is For</h3>
-              <ul className="space-y-3">
-                {whoForItems.map((item) => (
-                  <li key={item} className="flex items-center gap-3 text-sm">
-                    <CheckCircle2 className="h-4 w-4 shrink-0 text-primary" />
-                    <span>{item}</span>
+          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 28 }}>
+            {/* Light col */}
+            <div className="reveal" style={{ border: `1px solid ${V.border}`, borderRadius: 28, padding: "44px 40px", background: "linear-gradient(180deg,#FDFEFF 0%,#F7FBFF 100%)" }}>
+              <span style={{ fontSize: 11, letterSpacing: "0.12em", textTransform: "uppercase", color: V.cyanDim, display: "block", marginBottom: 14 }}>Why Choose Crecer</span>
+              <h3 style={{ fontFamily: "CenturyGothic, sans-serif", fontSize: 26, color: V.navy, marginBottom: 28, letterSpacing: "-0.02em" }}>Built for sales performance, not just placement.</h3>
+              <ul style={{ listStyle: "none", display: "flex", flexDirection: "column", gap: 14 }}>
+                {whyPoints.map(({ icon: Icon, text }) => (
+                  <li key={text} style={{ display: "flex", alignItems: "flex-start", gap: 12, fontSize: 15, color: V.bodyText, lineHeight: 1.6 }}>
+                    <span style={{ width: 22, height: 22, borderRadius: "50%", background: V.cyanBg, border: `1px solid ${V.cyanBorder}`, color: V.cyanDim, display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0, marginTop: 1 }}>
+                      <Icon size={11} />
+                    </span>
+                    {text}
                   </li>
                 ))}
               </ul>
             </div>
-            <div className="mt-8">
-              <img src="/3.png" alt="Sales Performance" className="w-full h-64 object-cover rounded-2xl shadow-md border border-border/50" />
+            {/* Dark col */}
+            <div className="reveal" style={{ border: `1px solid rgba(0,194,255,0.16)`, borderRadius: 28, padding: "44px 40px", background: V.navy }}>
+              <span style={{ fontSize: 11, letterSpacing: "0.12em", textTransform: "uppercase", color: V.cyan, display: "block", marginBottom: 14 }}>Who This Is For</span>
+              <h3 style={{ fontFamily: "CenturyGothic, sans-serif", fontSize: 26, color: "#fff", marginBottom: 28, letterSpacing: "-0.02em" }}>Scale your sales team without the hiring headache.</h3>
+              <ul style={{ listStyle: "none", display: "flex", flexDirection: "column", gap: 14 }}>
+                {whoFor.map(item => (
+                  <li key={item} style={{ display: "flex", alignItems: "flex-start", gap: 12, fontSize: 15, color: "rgba(255,255,255,0.78)", lineHeight: 1.6 }}>
+                    <span style={{ width: 22, height: 22, borderRadius: "50%", background: "rgba(0,194,255,0.14)", border: "1px solid rgba(0,194,255,0.28)", color: V.cyan, display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0, marginTop: 1 }}>
+                      <CheckCircle size={11} />
+                    </span>
+                    {item}
+                  </li>
+                ))}
+              </ul>
+              <div style={{ marginTop: 32, borderRadius: 14, overflow: "hidden", border: "1px solid rgba(0,194,255,0.15)" }}>
+                <img src="/why-us.png" alt="Sales Performance" style={{ width: "100%", height: 200, objectFit: "cover", display: "block" }} />
+              </div>
             </div>
           </div>
         </div>
       </section>
 
-      {/* ── Final CTA Banner ─────────────────────────── */}
-      <section className="bg-sky-600">
-        <div className="mx-auto max-w-3xl px-4 py-16 text-center">
-          <h2 className="font-display text-3xl text-primary-foreground md:text-4xl">
-            Ready to scale your sales team?
-          </h2>
-          <p className="mt-4 text-base text-primary-foreground/80">
-            Whether you need one closer or a full sales force, Crecer helps you hire and deploy sales talent that performs.
-          </p>
-          <div className="mt-8 flex flex-wrap items-center justify-center gap-4">
-            <Button
-              onClick={scrollToForm}
-              size="lg"
-              className="bg-[#00C2FF] text-slate-900 border-0 px-8 text-base font-bold shadow-[0_4px_24px_rgba(0,194,255,0.4)] hover:bg-[#33CFFF] hover:shadow-[0_6px_28px_rgba(0,194,255,0.5)] transition-all"
-            >
-              Hire Sales Talent <ArrowRight className="ml-2 h-4 w-4" />
-            </Button>
-            <Button
-              variant="ghost"
-              size="lg"
-              className="text-primary-foreground hover:bg-primary-foreground/10 px-8 font-semibold border border-primary-foreground/30"
-              asChild
-            >
-              <a href="mailto:hire@digihire.io">Book a Consultation</a>
-            </Button>
-          </div>
-        </div>
-      </section>
-
-      {/* ── Hire Form ────────────────────────────────── */}
-      <section ref={formRef} id="hire-form" className="mx-auto max-w-3xl px-4 py-16 md:py-24 scroll-mt-20">
-        <div className="mb-10 text-center">
-          <span className="mb-3 inline-block rounded-full bg-primary/10 px-4 py-1 text-sm font-semibold text-primary">
-            Get Started
-          </span>
-          <h2 className="font-display text-3xl text-slate-800">Hire Sales Talent</h2>
-          <p className="mt-3 text-muted-foreground">Tell us about your needs and we'll be in touch within 24–48 hours.</p>
-        </div>
-
-        {submitted ? (
-          <div className="rounded-2xl border border-border bg-card p-10 text-center shadow-sm">
-            <div className="mx-auto mb-6 flex h-16 w-16 items-center justify-center rounded-full bg-primary/10">
-              <CheckCircle2 className="h-8 w-8 text-primary" />
-            </div>
-            <h3 className="font-display text-2xl text-slate-800">Request Submitted!</h3>
-            <p className="mt-3 text-muted-foreground">
-              Our team will review your request and get back to you within 24–48 hours.
+      {/* ══ FINAL CTA ══════════════════════════════════════ */}
+      <section style={{ background: V.navy, padding: "110px 0", textAlign: "center", position: "relative", overflow: "hidden" }}>
+        <div style={{ position: "absolute", inset: 0, background: "radial-gradient(ellipse 60% 80% at 50% 100%, rgba(0,194,255,0.14) 0%, transparent 70%)", pointerEvents: "none" }} />
+        <div style={{ maxWidth: 1140, margin: "0 auto", padding: "0 28px", position: "relative", zIndex: 1 }}>
+          <div className="reveal">
+            <h2 style={{ fontFamily: "CenturyGothic, sans-serif", fontSize: "clamp(28px,4.5vw,48px)", color: "#fff", letterSpacing: "-0.025em", marginBottom: 16, lineHeight: 1.1 }}>
+              Ready to scale your sales team?
+            </h2>
+            <p style={{ fontSize: 16, color: "rgba(255,255,255,0.6)", maxWidth: 560, margin: "0 auto 40px", lineHeight: 1.7 }}>
+              Whether you need one closer or a full sales force, Crecer helps you hire and deploy sales talent that performs.
             </p>
-            <Button
-              className="bg-sky-600 hover:bg-sky-700 text-white mt-8 border-0"
-              onClick={() => { setForm(initialForm); setSubmitted(false); }}
-            >
-              Submit Another Request
-            </Button>
+            <div style={{ display: "flex", gap: 14, justifyContent: "center", flexWrap: "wrap" }}>
+              <button onClick={scrollToForm} className="vs-btn-cyan">
+                Hire Sales Talent <ArrowRight size={16} />
+              </button>
+              <a href="mailto:hire@digihire.io" className="vs-btn-outline-white">
+                Book a Consultation
+              </a>
+            </div>
           </div>
-        ) : (
-          <form onSubmit={handleSubmit} className="space-y-8 rounded-2xl border border-border bg-card p-6 shadow-sm md:p-10">
+        </div>
+      </section>
 
-            {/* Section 1: Basic Details */}
-            <fieldset className="space-y-4">
-              <legend className="flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-muted-foreground">
-                <span className="flex h-5 w-5 items-center justify-center rounded bg-primary/10 text-primary text-[10px] font-black">1</span>
-                Basic Details
-              </legend>
-              <div className="grid gap-4 sm:grid-cols-2">
-                <label className="block space-y-1.5">
-                  <span className="text-sm font-medium">Full Name <span className="text-destructive">*</span></span>
-                  <input
-                    required
-                    type="text"
-                    placeholder="John Adeyemi"
-                    value={form.fullName}
-                    onChange={set("fullName")}
-                    className="w-full rounded-lg border border-border bg-background px-4 py-2.5 text-sm placeholder:text-muted-foreground/60 focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all"
-                  />
-                </label>
-                <label className="block space-y-1.5">
-                  <span className="text-sm font-medium">Work Email <span className="text-destructive">*</span></span>
-                  <input
-                    required
-                    type="email"
-                    placeholder="john@company.com"
-                    value={form.workEmail}
-                    onChange={set("workEmail")}
-                    className="w-full rounded-lg border border-border bg-background px-4 py-2.5 text-sm placeholder:text-muted-foreground/60 focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all"
-                  />
-                </label>
-                <label className="block space-y-1.5">
-                  <span className="text-sm font-medium">Company Name <span className="text-destructive">*</span></span>
-                  <input
-                    required
-                    type="text"
-                    placeholder="Acme Corp"
-                    value={form.companyName}
-                    onChange={set("companyName")}
-                    className="w-full rounded-lg border border-border bg-background px-4 py-2.5 text-sm placeholder:text-muted-foreground/60 focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all"
-                  />
-                </label>
-                <label className="block space-y-1.5">
-                  <span className="text-sm font-medium">Your Role <span className="text-destructive">*</span></span>
-                  <select
-                    required
-                    value={form.role}
-                    onChange={set("role")}
-                    className="w-full rounded-lg border border-border bg-background px-4 py-2.5 text-sm text-foreground focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all"
-                  >
-                    <option value="" disabled>Select your role</option>
-                    <option>Founder / Co-Founder</option>
-                    <option>CEO / Managing Director</option>
-                    <option>Head of Sales / Revenue</option>
-                    <option>HR / Talent Lead</option>
-                    <option>Operations / Growth</option>
-                    <option>Other</option>
-                  </select>
-                </label>
+      {/* ══ HIRE FORM ══════════════════════════════════════ */}
+      <section ref={formRef} id="hire-form" style={{ background: V.grayBg, padding: "110px 0" }}>
+        <div style={{ maxWidth: 780, margin: "0 auto", padding: "0 28px" }}>
+          <div className="reveal" style={{ textAlign: "center", marginBottom: 48 }}>
+            <p style={{ fontSize: 11, letterSpacing: "0.1em", textTransform: "uppercase", color: V.cyanDim, marginBottom: 10 }}>Get Started</p>
+            <h2 style={{ fontFamily: "CenturyGothic, sans-serif", fontSize: "clamp(26px,3.5vw,40px)", color: V.navy, marginBottom: 14, letterSpacing: "-0.02em" }}>Hire Sales Talent</h2>
+            <p style={{ fontSize: 16, color: V.subText }}>Tell us about your needs and we'll be in touch within 24–48 hours.</p>
+          </div>
+
+          {submitted ? (
+            <div className="reveal" style={{ background: "#fff", borderRadius: 28, border: `1px solid ${V.border}`, padding: "60px 40px", textAlign: "center" }}>
+              <div style={{ width: 64, height: 64, borderRadius: "50%", background: V.cyanBg, border: `1px solid ${V.cyanBorder}`, margin: "0 auto 24px", display: "flex", alignItems: "center", justifyContent: "center", color: V.cyanDim }}>
+                <CheckCircle size={28} />
               </div>
-            </fieldset>
+              <h3 style={{ fontFamily: "CenturyGothic, sans-serif", fontSize: 26, color: V.navy, marginBottom: 12 }}>Request Submitted!</h3>
+              <p style={{ fontSize: 16, color: V.subText, marginBottom: 32 }}>Our team will review your request and get back to you within 24–48 hours.</p>
+              <button onClick={() => { setForm(blank); setSubmitted(false); }} className="vs-btn-cyan" style={{ margin: "0 auto" }}>
+                Submit Another Request
+              </button>
+            </div>
+          ) : (
+            <form onSubmit={submit} style={{ background: "#fff", borderRadius: 28, border: `1px solid ${V.border}`, padding: "44px 40px", display: "flex", flexDirection: "column", gap: 32 }}>
 
-            <div className="h-px bg-border" />
+              {/* 1 Basic */}
+              <fieldset style={{ border: "none", padding: 0, margin: 0 }}>
+                <legend style={legendStyle}><span style={legendNum}>1</span> Basic Details</legend>
+                <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16 }}>
+                  {([["Full Name *", "fullName", "text", "John Adeyemi"], ["Work Email *", "workEmail", "email", "john@company.com"], ["Company Name *", "companyName", "text", "Acme Corp"]] as const).map(([label, key, type, ph]) => (
+                    <label key={key} style={{ display: "block" }}>
+                      <span style={labelStyle}>{label}</span>
+                      <input required type={type} placeholder={ph} value={form[key as keyof FormData] as string} onChange={set(key as keyof FormData)} style={inputStyle} />
+                    </label>
+                  ))}
+                  <label>
+                    <span style={labelStyle}>Your Role *</span>
+                    <select required value={form.role} onChange={set("role")} style={inputStyle}>
+                      <option value="" disabled>Select your role</option>
+                      {["Founder / Co-Founder", "CEO / Managing Director", "Head of Sales / Revenue", "HR / Talent Lead", "Operations / Growth", "Other"].map(o => <option key={o}>{o}</option>)}
+                    </select>
+                  </label>
+                </div>
+              </fieldset>
 
-            {/* Section 2: Business Context */}
-            <fieldset className="space-y-4">
-              <legend className="flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-muted-foreground">
-                <span className="flex h-5 w-5 items-center justify-center rounded bg-primary/10 text-primary text-[10px] font-black">2</span>
-                Business Context
-              </legend>
-              <div className="grid gap-4 sm:grid-cols-2">
-                <label className="block space-y-1.5">
-                  <span className="text-sm font-medium">What best describes your business?</span>
-                  <select
-                    value={form.businessType}
-                    onChange={set("businessType")}
-                    className="w-full rounded-lg border border-border bg-background px-4 py-2.5 text-sm text-foreground focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all"
-                  >
-                    <option value="" disabled>Select business type</option>
-                    <option>B2B company</option>
-                    <option>Tech / SaaS / Digital product</option>
-                    <option>Service-based business</option>
-                    <option>Marketplace / Platform</option>
-                    <option>Ecommerce / Product-led business</option>
-                    <option>Other</option>
-                  </select>
-                </label>
-                <label className="block space-y-1.5">
-                  <span className="text-sm font-medium">Company Stage</span>
-                  <select
-                    value={form.companyStage}
-                    onChange={set("companyStage")}
-                    className="w-full rounded-lg border border-border bg-background px-4 py-2.5 text-sm text-foreground focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all"
-                  >
-                    <option value="" disabled>Select company stage</option>
-                    <option>Early-stage</option>
-                    <option>Growth-stage</option>
-                    <option>Scaling / Expansion</option>
-                    <option>Enterprise</option>
-                  </select>
-                </label>
-              </div>
-            </fieldset>
+              <div style={{ height: 1, background: V.border }} />
 
-            <div className="h-px bg-border" />
+              {/* 2 Business */}
+              <fieldset style={{ border: "none", padding: 0, margin: 0 }}>
+                <legend style={legendStyle}><span style={legendNum}>2</span> Business Context</legend>
+                <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16 }}>
+                  <label>
+                    <span style={labelStyle}>Business type</span>
+                    <select value={form.businessType} onChange={set("businessType")} style={inputStyle}>
+                      <option value="" disabled>Select type</option>
+                      {["B2B company", "Tech / SaaS / Digital product", "Service-based business", "Marketplace / Platform", "Ecommerce / Product-led", "Other"].map(o => <option key={o}>{o}</option>)}
+                    </select>
+                  </label>
+                  <label>
+                    <span style={labelStyle}>Company stage</span>
+                    <select value={form.companyStage} onChange={set("companyStage")} style={inputStyle}>
+                      <option value="" disabled>Select stage</option>
+                      {["Early-stage", "Growth-stage", "Scaling / Expansion", "Enterprise"].map(o => <option key={o}>{o}</option>)}
+                    </select>
+                  </label>
+                </div>
+              </fieldset>
 
-            {/* Section 3: Sales Talent */}
-            <fieldset className="space-y-4">
-              <legend className="flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-muted-foreground">
-                <span className="flex h-5 w-5 items-center justify-center rounded bg-primary/10 text-primary text-[10px] font-black">3</span>
-                Sales Talent You Need
-              </legend>
-              <p className="text-sm text-muted-foreground">What type of sales talent are you looking for? <span className="text-destructive">*</span></p>
-              <MultiCheckbox
-                options={TALENT_OPTIONS}
-                selected={form.talentTypes}
-                onChange={(val) => setForm((p) => ({ ...p, talentTypes: val }))}
-              />
-            </fieldset>
+              <div style={{ height: 1, background: V.border }} />
 
-            <div className="h-px bg-border" />
+              {/* 3 Talent */}
+              <fieldset style={{ border: "none", padding: 0, margin: 0 }}>
+                <legend style={legendStyle}><span style={legendNum}>3</span> Sales Talent You Need *</legend>
+                <Checkbox options={TALENT_OPTIONS} selected={form.talentTypes} onChange={v => setForm(p => ({ ...p, talentTypes: v }))} />
+              </fieldset>
 
-            {/* Section 4: Hiring Model */}
-            <fieldset className="space-y-4">
-              <legend className="flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-muted-foreground">
-                <span className="flex h-5 w-5 items-center justify-center rounded bg-primary/10 text-primary text-[10px] font-black">4</span>
-                Hiring Model
-              </legend>
-              <p className="text-sm text-muted-foreground">How would you like to hire? <span className="text-destructive">*</span></p>
-              <MultiCheckbox
-                options={HIRING_MODEL_OPTIONS}
-                selected={form.hiringModels}
-                onChange={(val) => setForm((p) => ({ ...p, hiringModels: val }))}
-              />
-            </fieldset>
+              <div style={{ height: 1, background: V.border }} />
 
-            <div className="h-px bg-border" />
+              {/* 4 Hiring model */}
+              <fieldset style={{ border: "none", padding: 0, margin: 0 }}>
+                <legend style={legendStyle}><span style={legendNum}>4</span> Hiring Model *</legend>
+                <Checkbox options={HIRING_MODEL_OPTIONS} selected={form.hiringModels} onChange={v => setForm(p => ({ ...p, hiringModels: v }))} />
+              </fieldset>
 
-            {/* Section 5: Scale & Geography */}
-            <fieldset className="space-y-4">
-              <legend className="flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-muted-foreground">
-                <span className="flex h-5 w-5 items-center justify-center rounded bg-primary/10 text-primary text-[10px] font-black">5</span>
-                Scale & Timeline
-              </legend>
-              <div className="grid gap-4 sm:grid-cols-2">
-                <label className="block space-y-1.5">
-                  <span className="text-sm font-medium">How many sales professionals do you need?</span>
-                  <select
-                    value={form.teamSize}
-                    onChange={set("teamSize")}
-                    className="w-full rounded-lg border border-border bg-background px-4 py-2.5 text-sm text-foreground focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all"
-                  >
-                    <option value="" disabled>Select team size</option>
-                    <option>2–5</option>
-                    <option>6–10</option>
-                    <option>10+</option>
-                  </select>
-                </label>
-                <label className="block space-y-1.5">
-                  <span className="text-sm font-medium">When do you want to get started?</span>
-                  <select
-                    value={form.startDate}
-                    onChange={set("startDate")}
-                    className="w-full rounded-lg border border-border bg-background px-4 py-2.5 text-sm text-foreground focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all"
-                  >
-                    <option value="" disabled>Select timeline</option>
-                    <option>Immediately</option>
-                    <option>Within 30 days</option>
-                    <option>1–3 months</option>
-                    <option>Just exploring</option>
-                  </select>
-                </label>
-              </div>
-            </fieldset>
+              <div style={{ height: 1, background: V.border }} />
 
-            {error && (
-              <p className="rounded-lg bg-destructive/10 px-4 py-3 text-sm text-destructive border border-destructive/20">
-                {error}
-              </p>
-            )}
+              {/* 5 Scale */}
+              <fieldset style={{ border: "none", padding: 0, margin: 0 }}>
+                <legend style={legendStyle}><span style={legendNum}>5</span> Scale & Timeline</legend>
+                <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16 }}>
+                  <label>
+                    <span style={labelStyle}>How many professionals do you need?</span>
+                    <select value={form.teamSize} onChange={set("teamSize")} style={inputStyle}>
+                      <option value="" disabled>Select size</option>
+                      {["2–5", "6–10", "10+"].map(o => <option key={o}>{o}</option>)}
+                    </select>
+                  </label>
+                  <label>
+                    <span style={labelStyle}>When do you want to start?</span>
+                    <select value={form.startDate} onChange={set("startDate")} style={inputStyle}>
+                      <option value="" disabled>Select timeline</option>
+                      {["Immediately", "Within 30 days", "1–3 months", "Just exploring"].map(o => <option key={o}>{o}</option>)}
+                    </select>
+                  </label>
+                </div>
+              </fieldset>
 
-            <div className="pt-2">
-              <Button
-                type="submit"
-                disabled={submitting}
-                className="bg-[#00C2FF] text-slate-900 w-full border-0 text-base font-bold shadow-[0_4px_24px_rgba(0,194,255,0.4)] hover:bg-[#33CFFF] hover:shadow-[0_6px_28px_rgba(0,194,255,0.5)] transition-all disabled:opacity-60"
-              >
-                {submitting ? "Submitting..." : "Submit & Talk to Sales"}
-                {!submitting && <ArrowRight className="ml-2 h-5 w-5" />}
-              </Button>
-              <p className="mt-3 text-center text-xs text-muted-foreground">
+              {error && (
+                <p style={{ padding: "12px 16px", borderRadius: 10, background: "rgba(239,68,68,0.08)", border: "1px solid rgba(239,68,68,0.2)", color: "#DC2626", fontSize: 14 }}>
+                  {error}
+                </p>
+              )}
+
+              <button type="submit" disabled={submitting} className="vs-btn-cyan" style={{ width: "100%", justifyContent: "center", opacity: submitting ? 0.6 : 1 }}>
+                {submitting ? "Submitting…" : <><span>Submit & Talk to Sales</span><ArrowRight size={16} /></>}
+              </button>
+              <p style={{ textAlign: "center", fontSize: 13, color: V.subText }}>
                 Our team will review your request and get back to you within 24–48 hours.
               </p>
-            </div>
-          </form>
-        )}
+            </form>
+          )}
+        </div>
       </section>
 
-      {/* ── Footer ───────────────────────────────────── */}
-      <div id="footer-root"></div>
+      <div id="footer-root" />
     </div>
   );
 }
