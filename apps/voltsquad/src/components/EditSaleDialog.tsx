@@ -20,6 +20,7 @@ import {
 } from "@digihire/shared";
 import type { Sale } from "@digihire/shared";
 import { Calculator, Loader2 } from "lucide-react";
+import { toast } from "sonner";
 
 interface EditSaleDialogProps {
   open: boolean;
@@ -60,6 +61,10 @@ export function EditSaleDialog({ open, onOpenChange, sale }: EditSaleDialogProps
 
   const handleSubmit = () => {
     if (!sale) return;
+    if (!isLead && !customer.trim()) {
+      toast.error("Customer name is required");
+      return;
+    }
     updateSale.mutate({
       id: sale.id,
       data: {
