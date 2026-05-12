@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
 import {
   Dialog,
   DialogContent,
@@ -40,6 +40,7 @@ export function ManualSaleDialog({ open, onOpenChange }: ManualSaleDialogProps) 
   const [proofFile, setProofFile] = useState<File | null>(null);
   const [conversionStatus, setConversionStatus] = useState("clicked");
   const [submitting, setSubmitting] = useState(false);
+  const proofInputRef = useRef<HTMLInputElement>(null);
 
   const selectedProduct = products.find((p) => p.id === productId);
   const isLead = selectedProduct?.productType === "Digital" && selectedProduct?.delivery_type === "lead_url";
@@ -126,6 +127,7 @@ export function ManualSaleDialog({ open, onOpenChange }: ManualSaleDialogProps) 
     setNotes("");
     setProofFile(null);
     setConversionStatus("clicked");
+    if (proofInputRef.current) proofInputRef.current.value = "";
   };
 
   return (
@@ -214,6 +216,7 @@ export function ManualSaleDialog({ open, onOpenChange }: ManualSaleDialogProps) 
                     {proofFile ? proofFile.name : "Upload receipt / screenshot"}
                   </Button>
                   <input
+                    ref={proofInputRef}
                     id="proof-upload"
                     type="file"
                     accept="image/*,.pdf"
@@ -242,7 +245,7 @@ export function ManualSaleDialog({ open, onOpenChange }: ManualSaleDialogProps) 
                   <Calculator className="h-4 w-4" />
                   <span>Estimated Commission</span>
                 </div>
-                <p className="text-sm font-bold text-primary">{formatNaira(commission)}</p>
+                <p className="text-sm font-bold text-primary">{formatNaira(safeCommission)}</p>
               </div>
               <p className="text-[11px] text-muted-foreground text-center">
                 Commission will reflect in your wallet once the sale and payment are confirmed (3-7 working days)
