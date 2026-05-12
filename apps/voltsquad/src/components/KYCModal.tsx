@@ -53,6 +53,14 @@ export function KYCModal({ open, onOpenChange, onSuccess }: KYCModalProps) {
       toast.error("Please provide your NIN, BVN and Proof of Address");
       return;
     }
+    if (!/^d{11}$/.test(nin.trim())) {
+      toast.error("NIN must be exactly 11 digits");
+      return;
+    }
+    if (!/^d{11}$/.test(bvn.trim())) {
+      toast.error("BVN must be exactly 11 digits");
+      return;
+    }
 
     setSubmitting(true);
     try {
@@ -87,7 +95,9 @@ export function KYCModal({ open, onOpenChange, onSuccess }: KYCModalProps) {
             <Input 
               placeholder="Enter your 11-digit NIN" 
               value={nin} 
-              onChange={(e) => setNin(e.target.value)} 
+              onChange={(e) => setNin(e.target.value)}
+              maxLength={11}
+              inputMode="numeric"
             />
           </div>
 
@@ -96,7 +106,9 @@ export function KYCModal({ open, onOpenChange, onSuccess }: KYCModalProps) {
             <Input 
               placeholder="Enter your 11-digit BVN" 
               value={bvn} 
-              onChange={(e) => setBvn(e.target.value)} 
+              onChange={(e) => setBvn(e.target.value)}
+              maxLength={11}
+              inputMode="numeric"
             />
           </div>
 
