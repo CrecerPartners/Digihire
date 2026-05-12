@@ -9,7 +9,7 @@
           var data = JSON.parse(localStorage.getItem(key));
           if (data && data.access_token) {
             var exp = data.expires_at; /* unix seconds */
-            if (!exp || (Date.now() / 1000) < exp) return data;
+            if (exp && exp > 0 && (Date.now() / 1000) < exp) return data;
           }
         }
       }
