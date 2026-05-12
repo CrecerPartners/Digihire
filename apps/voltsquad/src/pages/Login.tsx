@@ -4,7 +4,7 @@ import { Button } from "@digihire/shared";
 import { Input } from "@digihire/shared";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@digihire/shared";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@digihire/shared";
-import { Zap, Gift, ArrowLeft } from "lucide-react";
+import { Zap, Gift, ArrowLeft, Eye, EyeOff } from "lucide-react";
 import { ThemeToggle } from "@/components/ThemeToggle";
 import { useAuth } from "@digihire/shared";
 import { toast } from "sonner";
@@ -53,6 +53,7 @@ const Login = () => {
   const [sellerType, setSellerType] = useState("");
   const [city, setCity] = useState("");
   const [loading, setLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -228,7 +229,12 @@ const Login = () => {
                 </div>
                 <div className="space-y-2">
                   <label className="text-sm font-medium text-foreground">Password <span className="text-destructive">*</span></label>
-                  <Input type="password" placeholder="••••••••" value={password} onChange={(e) => setPassword(e.target.value)} className="bg-secondary border-border" required minLength={6} />
+                  <div className="relative">
+                    <Input type={showPassword ? "text" : "password"} placeholder="••••••••" value={password} onChange={(e) => setPassword(e.target.value)} className="bg-secondary border-border pr-10" required minLength={6} />
+                    <button type="button" onClick={() => setShowPassword(p => !p)} className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors">
+                      {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                    </button>
+                  </div>
                 </div>
                 {isSignup && (
                   <>

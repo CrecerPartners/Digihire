@@ -14,7 +14,7 @@
   </style>
   <script src="https://unpkg.com/lucide@0.468.0/dist/umd/lucide.min.js"></script>
   <style>
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; font-weight: 400 !important; }
 
     :root {
       --navy:        #06111F;
@@ -333,29 +333,8 @@
 <body>
 
 <!-- ════ NAVBAR ════════════════════════════════════ -->
-<nav id="navbar">
-  <div class="nav-inner">
-    <div class="nav-left">
-      <a href="index.html" class="nav-logo">
-        <div class="nav-logo-wrap-img">
-          <img src="assets/logo-white.png" alt="DigiHire" class="nav-logo-img logo-white" />
-          <img src="assets/logo-color.png" alt="DigiHire" class="nav-logo-img logo-color" />
-        </div>
-      </a>
-      <ul class="nav-links">
-        <li><a href="index.html">Why DigiHire?</a></li>
-        <li><a href="index.html">Brands</a></li>
-        <li><a href="index.html">For Talents</a></li>
-        <li><a href="about.html">About</a></li>
-        <li><a href="events.html" class="active-page">Events</a></li>
-      </ul>
-    </div>
-    <div class="nav-right">
-      <a href="contact.html" class="btn-get-started">Contact Us</a>
-      <a href="index.html" class="btn-launch-campaign">Launch a Campaign →</a>
-    </div>
-  </div>
-</nav>
+<div id="nav-root"></div>
+<script src="/nav-loader.js"></script>
 
 <!-- ════ HERO ══════════════════════════════════════ -->
 <section class="events-hero">

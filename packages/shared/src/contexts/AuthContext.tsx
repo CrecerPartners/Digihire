@@ -78,9 +78,9 @@ export function AuthProvider({ children, signOutRedirect }: { children: ReactNod
   };
 
   const signOut = async (options?: { skipRedirect?: boolean }) => {
-    if (options?.skipRedirect) {
-      intentionalSignOut.current = true;
-    }
+    // Mark as intentional BEFORE signOut() so the onAuthStateChange handler
+    // skips its own /login redirect and lets us control the destination below.
+    intentionalSignOut.current = true;
     await supabase.auth.signOut();
     if (!options?.skipRedirect) {
       if (Capacitor.isNativePlatform()) {

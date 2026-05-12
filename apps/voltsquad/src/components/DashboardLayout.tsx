@@ -1,6 +1,6 @@
 import { SidebarProvider, SidebarTrigger } from "@digihire/shared";
 import { AppSidebar } from "@/components/AppSidebar";
-import { LogOut, Zap } from "lucide-react";
+import { LogOut, Zap, ArrowLeft } from "lucide-react";
 import { Button } from "@digihire/shared";
 import { ThemeToggle } from "@/components/ThemeToggle";
 import { useProfile } from "@digihire/shared";
@@ -25,6 +25,12 @@ export function DashboardLayout() {
     navigate("/login", { replace: true });
   };
 
+  const handleBack = () => {
+    const segments = location.pathname.split('/').filter(Boolean);
+    segments.pop();
+    navigate('/' + (segments.join('/') || 'dashboard'));
+  };
+
   return (
     <SidebarProvider>
       <div className="min-h-screen flex w-full">
@@ -47,6 +53,11 @@ export function DashboardLayout() {
                 </Link>
               ) : (
                 <SidebarTrigger />
+              )}
+              {location.pathname !== '/dashboard' && (
+                <Button variant="ghost" size="sm" onClick={handleBack} className="gap-1.5 text-muted-foreground hover:text-foreground">
+                  <ArrowLeft className="h-4 w-4" /> Back
+                </Button>
               )}
             </div>
             <div className="flex items-center gap-3">
