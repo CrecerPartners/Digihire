@@ -115,8 +115,8 @@ const Checkout = () => {
         const res = await fetch("https://api.ipify.org?format=json");
         const data = await res.json();
         ip = data.ip;
-      } catch (e) {
-        console.error("IP detection failed:", e);
+      } catch (_e) {
+        // IP detection is best-effort; continue without it
       }
 
       // Get/Generate Device ID
@@ -160,19 +160,44 @@ const Checkout = () => {
       const { error: itemsError } = await supabase.from("order_items").insert(orderItems);
       if (itemsError) throw itemsError;
 
+      // Resolve Paystack public key
+      const publicKey = import.meta.env.VITE_PAYSTACK_PUBLIC_KEY || import.meta.env.VITE_PAYSTACK_TEST_PUBLIC_KEY;
+      if (!publicKey) {
+        toast.error("Payment configuration error. Please contact support.");
+        setLoading(false);
+        return;
+      }
+
       // Inline Paystack Checkout configuration
       const paystackConfig = {
         reference: `VOLT-${order.id.slice(0, 8)}-${Date.now()}`,
         email: form.email,
         amount: Math.round(totalPrice * 100), // Paystack uses kobo
-        publicKey: (import.meta.env.VITE_PAYSTACK_TEST_PUBLIC_KEY || "pk_test_4e1d855c4863fc9556d8d7c419612e2b36cbf8be") as string,
+        publicKey: publicKey as string,
         metadata: {
           order_id: order.id,
           custom_fields: []
         }
       };
 
-      // Ensure the Paystack script is loaded dynamically or initialized
+      // Guard: if Paystack is already loaded, use it directly
+      if (typeof (window as any).PaystackPop !== "undefined" || document.querySelector('script[src*="paystack"]')) {
+        const handler = (window as any).PaystackPop.setup({
+          ...paystackConfig,
+          onClose: () => {
+            setLoading(false);
+            toast.info("Payment window closed.");
+          },
+          callback: (response: any) => {
+            clearCart();
+            navigate(`/order-confirmation?reference=${response.reference}`);
+          }
+        });
+        handler.openIframe();
+        return;
+      }
+
+      // Dynamically load the Paystack script
       const script = document.createElement("script");
       script.src = "https://js.paystack.co/v1/inline.js";
       script.async = true;
@@ -191,14 +216,17 @@ const Checkout = () => {
         });
         handler.openIframe();
       };
-      script.onerror = () => {
+      script.onerror = async () => {
+        if (order?.id) {
+          await supabase.from("order_items").delete().eq("order_id", order.id);
+          await supabase.from("orders").delete().eq("id", order.id);
+        }
         setLoading(false);
-        toast.error("Failed to load Paystack. Please check your connection.");
+        toast.error("Failed to load payment processor. Please try again.");
       };
       document.body.appendChild(script);
 
     } catch (err: any) {
-      console.error("Checkout error:", err);
       toast.error(err.message || "Checkout failed. Please try again.");
       setLoading(false);
     }
