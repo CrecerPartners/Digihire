@@ -19,10 +19,10 @@ export default function Navbar() {
           </Link>
           {user && (
             <div className="hidden md:flex items-center gap-6">
-              <Link to="/brand" className="text-[13px] font-semibold text-slate-500 hover:text-sky-600 transition-colors">Dashboard</Link>
-              <Link to="/brand/campaigns" className="text-[13px] font-semibold text-slate-500 hover:text-sky-600 transition-colors">Campaigns</Link>
-              <Link to="/brand/recruitment" className="text-[13px] font-semibold text-slate-500 hover:text-sky-600 transition-colors">Recruitment</Link>
-              <Link to="/brand/setup" className="text-[13px] font-semibold text-slate-500 hover:text-sky-600 transition-colors">Profile</Link>
+              <Link to="/brand" className="text-[13px] font-normal text-slate-500 hover:text-sky-600 transition-colors">Dashboard</Link>
+              <Link to="/brand/campaigns" className="text-[13px] font-normal text-slate-500 hover:text-sky-600 transition-colors">Campaigns</Link>
+              <Link to="/brand/recruitment" className="text-[13px] font-normal text-slate-500 hover:text-sky-600 transition-colors">Recruitment</Link>
+              <Link to="/brand/setup" className="text-[13px] font-normal text-slate-500 hover:text-sky-600 transition-colors">Profile</Link>
             </div>
           )}
         </div>
@@ -39,12 +39,12 @@ export default function Navbar() {
               <Link to="/brand/setup" aria-label="Company settings" className="p-2 text-slate-400 hover:text-sky-600 transition-all border border-transparent hover:border-sky-100 hover:bg-sky-50 rounded-lg">
                 <Settings size={18} />
               </Link>
-              <button onClick={handleLogout} className="text-[10px] font-bold uppercase tracking-widest text-slate-400 hover:text-red-500 ml-2">Logout</button>
+              <button onClick={handleLogout} className="text-[10px] font-normal uppercase tracking-widest text-slate-400 hover:text-red-500 ml-2">Logout</button>
             </div>
           ) : (
             <div className="flex items-center gap-5">
-              <Link to="/login" className="text-xs font-bold text-slate-500 hover:text-slate-800 uppercase tracking-widest">Login</Link>
-              <Link to="/signup" className="rounded-lg bg-sky-600 px-4 py-2 text-xs font-bold text-white shadow-sm shadow-sky-200 hover:bg-sky-700 transition-all uppercase tracking-widest">Register Brand</Link>
+              <Link to="/login" className="text-xs font-normal text-slate-500 hover:text-slate-800 uppercase tracking-widest">Login</Link>
+              <Link to="/signup" className="rounded-lg bg-sky-600 px-4 py-2 text-xs font-normal text-white shadow-sm shadow-sky-200 hover:bg-sky-700 transition-all uppercase tracking-widest">Register Brand</Link>
             </div>
           )}
         </div>

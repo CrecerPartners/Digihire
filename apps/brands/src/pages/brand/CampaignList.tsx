@@ -23,7 +23,7 @@ export default function CampaignList() {
           <button onClick={refetch} className="p-2.5 rounded-xl border border-gray-200 hover:bg-gray-50 text-gray-400 transition-all">
             <RefreshCw size={16} />
           </button>
-          <Link to="/brand/campaigns/new" className="flex items-center gap-2 rounded-xl bg-[#2563eb] px-4 py-2.5 text-sm font-bold text-white hover:bg-[#1d4ed8] transition-all shadow-sm shadow-blue-100">
+          <Link to="/brand/campaigns/new" className="flex items-center gap-2 rounded-xl bg-[#2563eb] px-4 py-2.5 text-sm font-normal text-white hover:bg-[#1d4ed8] transition-all shadow-sm shadow-blue-100">
             <Plus size={16} /> New Campaign
           </Link>
         </div>
@@ -38,7 +38,7 @@ export default function CampaignList() {
           </div>
           <h3 className="font-bold text-[#1a1a1a] mb-1">No campaigns yet</h3>
           <p className="text-sm text-gray-400 mb-6">Launch your first campaign to start reaching VoltSquad sellers.</p>
-          <Link to="/brand/campaigns/new" className="inline-flex items-center gap-2 rounded-xl bg-[#2563eb] px-6 py-2.5 text-sm font-bold text-white hover:bg-[#1d4ed8] transition-all">
+          <Link to="/brand/campaigns/new" className="inline-flex items-center gap-2 rounded-xl bg-[#2563eb] px-6 py-2.5 text-sm font-normal text-white hover:bg-[#1d4ed8] transition-all">
             <Plus size={16} /> Launch Campaign
           </Link>
         </div>

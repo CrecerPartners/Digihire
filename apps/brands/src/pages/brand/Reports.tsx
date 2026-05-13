@@ -22,7 +22,7 @@ export default function Reports() {
           <h2 className="text-xl font-bold text-[#1a1a1a]">Reports & Tracking</h2>
           <p className="text-sm text-gray-400">Consolidated view of all your activity with Digihire.</p>
         </div>
-        <button onClick={refetch} className="flex items-center gap-2 p-2.5 rounded-xl border border-gray-200 hover:bg-gray-50 text-gray-400 transition-all text-xs font-semibold">
+        <button onClick={refetch} className="flex items-center gap-2 p-2.5 rounded-xl border border-gray-200 hover:bg-gray-50 text-gray-400 transition-all text-xs font-normal">
           <RefreshCw size={15} /> Refresh
         </button>
       </div>
@@ -98,7 +98,7 @@ function Section({ title, icon, color, to, children }: { title: string; icon: Re
           {icon}
           <span className="text-[#1a1a1a]">{title}</span>
         </div>
-        <Link to={to} className="text-xs font-semibold text-[#2563eb] hover:underline">View all →</Link>
+        <Link to={to} className="text-xs font-normal text-[#2563eb] hover:underline">View all →</Link>
       </div>
       {children}
     </div>

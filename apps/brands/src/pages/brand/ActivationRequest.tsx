@@ -88,7 +88,7 @@ export default function ActivationRequest() {
             ? 'Our field team will review and get back to you within 48 hours.'
             : `Your meeting slot (${selectedSlot}) is confirmed. You'll receive a calendar invite.`}
         </p>
-        <button onClick={() => { setSubmitted(false); setSelectedSlot(''); }} className="rounded-xl bg-amber-500 text-white px-6 py-2.5 text-sm font-bold hover:bg-amber-600 transition-all">
+        <button onClick={() => { setSubmitted(false); setSelectedSlot(''); }} className="rounded-xl bg-amber-500 text-white px-6 py-2.5 text-sm font-normal hover:bg-amber-600 transition-all">
           Submit Another
         </button>
       </div>
@@ -206,7 +206,7 @@ export default function ActivationRequest() {
           {error && <p className="rounded-xl bg-red-50 border border-red-100 px-4 py-3 text-sm text-red-600">{error}</p>}
 
           <div className="flex justify-end">
-            <button type="submit" disabled={submitting} className="flex items-center gap-2 rounded-xl bg-amber-500 px-8 py-3 text-sm font-bold text-white hover:bg-amber-600 disabled:opacity-60 transition-all shadow-sm">
+            <button type="submit" disabled={submitting} className="flex items-center gap-2 rounded-xl bg-amber-500 px-8 py-3 text-sm font-normal text-white hover:bg-amber-600 disabled:opacity-60 transition-all shadow-sm">
               {submitting ? 'Submitting...' : mode === 'form' ? 'Submit Request' : 'Confirm Booking'}
             </button>
           </div>

@@ -30,7 +30,7 @@ export default function CampaignDetail() {
   if (!campaign) return (
     <div className="rounded-2xl bg-white border border-gray-100 p-12 text-center shadow-sm">
       <p className="text-gray-400">Campaign not found.</p>
-      <button onClick={() => navigate('/brand/campaigns')} className="mt-4 text-sm text-[#2563eb] font-semibold hover:underline">
+      <button onClick={() => navigate('/brand/campaigns')} className="mt-4 text-sm text-[#2563eb] font-normal hover:underline">
         Back to Campaigns
       </button>
     </div>
@@ -67,7 +67,7 @@ export default function CampaignDetail() {
             <code className="flex-1 text-sm font-mono text-[#1a1a1a] truncate">
               https://digihire.io/c/{campaign.tracking_code}
             </code>
-            <button onClick={copyTrackingCode} className="flex items-center gap-1.5 text-xs font-bold text-[#2563eb] hover:text-[#1d4ed8] transition-colors shrink-0">
+            <button onClick={copyTrackingCode} className="flex items-center gap-1.5 text-xs font-normal text-[#2563eb] hover:text-[#1d4ed8] transition-colors shrink-0">
               {copied ? <><CheckCircle2 size={14} /> Copied!</> : <><Copy size={14} /> Copy</>}
             </button>
           </div>

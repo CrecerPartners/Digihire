@@ -72,10 +72,10 @@ export default function CampaignLaunch() {
         <h3 className="text-xl font-bold text-[#1a1a1a] mb-2">Campaign Request Submitted!</h3>
         <p className="text-sm text-gray-500 mb-8">Our team will review and activate your campaign within 24–48 hours.</p>
         <div className="flex gap-3 justify-center">
-          <button onClick={() => navigate('/brand/campaigns')} className="rounded-xl bg-[#2563eb] text-white px-6 py-2.5 text-sm font-bold hover:bg-[#1d4ed8] transition-all">
+          <button onClick={() => navigate('/brand/campaigns')} className="rounded-xl bg-[#2563eb] text-white px-6 py-2.5 text-sm font-normal hover:bg-[#1d4ed8] transition-all">
             View Campaigns
           </button>
-          <button onClick={() => { setSubmitted(false); setForm({ campaign_name: '', brand_name: profile?.company_name ?? '', campaign_goal: '', product_name: '', product_category: '', target_audience: '', city: '', region: '', start_date: '', end_date: '', payout_model: '', target_volume: undefined, tracking_link: '', notes: '' }); }} className="rounded-xl border border-gray-200 px-6 py-2.5 text-sm font-bold text-[#4a4a4a] hover:bg-gray-50 transition-all">
+          <button onClick={() => { setSubmitted(false); setForm({ campaign_name: '', brand_name: profile?.company_name ?? '', campaign_goal: '', product_name: '', product_category: '', target_audience: '', city: '', region: '', start_date: '', end_date: '', payout_model: '', target_volume: undefined, tracking_link: '', notes: '' }); }} className="rounded-xl border border-gray-200 px-6 py-2.5 text-sm font-normal text-[#4a4a4a] hover:bg-gray-50 transition-all">
             Submit Another
           </button>
         </div>
@@ -212,7 +212,7 @@ export default function CampaignLaunch() {
         {error && <p className="rounded-xl bg-red-50 border border-red-100 px-4 py-3 text-sm text-red-600">{error}</p>}
 
         <div className="pt-2 flex justify-end">
-          <button type="submit" disabled={submitting} className="flex items-center gap-2 rounded-xl bg-[#2563eb] px-8 py-3 text-sm font-bold text-white hover:bg-[#1d4ed8] disabled:opacity-60 transition-all shadow-lg shadow-blue-100">
+          <button type="submit" disabled={submitting} className="flex items-center gap-2 rounded-xl bg-[#2563eb] px-8 py-3 text-sm font-normal text-white hover:bg-[#1d4ed8] disabled:opacity-60 transition-all shadow-lg shadow-blue-100">
             {submitting ? 'Submitting...' : 'Submit Campaign Request'} <ArrowRight size={16} />
           </button>
         </div>

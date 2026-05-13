@@ -107,10 +107,10 @@ export default function RecruitmentRequest() {
         <h3 className="text-xl font-bold text-[#1a1a1a] mb-2">Recruitment Request Submitted!</h3>
         <p className="text-sm text-gray-500 mb-8">Our talent team will review your request and be in touch within 48 hours.</p>
         <div className="flex gap-3 justify-center">
-          <button onClick={() => navigate('/brand/recruitment')} className="rounded-xl bg-violet-600 text-white px-6 py-2.5 text-sm font-bold hover:bg-violet-700 transition-all">
+          <button onClick={() => navigate('/brand/recruitment')} className="rounded-xl bg-violet-600 text-white px-6 py-2.5 text-sm font-normal hover:bg-violet-700 transition-all">
             View Requests
           </button>
-          <button onClick={() => { setSubmitted(false); setStep(1); }} className="rounded-xl border border-gray-200 px-6 py-2.5 text-sm font-bold text-[#4a4a4a] hover:bg-gray-50 transition-all">
+          <button onClick={() => { setSubmitted(false); setStep(1); }} className="rounded-xl border border-gray-200 px-6 py-2.5 text-sm font-normal text-[#4a4a4a] hover:bg-gray-50 transition-all">
             Submit Another
           </button>
         </div>
@@ -163,7 +163,7 @@ export default function RecruitmentRequest() {
           </div>
           {error && <p className="rounded-xl bg-red-50 border border-red-100 px-4 py-3 text-sm text-red-600">{error}</p>}
           <div className="flex justify-end">
-            <button type="submit" className="flex items-center gap-2 rounded-xl bg-violet-600 px-8 py-3 text-sm font-bold text-white hover:bg-violet-700 transition-all">
+            <button type="submit" className="flex items-center gap-2 rounded-xl bg-violet-600 px-8 py-3 text-sm font-normal text-white hover:bg-violet-700 transition-all">
               Next: Talent Requirements <ArrowRight size={16} />
             </button>
           </div>
@@ -248,10 +248,10 @@ export default function RecruitmentRequest() {
           </div>
           {error && <p className="rounded-xl bg-red-50 border border-red-100 px-4 py-3 text-sm text-red-600">{error}</p>}
           <div className="flex justify-between items-center">
-            <button type="button" onClick={() => setStep(1)} className="flex items-center gap-2 text-sm font-semibold text-gray-400 hover:text-[#1a1a1a] transition-colors">
+            <button type="button" onClick={() => setStep(1)} className="flex items-center gap-2 text-sm font-normal text-gray-400 hover:text-[#1a1a1a] transition-colors">
               <ChevronLeft size={16} /> Back
             </button>
-            <button type="submit" disabled={submitting} className="flex items-center gap-2 rounded-xl bg-violet-600 px-8 py-3 text-sm font-bold text-white hover:bg-violet-700 disabled:opacity-60 transition-all">
+            <button type="submit" disabled={submitting} className="flex items-center gap-2 rounded-xl bg-violet-600 px-8 py-3 text-sm font-normal text-white hover:bg-violet-700 disabled:opacity-60 transition-all">
               {submitting ? 'Submitting...' : 'Submit Request'} <ArrowRight size={16} />
             </button>
           </div>
