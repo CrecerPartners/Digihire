@@ -88,6 +88,20 @@ export function useAdminCourses() {
   });
 }
 
+export function useAdminTalentCourses() {
+  return useQuery({
+    queryKey: ["admin-talent-courses"],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("talent_courses")
+        .select("*")
+        .order("created_at", { ascending: false });
+      if (error) throw error;
+      return data;
+    },
+  });
+}
+
 export function useAdminTransactions() {
   return useQuery({
     queryKey: ["admin-transactions"],
@@ -245,6 +259,28 @@ export function useDeleteCourse() {
       if (error) throw error;
     },
     onSuccess: () => qc.invalidateQueries({ queryKey: ["admin-courses"] }),
+  });
+}
+
+export function useUpsertTalentCourse() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: async (course: Record<string, unknown>) => {
+      const { error } = await supabase.from("talent_courses").upsert(course as any);
+      if (error) throw error;
+    },
+    onSuccess: () => qc.invalidateQueries({ queryKey: ["admin-talent-courses"] }),
+  });
+}
+
+export function useDeleteTalentCourse() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: async (id: string) => {
+      const { error } = await supabase.from("talent_courses").delete().eq("id", id);
+      if (error) throw error;
+    },
+    onSuccess: () => qc.invalidateQueries({ queryKey: ["admin-talent-courses"] }),
   });
 }
 

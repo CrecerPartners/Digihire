@@ -20,9 +20,10 @@ interface TalentProfile {
   salary_max?: number;
   availability_status?: string;
   work_preference?: string;
-  education?: { degree?: string; institution?: string }[];
+  education?: { degree?: string; institution?: string; summary?: string }[];
   status: string;
   updated_at: string;
+  industry_experience?: string[];
 }
 
 const statusColors: Record<string, string> = {
@@ -31,6 +32,7 @@ const statusColors: Record<string, string> = {
   'Matched': 'bg-green-50 text-green-700 border-green-100',
   'complete': 'bg-blue-50 text-blue-700 border-blue-100',
   'incomplete': 'bg-gray-50 text-gray-500 border-gray-100',
+  'Archived': 'bg-slate-100 text-slate-500 border-slate-200',
 };
 
 export default function AdminTalentPool() {
@@ -40,6 +42,11 @@ export default function AdminTalentPool() {
   const [selectedTalent, setSelectedTalent] = useState<TalentProfile | null>(null);
   const [statusFilter, setStatusFilter] = useState('all');
   const [roleFilter, setRoleFilter] = useState('all');
+  const [cityFilter, setCityFilter] = useState('all');
+  const [expFilter, setExpFilter] = useState('all');
+  const [availabilityFilter, setAvailabilityFilter] = useState('all');
+  const [industryFilter, setIndustryFilter] = useState('all');
+  const [workTypeFilter, setWorkTypeFilter] = useState('all');
 
   useEffect(() => {
     supabase
@@ -64,8 +71,21 @@ export default function AdminTalentPool() {
       t.role_interest?.some(r => r.toLowerCase().includes(q));
     const matchesStatus = statusFilter === 'all' || t.status === statusFilter;
     const matchesRole = roleFilter === 'all' || t.role_interest?.includes(roleFilter);
-    return matchesSearch && matchesStatus && matchesRole;
+    const matchesCity = cityFilter === 'all' || t.city === cityFilter;
+    const matchesExp = expFilter === 'all' || (
+      expFilter === '0-2' ? (t.years_of_experience ?? 0) <= 2 :
+      expFilter === '3-5' ? (t.years_of_experience ?? 0) >= 3 && (t.years_of_experience ?? 0) <= 5 :
+      expFilter === '5+' ? (t.years_of_experience ?? 0) > 5 : true
+    );
+    const matchesAvailability = availabilityFilter === 'all' || t.availability_status === availabilityFilter;
+    const matchesIndustry = industryFilter === 'all' || t.industry_experience?.includes(industryFilter);
+    const matchesWorkType = workTypeFilter === 'all' || t.work_preference === workTypeFilter;
+
+    return matchesSearch && matchesStatus && matchesRole && matchesCity && matchesExp && matchesAvailability && matchesIndustry && matchesWorkType;
   });
+
+  const uniqueCities = Array.from(new Set(talents.map(t => t.city).filter(Boolean)));
+  const uniqueIndustries = Array.from(new Set(talents.flatMap(t => t.industry_experience || []).filter(Boolean)));
 
   return (
     <div className="bg-gray-50 min-h-screen pb-20">
@@ -80,8 +100,8 @@ export default function AdminTalentPool() {
           </div>
         </header>
 
-        <div className="bg-white rounded-xl p-4 shadow-sm border border-gray-200 mb-8 grid grid-cols-1 md:grid-cols-5 gap-3">
-          <div className="md:col-span-2 relative">
+        <div className="bg-white rounded-xl p-4 shadow-sm border border-gray-200 mb-8 grid grid-cols-1 md:grid-cols-4 lg:grid-cols-8 gap-3">
+          <div className="md:col-span-2 lg:col-span-2 relative">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={18} />
             <input
               type="text"
@@ -96,21 +116,61 @@ export default function AdminTalentPool() {
             onChange={e => setStatusFilter(e.target.value)}
             className="bg-gray-50 border border-gray-100 rounded-lg py-2 px-3 text-xs font-medium focus:bg-white focus:outline-none focus:border-sky-500"
           >
-            <option value="all">All Statuses</option>
+            <option value="all">Status</option>
             <option value="Under Review">Under Review</option>
             <option value="Shortlisted">Shortlisted</option>
             <option value="Matched">Matched</option>
+            <option value="complete">Complete</option>
             <option value="incomplete">Incomplete</option>
+            <option value="Archived">Archived</option>
           </select>
           <select
             value={roleFilter}
             onChange={e => setRoleFilter(e.target.value)}
             className="bg-gray-50 border border-gray-100 rounded-lg py-2 px-3 text-xs font-medium focus:bg-white focus:outline-none focus:border-sky-500"
           >
-            <option value="all">All Roles</option>
+            <option value="all">Roles</option>
             {['B2B Sales', 'Tech Sales', 'SaaS Sales', 'SDR', 'BDR', 'AE'].map(role => (
               <option key={role} value={role}>{role}</option>
             ))}
+          </select>
+          <select
+            value={cityFilter}
+            onChange={e => setCityFilter(e.target.value)}
+            className="bg-gray-50 border border-gray-100 rounded-lg py-2 px-3 text-xs font-medium focus:bg-white focus:outline-none focus:border-sky-500"
+          >
+            <option value="all">City</option>
+            {uniqueCities.map(c => <option key={c} value={c}>{c}</option>)}
+          </select>
+          <select
+            value={expFilter}
+            onChange={e => setExpFilter(e.target.value)}
+            className="bg-gray-50 border border-gray-100 rounded-lg py-2 px-3 text-xs font-medium focus:bg-white focus:outline-none focus:border-sky-500"
+          >
+            <option value="all">Experience</option>
+            <option value="0-2">0-2 years</option>
+            <option value="3-5">3-5 years</option>
+            <option value="5+">5+ years</option>
+          </select>
+          <select
+            value={availabilityFilter}
+            onChange={e => setAvailabilityFilter(e.target.value)}
+            className="bg-gray-50 border border-gray-100 rounded-lg py-2 px-3 text-xs font-medium focus:bg-white focus:outline-none focus:border-sky-500"
+          >
+            <option value="all">Availability</option>
+            <option value="available">Available</option>
+            <option value="looking">Looking</option>
+            <option value="unavailable">Unavailable</option>
+          </select>
+          <select
+            value={workTypeFilter}
+            onChange={e => setWorkTypeFilter(e.target.value)}
+            className="bg-gray-50 border border-gray-100 rounded-lg py-2 px-3 text-xs font-medium focus:bg-white focus:outline-none focus:border-sky-500"
+          >
+            <option value="all">Work Type</option>
+            <option value="remote">Remote</option>
+            <option value="hybrid">Hybrid</option>
+            <option value="onsite">Onsite</option>
           </select>
           <div className="flex items-center justify-center gap-2 py-2 px-4 bg-gray-50 border border-gray-100 rounded-lg text-xs font-semibold text-slate-500">
             <Filter size={16} /> {filtered.length} results

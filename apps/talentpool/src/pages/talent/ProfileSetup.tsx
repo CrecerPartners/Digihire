@@ -135,8 +135,42 @@ export default function ProfileSetup({ profile, onUpdate }: Props) {
     }
   };
 
-  const handleFileUpload = async (_e: React.ChangeEvent<HTMLInputElement>, _field: string) => {
-    alert('File upload will be wired to Supabase Storage in a follow-on task.');
+  const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>, field: string) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    if (file.size > MAX_FILE_SIZE) {
+      setError('File size must be less than 5MB');
+      return;
+    }
+    
+    setSaving(true);
+    setError(null);
+    try {
+      const fileExt = file.name.split('.').pop();
+      const fileName = `${profile?.id || 'new'}-${field}-${Math.random().toString(36).substring(2)}.${fileExt}`;
+      const { error: uploadError } = await supabase.storage
+        .from('talent-assets')
+        .upload(fileName, file);
+
+      if (uploadError) throw uploadError;
+
+      const { data: { publicUrl } } = supabase.storage
+        .from('talent-assets')
+        .getPublicUrl(fileName);
+
+      if (field === 'certifications') {
+        setFormData(prev => ({
+          ...prev,
+          certifications: [...(prev.certifications || []), { url: publicUrl, name: file.name }]
+        }));
+      } else {
+        setFormData(prev => ({ ...prev, [field]: publicUrl }));
+      }
+    } catch (err: unknown) {
+      setError(err instanceof Error ? err.message : 'Upload failed');
+    } finally {
+      setSaving(false);
+    }
   };
 
   return (
@@ -224,6 +258,7 @@ export default function ProfileSetup({ profile, onUpdate }: Props) {
                   <Input label="Full Name" name="full_name" value={formData.full_name} onChange={handleChange} />
                   <Input label="Email Address" name="email" type="email" value={(formData as any).email} onChange={handleChange} disabled />
                   <Input label="Phone Number" name="phone" value={formData.phone} onChange={handleChange} placeholder="+234..." />
+                  <Input label="Date of Birth" name="date_of_birth" type="date" value={formData.date_of_birth} onChange={handleChange} />
 
                   <div className="space-y-1.5">
                     <label className="block text-[10px] font-bold uppercase tracking-widest text-slate-400 ml-1">Gender</label>
@@ -271,15 +306,16 @@ export default function ProfileSetup({ profile, onUpdate }: Props) {
 
         {activeTab === 'experience' && (
           <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="space-y-8">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               <Input label="Total Years of Experience" name="experience_years" type="number" value={formData.experience_years} onChange={handleChange} />
-              <Input label="Target Salary Range" name="salary_min" value={formData.salary_min} onChange={handleChange} placeholder="e.g. $80k - $100k" />
+              <Input label="Min Salary Expectation" name="salary_min" type="number" value={formData.salary_min} onChange={handleChange} placeholder="e.g. 80000" />
+              <Input label="Max Salary Expectation" name="salary_max" type="number" value={formData.salary_max} onChange={handleChange} placeholder="e.g. 100000" />
             </div>
 
             <div className="space-y-4 pt-4">
               <label className="block text-[10px] font-bold uppercase tracking-widest text-slate-400 ml-1">Expertise & Roles</label>
               <div className="flex flex-wrap gap-2">
-                {['B2B Sales', 'Tech Sales', 'SaaS Sales', 'SDR', 'BDR', 'Account Executive', 'Business Development', 'Sales Ops'].map(role => (
+                {['B2B Sales', 'Tech Sales', 'SaaS Sales', 'SDR', 'BDR', 'Account Executive', 'Business Development', 'Sales Ops', 'Merchandiser', 'Field Sales', 'Closer'].map(role => (
                    <Checkbox key={role} label={role} name="role_interests" checked={formData.role_interests?.includes(role)} onChange={handleChange} />
                  ))}
               </div>
@@ -292,6 +328,38 @@ export default function ProfileSetup({ profile, onUpdate }: Props) {
                 className="w-full rounded-lg border border-gray-200 bg-gray-50 px-4 py-3 text-sm font-medium focus:bg-white focus:outline-none transition-all"
                 value={formData.skills?.join(', ')}
                 onChange={(e:any) => setFormData({...formData, skills: e.target.value.split(',').map((s:string) => s.trim()).filter(Boolean)})}
+              />
+            </div>
+
+            <div className="space-y-1.5">
+              <label className="block text-[10px] font-bold uppercase tracking-widest text-slate-400 ml-1">Languages (Comma separated)</label>
+              <textarea
+                placeholder="English, French, Swahili..."
+                className="w-full rounded-lg border border-gray-200 bg-gray-50 px-4 py-3 text-sm font-medium focus:bg-white focus:outline-none transition-all"
+                value={formData.languages?.join(', ')}
+                onChange={(e:any) => setFormData({...formData, languages: e.target.value.split(',').map((s:string) => s.trim()).filter(Boolean)})}
+              />
+            </div>
+
+            <div className="space-y-1.5">
+              <label className="block text-[10px] font-bold uppercase tracking-widest text-slate-400 ml-1">Work History (Brief summary)</label>
+              <textarea
+                placeholder="Company A (2020 - 2022) - Sales Executive&#10;Company B (2018 - 2020) - BDR..."
+                rows={4}
+                className="w-full rounded-lg border border-gray-200 bg-gray-50 px-4 py-3 text-sm font-medium focus:bg-white focus:outline-none transition-all"
+                value={Array.isArray(formData.work_history) && formData.work_history.length ? formData.work_history[0]?.summary : ''}
+                onChange={(e:any) => setFormData({...formData, work_history: [{ summary: e.target.value }]})}
+              />
+            </div>
+
+            <div className="space-y-1.5">
+              <label className="block text-[10px] font-bold uppercase tracking-widest text-slate-400 ml-1">Education (Brief summary)</label>
+              <textarea
+                placeholder="BSc Business Administration - University of Lagos (2018)"
+                rows={3}
+                className="w-full rounded-lg border border-gray-200 bg-gray-50 px-4 py-3 text-sm font-medium focus:bg-white focus:outline-none transition-all"
+                value={Array.isArray(formData.education) && formData.education.length ? formData.education[0]?.summary : ''}
+                onChange={(e:any) => setFormData({...formData, education: [{ summary: e.target.value }]})}
               />
             </div>
           </motion.div>

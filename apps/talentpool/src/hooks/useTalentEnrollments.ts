@@ -41,5 +41,17 @@ export function useTalentEnrollments() {
     return { error: err };
   };
 
-  return { enrollments, loading, error, enroll };
+  const updateProgress = async (courseId: string, completedModules: number[], progress: number) => {
+    if (!user) return { error: new Error('Not authenticated') };
+    const { error: err } = await supabase
+      .from('talent_enrollments')
+      .update({ completed_modules: completedModules, progress })
+      .match({ user_id: user.id, course_id: courseId });
+    if (!err) {
+      setEnrollments(prev => prev.map(e => e.course_id === courseId ? { ...e, completed_modules: completedModules, progress } : e));
+    }
+    return { error: err };
+  };
+
+  return { enrollments, loading, error, enroll, updateProgress };
 }

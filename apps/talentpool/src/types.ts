@@ -40,7 +40,7 @@ export interface TalentCourse {
   description?: string;
   thumbnail_url?: string;
   category?: string;
-  modules: { title: string; duration_minutes?: number; content?: string }[];
+  modules: { title: string; duration_minutes?: number; content?: string; youtube_url?: string }[];
   has_certificate: boolean;
   is_published: boolean;
   created_at?: string;

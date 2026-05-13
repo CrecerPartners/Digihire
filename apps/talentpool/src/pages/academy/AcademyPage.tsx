@@ -1,12 +1,14 @@
 import { useState } from 'react';
 import { TalentCourse } from '../../types';
 import { useTalentCourses } from '../../hooks/useTalentCourses';
+import { useTalentWebinars } from '../../hooks/useTalentWebinars';
 import { motion } from 'motion/react';
-import { GraduationCap, Play, Clock, Star, BookOpen, Search, ArrowRight } from 'lucide-react';
+import { GraduationCap, Play, Clock, Star, BookOpen, Search, ArrowRight, Calendar, Wifi } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
 export default function AcademyPage() {
   const { courses, loading } = useTalentCourses();
+  const { webinars: upcomingWebinars } = useTalentWebinars();
   const [filter, setFilter] = useState('all');
 
   const categories = ['all', 'sales process', 'saas sales', 'b2b strategy', 'soft skills'];
@@ -70,8 +72,52 @@ export default function AcademyPage() {
           </div>
         )}
 
+        {/* Upcoming Sessions Banner */}
+        {upcomingWebinars.length > 0 && (
+          <div className="mt-20 bg-slate-900 rounded-3xl p-8 text-white relative overflow-hidden">
+            <div className="absolute inset-0 bg-gradient-to-r from-violet-600/20 to-transparent pointer-events-none" />
+            <div className="relative z-10">
+              <div className="flex items-center justify-between mb-6">
+                <div>
+                  <div className="inline-flex items-center gap-2 text-[10px] font-bold uppercase tracking-widest text-violet-400 mb-2">
+                    <Wifi size={12} /> Live Sessions
+                  </div>
+                  <h2 className="text-2xl font-bold">Upcoming Webinars & Training</h2>
+                </div>
+                <Link
+                  to="/academy/timetable"
+                  className="flex items-center gap-2 text-xs font-bold text-violet-400 hover:text-violet-300 transition-colors"
+                >
+                  View All <ArrowRight size={14} />
+                </Link>
+              </div>
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                {upcomingWebinars.slice(0, 3).map(w => (
+                  <Link key={w.id} to="/academy/timetable" className="group p-5 rounded-2xl bg-white/5 border border-white/10 hover:bg-white/10 transition-all">
+                    <div
+                      className="h-1 w-12 rounded-full mb-4"
+                      style={{ background: w.cover_color }}
+                    />
+                    <h3 className="font-bold text-white mb-3 line-clamp-2 group-hover:text-violet-300 transition-colors">{w.title}</h3>
+                    <div className="space-y-1.5">
+                      <div className="flex items-center gap-2 text-xs text-slate-400">
+                        <Calendar size={12} />
+                        {new Date(w.scheduled_at).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' })}
+                      </div>
+                      <div className="flex items-center gap-2 text-xs text-slate-400">
+                        <Clock size={12} />
+                        {new Date(w.scheduled_at).toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit', hour12: true })} · {w.duration_minutes} min
+                      </div>
+                    </div>
+                  </Link>
+                ))}
+              </div>
+            </div>
+          </div>
+        )}
+
         {/* Sales Tracks */}
-        <div className="mt-24">
+        <div className="mt-16">
           <h2 className="text-2xl font-bold mb-8">Sales Role Tracks</h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
             <TrackCard title="SDR / BDR" count={8} color="bg-orange-50 text-orange-600" />

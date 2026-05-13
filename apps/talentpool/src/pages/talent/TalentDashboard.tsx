@@ -3,6 +3,7 @@ import { DashboardLayout } from '@/components/DashboardLayout';
 import { useTalentProfile } from '../../hooks/useTalentProfile';
 import ProfileSetup from './ProfileSetup';
 import TalentProfileView from './TalentProfileView';
+import MyLearning from './MyLearning';
 
 export default function TalentDashboard() {
   const { profile, loading, setProfile } = useTalentProfile();
@@ -25,6 +26,7 @@ export default function TalentDashboard() {
           element={isProfileComplete ? <TalentProfileView profile={profile!} /> : <Navigate to="/talent/setup" />}
         />
         <Route path="/setup" element={<ProfileSetup profile={profile} onUpdate={setProfile} />} />
+        <Route path="/learning" element={<MyLearning />} />
       </Routes>
     </DashboardLayout>
   );

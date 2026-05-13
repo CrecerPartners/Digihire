@@ -19,7 +19,10 @@ interface TalentProfile {
   salary_max?: number;
   availability_status?: string;
   work_preference?: string;
-  education?: { degree?: string; institution?: string }[];
+  education?: { degree?: string; institution?: string; summary?: string }[];
+  work_history?: { summary?: string }[];
+  languages?: string[];
+  cv_url?: string;
   status: string;
 }
 
@@ -163,10 +166,13 @@ export default function TalentDetailsModal({ talent, onClose, onStatusChange }: 
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                   <section>
-                    <h3 className="text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-4">Core Skills</h3>
+                    <h3 className="text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-4">Core Skills & Languages</h3>
                     <div className="flex flex-wrap gap-2">
                       {talent.skills?.map(skill => (
                         <span key={skill} className="px-2 py-1 rounded bg-sky-50 text-sky-600 text-[10px] font-bold border border-sky-100">{skill}</span>
+                      ))}
+                      {talent.languages?.map(lang => (
+                        <span key={lang} className="px-2 py-1 rounded bg-purple-50 text-purple-600 text-[10px] font-bold border border-purple-100">{lang}</span>
                       ))}
                     </div>
                   </section>
@@ -186,8 +192,16 @@ export default function TalentDetailsModal({ talent, onClose, onStatusChange }: 
                   <InfoItem icon={<DollarSign size={18} />} label="Expectation" value={salaryDisplay} />
                   <InfoItem icon={<Calendar size={18} />} label="Availability" value={talent.availability_status || 'Unknown'} />
                   <InfoItem icon={<Briefcase size={18} />} label="Work Pref" value={talent.work_preference || 'Any'} />
-                  <InfoItem icon={<GraduationCap size={18} />} label="Education" value={talent.education?.[0]?.degree || 'No info'} />
+                  <InfoItem icon={<GraduationCap size={18} />} label="Education" value={talent.education?.[0]?.summary || talent.education?.[0]?.degree || 'No info'} />
                 </div>
+
+                {talent.cv_url && (
+                  <div className="pt-4 border-t border-gray-100">
+                    <a href={talent.cv_url} target="_blank" rel="noreferrer" className="inline-flex items-center gap-2 bg-slate-900 text-white px-6 py-3 rounded-xl text-sm font-bold shadow-lg hover:bg-slate-800 transition-all">
+                      View / Download CV
+                    </a>
+                  </div>
+                )}
               </div>
             ) : (
               <div className="space-y-6">

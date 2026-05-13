@@ -10,6 +10,7 @@ import VerifyEmail from './pages/VerifyEmail';
 import TalentDashboard from './pages/talent/TalentDashboard';
 import AcademyPage from './pages/academy/AcademyPage';
 import CourseDetailPage from './pages/academy/CourseDetailPage';
+import TalentTimetable from './pages/academy/TalentTimetable';
 
 const queryClient = new QueryClient({
   defaultOptions: { queries: { gcTime: 1000 * 60 * 60 * 24, staleTime: 1000 * 60 * 5 } },
@@ -31,6 +32,7 @@ export default function App() {
                 <Route path="/verify-email" element={<VerifyEmail />} />
                 <Route path="/academy" element={<AcademyPage />} />
                 <Route path="/academy/course/:id" element={<CourseDetailPage />} />
+                <Route path="/academy/timetable" element={<TalentTimetable />} />
                 <Route path="/talent/*" element={<ProtectedRoute><TalentDashboard /></ProtectedRoute>} />
                 <Route path="*" element={<Login />} />
               </Routes>

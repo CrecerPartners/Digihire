@@ -14,6 +14,7 @@ import {
   UserSearch,
   Building2,
   ClipboardCheck,
+  Wifi,
 } from "lucide-react";
 import { NavLink } from "@/components/NavLink";
 import { useLocation } from "react-router-dom";
@@ -47,6 +48,8 @@ const navItems = [
   { label: "Memberships", path: "/campaigns/memberships", icon: UserCheck },
   { label: "Earnings", path: "/campaigns/earnings", icon: BadgeDollarSign },
   { label: "Talent Pool", path: "/talent-pool", icon: UserSearch },
+  { label: "Talent Academy", path: "/talent-academy", icon: GraduationCap },
+  { label: "Webinars", path: "/webinars", icon: Wifi },
   { label: "Brands", path: "/brands", icon: Building2 },
   { label: "Recruitment", path: "/recruitment", icon: ClipboardCheck },
 ];

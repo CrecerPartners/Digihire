@@ -28,6 +28,8 @@ import AdminCampaignForm from "@/pages/AdminCampaignForm";
 import AdminTalentPool from "@/pages/AdminTalentPool";
 import AdminBrands from "@/pages/AdminBrands";
 import AdminRecruitment from "@/pages/AdminRecruitment";
+import AdminTalentAcademy from "@/pages/AdminTalentAcademy";
+import AdminWebinars from "@/pages/AdminWebinars";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -71,6 +73,8 @@ export default function App() {
                   <Route path="/campaigns/memberships" element={<AdminCampaignMemberships />} />
                   <Route path="/campaigns/earnings" element={<AdminCampaignEarnings />} />
                   <Route path="/talent-pool" element={<AdminTalentPool />} />
+                  <Route path="/talent-academy" element={<AdminTalentAcademy />} />
+                  <Route path="/webinars" element={<AdminWebinars />} />
                   <Route path="/brands" element={<AdminBrands />} />
                   <Route path="/recruitment" element={<AdminRecruitment />} />
                 </Route>

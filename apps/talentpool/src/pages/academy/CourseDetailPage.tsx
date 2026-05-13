@@ -4,13 +4,19 @@ import { TalentCourse } from '../../types';
 import { useTalentCourse } from '../../hooks/useTalentCourses';
 import { useTalentEnrollments } from '../../hooks/useTalentEnrollments';
 import { motion } from 'motion/react';
-import { Play, CheckCircle, Lock, GraduationCap, ArrowLeft, Download, FileText } from 'lucide-react';
+import { Play, CheckCircle, Lock, GraduationCap, ArrowLeft, Download, FileText, Check } from 'lucide-react';
+
+function extractYouTubeId(url?: string): string | null {
+  if (!url) return null;
+  const match = url.match(/(?:youtube\.com\/(?:watch\?v=|embed\/)|youtu\.be\/)([a-zA-Z0-9_-]{11})/);
+  return match ? match[1] : null;
+}
 
 export default function CourseDetailPage() {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const { course, loading } = useTalentCourse(id);
-  const { enrollments, enroll } = useTalentEnrollments();
+  const { enrollments, enroll, updateProgress } = useTalentEnrollments();
   const [activeModule, setActiveModule] = useState(0);
 
   const isEnrolled = enrollments.some(e => e.course_id === id);
@@ -24,6 +30,24 @@ export default function CourseDetailPage() {
       alert(message);
     }
   };
+
+  const handleMarkComplete = async () => {
+    if (!enrollment || !course) return;
+    const completed = new Set(enrollment.completed_modules || []);
+    completed.add(activeModule);
+    const newCompleted = Array.from(completed);
+    const total = course.modules?.length || 1;
+    const progress = Math.round((newCompleted.length / total) * 100);
+    
+    await updateProgress(course.id, newCompleted, progress);
+    
+    if (activeModule < total - 1) {
+      setActiveModule(activeModule + 1);
+    }
+  };
+
+  const currentModule = course?.modules?.[activeModule];
+  const videoId = currentModule?.youtube_url ? extractYouTubeId(currentModule.youtube_url) : null;
 
   if (loading) return <div className="flex items-center justify-center min-h-screen">Loading course...</div>;
   if (!course) return <div className="p-20 text-center">Course not found</div>;
@@ -111,6 +135,51 @@ export default function CourseDetailPage() {
                     ))}
                   </div>
                </div>
+
+               {isEnrolled && currentModule && (
+                 <div className="rounded-xl bg-white border border-gray-200 shadow-sm overflow-hidden mt-8">
+                   {videoId ? (
+                     <div className="aspect-video w-full bg-black">
+                       <iframe
+                         src={`https://www.youtube.com/embed/${videoId}?rel=0`}
+                         className="w-full h-full"
+                         allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                         allowFullScreen
+                       />
+                     </div>
+                   ) : (
+                     <div className="aspect-video w-full bg-gray-100 flex items-center justify-center text-gray-400">
+                       No video available for this module
+                     </div>
+                   )}
+                   <div className="p-8">
+                     <h2 className="text-2xl font-bold text-slate-900 mb-4">{currentModule.title}</h2>
+                     {currentModule.content && (
+                       <p className="text-slate-600 leading-relaxed mb-8">{currentModule.content}</p>
+                     )}
+                     
+                     <div className="flex justify-end pt-6 border-t border-gray-100">
+                       <button
+                         onClick={handleMarkComplete}
+                         disabled={enrollment?.completed_modules?.includes(activeModule)}
+                         className={`flex items-center gap-2 px-6 py-3 rounded-xl text-sm font-bold transition-all ${
+                           enrollment?.completed_modules?.includes(activeModule)
+                             ? 'bg-green-50 text-green-600 cursor-default'
+                             : 'bg-sky-600 text-white hover:bg-sky-700 shadow-lg shadow-sky-200'
+                         }`}
+                       >
+                         {enrollment?.completed_modules?.includes(activeModule) ? (
+                           <>
+                             <Check size={16} /> Completed
+                           </>
+                         ) : (
+                           'Mark as Complete'
+                         )}
+                       </button>
+                     </div>
+                   </div>
+                 </div>
+               )}
             </div>
 
             <div className="lg:col-span-1 space-y-6">
