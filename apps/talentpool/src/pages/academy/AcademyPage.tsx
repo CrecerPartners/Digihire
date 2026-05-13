@@ -10,12 +10,16 @@ export default function AcademyPage() {
   const { courses, loading } = useTalentCourses();
   const { webinars: upcomingWebinars } = useTalentWebinars();
   const [filter, setFilter] = useState('all');
+  const [searchQuery, setSearchQuery] = useState('');
 
   const categories = ['all', 'sales process', 'saas sales', 'b2b strategy', 'soft skills'];
 
-  const filteredCourses = filter === 'all'
-    ? courses
-    : courses.filter(c => c.category?.toLowerCase() === filter.toLowerCase());
+  const filteredCourses = courses.filter(c => {
+    const matchesFilter = filter === 'all' || c.category?.toLowerCase() === filter.toLowerCase();
+    const matchesSearch = c.title.toLowerCase().includes(searchQuery.toLowerCase()) || 
+                         (c.description || '').toLowerCase().includes(searchQuery.toLowerCase());
+    return matchesFilter && matchesSearch;
+  });
 
   return (
     <div className="bg-[#fafafa] min-h-screen">
@@ -32,7 +36,13 @@ export default function AcademyPage() {
               <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400">
                 <Search size={18} />
               </div>
-              <input type="text" placeholder="Search for courses, tracks, or skills..." className="w-full rounded-xl bg-white/10 border border-white/20 py-4 pl-10 pr-4 text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-sky-500 transition-all text-sm" />
+              <input 
+                type="text" 
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                placeholder="Search for courses, tracks, or skills..." 
+                className="w-full rounded-xl bg-white/10 border border-white/20 py-4 pl-10 pr-4 text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-sky-500 transition-all text-sm" 
+              />
             </div>
           </motion.div>
         </div>
@@ -43,15 +53,17 @@ export default function AcademyPage() {
         {/* Filters */}
         <div className="flex flex-wrap items-center gap-2 mb-12">
           {categories.map(cat => (
-            <button
+            <motion.button
               key={cat}
+              whileHover={{ y: -2 }}
+              whileTap={{ scale: 0.95 }}
               onClick={() => setFilter(cat)}
-              className={`px-5 py-2 rounded-lg text-xs font-bold capitalize transition-all ${
-                filter === cat ? 'bg-sky-600 text-white shadow-lg shadow-sky-200' : 'bg-white text-slate-600 border border-gray-200 hover:border-gray-300'
+              className={`px-5 py-2 rounded-lg text-xs font-bold capitalize transition-all cursor-pointer ${
+                filter === cat ? 'bg-sky-600 text-white shadow-lg shadow-sky-200' : 'bg-white text-slate-600 border border-gray-200 hover:border-gray-300 hover:bg-gray-50'
               }`}
             >
               {cat}
-            </button>
+            </motion.button>
           ))}
         </div>
 
@@ -120,10 +132,30 @@ export default function AcademyPage() {
         <div className="mt-16">
           <h2 className="text-2xl font-bold mb-8">Sales Role Tracks</h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            <TrackCard title="SDR / BDR" count={8} color="bg-orange-50 text-orange-600" />
-            <TrackCard title="Account Executive" count={12} color="bg-blue-50 text-blue-600" />
-            <TrackCard title="SaaS Sales Pro" count={15} color="bg-purple-50 text-purple-600" />
-            <TrackCard title="Sales Management" count={6} color="bg-green-50 text-green-600" />
+            <TrackCard 
+              title="SDR / BDR" 
+              count={8} 
+              color="bg-orange-50 text-orange-600" 
+              onClick={() => setFilter('sales process')}
+            />
+            <TrackCard 
+              title="Account Executive" 
+              count={12} 
+              color="bg-blue-50 text-blue-600" 
+              onClick={() => setFilter('b2b strategy')}
+            />
+            <TrackCard 
+              title="SaaS Sales Pro" 
+              count={15} 
+              color="bg-purple-50 text-purple-600" 
+              onClick={() => setFilter('saas sales')}
+            />
+            <TrackCard 
+              title="Sales Management" 
+              count={6} 
+              color="bg-green-50 text-green-600" 
+              onClick={() => setFilter('soft skills')}
+            />
           </div>
         </div>
       </div>
@@ -171,17 +203,22 @@ function CourseCard({ course }: { course: TalentCourse }) {
   );
 }
 
-function TrackCard({ title, count, color }: { title: string; count: number; color: string }) {
+function TrackCard({ title, count, color, onClick }: { title: string; count: number; color: string; onClick?: () => void }) {
   return (
-    <div className={`p-6 rounded-2xl ${color} flex flex-col justify-between h-40 border border-white shadow-sm`}>
+    <motion.button 
+      whileHover={{ y: -5, shadow: "0 10px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.05)" }}
+      whileTap={{ scale: 0.98 }}
+      onClick={onClick}
+      className={`p-6 rounded-2xl ${color} flex flex-col justify-between h-40 border border-white shadow-sm text-left w-full transition-all cursor-pointer group`}
+    >
       <h3 className="text-xl font-bold leading-tight">{title}</h3>
-      <div className="flex items-center justify-between">
+      <div className="flex items-center justify-between w-full">
         <span className="text-xs font-semibold uppercase">{count} Courses</span>
-        <div className="h-8 w-8 rounded-full bg-white/50 flex items-center justify-center">
+        <div className="h-8 w-8 rounded-full bg-white/50 flex items-center justify-center group-hover:bg-white transition-colors">
           <ArrowRight size={16} />
         </div>
       </div>
-    </div>
+    </motion.button>
   );
 }
 
