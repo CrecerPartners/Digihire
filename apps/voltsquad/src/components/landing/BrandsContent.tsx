@@ -233,7 +233,7 @@ export function BrandsContent() {
               size="lg"
               className="bg-background text-foreground px-8 text-base font-semibold hover:bg-background/90"
             >
-              <a href="https://volt.crecerpartners.com/brand-form/" target="_blank" rel="noopener noreferrer">
+              <a href="https://brands.digihire.io/signup" target="_blank" rel="noopener noreferrer">
                 Start Selling
                 <ArrowRight className="ml-2 h-4 w-4" />
               </a>

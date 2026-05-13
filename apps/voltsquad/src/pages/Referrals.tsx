@@ -28,7 +28,7 @@ const Referrals = () => {
 
   const shareLink = () => {
     if (profile?.referral_code) {
-      navigator.clipboard.writeText(`${import.meta.env.VITE_APP_URL || window.location.origin}/ref/${profile.referral_code}`);
+      navigator.clipboard.writeText(`https://voltsquad.digihire.io/join-now?ref=${profile.referral_code}`);
       toast.success("Referral link copied!");
     }
   };

@@ -42,7 +42,7 @@ const audiences = {
     subtitle:
       "Get customers through a network of active sellers across campuses, communities, and online audiences. No upfront ad spend. You only pay when results happen.",
     cta: "Start Selling",
-    ctaLink: "https://volt.crecerpartners.com/brand-form/",
+    ctaLink: "https://brands.digihire.io/signup",
     icon: Building2,
     image: heroBrands,
   },

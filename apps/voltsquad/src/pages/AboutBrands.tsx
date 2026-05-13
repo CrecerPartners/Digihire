@@ -65,7 +65,7 @@ export default function AboutBrands() {
               size="lg"
               className="bg-primary px-8 text-base font-semibold text-primary-foreground hover:bg-primary/90"
             >
-              <a href="https://volt.crecerpartners.com/brand-form/" target="_blank" rel="noopener noreferrer">
+              <a href="https://brands.digihire.io/signup" target="_blank" rel="noopener noreferrer">
                 Partner with Volt <ArrowRight className="ml-2 h-5 w-5" />
               </a>
             </Button>
@@ -131,7 +131,7 @@ export default function AboutBrands() {
             size="lg"
             className="mt-8 bg-background text-foreground px-8 font-semibold hover:bg-background/90"
           >
-            <a href="https://volt.crecerpartners.com/brand-form/" target="_blank" rel="noopener noreferrer">
+            <a href="https://brands.digihire.io/signup" target="_blank" rel="noopener noreferrer">
               Partner with Volt <ArrowRight className="ml-2 h-4 w-4" />
             </a>
           </Button>

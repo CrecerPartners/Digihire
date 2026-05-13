@@ -40,7 +40,7 @@ export function ProductDetailSheet({ product, open, onOpenChange }: ProductDetai
 
   if (!product) return null;
 
-  const referralLink = `https://volt.ng/ref/${profile?.referral_code || "VOLT"}/${product.id}`;
+  const referralLink = `https://voltsquad.digihire.io/product/${product.slug}?ref=${profile?.referral_code || "VOLT"}`;
 
   const openLightbox = (index: number) => {
     setLightboxIndex(index);

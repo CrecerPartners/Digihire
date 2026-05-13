@@ -57,10 +57,13 @@ export function MobileBottomNav() {
 
   const currentMoreTabs = [...moreTabs];
   if (isAdmin) {
-    currentMoreTabs.unshift({ label: "Admin", path: "/admin", icon: ShieldCheck, badge: null });
+    currentMoreTabs.unshift({ label: "Admin", path: "https://admin.digihire.io", icon: ShieldCheck, badge: null });
   }
 
-  const isActive = (path: string) => location.pathname === path || (path !== "/dashboard" && location.pathname.startsWith(path));
+  const isActive = (path: string) => {
+    if (path.startsWith("http")) return false;
+    return location.pathname === path || (path !== "/dashboard" && location.pathname.startsWith(path));
+  };
   const isMoreActive = currentMoreTabs.some((t) => isActive(t.path));
 
   const totalMoreBadge = currentMoreTabs.reduce((sum, t) => {
@@ -68,7 +71,11 @@ export function MobileBottomNav() {
   }, 0);
 
   const handleNav = (path: string) => {
-    navigate(path);
+    if (path.startsWith("http")) {
+      window.open(path, "_blank", "noopener,noreferrer");
+    } else {
+      navigate(path);
+    }
     setMoreOpen(false);
   };
 
