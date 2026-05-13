@@ -2,7 +2,9 @@
   "installCommand": "npm install",
   "buildCommand": "npm run build:brands",
   "outputDirectory": "apps/brands/dist",
-  "rewrites": [
-    { "source": "/((?!assets/|.*\\.[a-z0-9]+$).*)", "destination": "/index.html" }
+  "routes": [
+    { "handle": "filesystem" },
+    { "src": "/(.*)", "dest": "/index.html" }
   ]
 }
+

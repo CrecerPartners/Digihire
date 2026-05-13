@@ -2,8 +2,10 @@
   "installCommand": "npm install",
   "buildCommand": "npm run build:voltsquad",
   "outputDirectory": "apps/voltsquad/dist",
-  "rewrites": [
-    { "source": "/(.*)", "destination": "/index.html" }
+  "routes": [
+    { "handle": "filesystem" },
+    { "src": "/(.*)", "dest": "/index.html" }
   ]
 }
+
 
