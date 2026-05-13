@@ -3,6 +3,6 @@
   "buildCommand": "npm run build:talentpool",
   "outputDirectory": "apps/talentpool/dist",
   "rewrites": [
-    { "source": "/((?!assets/).*)", "destination": "/index.html" }
+    { "source": "/((?!assets/|.*\\.[a-z0-9]+$).*)", "destination": "/index.html" }
   ]
 }
