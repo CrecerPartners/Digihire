@@ -6,12 +6,13 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { useProducts, Product } from "@digihire/shared";
 import { useProfile, useUpdateProfile } from "@digihire/shared";
 import { formatNaira } from "@digihire/shared";
-import { 
-  Calculator, Plus, Trash2, Sparkles, Share2, 
-  Loader2, Target, TrendingUp, Calendar, 
+import {
+  Calculator, Plus, Trash2, Sparkles, Share2,
+  Loader2, Target, TrendingUp, Calendar,
   ChevronRight, Save, Info, AlertTriangle,
-  Lightbulb
+  Lightbulb, Minus, MessageCircle, Twitter, Copy
 } from "lucide-react";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@digihire/shared";
 import { toast } from "sonner";
 import { Progress } from "@digihire/shared";
 import { Tabs, TabsList, TabsTrigger } from "@digihire/shared";
@@ -48,7 +49,7 @@ const Calculator_Page = () => {
   const [selectedProduct, setSelectedProduct] = useState<string>("");
   const [quantity, setQuantity] = useState<number>(1);
   
-  const [mode, setMode] = useState<"quick" | "target">("quick");
+  const [mode, setMode] = useState<"quick" | "target">("target");
   const [targetAmount, setTargetAmount] = useState<string>("100000");
   const [timeframe, setTimeframe] = useState<"weekly" | "monthly">("monthly");
 
@@ -114,22 +115,31 @@ const Calculator_Page = () => {
     });
   };
 
-  const sharePlan = () => {
+  const buildShareText = () => {
     const lines = items.map((item) => {
       const p = getProduct(item.productId);
       if (!p) return "";
       return `• ${p.name} x${item.quantity} = ${formatNaira(calculateCommission(item))}`;
-    });
-    
-    let text = "";
+    }).filter(Boolean);
     if (mode === "target") {
-      text = `🎯 Goal: ${formatNaira(targetNum)} in 1 ${timeframe.replace('ly', '')}\n🔥 My Progress: ${progressPercent}%\n\n${lines.join("\n")}\n\n💰 Total: ${formatNaira(totalEarnings)}\n\nJoin Volt and start earning too! ⚡`;
-    } else {
-      text = `🔥 My Volt Earnings Plan\n\n${lines.join("\n")}\n\n💰 Total: ${formatNaira(totalEarnings)} from ${totalSales} sales!\n\nJoin Volt and start earning too! ⚡`;
+      return `🎯 Goal: ${formatNaira(targetNum)} in 1 ${timeframe.replace('ly', '')}\n🔥 Progress: ${progressPercent}%\n\n${lines.join("\n")}\n\n💰 Total: ${formatNaira(totalEarnings)}\n\nJoin VoltSquad & start earning! ⚡ voltsquad.digihire.io`;
     }
-    
-    navigator.clipboard.writeText(text);
-    toast.success("Goal plan copied to clipboard!");
+    return `🔥 My VoltSquad Earnings Plan\n\n${lines.join("\n")}\n\n💰 Total: ${formatNaira(totalEarnings)} from ${totalSales} sales!\n\nJoin VoltSquad & start earning! ⚡ voltsquad.digihire.io`;
+  };
+
+  const shareToWhatsApp = () => {
+    const text = encodeURIComponent(buildShareText());
+    window.open(`https://wa.me/?text=${text}`, "_blank");
+  };
+
+  const shareToTwitter = () => {
+    const text = encodeURIComponent(buildShareText());
+    window.open(`https://twitter.com/intent/tweet?text=${text}`, "_blank");
+  };
+
+  const copyToClipboard = () => {
+    navigator.clipboard.writeText(buildShareText());
+    toast.success("Plan copied to clipboard!");
   };
 
   const averageCommission = totalSales > 0 ? totalEarnings / totalSales : 0;
@@ -152,11 +162,11 @@ const Calculator_Page = () => {
         
         <Tabs value={mode} onValueChange={(v: any) => setMode(v)} className="w-fit">
           <TabsList className="bg-secondary/50 border border-border">
-            <TabsTrigger value="quick" className="data-[state=active]:bg-background data-[state=active]:text-primary">
-              <Calculator className="h-3.5 w-3.5 mr-1.5" /> Quick Est.
-            </TabsTrigger>
             <TabsTrigger value="target" className="data-[state=active]:bg-background data-[state=active]:text-primary">
               <Target className="h-3.5 w-3.5 mr-1.5" /> Income Target
+            </TabsTrigger>
+            <TabsTrigger value="quick" className="data-[state=active]:bg-background data-[state=active]:text-primary">
+              <Calculator className="h-3.5 w-3.5 mr-1.5" /> Quick Est.
             </TabsTrigger>
           </TabsList>
         </Tabs>
@@ -218,14 +228,33 @@ const Calculator_Page = () => {
                     ))}
                   </SelectContent>
                 </Select>
-                <Input
-                  type="number"
-                  min={1}
-                  value={quantity}
-                  onChange={(e) => setQuantity(parseInt(e.target.value) || 1)}
-                  className="w-full sm:w-24"
-                  placeholder="Qty"
-                />
+                <div className="flex items-center gap-1 w-full sm:w-auto">
+                  <Button
+                    type="button"
+                    variant="outline"
+                    size="icon"
+                    className="h-9 w-9 shrink-0"
+                    onClick={() => setQuantity(q => Math.max(1, q - 1))}
+                  >
+                    <Minus className="h-3.5 w-3.5" />
+                  </Button>
+                  <Input
+                    type="number"
+                    min={1}
+                    value={quantity}
+                    onChange={(e) => setQuantity(parseInt(e.target.value) || 1)}
+                    className="w-16 text-center"
+                  />
+                  <Button
+                    type="button"
+                    variant="outline"
+                    size="icon"
+                    className="h-9 w-9 shrink-0"
+                    onClick={() => setQuantity(q => q + 1)}
+                  >
+                    <Plus className="h-3.5 w-3.5" />
+                  </Button>
+                </div>
                 <Button onClick={addItem} className="volt-gradient">
                   Add to Plan
                 </Button>
@@ -350,9 +379,24 @@ const Calculator_Page = () => {
                   </Button>
                 )}
                 {items.length > 0 && (
-                  <Button className="volt-gradient w-full" onClick={sharePlan}>
-                    <Share2 className="h-3.5 w-3.5 mr-2" /> Share Plan
-                  </Button>
+                  <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                      <Button className="volt-gradient w-full">
+                        <Share2 className="h-3.5 w-3.5 mr-2" /> Share Plan
+                      </Button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent align="end" className="w-48">
+                      <DropdownMenuItem onClick={shareToWhatsApp} className="gap-2 cursor-pointer">
+                        <MessageCircle className="h-4 w-4 text-green-500" /> Share on WhatsApp
+                      </DropdownMenuItem>
+                      <DropdownMenuItem onClick={shareToTwitter} className="gap-2 cursor-pointer">
+                        <Twitter className="h-4 w-4 text-sky-500" /> Share on X / Twitter
+                      </DropdownMenuItem>
+                      <DropdownMenuItem onClick={copyToClipboard} className="gap-2 cursor-pointer">
+                        <Copy className="h-4 w-4" /> Copy to Clipboard
+                      </DropdownMenuItem>
+                    </DropdownMenuContent>
+                  </DropdownMenu>
                 )}
                 {items.length > 0 && (
                   <Button variant="ghost" size="sm" onClick={() => setItems([])} className="text-muted-foreground text-xs">Clear Plan</Button>

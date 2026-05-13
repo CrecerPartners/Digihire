@@ -32,6 +32,46 @@ function extractYouTubeId(url: string): string | null {
   return match ? match[1] : null;
 }
 
+function extractDriveId(url: string): string | null {
+  const match = url.match(/drive\.google\.com\/file\/d\/([a-zA-Z0-9_-]+)/);
+  return match ? match[1] : null;
+}
+
+type EmbedInfo =
+  | { type: "youtube"; id: string }
+  | { type: "drive"; id: string }
+  | { type: "url"; url: string }
+  | null;
+
+function resolveEmbed(url: string | null | undefined): EmbedInfo {
+  if (!url) return null;
+  const ytId = extractYouTubeId(url);
+  if (ytId) return { type: "youtube", id: ytId };
+  const driveId = extractDriveId(url);
+  if (driveId) return { type: "drive", id: driveId };
+  if (url.startsWith("http")) return { type: "url", url };
+  return null;
+}
+
+function LessonEmbed({ embed, title }: { embed: EmbedInfo; title?: string }) {
+  if (!embed) return null;
+  let src = "";
+  if (embed.type === "youtube") src = `https://www.youtube.com/embed/${embed.id}?autoplay=1`;
+  if (embed.type === "drive") src = `https://drive.google.com/file/d/${embed.id}/preview`;
+  if (embed.type === "url") src = embed.url;
+  return (
+    <AspectRatio ratio={16 / 9}>
+      <iframe
+        src={src}
+        title={title}
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+        allowFullScreen
+        className="w-full h-full"
+      />
+    </AspectRatio>
+  );
+}
+
 const TrainingCourse = () => {
   const { courseId } = useParams<{ courseId: string }>();
   const navigate = useNavigate();
@@ -118,19 +158,11 @@ const TrainingCourse = () => {
       {/* Active video player */}
       {activeLesson && (() => {
         const lesson = lessons?.find((l) => l.id === activeLesson);
-        const videoId = lesson ? extractYouTubeId(lesson.youtube_url) : null;
-        if (!videoId) return null;
+        const embed = resolveEmbed(lesson?.youtube_url);
+        if (!embed) return null;
         return (
           <Card className="border-border/50 overflow-hidden">
-            <AspectRatio ratio={16 / 9}>
-              <iframe
-                src={`https://www.youtube.com/embed/${videoId}?autoplay=1`}
-                title={lesson?.title}
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                allowFullScreen
-                className="w-full h-full"
-              />
-            </AspectRatio>
+            <LessonEmbed embed={embed} title={lesson?.title} />
             <CardContent className="p-3">
               <p className="text-sm font-medium">{lesson?.title}</p>
             </CardContent>
@@ -158,18 +190,17 @@ const TrainingCourse = () => {
                   {mod.lessons.map((lesson) => {
                     const done = completedIds.has(lesson.id);
                     const isPlaying = activeLesson === lesson.id;
+                    const embed = resolveEmbed(lesson.youtube_url);
                     return (
                       <div
                         key={lesson.id}
-                        className={`flex items-center gap-3 p-2.5 rounded-lg transition-all cursor-pointer ${
-                          isPlaying ? "bg-primary/10" : "hover:bg-secondary"
-                        }`}
+                        className={`flex items-center gap-3 p-2.5 rounded-lg transition-all ${
+                          embed ? "cursor-pointer" : ""
+                        } ${isPlaying ? "bg-primary/10" : embed ? "hover:bg-secondary" : ""}`}
                       >
                         <button
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            toggleComplete(lesson.id);
-                          }}
+                          type="button"
+                          onClick={(e) => { e.stopPropagation(); toggleComplete(lesson.id); }}
                           className="shrink-0"
                         >
                           {done ? (
@@ -179,13 +210,18 @@ const TrainingCourse = () => {
                           )}
                         </button>
                         <button
-                          onClick={() => setActiveLesson(isPlaying ? null : lesson.id)}
-                          className="flex items-center gap-2 flex-1 text-left"
+                          type="button"
+                          disabled={!embed}
+                          onClick={() => embed && setActiveLesson(isPlaying ? null : lesson.id)}
+                          className="flex items-center gap-2 flex-1 text-left disabled:cursor-default"
                         >
-                          <Play className="h-3.5 w-3.5 text-muted-foreground shrink-0" />
+                          <Play className={`h-3.5 w-3.5 shrink-0 ${embed ? "text-primary" : "text-muted-foreground/30"}`} />
                           <span className={`text-sm ${done ? "line-through text-muted-foreground" : ""}`}>
                             {lesson.title}
                           </span>
+                          {!embed && (
+                            <span className="ml-auto text-[10px] text-muted-foreground/50 font-medium">Text</span>
+                          )}
                         </button>
                       </div>
                     );

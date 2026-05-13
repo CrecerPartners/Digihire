@@ -19,7 +19,7 @@ import {
   supabase,
   formatNaira,
 } from "@digihire/shared";
-import { Upload, Calculator, Loader2 } from "lucide-react";
+import { Upload, Calculator, Loader2, Minus, Plus, ImageIcon } from "lucide-react";
 import { toast } from "sonner";
 import { useQueryClient } from "@tanstack/react-query";
 
@@ -55,7 +55,6 @@ export function ManualSaleDialog({ open, onOpenChange }: ManualSaleDialogProps) 
   const handleSubmit = async () => {
     if (!productId) return toast.error("Select a product");
     if (!isLead && !customer.trim()) return toast.error("Enter customer name");
-    if (!isLead && !proofFile) return toast.error("Upload proof of sale");
     if (!user) return toast.error("Not authenticated");
 
     setSubmitting(true);
@@ -138,12 +137,13 @@ export function ManualSaleDialog({ open, onOpenChange }: ManualSaleDialogProps) 
           <DialogDescription>
             {isLead
               ? "Record a lead/sign-up. It will be reviewed and verified by admin."
-              : "Record an offline sale. It will be reviewed and payment confirmed within 3-7 working days."
+              : "Record an offline sale. Upload a receipt or screenshot for faster verification (optional)."
             }
           </DialogDescription>
         </DialogHeader>
 
         <div className="space-y-4">
+          {/* Product */}
           <div className="space-y-1.5">
             <label className="text-xs font-medium text-muted-foreground">Product</label>
             <Select value={productId} onValueChange={(v) => { setProductId(v); const p = products.find(x => x.id === v); if (p) setPrice(p.price); }}>
@@ -152,9 +152,7 @@ export function ManualSaleDialog({ open, onOpenChange }: ManualSaleDialogProps) 
               </SelectTrigger>
               <SelectContent>
                 {products.map((p) => (
-                  <SelectItem key={p.id} value={p.id}>
-                    {p.name}
-                  </SelectItem>
+                  <SelectItem key={p.id} value={p.id}>{p.name}</SelectItem>
                 ))}
               </SelectContent>
             </Select>
@@ -173,18 +171,52 @@ export function ManualSaleDialog({ open, onOpenChange }: ManualSaleDialogProps) 
             </div>
           ) : (
             <>
-              <div className="grid grid-cols-3 gap-3">
+              {/* Customer name — full width, prominent */}
+              <div className="space-y-1.5">
+                <label className="text-xs font-medium text-muted-foreground">
+                  Customer Name <span className="text-destructive">*</span>
+                </label>
+                <Input
+                  placeholder="e.g. Bola Adeyemi"
+                  value={customer}
+                  onChange={(e) => setCustomer(e.target.value)}
+                />
+              </div>
+
+              {/* Quantity + Price row */}
+              <div className="grid grid-cols-2 gap-3">
                 <div className="space-y-1.5">
                   <label className="text-xs font-medium text-muted-foreground">Quantity</label>
-                  <Input
-                    type="number"
-                    min={1}
-                    value={quantity}
-                    onChange={(e) => setQuantity(parseInt(e.target.value) || 1)}
-                  />
+                  <div className="flex items-center gap-1">
+                    <Button
+                      type="button"
+                      variant="outline"
+                      size="icon"
+                      className="h-9 w-9 shrink-0"
+                      onClick={() => setQuantity(q => Math.max(1, q - 1))}
+                    >
+                      <Minus className="h-3 w-3" />
+                    </Button>
+                    <Input
+                      type="number"
+                      min={1}
+                      value={quantity}
+                      onChange={(e) => setQuantity(parseInt(e.target.value) || 1)}
+                      className="text-center"
+                    />
+                    <Button
+                      type="button"
+                      variant="outline"
+                      size="icon"
+                      className="h-9 w-9 shrink-0"
+                      onClick={() => setQuantity(q => q + 1)}
+                    >
+                      <Plus className="h-3 w-3" />
+                    </Button>
+                  </div>
                 </div>
                 <div className="space-y-1.5">
-                  <label className="text-xs font-medium text-muted-foreground">Price (₦)</label>
+                  <label className="text-xs font-medium text-muted-foreground">Sale Price (₦)</label>
                   <Input
                     type="number"
                     min={0}
@@ -193,41 +225,39 @@ export function ManualSaleDialog({ open, onOpenChange }: ManualSaleDialogProps) 
                     onChange={(e) => setPrice(parseFloat(e.target.value) || "")}
                   />
                 </div>
-                <div className="space-y-1.5">
-                  <label className="text-xs font-medium text-muted-foreground">Customer Name</label>
-                  <Input
-                    placeholder="e.g. Bola A."
-                    value={customer}
-                    onChange={(e) => setCustomer(e.target.value)}
-                  />
-                </div>
               </div>
 
+              {/* Proof upload — optional */}
               <div className="space-y-1.5">
-                <label className="text-xs font-medium text-muted-foreground">Proof of Sale</label>
-                <div className="flex items-center gap-3">
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    className="flex-1"
-                    onClick={() => document.getElementById("proof-upload")?.click()}
-                  >
-                    <Upload className="h-3 w-3 mr-2" />
-                    {proofFile ? proofFile.name : "Upload receipt / screenshot"}
-                  </Button>
-                  <input
-                    ref={proofInputRef}
-                    id="proof-upload"
-                    type="file"
-                    accept="image/*,.pdf"
-                    className="hidden"
-                    onChange={(e) => setProofFile(e.target.files?.[0] || null)}
-                  />
-                </div>
+                <label className="text-xs font-medium text-muted-foreground">
+                  Receipt / Screenshot <span className="text-muted-foreground/60">(optional — speeds up verification)</span>
+                </label>
+                <button
+                  type="button"
+                  onClick={() => proofInputRef.current?.click()}
+                  className={`w-full flex items-center gap-3 rounded-lg border border-dashed px-4 py-3 text-sm transition-colors hover:bg-secondary/50 ${
+                    proofFile ? "border-primary/40 bg-primary/5 text-foreground" : "border-border text-muted-foreground"
+                  }`}
+                >
+                  {proofFile ? (
+                    <ImageIcon className="h-4 w-4 text-primary shrink-0" />
+                  ) : (
+                    <Upload className="h-4 w-4 shrink-0" />
+                  )}
+                  <span className="truncate">{proofFile ? proofFile.name : "Upload receipt or screenshot"}</span>
+                </button>
+                <input
+                  ref={proofInputRef}
+                  type="file"
+                  accept="image/*,.pdf"
+                  className="hidden"
+                  onChange={(e) => setProofFile(e.target.files?.[0] || null)}
+                />
               </div>
             </>
           )}
 
+          {/* Notes */}
           <div className="space-y-1.5">
             <label className="text-xs font-medium text-muted-foreground">Notes (optional)</label>
             <Textarea
@@ -238,17 +268,18 @@ export function ManualSaleDialog({ open, onOpenChange }: ManualSaleDialogProps) 
             />
           </div>
 
+          {/* Commission preview */}
           {selectedProduct && !isLead && (
-            <div className="space-y-2">
+            <div className="space-y-1.5">
               <div className="rounded-lg bg-secondary p-3 flex items-center justify-between">
                 <div className="flex items-center gap-2 text-xs text-muted-foreground">
                   <Calculator className="h-4 w-4" />
                   <span>Estimated Commission</span>
                 </div>
-                <p className="text-sm font-bold text-primary">{formatNaira(safeCommission)}</p>
+                <p className="text-sm font-bold text-primary">{formatNaira(commission)}</p>
               </div>
               <p className="text-[11px] text-muted-foreground text-center">
-                Commission will reflect in your wallet once the sale and payment are confirmed (3-7 working days)
+                Credited to your wallet once confirmed (3-7 working days)
               </p>
             </div>
           )}
@@ -263,9 +294,9 @@ export function ManualSaleDialog({ open, onOpenChange }: ManualSaleDialogProps) 
         </div>
 
         <DialogFooter>
-          <Button variant="outline" onClick={() => onOpenChange(false)}>Cancel</Button>
-          <Button className="volt-gradient" onClick={handleSubmit} disabled={submitting}>
-            {submitting ? <><Loader2 className="h-4 w-4 mr-2 animate-spin" /> Submitting...</> : isLead ? "Submit Lead" : "Submit Sale"}
+          <Button type="button" variant="outline" onClick={() => onOpenChange(false)}>Cancel</Button>
+          <Button type="button" className="volt-gradient" onClick={handleSubmit} disabled={submitting}>
+            {submitting ? <><Loader2 className="h-4 w-4 mr-2 animate-spin" />Submitting...</> : isLead ? "Submit Lead" : "Submit Sale"}
           </Button>
         </DialogFooter>
       </DialogContent>
