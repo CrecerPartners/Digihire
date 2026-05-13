@@ -1,7 +1,7 @@
 -- supabase/migrations/20260506120000_brand_dashboard.sql
 
 -- ── brand_campaigns ──────────────────────────────────────────────────────────
-create table public.brand_campaigns (
+create table if not exists public.brand_campaigns (
   id               uuid        primary key default gen_random_uuid(),
   brand_id         uuid        not null references public.brand_profiles(id) on delete cascade,
   campaign_name    text        not null,
@@ -28,7 +28,7 @@ create table public.brand_campaigns (
 );
 
 -- ── recruitment_requests ─────────────────────────────────────────────────────
-create table public.recruitment_requests (
+create table if not exists public.recruitment_requests (
   id                   uuid        primary key default gen_random_uuid(),
   brand_id             uuid        not null references public.brand_profiles(id) on delete cascade,
   contact_person       text,
@@ -57,7 +57,7 @@ create table public.recruitment_requests (
 );
 
 -- ── activation_requests ──────────────────────────────────────────────────────
-create table public.activation_requests (
+create table if not exists public.activation_requests (
   id                   uuid        primary key default gen_random_uuid(),
   brand_id             uuid        not null references public.brand_profiles(id) on delete cascade,
   company_name         text,
