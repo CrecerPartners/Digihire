@@ -354,8 +354,8 @@ export default function DigiHireSalesActivations() {
         </div>
       </section>
 
-      {false && (
       {/* VISUAL GALLERY */}
+      {false && (
       <section className="bg-slate-50 py-20">
         <div className="max-w-6xl mx-auto px-7">
           <h2

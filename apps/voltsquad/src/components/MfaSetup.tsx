@@ -91,6 +91,7 @@ export function MfaSetup() {
 
   if (isMfaEnabled) {
     return (
+      <>
       <div className="p-4 border border-success/30 bg-success/5 rounded-lg flex items-center justify-between gap-4">
         <div className="flex items-center gap-3">
           <div className="h-10 w-10 rounded-full bg-success/20 flex items-center justify-center">
@@ -125,6 +126,7 @@ export function MfaSetup() {
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
+      </>
     );
   }
 
