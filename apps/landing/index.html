@@ -1696,11 +1696,11 @@
         <div class="nav-dropdown">
           <!-- Talent section -->
           <p class="dd-section-label">Talent</p>
-          <a href="https://voltsquad.digihire.io/login">
+          <a href="https://talents.digihire.io/login">
             <span>Log in</span>
             <span class="dd-arrow">›</span>
           </a>
-          <a href="https://voltsquad.digihire.io/join-now">
+          <a href="https://talents.digihire.io/signup">
             <span>Sign up</span>
             <span class="dd-arrow">›</span>
           </a>
@@ -1714,6 +1714,19 @@
             <span class="dd-arrow">›</span>
           </a>
           <a href="https://brands.digihire.io/signup">
+            <span>Sign up</span>
+            <span class="dd-arrow">›</span>
+          </a>
+
+          <div class="nav-dropdown-divider"></div>
+
+          <!-- VoltSquad section -->
+          <p class="dd-section-label">VoltSquad</p>
+          <a href="https://voltsquad.digihire.io/login">
+            <span>Log in</span>
+            <span class="dd-arrow">›</span>
+          </a>
+          <a href="https://voltsquad.digihire.io/join-now">
             <span>Sign up</span>
             <span class="dd-arrow">›</span>
           </a>
@@ -2503,12 +2516,14 @@
     'job-seeker': {
       headline: 'Join Digihire to access sales gigs, jobs, and growth opportunities',
       sub: 'Access commission-based campaigns, project-based gigs, part-time roles, full-time jobs, and career-building opportunities with brands looking for people who can sell.',
-      cta: 'Get Started'
+      cta: 'Get Started',
+      href: 'https://talents.digihire.io/signup'
     },
     'employer': {
       headline: 'Acquire users, recruit sales talent, and run field activations with Digihire',
       sub: 'Digihire helps brands grow through structured sales campaigns, targeted recruitment, and field activations designed to drive visibility, users, and revenue.',
-      cta: 'Get Started'
+      cta: 'Get Started',
+      href: 'https://brands.digihire.io/signup'
     }
   };
 
@@ -2525,6 +2540,7 @@
       hl.textContent = c.headline;
       sub.textContent = c.sub;
       cta.textContent = c.cta;
+      cta.href = c.href;
       hl.style.transition = 'opacity 0.4s, transform 0.4s';
       hl.style.opacity = 1; hl.style.transform = 'none';
       sub.style.transition = 'opacity 0.4s'; sub.style.opacity = 1;
