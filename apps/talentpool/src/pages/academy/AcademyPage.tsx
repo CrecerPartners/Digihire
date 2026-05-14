@@ -206,7 +206,7 @@ function CourseCard({ course }: { course: TalentCourse }) {
 function TrackCard({ title, count, color, onClick }: { title: string; count: number; color: string; onClick?: () => void }) {
   return (
     <motion.button 
-      whileHover={{ y: -5, shadow: "0 10px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.05)" }}
+      whileHover={{ y: -5 }}
       whileTap={{ scale: 0.98 }}
       onClick={onClick}
       className={`p-6 rounded-2xl ${color} flex flex-col justify-between h-40 border border-white shadow-sm text-left w-full transition-all cursor-pointer group`}
