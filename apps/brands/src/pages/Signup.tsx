@@ -37,6 +37,7 @@ export default function Signup() {
         },
       });
       if (signUpErr) throw signUpErr;
+      sessionStorage.setItem('pending_verify_email', formData.email);
       navigate('/verify-email');
     } catch (err: unknown) {
       setError(err instanceof Error ? err.message : 'Failed to create account');

@@ -6,7 +6,8 @@ import { Mail, RefreshCw, LogOut, ArrowRight } from 'lucide-react';
 import { Button, Card, CardContent } from '@digihire/shared';
 
 export default function VerifyEmail() {
-  const { user, signOut } = useAuth();
+  const { signOut } = useAuth();
+  const [email] = useState(() => sessionStorage.getItem('pending_verify_email') ?? '');
   const [otp, setOtp] = useState(['', '', '', '', '', '']);
   const [verifying, setVerifying] = useState(false);
   const [sending, setSending] = useState(false);
@@ -44,11 +45,11 @@ export default function VerifyEmail() {
   const handleVerify = async () => {
     const token = otp.join('');
     if (token.length < 6) return setError('Enter the full 6-digit code.');
-    if (!user?.email) return setError('Session expired. Please sign up again.');
+    if (!email) return setError('Session expired. Please sign up again.');
     setVerifying(true);
     setError('');
     const { error: err } = await supabase.auth.verifyOtp({
-      email: user.email,
+      email,
       token,
       type: 'signup',
     });
@@ -57,6 +58,7 @@ export default function VerifyEmail() {
       setOtp(['', '', '', '', '', '']);
       inputRefs.current[0]?.focus();
     } else {
+      sessionStorage.removeItem('pending_verify_email');
       setSuccess('Email verified! Redirecting...');
       setTimeout(() => navigate('/brand'), 1000);
     }
@@ -64,11 +66,11 @@ export default function VerifyEmail() {
   };
 
   const handleResend = async () => {
-    if (!user?.email) return;
+    if (!email) return;
     setSending(true);
     setError('');
     setSuccess('');
-    const { error: err } = await supabase.auth.resend({ type: 'signup', email: user.email });
+    const { error: err } = await supabase.auth.resend({ type: 'signup', email });
     if (err) setError(err.message);
     else setSuccess('New code sent! Check your inbox.');
     setSending(false);
@@ -91,7 +93,7 @@ export default function VerifyEmail() {
               <h1 className="text-2xl text-foreground">Check your email</h1>
               <p className="mt-2 text-sm text-muted-foreground leading-relaxed">
                 We sent a 6-digit code to{' '}
-                <span className="text-foreground">{user?.email}</span>.
+                <span className="text-foreground">{email}</span>.
                 <span className="block mt-1 text-xs italic">Check your Spam folder if you don't see it.</span>
               </p>
             </div>
