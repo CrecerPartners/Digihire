@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth, supabase } from '@digihire/shared';
 import { motion } from 'motion/react';
@@ -12,6 +12,16 @@ export default function VerifyEmail() {
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
   const navigate = useNavigate();
+
+  // Auto-redirect when Supabase fires SIGNED_IN after the user clicks the email link
+  useEffect(() => {
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
+      if ((event === 'SIGNED_IN' || event === 'TOKEN_REFRESHED') && session?.user?.email_confirmed_at) {
+        navigate('/brand');
+      }
+    });
+    return () => subscription.unsubscribe();
+  }, [navigate]);
 
   const handleResend = async () => {
     if (!user?.email) return;
