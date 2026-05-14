@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { useAuth, supabase } from '@digihire/shared';
 import { motion } from 'motion/react';
 import { Mail, RefreshCw, LogOut, ArrowRight } from 'lucide-react';
+
 import { Button, Card, CardContent } from '@digihire/shared';
 
 export default function VerifyEmail() {
