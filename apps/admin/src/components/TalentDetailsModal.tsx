@@ -55,6 +55,11 @@ interface Props {
   onStatusChange?: (id: string, newStatus: string) => void;
 }
 
+const scoreTextColor = (s: number) =>
+  s >= 75 ? 'text-emerald-600' : s >= 50 ? 'text-amber-500' : 'text-red-500';
+const scoreBarColor = (s: number) =>
+  s >= 75 ? 'bg-emerald-500' : s >= 50 ? 'bg-amber-400' : 'bg-red-400';
+
 export default function TalentDetailsModal({ talent, onClose, onStatusChange }: Props) {
   const { user } = useAuth();
   const [notes, setNotes] = useState<InternalNote[]>([]);
@@ -138,14 +143,13 @@ export default function TalentDetailsModal({ talent, onClose, onStatusChange }: 
 
   const salaryDisplay = talent.salary_min && talent.salary_max
     ? `$${talent.salary_min.toLocaleString()} – $${talent.salary_max.toLocaleString()}`
-    : talent.salary_min
-    ? `From $${talent.salary_min.toLocaleString()}`
-    : 'Not specified';
+    : talent.salary_min ? `From $${talent.salary_min.toLocaleString()}` : 'Not specified';
 
-  const scoreColor = (s: number) =>
-    s >= 75 ? 'text-emerald-600' : s >= 50 ? 'text-amber-500' : 'text-red-500';
-  const scoreBg = (s: number) =>
-    s >= 75 ? 'bg-emerald-50 border-emerald-100' : s >= 50 ? 'bg-amber-50 border-amber-100' : 'bg-red-50 border-red-100';
+  const tabs = [
+    { id: 'profile', label: 'Profile Details' },
+    { id: 'score', label: 'AI Score', icon: <Sparkles size={13} />, badge: score ? String(score.overall_score) : null },
+    { id: 'notes', label: `Notes (${notes.length})` },
+  ];
 
   return (
     <div className="fixed inset-0 z-[60] flex items-center justify-center p-4">
@@ -154,112 +158,168 @@ export default function TalentDetailsModal({ talent, onClose, onStatusChange }: 
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
         onClick={onClose}
-        className="absolute inset-0 bg-black/60 backdrop-blur-sm"
+        className="absolute inset-0 bg-black/50"
       />
       <motion.div
-        initial={{ opacity: 0, scale: 0.95, y: 20 }}
+        initial={{ opacity: 0, scale: 0.97, y: 12 }}
         animate={{ opacity: 1, scale: 1, y: 0 }}
-        exit={{ opacity: 0, scale: 0.95, y: 20 }}
-        className="relative w-full max-w-5xl max-h-[90vh] overflow-hidden bg-white rounded-[2rem] shadow-2xl flex flex-col md:flex-row"
+        exit={{ opacity: 0, scale: 0.97, y: 12 }}
+        className="relative w-full max-w-5xl max-h-[90vh] overflow-hidden rounded-xl border bg-card shadow-lg flex flex-col md:flex-row"
       >
-        {/* Left Panel */}
-        <div className="w-full md:w-80 bg-gray-50 p-8 border-r border-gray-200 overflow-y-auto">
-          <button onClick={onClose} className="md:hidden absolute top-4 right-4 p-2 text-gray-500"><X /></button>
-          <div className="flex flex-col items-center text-center mb-8">
+        {/* ── Left panel ── */}
+        <div className="w-full md:w-72 bg-muted/30 border-r border-border p-6 flex flex-col gap-6 overflow-y-auto shrink-0">
+          <button onClick={onClose} className="md:hidden absolute top-4 right-4 p-1.5 rounded-lg hover:bg-muted text-muted-foreground">
+            <X size={18} />
+          </button>
+
+          {/* Avatar + name */}
+          <div className="flex flex-col items-center text-center gap-3">
             <div className="relative">
-              <div className="h-20 w-20 rounded-full bg-sky-500 text-white flex items-center justify-center text-2xl font-bold mb-4 shadow-sm">
+              <div className="h-16 w-16 rounded-full bg-primary flex items-center justify-center text-primary-foreground text-xl font-bold">
                 {talent.full_name.charAt(0)}
               </div>
               {score && (
-                <div className={`absolute -bottom-1 -right-1 h-8 w-8 rounded-full border-2 border-white flex items-center justify-center text-[10px] font-bold shadow-sm ${scoreBg(score.overall_score)} ${scoreColor(score.overall_score)}`}>
+                <span className={`absolute -bottom-1 -right-1 h-7 w-7 rounded-full border-2 border-card flex items-center justify-center text-[9px] font-bold shadow-sm ${scoreBarColor(score.overall_score)} text-white`}>
                   {score.overall_score}
-                </div>
+                </span>
               )}
             </div>
-            <h2 className="text-xl font-bold text-slate-900">{talent.full_name}</h2>
-            <div className="mt-2 px-3 py-1 rounded bg-sky-100 text-sky-700 text-[10px] font-bold uppercase tracking-wider">{status}</div>
+            <div>
+              <p className="font-bold text-foreground">{talent.full_name}</p>
+              <span className="inline-block mt-1 px-2 py-0.5 rounded bg-primary/10 text-primary text-[10px] font-bold uppercase tracking-wider border border-primary/20">
+                {status}
+              </span>
+            </div>
           </div>
 
-          <div className="space-y-6">
-            <div className="space-y-4">
-              <h3 className="text-[10px] font-bold uppercase tracking-widest text-slate-400">Application Status</h3>
-              <div className="grid grid-cols-1 gap-2">
-                {['Under Review', 'Shortlisted', 'Matched'].map(s => (
-                  <button
-                    key={s}
-                    onClick={() => handleUpdateStatus(s)}
-                    disabled={isUpdating || status === s}
-                    className={`px-4 py-2 rounded-lg text-xs font-bold transition-all border ${
-                      status === s ? 'bg-sky-50 border-sky-500 text-sky-700 shadow-sm' : 'bg-white border-gray-200 text-slate-500 hover:bg-gray-50'
-                    }`}
-                  >
-                    {s}
-                  </button>
-                ))}
+          {/* Status controls */}
+          <div className="space-y-2">
+            <p className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground">Application Status</p>
+            {['Under Review', 'Shortlisted', 'Matched', 'Archived'].map(s => (
+              <button
+                key={s}
+                onClick={() => handleUpdateStatus(s)}
+                disabled={isUpdating || status === s}
+                className={`w-full px-3 py-2 rounded-lg text-xs font-semibold transition-all border ${
+                  status === s
+                    ? 'bg-primary/10 border-primary/30 text-primary'
+                    : 'bg-background border-border text-muted-foreground hover:text-foreground hover:bg-muted/60'
+                }`}
+              >
+                {s}
+              </button>
+            ))}
+          </div>
+
+          {/* Quick info */}
+          <div className="space-y-2 pt-2 border-t border-border">
+            <p className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground">Quick Info</p>
+            {talent.city && (
+              <div className="flex items-center gap-2 text-xs text-muted-foreground">
+                <MapPin size={12} className="shrink-0 text-primary" />
+                {[talent.city, talent.country].filter(Boolean).join(', ')}
               </div>
+            )}
+            <div className="flex items-center gap-2 text-xs text-muted-foreground">
+              <Briefcase size={12} className="shrink-0 text-primary" />
+              {talent.years_of_experience ?? 0} years experience
             </div>
+            {talent.availability_status && (
+              <div className="flex items-center gap-2 text-xs text-muted-foreground">
+                <Calendar size={12} className="shrink-0 text-primary" />
+                {talent.availability_status}
+              </div>
+            )}
           </div>
         </div>
 
-        {/* Right Panel */}
-        <div className="flex-1 bg-white overflow-y-auto">
-          <div className="border-b border-gray-100 flex items-center justify-between px-8 bg-white sticky top-0 z-10">
-            <div className="flex gap-6">
-              <button onClick={() => setActiveTab('profile')} className={`py-6 text-sm font-bold border-b-2 transition-all ${activeTab === 'profile' ? 'border-sky-500 text-sky-600' : 'border-transparent text-slate-400 hover:text-slate-600'}`}>
-                Profile Details
-              </button>
-              <button onClick={() => setActiveTab('score')} className={`py-6 text-sm font-bold border-b-2 transition-all flex items-center gap-1.5 ${activeTab === 'score' ? 'border-violet-500 text-violet-600' : 'border-transparent text-slate-400 hover:text-slate-600'}`}>
-                <Sparkles size={14} /> AI Score {score ? <span className={`ml-1 px-1.5 py-0.5 rounded text-[10px] font-bold ${scoreBg(score.overall_score)} ${scoreColor(score.overall_score)}`}>{score.overall_score}</span> : null}
-              </button>
-              <button onClick={() => setActiveTab('notes')} className={`py-6 text-sm font-bold border-b-2 transition-all ${activeTab === 'notes' ? 'border-sky-500 text-sky-600' : 'border-transparent text-slate-400 hover:text-slate-600'}`}>
-                Internal Notes ({notes.length})
-              </button>
+        {/* ── Right panel ── */}
+        <div className="flex-1 flex flex-col overflow-hidden">
+          {/* Tab bar */}
+          <div className="border-b border-border flex items-center justify-between px-6 bg-card sticky top-0 z-10 shrink-0">
+            <div className="flex gap-1">
+              {tabs.map(tab => (
+                <button
+                  key={tab.id}
+                  onClick={() => setActiveTab(tab.id)}
+                  className={`flex items-center gap-1.5 px-4 py-4 text-sm font-semibold border-b-2 transition-all ${
+                    activeTab === tab.id
+                      ? 'border-primary text-primary'
+                      : 'border-transparent text-muted-foreground hover:text-foreground'
+                  }`}
+                >
+                  {tab.icon}
+                  {tab.label}
+                  {tab.badge && (
+                    <span className={`px-1.5 py-0.5 rounded text-[10px] font-bold ${scoreBarColor(score!.overall_score)} text-white`}>
+                      {tab.badge}
+                    </span>
+                  )}
+                </button>
+              ))}
             </div>
-            <button onClick={onClose} className="hidden md:flex h-8 w-8 items-center justify-center rounded-lg bg-gray-50 text-slate-400 hover:bg-gray-100 transition-all"><X size={16} /></button>
+            <button
+              onClick={onClose}
+              className="hidden md:flex h-8 w-8 items-center justify-center rounded-lg hover:bg-muted text-muted-foreground transition-colors"
+            >
+              <X size={16} />
+            </button>
           </div>
 
-          <div className="p-8">
+          {/* Tab content */}
+          <div className="flex-1 overflow-y-auto p-6">
+            {/* ── Profile tab ── */}
             {activeTab === 'profile' && (
-              <div className="space-y-10">
+              <div className="space-y-8">
                 <section>
-                  <h3 className="text-[10px] uppercase tracking-widest text-slate-400 font-bold mb-4 flex items-center gap-2"><User size={14} className="text-sky-500" /> Experience Summary</h3>
-                  <p className="text-slate-600 text-sm leading-relaxed bg-gray-50/50 p-6 rounded-xl border border-gray-100">{talent.bio || 'No bio provided.'}</p>
+                  <SectionLabel icon={<User size={13} />} label="Experience Summary" />
+                  <p className="text-sm text-foreground/80 leading-relaxed rounded-lg bg-muted/40 border border-border p-4">
+                    {talent.bio || 'No bio provided.'}
+                  </p>
                 </section>
 
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <section>
-                    <h3 className="text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-4">Core Skills & Languages</h3>
-                    <div className="flex flex-wrap gap-2">
+                    <SectionLabel label="Skills & Languages" />
+                    <div className="flex flex-wrap gap-1.5">
                       {talent.skills?.map(skill => (
-                        <span key={skill} className="px-2 py-1 rounded bg-sky-50 text-sky-600 text-[10px] font-bold border border-sky-100">{skill}</span>
+                        <span key={skill} className="px-2 py-0.5 rounded-md bg-primary/10 text-primary text-[10px] font-semibold border border-primary/20">{skill}</span>
                       ))}
                       {talent.languages?.map(lang => (
-                        <span key={lang} className="px-2 py-1 rounded bg-purple-50 text-purple-600 text-[10px] font-bold border border-purple-100">{lang}</span>
+                        <span key={lang} className="px-2 py-0.5 rounded-md bg-muted text-muted-foreground text-[10px] font-semibold border border-border">{lang}</span>
                       ))}
+                      {!talent.skills?.length && !talent.languages?.length && (
+                        <span className="text-xs text-muted-foreground">None listed</span>
+                      )}
                     </div>
                   </section>
                   <section>
-                    <h3 className="text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-4">Role Interests</h3>
-                    <div className="flex flex-wrap gap-2">
+                    <SectionLabel label="Role Interests" />
+                    <div className="flex flex-wrap gap-1.5">
                       {talent.role_interest?.map(role => (
-                        <span key={role} className="px-3 py-1.5 rounded-xl bg-gray-100 text-gray-600 text-xs font-bold">{role}</span>
+                        <span key={role} className="px-2 py-0.5 rounded-md bg-muted text-muted-foreground text-[10px] font-semibold border border-border">{role}</span>
                       ))}
+                      {!talent.role_interest?.length && (
+                        <span className="text-xs text-muted-foreground">None listed</span>
+                      )}
                     </div>
                   </section>
                 </div>
 
-                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
-                  <InfoItem icon={<MapPin size={18} />} label="Location" value={[talent.city, talent.country].filter(Boolean).join(', ') || 'Not specified'} />
-                  <InfoItem icon={<Briefcase size={18} />} label="Experience" value={`${talent.years_of_experience ?? 0} Years`} />
-                  <InfoItem icon={<DollarSign size={18} />} label="Expectation" value={salaryDisplay} />
-                  <InfoItem icon={<Calendar size={18} />} label="Availability" value={talent.availability_status || 'Unknown'} />
-                  <InfoItem icon={<Briefcase size={18} />} label="Work Pref" value={talent.work_preference || 'Any'} />
-                  <InfoItem icon={<GraduationCap size={18} />} label="Education" value={talent.education?.[0]?.summary || talent.education?.[0]?.degree || 'No info'} />
+                <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
+                  <InfoItem icon={<DollarSign size={15} />} label="Salary Expectation" value={salaryDisplay} />
+                  <InfoItem icon={<Briefcase size={15} />} label="Work Preference" value={talent.work_preference || 'Any'} />
+                  <InfoItem icon={<GraduationCap size={15} />} label="Education" value={talent.education?.[0]?.summary || talent.education?.[0]?.degree || 'No info'} />
                 </div>
 
                 {talent.cv_url && (
-                  <div className="pt-4 border-t border-gray-100">
-                    <a href={talent.cv_url} target="_blank" rel="noreferrer" className="inline-flex items-center gap-2 bg-slate-900 text-white px-6 py-3 rounded-xl text-sm font-bold shadow-lg hover:bg-slate-800 transition-all">
+                  <div className="pt-4 border-t border-border">
+                    <a
+                      href={talent.cv_url}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="inline-flex items-center gap-2 rounded-lg border bg-foreground text-background px-5 py-2.5 text-sm font-semibold hover:opacity-90 transition-opacity"
+                    >
                       View / Download CV
                     </a>
                   </div>
@@ -267,47 +327,52 @@ export default function TalentDetailsModal({ talent, onClose, onStatusChange }: 
               </div>
             )}
 
+            {/* ── AI Score tab ── */}
             {activeTab === 'score' && (
-              <div className="space-y-8">
+              <div className="space-y-6">
                 {!score ? (
                   <div className="text-center py-16">
-                    <div className="h-16 w-16 rounded-full bg-violet-50 flex items-center justify-center mx-auto mb-4">
-                      <Sparkles size={28} className="text-violet-500" />
+                    <div className="h-14 w-14 rounded-full bg-primary/10 flex items-center justify-center mx-auto mb-4">
+                      <Sparkles size={24} className="text-primary" />
                     </div>
-                    <h3 className="text-lg font-bold text-slate-800 mb-2">No AI Score Yet</h3>
-                    <p className="text-sm text-slate-500 mb-6 max-w-xs mx-auto">Run an AI evaluation to get a scored profile summary, role suggestions, and key strengths.</p>
+                    <p className="font-bold text-foreground mb-1">No AI Score Yet</p>
+                    <p className="text-sm text-muted-foreground mb-6 max-w-xs mx-auto">
+                      Run an AI evaluation to get a scored profile summary, role suggestions, and key strengths.
+                    </p>
                     {scoreError && (
-                      <div className="flex items-center gap-2 justify-center text-sm text-red-600 mb-4">
-                        <AlertCircle size={16} /> {scoreError}
+                      <div className="flex items-center gap-2 justify-center text-sm text-destructive mb-4">
+                        <AlertCircle size={15} /> {scoreError}
                       </div>
                     )}
                     <button
                       type="button"
                       onClick={handleRunScore}
                       disabled={scoring}
-                      className="inline-flex items-center gap-2 px-6 py-3 bg-violet-600 text-white rounded-xl text-sm font-bold shadow-lg shadow-violet-100 hover:bg-violet-700 disabled:opacity-50 transition-all"
+                      className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg bg-primary text-primary-foreground text-sm font-semibold hover:opacity-90 disabled:opacity-50 transition-opacity"
                     >
-                      {scoring ? <RefreshCw size={16} className="animate-spin" /> : <Sparkles size={16} />}
+                      {scoring ? <RefreshCw size={15} className="animate-spin" /> : <Sparkles size={15} />}
                       {scoring ? 'Scoring...' : 'Run AI Score'}
                     </button>
                   </div>
                 ) : (
                   <>
-                    {/* Overall score */}
-                    <div className="flex items-center gap-6 p-6 rounded-2xl bg-gradient-to-r from-violet-50 to-white border border-violet-100">
-                      <div className={`h-20 w-20 rounded-full border-4 flex items-center justify-center text-3xl font-bold shrink-0 ${scoreColor(score.overall_score)} ${scoreBg(score.overall_score)}`}>
+                    {/* Overall score card */}
+                    <div className="flex items-center gap-5 p-5 rounded-xl border bg-muted/30">
+                      <div className={`h-16 w-16 rounded-full border-4 flex items-center justify-center text-2xl font-bold shrink-0 ${scoreTextColor(score.overall_score)} border-current`}>
                         {score.overall_score}
                       </div>
-                      <div className="flex-1">
-                        <p className="text-[10px] uppercase tracking-widest text-slate-400 font-bold mb-1">Overall Score</p>
-                        <p className="text-sm text-slate-600 leading-relaxed">{score.summary}</p>
-                        <p className="text-[10px] text-slate-400 mt-2">Scored {new Date(score.scored_at).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' })}</p>
+                      <div className="flex-1 min-w-0">
+                        <p className="text-[10px] uppercase tracking-widest text-muted-foreground font-bold mb-1">Overall Score</p>
+                        <p className="text-sm text-foreground/80 leading-relaxed">{score.summary}</p>
+                        <p className="text-[10px] text-muted-foreground mt-1.5">
+                          Scored {new Date(score.scored_at).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' })}
+                        </p>
                       </div>
                     </div>
 
-                    {/* Component scores */}
+                    {/* Score breakdown */}
                     <div>
-                      <h3 className="text-[10px] uppercase tracking-widest text-slate-400 font-bold mb-4">Score Breakdown</h3>
+                      <SectionLabel label="Score Breakdown" />
                       <div className="space-y-3">
                         {[
                           { label: 'Experience', value: score.experience_score },
@@ -316,27 +381,27 @@ export default function TalentDetailsModal({ talent, onClose, onStatusChange }: 
                           { label: 'Education', value: score.education_score },
                           { label: 'Availability', value: score.availability_score },
                         ].map(({ label, value }) => (
-                          <div key={label} className="flex items-center gap-4">
-                            <span className="text-xs text-slate-500 w-40 shrink-0">{label}</span>
-                            <div className="flex-1 h-2 rounded-full bg-gray-100 overflow-hidden">
+                          <div key={label} className="flex items-center gap-3">
+                            <span className="text-xs text-muted-foreground w-36 shrink-0">{label}</span>
+                            <div className="flex-1 h-1.5 rounded-full bg-border overflow-hidden">
                               <div
-                                className={`h-full rounded-full transition-all ${value >= 75 ? 'bg-emerald-500' : value >= 50 ? 'bg-amber-400' : 'bg-red-400'}`}
+                                className={`h-full rounded-full ${scoreBarColor(value)}`}
                                 style={{ width: `${value}%` }}
                               />
                             </div>
-                            <span className={`text-xs font-bold w-8 text-right ${scoreColor(value)}`}>{value}</span>
+                            <span className={`text-xs font-bold w-7 text-right ${scoreTextColor(value)}`}>{value}</span>
                           </div>
                         ))}
                       </div>
                     </div>
 
-                    {/* Strengths + suggested roles */}
+                    {/* Strengths + roles */}
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                       <div>
-                        <h3 className="text-[10px] uppercase tracking-widest text-slate-400 font-bold mb-3">Strengths</h3>
+                        <SectionLabel label="Strengths" />
                         <div className="space-y-2">
                           {score.strengths.map((s, i) => (
-                            <div key={i} className="flex items-start gap-2 text-sm text-slate-700">
+                            <div key={i} className="flex items-start gap-2 text-sm text-foreground/80">
                               <span className="mt-0.5 h-4 w-4 rounded-full bg-emerald-100 text-emerald-600 flex items-center justify-center text-[10px] font-bold shrink-0">✓</span>
                               {s}
                             </div>
@@ -344,67 +409,75 @@ export default function TalentDetailsModal({ talent, onClose, onStatusChange }: 
                         </div>
                       </div>
                       <div>
-                        <h3 className="text-[10px] uppercase tracking-widest text-slate-400 font-bold mb-3">Suggested Roles</h3>
-                        <div className="flex flex-wrap gap-2">
+                        <SectionLabel label="Suggested Roles" />
+                        <div className="flex flex-wrap gap-1.5">
                           {score.suggested_roles.map((r, i) => (
-                            <span key={i} className="px-3 py-1.5 rounded-xl bg-sky-50 text-sky-700 text-xs font-bold border border-sky-100">{r}</span>
+                            <span key={i} className="px-2.5 py-1 rounded-lg bg-primary/10 text-primary text-xs font-semibold border border-primary/20">{r}</span>
                           ))}
                         </div>
-                        <div className="flex flex-wrap gap-1.5 mt-4">
+                        <div className="flex flex-wrap gap-1.5 mt-3">
                           {score.ai_tags.map((tag, i) => (
-                            <span key={i} className="px-2 py-1 rounded bg-gray-100 text-gray-500 text-[10px]">#{tag}</span>
+                            <span key={i} className="px-2 py-0.5 rounded bg-muted text-muted-foreground text-[10px] border border-border">#{tag}</span>
                           ))}
                         </div>
                       </div>
                     </div>
 
-                    {/* Re-score button */}
-                    <div className="pt-4 border-t border-gray-100 flex items-center gap-3">
+                    {/* Re-score */}
+                    <div className="pt-4 border-t border-border flex items-center gap-3">
                       <button
                         type="button"
                         onClick={handleRunScore}
                         disabled={scoring}
-                        className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-gray-50 border border-gray-200 text-slate-600 text-xs font-bold hover:bg-gray-100 disabled:opacity-50 transition-all"
+                        className="inline-flex items-center gap-2 px-3 py-2 rounded-lg border bg-background text-muted-foreground text-xs font-semibold hover:text-foreground hover:bg-muted/60 disabled:opacity-50 transition-colors"
                       >
-                        {scoring ? <RefreshCw size={13} className="animate-spin" /> : <RefreshCw size={13} />}
+                        <RefreshCw size={13} className={scoring ? 'animate-spin' : ''} />
                         {scoring ? 'Re-scoring...' : 'Re-score'}
                       </button>
-                      {scoreError && <span className="text-xs text-red-500 flex items-center gap-1"><AlertCircle size={13} /> {scoreError}</span>}
+                      {scoreError && (
+                        <span className="text-xs text-destructive flex items-center gap-1">
+                          <AlertCircle size={13} /> {scoreError}
+                        </span>
+                      )}
                     </div>
                   </>
                 )}
               </div>
             )}
 
+            {/* ── Notes tab ── */}
             {activeTab === 'notes' && (
-              <div className="space-y-6">
+              <div className="space-y-5">
                 <form onSubmit={handleAddNote} className="relative">
                   <textarea
                     value={newNote}
                     onChange={e => setNewNote(e.target.value)}
                     placeholder="Add an internal note about this talent..."
-                    className="w-full rounded-2xl bg-gray-50 border border-gray-100 p-6 pr-16 text-sm focus:bg-white focus:border-sky-500 focus:outline-none transition-all h-32 resize-none"
+                    className="w-full rounded-lg bg-background border border-border p-4 pr-14 text-sm focus:border-primary focus:outline-none transition-colors h-28 resize-none"
                   />
-                  <button type="submit" className="absolute bottom-6 right-6 p-3 bg-sky-600 text-white rounded-xl shadow-lg shadow-sky-100 hover:scale-105 active:scale-95 transition-all">
-                    <Send size={18} />
+                  <button
+                    type="submit"
+                    className="absolute bottom-4 right-4 p-2 bg-primary text-primary-foreground rounded-lg hover:opacity-90 transition-opacity"
+                  >
+                    <Send size={16} />
                   </button>
                 </form>
 
-                <div className="space-y-4">
+                <div className="space-y-3">
                   {notes.map(note => (
-                    <div key={note.id} className="p-6 bg-white border border-gray-50 rounded-2xl shadow-sm">
-                      <div className="flex items-center justify-between mb-4">
+                    <div key={note.id} className="p-4 rounded-lg border bg-card shadow-sm">
+                      <div className="flex items-center justify-between mb-2">
                         <div className="flex items-center gap-2">
-                          <div className="h-6 w-6 rounded bg-gray-100 text-[10px] flex items-center justify-center font-bold">A</div>
-                          <span className="text-xs font-bold text-gray-600">Admin</span>
+                          <div className="h-5 w-5 rounded bg-muted text-[10px] flex items-center justify-center font-bold text-muted-foreground">A</div>
+                          <span className="text-xs font-semibold text-foreground">Admin</span>
                         </div>
-                        <span className="text-[10px] font-medium text-gray-400">{new Date(note.created_at).toLocaleDateString()}</span>
+                        <span className="text-[10px] text-muted-foreground">{new Date(note.created_at).toLocaleDateString()}</span>
                       </div>
-                      <p className="text-sm text-gray-700 leading-relaxed">{note.note}</p>
+                      <p className="text-sm text-foreground/80 leading-relaxed">{note.note}</p>
                     </div>
                   ))}
                   {notes.length === 0 && (
-                    <div className="text-center py-10 text-gray-400 italic">No notes yet.</div>
+                    <div className="text-center py-10 text-muted-foreground text-sm">No notes yet.</div>
                   )}
                 </div>
               </div>
@@ -416,15 +489,23 @@ export default function TalentDetailsModal({ talent, onClose, onStatusChange }: 
   );
 }
 
+function SectionLabel({ label, icon }: { label: string; icon?: React.ReactNode }) {
+  return (
+    <p className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground mb-3 flex items-center gap-1.5">
+      {icon}{label}
+    </p>
+  );
+}
+
 function InfoItem({ icon, label, value }: { icon: React.ReactNode; label: string; value: string }) {
   return (
-    <div className="flex items-center gap-3 p-4 rounded-xl bg-gray-50 border border-gray-100">
-      <div className="h-8 w-8 rounded-lg bg-white text-sky-600 flex items-center justify-center shadow-sm">
+    <div className="flex items-center gap-3 p-3 rounded-lg border bg-background">
+      <div className="h-8 w-8 rounded-md bg-primary/10 text-primary flex items-center justify-center shrink-0">
         {icon}
       </div>
-      <div>
-        <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-0.5">{label}</p>
-        <p className="text-xs font-bold text-slate-800 truncate">{value}</p>
+      <div className="min-w-0">
+        <p className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground mb-0.5">{label}</p>
+        <p className="text-xs font-semibold text-foreground truncate">{value}</p>
       </div>
     </div>
   );
