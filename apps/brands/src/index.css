@@ -49,13 +49,13 @@
 @font-face {
   font-family: 'CenturyGothic';
   src: url('/fonts/CenturyGothicPaneuropeanBold.ttf') format('truetype');
-  font-weight: 700;
+  font-weight: 400;
   font-style: normal;
 }
 @font-face {
   font-family: 'CenturyGothic';
   src: url('/fonts/CenturyGothicPaneuropeanBoldItalic.ttf') format('truetype');
-  font-weight: 700;
+  font-weight: 400;
   font-style: italic;
 }
 @font-face {
@@ -215,7 +215,7 @@
     background: #00C2FF;
     color: #06111F;
     font-size: 15px;
-    font-weight: 700;
+    font-weight: 400;
     border: none;
     text-decoration: none;
     cursor: pointer;
@@ -237,7 +237,7 @@
     background: transparent;
     color: #fff;
     font-size: 15px;
-    font-weight: 700;
+    font-weight: 400;
     border: 1.5px solid rgba(255,255,255,0.35);
     text-decoration: none;
     cursor: pointer;
@@ -257,7 +257,7 @@
     background: transparent;
     color: #06111F;
     font-size: 15px;
-    font-weight: 700;
+    font-weight: 400;
     border: 1.5px solid rgba(0,0,0,0.18);
     text-decoration: none;
     cursor: pointer;
