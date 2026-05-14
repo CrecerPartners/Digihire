@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import { useTalentWebinars, useWebinarRegistrations, TalentWebinar } from '../../hooks/useTalentWebinars';
 import { motion, AnimatePresence } from 'motion/react';
-import { Calendar, Clock, Users, Video, X, CheckCircle, ChevronRight, Wifi } from 'lucide-react';
+import { Calendar, Clock, Users, Video, X, CheckCircle, ChevronRight, Wifi, ArrowLeft } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 
 function formatDate(iso: string) {
   const d = new Date(iso);
@@ -26,6 +27,7 @@ function daysUntil(iso: string) {
 }
 
 export default function TalentTimetable() {
+  const navigate = useNavigate();
   const { webinars, loading } = useTalentWebinars();
   const { registrations, register, unregister } = useWebinarRegistrations();
   const [selected, setSelected] = useState<TalentWebinar | null>(null);
@@ -53,6 +55,9 @@ export default function TalentTimetable() {
       {/* Hero */}
       <div className="bg-slate-900 py-16 text-white relative overflow-hidden">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 relative z-10">
+          <button type="button" onClick={() => navigate(-1)} className="flex items-center gap-2 text-slate-400 hover:text-white transition-colors text-sm mb-6">
+            <ArrowLeft size={16} /> Back
+          </button>
           <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-violet-600 text-xs font-bold uppercase tracking-widest mb-6">
               <Wifi size={14} /> Live Sessions

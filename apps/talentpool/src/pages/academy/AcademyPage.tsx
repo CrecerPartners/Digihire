@@ -3,12 +3,13 @@ import { TalentCourse } from '../../types';
 import { useTalentCourses } from '../../hooks/useTalentCourses';
 import { useTalentWebinars } from '../../hooks/useTalentWebinars';
 import { motion } from 'motion/react';
-import { GraduationCap, Play, Clock, Star, BookOpen, Search, ArrowRight, Calendar, Wifi } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import { GraduationCap, Play, Clock, Star, BookOpen, Search, ArrowRight, Calendar, Wifi, ArrowLeft } from 'lucide-react';
+import { Link, useNavigate } from 'react-router-dom';
 
 export default function AcademyPage() {
   const { courses, loading } = useTalentCourses();
   const { webinars: upcomingWebinars } = useTalentWebinars();
+  const navigate = useNavigate();
   const [filter, setFilter] = useState('all');
   const [searchQuery, setSearchQuery] = useState('');
 
@@ -26,6 +27,9 @@ export default function AcademyPage() {
       {/* Academy Hero */}
       <div className="bg-slate-900 py-20 text-white relative overflow-hidden">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 relative z-10">
+          <button type="button" onClick={() => navigate(-1)} className="flex items-center gap-2 text-slate-400 hover:text-white transition-colors text-sm mb-6">
+            <ArrowLeft size={16} /> Back
+          </button>
           <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="max-w-2xl">
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-sky-600 text-xs font-bold uppercase tracking-widest mb-6">
               <GraduationCap size={14} /> Digihire Academy

@@ -17,7 +17,7 @@ import {
 
 const navItems = [
   { label: "My Profile", path: "/talent", icon: UserCircle, exact: true },
-  { label: "Settings", path: "/talent/setup", icon: Settings, exact: false },
+  { label: "Edit Profile", path: "/talent/setup", icon: Settings, exact: false },
   { label: "My Learning", path: "/talent/learning", icon: BookOpen, exact: false },
   { label: "Course Catalog", path: "/academy", icon: GraduationCap, exact: true },
   { label: "Live Sessions", path: "/academy/timetable", icon: CalendarDays, exact: false },
