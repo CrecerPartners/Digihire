@@ -1,5 +1,5 @@
 import { TalentProfile } from '../../types';
-import { MapPin, Briefcase, Linkedin, Globe, CheckCircle } from 'lucide-react';
+import { MapPin, Briefcase, Linkedin, Globe, CheckCircle, TrendingUp } from 'lucide-react';
 
 interface Props {
   profile: TalentProfile;
@@ -45,6 +45,29 @@ export default function TalentProfileView({ profile }: Props) {
         </div>
 
         <div className="space-y-8">
+           {/* Profile completion */}
+           {(() => {
+             const pct = profile.profile_completion ?? 0;
+             const color = pct >= 80 ? 'bg-emerald-500' : pct >= 50 ? 'bg-amber-400' : 'bg-red-400';
+             const tip = pct < 80
+               ? pct < 50
+                 ? 'Add your bio, skills, and work history to boost your profile.'
+                 : 'Add your CV and LinkedIn to reach 80% and get noticed by brands.'
+               : 'Great profile! Brands can now discover you.';
+             return (
+               <section className="rounded-xl bg-white p-6 shadow-sm border border-gray-200">
+                 <div className="flex items-center justify-between mb-3">
+                   <h2 className="text-[10px] uppercase tracking-widest text-slate-400 font-bold flex items-center gap-2"><TrendingUp size={13} className="text-sky-500" /> Profile Completion</h2>
+                   <span className="text-lg font-bold text-slate-800">{pct}%</span>
+                 </div>
+                 <div className="w-full h-2 rounded-full bg-gray-100 overflow-hidden mb-3">
+                   <div className={`h-full rounded-full transition-all ${color} w-[${pct}%]`} />
+                 </div>
+                 <p className="text-xs text-slate-500">{tip}</p>
+               </section>
+             );
+           })()}
+
            <section className="rounded-xl bg-white p-8 shadow-sm border border-gray-200">
               <h2 className="text-[10px] uppercase tracking-widest text-slate-400 font-bold mb-6">Preferences</h2>
               <div className="space-y-5">

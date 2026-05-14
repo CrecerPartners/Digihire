@@ -24,6 +24,7 @@ interface TalentProfile {
   status: string;
   updated_at: string;
   industry_experience?: string[];
+  talent_profile_scores?: { overall_score: number }[];
 }
 
 const statusColors: Record<string, string> = {
@@ -51,7 +52,7 @@ export default function AdminTalentPool() {
   useEffect(() => {
     supabase
       .from('talent_profiles')
-      .select('*')
+      .select('*, talent_profile_scores(overall_score)')
       .order('updated_at', { ascending: false })
       .then(({ data }: { data: TalentProfile[] | null }) => {
         setTalents(data ?? []);
@@ -190,8 +191,20 @@ export default function AdminTalentPool() {
               >
                 <div className="flex items-start justify-between mb-4">
                   <div className="flex items-center gap-4">
-                    <div className="h-12 w-12 rounded-full bg-sky-50 flex items-center justify-center text-sky-600 font-bold text-lg border border-white">
-                      {talent.full_name.charAt(0)}
+                    <div className="relative">
+                      <div className="h-12 w-12 rounded-full bg-sky-50 flex items-center justify-center text-sky-600 font-bold text-lg border border-white">
+                        {talent.full_name.charAt(0)}
+                      </div>
+                      {(() => {
+                        const s = talent.talent_profile_scores?.[0]?.overall_score;
+                        if (s == null) return null;
+                        const cls = s >= 75 ? 'bg-emerald-500' : s >= 50 ? 'bg-amber-400' : 'bg-red-400';
+                        return (
+                          <span className={`absolute -bottom-1 -right-1 h-5 w-5 rounded-full ${cls} text-white text-[9px] font-bold flex items-center justify-center border border-white`}>
+                            {s}
+                          </span>
+                        );
+                      })()}
                     </div>
                     <div>
                       <h3 className="font-bold text-slate-800 group-hover:text-sky-600 transition-colors">{talent.full_name}</h3>
