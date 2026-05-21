@@ -1,0 +1,8 @@
+{
+  "buildCommand": "npm run build:voltsquad",
+  "outputDirectory": "apps/voltsquad/dist",
+  "rewrites": [
+    { "source": "/", "destination": "/index.html" },
+    { "source": "/:path*", "destination": "/app.html" }
+  ]
+}
