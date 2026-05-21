@@ -28,4 +28,7 @@ dist-ssr
 error.txt
 .env*.local
 .worktrees/
-.worktrees/
+
+# Supabase CLI temp / local-only state
+supabase/.temp/
+supabase/.branches/
