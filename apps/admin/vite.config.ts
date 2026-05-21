@@ -15,5 +15,5 @@ export default defineConfig({
       "@digihire/shared": path.resolve(__dirname, "../../packages/shared/src"),
     },
   },
-  base: "/",
+  base: "/admin/",
 });

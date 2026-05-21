@@ -3,6 +3,7 @@
   "buildCommand": "cd ../.. && npm run build:voltsquad",
   "outputDirectory": "dist",
   "rewrites": [
-    { "source": "/:path*", "destination": "/index.html" }
+    { "source": "/", "destination": "/index.html" },
+    { "source": "/:path*", "destination": "/app.html" }
   ]
 }
