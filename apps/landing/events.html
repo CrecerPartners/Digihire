@@ -327,7 +327,75 @@
     @media (max-width: 600px) {
       .events-grid, .past-grid { grid-template-columns: 1fr; }
       .footer-grid { grid-template-columns: 1fr 1fr; }
+      .events-hero { padding: 120px 0 64px; }
+      .featured-section, .upcoming-section, .past-section, .events-cta { padding: 56px 0; }
+      .container { padding: 0 20px; }
     }
+
+    /* ── MOBILE NAV (hamburger + slide-in overlay) ── */
+    .nav-hamburger {
+      display: none; background: transparent; border: none; cursor: pointer;
+      padding: 6px; border-radius: 6px; line-height: 0;
+      color: rgba(255,255,255,0.9); transition: color 0.2s, background 0.2s;
+    }
+    #navbar.scrolled .nav-hamburger { color: #1E3A5F; }
+    .nav-hamburger:hover { background: rgba(255,255,255,0.1); }
+    #navbar.scrolled .nav-hamburger:hover { background: rgba(0,0,0,0.05); }
+    @media (max-width: 960px) {
+      .nav-links { display: none; }
+      .nav-right { display: none; }
+      .nav-hamburger { display: flex; align-items: center; justify-content: center; }
+    }
+    .nav-mobile-overlay {
+      position: fixed; inset: 0; z-index: 198; background: #06111F;
+      transform: translateX(100%); transition: transform 0.38s cubic-bezier(0.4,0,0.2,1);
+      display: flex; flex-direction: column; overflow: hidden;
+    }
+    .nav-mobile-overlay.nm-open { transform: translateX(0); }
+    .nm-top {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 24px; height: 68px; flex-shrink: 0; border-bottom: 1px solid rgba(0,194,255,0.1);
+    }
+    .nm-close-btn {
+      background: transparent; border: none; cursor: pointer; color: rgba(255,255,255,0.65);
+      padding: 6px; border-radius: 6px; display: flex; transition: color 0.2s, background 0.2s;
+    }
+    .nm-close-btn:hover { color: #fff; background: rgba(255,255,255,0.08); }
+    .nm-body { flex: 1; overflow-y: auto; padding: 8px 24px 32px; display: flex; flex-direction: column; }
+    .nm-section { border-bottom: 1px solid rgba(255,255,255,0.07); }
+    .nm-trigger {
+      display: flex; align-items: center; justify-content: space-between; width: 100%;
+      background: transparent; border: none; cursor: pointer; padding: 18px 0; text-align: left;
+      font-family: 'CenturyGothic', sans-serif; font-size: 17px; font-weight: 700;
+      color: rgba(255,255,255,0.85); transition: color 0.2s;
+    }
+    .nm-trigger:hover { color: #00C2FF; }
+    .nm-trigger svg { width: 16px; height: 16px; flex-shrink: 0; transition: transform 0.25s; }
+    .nm-trigger.nm-active { color: #00C2FF; }
+    .nm-trigger.nm-active svg { transform: rotate(180deg); }
+    .nm-submenu { max-height: 0; overflow: hidden; transition: max-height 0.32s ease, padding-bottom 0.32s ease; padding-bottom: 0; }
+    .nm-submenu.nm-open { max-height: 400px; padding-bottom: 10px; }
+    .nm-sub-item {
+      display: block; padding: 10px 14px; margin: 3px 0;
+      font-family: 'CenturyGothic', sans-serif; font-size: 14px; font-weight: 500;
+      color: rgba(255,255,255,0.55); text-decoration: none;
+      border-left: 2px solid rgba(0,194,255,0.18); border-radius: 0 6px 6px 0;
+      transition: color 0.2s, border-color 0.2s, background 0.2s;
+    }
+    .nm-sub-item:hover { color: #00C2FF; border-left-color: #00C2FF; background: rgba(0,194,255,0.06); }
+    .nm-actions { margin-top: auto; padding-top: 28px; display: flex; flex-direction: column; gap: 12px; }
+    .nm-btn-outline {
+      display: flex; align-items: center; justify-content: center; padding: 14px; border-radius: 10px;
+      text-decoration: none; font-family: 'CenturyGothic', sans-serif; font-size: 15px; font-weight: 700;
+      border: 1.5px solid rgba(255,255,255,0.25); background: transparent; color: rgba(255,255,255,0.85); transition: all 0.2s;
+    }
+    .nm-btn-outline:hover { border-color: #00C2FF; color: #00C2FF; }
+    .nm-btn-cyan {
+      display: flex; align-items: center; justify-content: center; gap: 8px; padding: 14px; border-radius: 10px;
+      text-decoration: none; font-family: 'CenturyGothic', sans-serif; font-size: 15px; font-weight: 800;
+      background: #00C2FF; color: #06111F; border: none; transition: background 0.22s;
+    }
+    .nm-btn-cyan:hover { background: #33CFFF; }
   </style>
 </head>
 <body>
@@ -354,6 +422,9 @@
       <a href="/contact" class="btn-get-started">Contact Us</a>
       <a href="/" class="btn-launch-campaign">Launch a Campaign →</a>
     </div>
+    <button class="nav-hamburger" id="nav-hamburger-btn" aria-label="Open menu">
+      <svg viewBox="0 0 24 24" fill="none" width="22" height="22" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 7h18M3 12h18M3 17h18"/></svg>
+    </button>
   </div>
 </nav>
 
@@ -633,32 +704,32 @@
           <li><a href="/about">About Us</a></li>
           <li><a href="/contact">Contact</a></li>
           <li><a href="/events">Events</a></li>
-          <li><a href="#">Blog</a></li>
+          <li><a href="/blog">Blog</a></li>
         </ul>
       </div>
       <div>
         <p class="footer-col-title">Solutions</p>
         <ul class="footer-col-links">
-          <li><a href="#">VoltSquad</a></li>
-          <li><a href="#">Sales Recruitment</a></li>
-          <li><a href="#">Activations &amp; Field Marketing</a></li>
-          <li><a href="#">Sales Academy</a></li>
+          <li><a href="https://voltsquad.digihire.io">VoltSquad</a></li>
+          <li><a href="https://brands.digihire.io">Sales Recruitment</a></li>
+          <li><a href="/sales-activations">Activations &amp; Field Marketing</a></li>
+          <li><a href="https://talents.digihire.io/academy">Sales Academy</a></li>
         </ul>
       </div>
       <div>
         <p class="footer-col-title">Talent</p>
         <ul class="footer-col-links">
-          <li><a href="#">Join the Talent Pool</a></li>
-          <li><a href="#">Sales Academy</a></li>
-          <li><a href="#">VoltSquad</a></li>
+          <li><a href="https://talents.digihire.io">Join the Talent Pool</a></li>
+          <li><a href="https://talents.digihire.io/academy">Sales Academy</a></li>
+          <li><a href="https://voltsquad.digihire.io">VoltSquad</a></li>
         </ul>
       </div>
       <div>
         <p class="footer-col-title">Brands</p>
         <ul class="footer-col-links">
-          <li><a href="#">VoltSquad</a></li>
-          <li><a href="#">Sales Recruitment</a></li>
-          <li><a href="#">Activations &amp; Field Marketing</a></li>
+          <li><a href="https://voltsquad.digihire.io">VoltSquad</a></li>
+          <li><a href="https://brands.digihire.io">Sales Recruitment</a></li>
+          <li><a href="/sales-activations">Activations &amp; Field Marketing</a></li>
         </ul>
       </div>
     </div>
@@ -694,6 +765,79 @@
   }
 
   lucide.createIcons();
+
+  /* Mobile menu */
+  (function () {
+    var overlay = document.getElementById('nav-mobile-overlay');
+    var openBtn = document.getElementById('nav-hamburger-btn');
+    var closeBtn = document.getElementById('nm-close-btn');
+    if (!overlay || !openBtn) return;
+    function open() { overlay.classList.add('nm-open'); overlay.setAttribute('aria-hidden', 'false'); document.body.style.overflow = 'hidden'; }
+    function close() { overlay.classList.remove('nm-open'); overlay.setAttribute('aria-hidden', 'true'); document.body.style.overflow = ''; }
+    openBtn.addEventListener('click', open);
+    if (closeBtn) closeBtn.addEventListener('click', close);
+    overlay.querySelectorAll('a').forEach(function (a) { a.addEventListener('click', close); });
+    overlay.querySelectorAll('.nm-trigger[data-nm-target]').forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        var sm = document.getElementById(btn.getAttribute('data-nm-target'));
+        var isOpen = sm && sm.classList.contains('nm-open');
+        overlay.querySelectorAll('.nm-submenu.nm-open').forEach(function (el) { el.classList.remove('nm-open'); });
+        overlay.querySelectorAll('.nm-trigger.nm-active').forEach(function (el) { el.classList.remove('nm-active'); });
+        if (!isOpen && sm) { sm.classList.add('nm-open'); btn.classList.add('nm-active'); }
+      });
+    });
+  })();
 </script>
+
+<!-- ════ MOBILE MENU OVERLAY ════════════════════════ -->
+<div class="nav-mobile-overlay" id="nav-mobile-overlay" aria-hidden="true">
+  <div class="nm-top">
+    <a href="/" style="display:flex;align-items:center;line-height:0;">
+      <img src="assets/logo-white.png" alt="DigiHire" style="height:30px;width:auto;" />
+    </a>
+    <button class="nm-close-btn" id="nm-close-btn" aria-label="Close menu">
+      <svg viewBox="0 0 24 24" fill="none" width="22" height="22" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M18 6L6 18M6 6l12 12"/></svg>
+    </button>
+  </div>
+  <div class="nm-body">
+    <div class="nm-section">
+      <button class="nm-trigger" data-nm-target="nm-why">Why DigiHire?
+        <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6l4 4 4-4"/></svg>
+      </button>
+      <div class="nm-submenu" id="nm-why">
+        <a href="/about" class="nm-sub-item">About Us</a>
+        <a href="/blog" class="nm-sub-item">Blog</a>
+        <a href="/events" class="nm-sub-item">Events</a>
+        <a href="/contact" class="nm-sub-item">Contact</a>
+      </div>
+    </div>
+    <div class="nm-section">
+      <button class="nm-trigger" data-nm-target="nm-brands">Brands
+        <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6l4 4 4-4"/></svg>
+      </button>
+      <div class="nm-submenu" id="nm-brands">
+        <a href="/login?role=brand" class="nm-sub-item">Launch a Campaign</a>
+        <a href="/login?role=brand" class="nm-sub-item">Sales Recruitment</a>
+        <a href="/login?role=brand" class="nm-sub-item">Activations &amp; Field Marketing</a>
+      </div>
+    </div>
+    <div class="nm-section">
+      <button class="nm-trigger" data-nm-target="nm-talents">For Talents
+        <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6l4 4 4-4"/></svg>
+      </button>
+      <div class="nm-submenu" id="nm-talents">
+        <a href="/login?role=talent" class="nm-sub-item">Join VoltSquad</a>
+        <a href="/login?role=talent" class="nm-sub-item">Talent Pool</a>
+        <a href="/login?role=talent" class="nm-sub-item">Sales Academy</a>
+      </div>
+    </div>
+    <div class="nm-actions">
+      <a href="/contact" class="nm-btn-outline">Contact Us</a>
+      <a href="/login?role=brand" class="nm-btn-cyan">Launch a Campaign
+        <svg viewBox="0 0 16 16" fill="none" width="14" height="14" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8h10M9 4l4 4-4 4"/></svg>
+      </a>
+    </div>
+  </div>
+</div>
 </body>
 </html>
