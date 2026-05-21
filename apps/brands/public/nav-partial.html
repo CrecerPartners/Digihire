@@ -398,6 +398,7 @@
   }
   #navbar .bsc-icon.i1 { background: #E6F4FF; color: #0096C7; }
   #navbar .bsc-icon.i2 { background: #E8FDF5; color: #00875A; }
+  #navbar .bsc-icon.i3 { background: linear-gradient(135deg, #06111F 0%, #0F2544 100%); color: #00C2FF; }
   #navbar .bsc-title {
     font-family: 'CenturyGothic', sans-serif; font-size: 13px; font-weight: 400;
     color: #0D1B33;
@@ -412,7 +413,8 @@
 
   @media (max-width: 960px) {
     #navbar .nav-links { display: none; }
-    #navbar .nav-actions { display: none; }
+    #navbar .nav-dropdown-wrap { display: none; }
+    #navbar .btn-launch { display: none; }
     #navbar.scrolled { left: 12px; right: 12px; }
   }
 
@@ -600,18 +602,15 @@
             <div class="mega-left">
               <h3 class="mega-headline">Launch campaigns, hire sales talent, and activate markets with <em>Digihire.</em></h3>
               <p class="mega-body">Digihire helps brands grow through structured sales campaigns, end-to-end sales recruitment, and field activations designed to drive visibility, traction, and revenue.</p>
-              <div class="mega-feat-highlight">
-                <span class="feat-badge"><i data-lucide="star" class="lucide" style="width:9px;height:9px"></i> FEATURED</span>
-                <p class="feat-product">VoltSquad</p>
-                <p class="feat-desc">Launch structured sales campaigns through VoltSquad. Activate sellers across target audiences and locations, drive users or sales, and grow through performance-based selling.</p>
-                <a href="https://voltsquad.digihire.io" class="feat-cta">Launch on VoltSquad →</a>
-                <a href="https://voltsquad.digihire.io" class="feat-action-btn">
-                  Explore VoltSquad
-                  <svg viewBox="0 0 16 16" fill="none" width="11" height="11"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
-                </a>
-              </div>
+              <a href="/about" class="mega-learn">Explore all solutions <span>→</span></a>
             </div>
             <div class="mega-right brands-right">
+              <a href="https://voltsquad.digihire.io" class="brand-supp-card">
+                <div class="bsc-icon i3"><i data-lucide="zap" class="lucide ic-lg"></i></div>
+                <p class="bsc-title">VoltSquad</p>
+                <p class="bsc-desc">Launch structured sales campaigns. Activate sellers across target audiences and locations, drive users or sales, and grow through performance-based selling.</p>
+                <span class="bsc-cta">Explore VoltSquad →</span>
+              </a>
               <a href="https://brands.digihire.io" class="brand-supp-card">
                 <div class="bsc-icon i1"><i data-lucide="users" class="lucide ic-lg"></i></div>
                 <p class="bsc-title">Sales Recruitment</p>
@@ -637,14 +636,15 @@
             <div class="mega-left">
               <h3 class="mega-headline">Work with brands. Earn through sales. Grow with <em>Digihire.</em></h3>
               <p class="mega-body">Access sales gigs, commission-based campaigns, job opportunities, and practical training built for people who want to earn more and build real career value through sales.</p>
-              <div class="mega-feat-highlight">
-                <span class="feat-badge"><i data-lucide="star" class="lucide" style="width:9px;height:9px"></i> FEATURED</span>
-                <p class="feat-product">VoltSquad</p>
-                <p class="feat-desc">Campaign marketplace for sales talent. Join active brand campaigns, promote products and apps, earn commissions, track your wallet, set revenue targets, and grow your income through real sales opportunities.</p>
-                <a href="https://voltsquad.digihire.io/join-now" class="feat-cta">Join VoltSquad →</a>
-              </div>
+              <a href="/about" class="mega-learn">Explore all opportunities <span>→</span></a>
             </div>
             <div class="mega-right brands-right">
+              <a href="https://voltsquad.digihire.io/join-now" class="brand-supp-card">
+                <div class="bsc-icon i3"><i data-lucide="zap" class="lucide ic-lg"></i></div>
+                <p class="bsc-title">VoltSquad</p>
+                <p class="bsc-desc">Campaign marketplace for sales talent. Join brand campaigns, earn commissions, track your wallet, and grow your income through real sales opportunities.</p>
+                <span class="bsc-cta">Join VoltSquad →</span>
+              </a>
               <a href="https://talents.digihire.io" class="brand-supp-card">
                 <div class="bsc-icon i1"><i data-lucide="user-plus" class="lucide ic-lg"></i></div>
                 <p class="bsc-title">Enter Our Talent Pool</p>
