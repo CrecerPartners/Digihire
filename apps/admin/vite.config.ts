@@ -11,7 +11,10 @@ export default defineConfig({
   },
   resolve: {
     alias: {
-      "@":               path.resolve(__dirname, "./src"),
+      "@": path.resolve(__dirname, "./src"),
+      "@digihire/ui": path.resolve(__dirname, "../../packages/ui/src"),
+      "@digihire/supabase": path.resolve(__dirname, "../../packages/supabase/src"),
+      "@digihire/hooks": path.resolve(__dirname, "../../packages/hooks/src"),
       "@digihire/shared": path.resolve(__dirname, "../../packages/shared/src"),
     },
   },

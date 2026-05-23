@@ -4,12 +4,25 @@
     "baseUrl": ".",
     "noUnusedLocals": false,
     "noUnusedParameters": false,
+    "noImplicitAny": false,
     "paths": {
-      "@/*":                ["./src/*"],
-      "@digihire/shared":   ["../../packages/shared/src/index.ts"],
-      "@digihire/shared/*": ["../../packages/shared/src/*"]
+      "@/*":                    ["./src/*"],
+      "@digihire/ui":           ["../../packages/ui/src/index.ts"],
+      "@digihire/ui/*":         ["../../packages/ui/src/*"],
+      "@digihire/supabase":     ["../../packages/supabase/src/index.ts"],
+      "@digihire/supabase/*":   ["../../packages/supabase/src/*"],
+      "@digihire/hooks":        ["../../packages/hooks/src/index.ts"],
+      "@digihire/hooks/*":      ["../../packages/hooks/src/*"],
+      "@digihire/shared":       ["../../packages/shared/src/index.ts"],
+      "@digihire/shared/*":     ["../../packages/shared/src/*"]
     },
     "types": ["vite/client"]
   },
-  "include": ["src", "../../packages/shared/src"]
+  "include": [
+    "src",
+    "../../packages/ui/src",
+    "../../packages/supabase/src",
+    "../../packages/hooks/src",
+    "../../packages/shared/src"
+  ]
 }

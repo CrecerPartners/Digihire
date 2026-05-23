@@ -1,0 +1,14 @@
+{
+  "extends": "../../tsconfig.json",
+  "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "@/*":                ["./src/*"],
+      "@digihire/ui":       ["../ui/src/index.ts"],
+      "@digihire/ui/*":     ["../ui/src/*"],
+      "@digihire/supabase": ["../supabase/src/index.ts"],
+      "@digihire/supabase/*": ["../supabase/src/*"]
+    }
+  },
+  "include": ["src"]
+}
