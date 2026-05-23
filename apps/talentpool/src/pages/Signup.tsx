@@ -1,18 +1,24 @@
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { supabase as _supabase } from '@digihire/shared';
 import { motion } from 'motion/react';
-import { Mail, Lock, User, Phone, ArrowRight } from 'lucide-react';
+import { Mail, Lock, User, Phone, ArrowRight, Linkedin, FileText, Upload, X } from 'lucide-react';
 import { Button, Input } from '@digihire/shared';
+import { readFileAsBase64, CV_SESSION_KEY, CV_NAME_SESSION_KEY, LINKEDIN_SESSION_KEY } from '../lib/cv-parser';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const supabase = _supabase as any;
 const REDIRECT_URL = `${window.location.origin}/verify-email`;
+const MAX_CV_SIZE = 4 * 1024 * 1024; // 4MB (leaves room for base64 in sessionStorage)
 
 export default function Signup() {
-  const [formData, setFormData] = useState({ fullName: '', email: '', phoneNumber: '', password: '', confirmPassword: '' });
+  const [formData, setFormData] = useState({
+    fullName: '', email: '', phoneNumber: '', password: '', confirmPassword: '', linkedinUrl: '',
+  });
+  const [cvFile, setCvFile] = useState<File | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+  const cvInputRef = useRef<HTMLInputElement>(null);
   const navigate = useNavigate();
 
   const handleSignup = async (e: React.FormEvent) => {
@@ -34,6 +40,23 @@ export default function Signup() {
         },
       });
       if (signUpErr) throw signUpErr;
+
+      // Stash LinkedIn URL for ProfileSetup to pick up
+      if (formData.linkedinUrl.trim()) {
+        sessionStorage.setItem(LINKEDIN_SESSION_KEY, formData.linkedinUrl.trim());
+      }
+
+      // Stash CV as base64 for ProfileSetup to parse
+      if (cvFile) {
+        try {
+          const base64 = await readFileAsBase64(cvFile);
+          sessionStorage.setItem(CV_SESSION_KEY, base64);
+          sessionStorage.setItem(CV_NAME_SESSION_KEY, cvFile.name);
+        } catch {
+          // CV storage failure is non-fatal — user can upload in profile setup
+        }
+      }
+
       sessionStorage.setItem('pending_verify_email', formData.email);
       navigate('/verify-email');
     } catch (err: unknown) {
@@ -45,6 +68,17 @@ export default function Signup() {
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) =>
     setFormData(prev => ({ ...prev, [e.target.name]: e.target.value }));
+
+  const handleCvSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    if (file.size > MAX_CV_SIZE) {
+      setError('CV must be less than 4MB');
+      return;
+    }
+    setError('');
+    setCvFile(file);
+  };
 
   return (
     <div className="min-h-screen flex items-center justify-center p-4 relative overflow-hidden bg-background">
@@ -85,7 +119,7 @@ export default function Signup() {
         </div>
 
         {/* Right panel */}
-        <div className="bg-card p-10">
+        <div className="bg-card p-8 overflow-y-auto max-h-screen">
           <form className="space-y-4" onSubmit={handleSignup}>
             {error && (
               <div className="rounded-lg bg-destructive/10 p-3 text-sm text-destructive border border-destructive/20">{error}</div>
@@ -96,7 +130,56 @@ export default function Signup() {
               <Field label="Phone" name="phoneNumber" type="tel" placeholder="+234 800 000 0000" icon={<Phone size={15} />} value={formData.phoneNumber} onChange={handleChange} />
               <Field label="Password" name="password" type="password" placeholder="••••••••" icon={<Lock size={15} />} value={formData.password} onChange={handleChange} />
               <Field label="Confirm Password" name="confirmPassword" type="password" placeholder="••••••••" icon={<Lock size={15} />} value={formData.confirmPassword} onChange={handleChange} />
+
+              {/* LinkedIn URL */}
+              <Field
+                label="LinkedIn Profile (Optional)"
+                name="linkedinUrl"
+                type="url"
+                placeholder="linkedin.com/in/yourname"
+                icon={<Linkedin size={15} />}
+                value={formData.linkedinUrl}
+                onChange={handleChange}
+                required={false}
+              />
+
+              {/* CV Upload */}
+              <div className="space-y-1.5">
+                <label className="text-xs font-medium text-muted-foreground">
+                  CV / Resume <span className="text-muted-foreground/60">(Optional — auto-fills your profile)</span>
+                </label>
+                <input
+                  ref={cvInputRef}
+                  type="file"
+                  accept=".pdf"
+                  className="hidden"
+                  onChange={handleCvSelect}
+                />
+                {cvFile ? (
+                  <div className="flex items-center gap-2 rounded-lg border border-primary/30 bg-primary/5 px-3 py-2.5">
+                    <FileText size={15} className="text-primary shrink-0" />
+                    <span className="text-xs font-medium text-primary truncate flex-1">{cvFile.name}</span>
+                    <button
+                      type="button"
+                      onClick={() => { setCvFile(null); if (cvInputRef.current) cvInputRef.current.value = ''; }}
+                      className="text-muted-foreground hover:text-destructive transition-colors"
+                    >
+                      <X size={14} />
+                    </button>
+                  </div>
+                ) : (
+                  <button
+                    type="button"
+                    onClick={() => cvInputRef.current?.click()}
+                    className="w-full flex items-center gap-2 rounded-lg border border-dashed border-border px-3 py-2.5 text-muted-foreground hover:border-primary/40 hover:bg-primary/5 transition-all"
+                  >
+                    <Upload size={15} />
+                    <span className="text-xs font-medium">Upload PDF CV (max 4MB)</span>
+                  </button>
+                )}
+              </div>
             </div>
+
             <Button type="submit" className="w-full gap-2" disabled={loading}>
               {loading ? 'Creating account...' : <>Create Account <ArrowRight className="h-4 w-4" /></>}
             </Button>
@@ -111,16 +194,17 @@ export default function Signup() {
   );
 }
 
-function Field({ label, name, type, placeholder, icon, value, onChange }: {
+function Field({ label, name, type, placeholder, icon, value, onChange, required = true }: {
   label: string; name: string; type: string; placeholder: string;
   icon: React.ReactNode; value: string; onChange: React.ChangeEventHandler<HTMLInputElement>;
+  required?: boolean;
 }) {
   return (
     <div className="space-y-1.5">
       <label className="text-xs font-medium text-muted-foreground">{label}</label>
       <div className="relative">
         <div className="absolute inset-y-0 left-0 flex items-center pl-3 text-muted-foreground/60">{icon}</div>
-        <Input name={name} type={type} required placeholder={placeholder} value={value} onChange={onChange} className="pl-9 bg-secondary border-border" />
+        <Input name={name} type={type} required={required} placeholder={placeholder} value={value} onChange={onChange} className="pl-9 bg-secondary border-border" />
       </div>
     </div>
   );

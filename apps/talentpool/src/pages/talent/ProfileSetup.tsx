@@ -1,11 +1,12 @@
-import React, { useState, useRef, useMemo } from 'react';
+import React, { useState, useRef, useMemo, useEffect } from 'react';
 import { TalentProfile } from '../../types';
 import { useNavigate } from 'react-router-dom';
 import { supabase as _supabase } from '@digihire/shared';
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const supabase = _supabase as any;
 import { motion } from 'motion/react';
-import { Save, User, MapPin, Briefcase, GraduationCap, Link as LinkIcon, Camera, Upload, CheckCircle, AlertCircle, FileText, Settings, Heart } from 'lucide-react';
+import { Save, User, MapPin, Briefcase, GraduationCap, Link as LinkIcon, Camera, Upload, CheckCircle, AlertCircle, FileText, Settings, Heart, Sparkles, Loader2, X } from 'lucide-react';
+import { parseCvWithClaude, CV_SESSION_KEY, CV_NAME_SESSION_KEY, LINKEDIN_SESSION_KEY } from '../../lib/cv-parser';
 
 interface Props {
   profile: TalentProfile | null;
@@ -24,6 +25,69 @@ export default function ProfileSetup({ profile, onUpdate }: Props) {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const cvInputRef = useRef<HTMLInputElement>(null);
   const certInputRef = useRef<HTMLInputElement>(null);
+
+  // CV auto-fill state
+  const [pendingCvName, setPendingCvName] = useState<string | null>(null);
+  const [cvParsing, setCvParsing] = useState(false);
+  const [cvFillSuccess, setCvFillSuccess] = useState(false);
+  const [cvError, setCvError] = useState<string | null>(null);
+
+  useEffect(() => {
+    // Pre-fill LinkedIn URL from signup
+    const pendingLinkedin = sessionStorage.getItem(LINKEDIN_SESSION_KEY);
+    if (pendingLinkedin && !formData.linkedin_url) {
+      setFormData(prev => ({ ...prev, linkedin_url: pendingLinkedin }));
+    }
+    // Detect pending CV
+    const cvName = sessionStorage.getItem(CV_NAME_SESSION_KEY);
+    if (cvName && sessionStorage.getItem(CV_SESSION_KEY)) {
+      setPendingCvName(cvName);
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  const handleCvAutoFill = async () => {
+    const cvBase64 = sessionStorage.getItem(CV_SESSION_KEY);
+    if (!cvBase64) return;
+    setCvParsing(true);
+    setCvError(null);
+    try {
+      const parsed = await parseCvWithClaude(cvBase64);
+      setFormData(prev => ({
+        ...prev,
+        ...(parsed.full_name && !prev.full_name ? { full_name: parsed.full_name } : {}),
+        ...(parsed.phone && !prev.phone ? { phone: parsed.phone } : {}),
+        ...(parsed.city && !prev.city ? { city: parsed.city } : {}),
+        ...(parsed.state && !prev.state ? { state: parsed.state } : {}),
+        ...(parsed.country && !prev.country ? { country: parsed.country } : {}),
+        ...(parsed.bio && !prev.bio ? { bio: parsed.bio } : {}),
+        ...(parsed.experience_years && !prev.experience_years ? { experience_years: parsed.experience_years } : {}),
+        ...(parsed.skills?.length && !prev.skills?.length ? { skills: parsed.skills } : {}),
+        ...(parsed.languages?.length && !prev.languages?.length ? { languages: parsed.languages } : {}),
+        ...(parsed.work_history?.length && !prev.work_history?.length ? { work_history: parsed.work_history } : {}),
+        ...(parsed.education?.length && !prev.education?.length ? { education: parsed.education } : {}),
+        ...(parsed.linkedin_url && !prev.linkedin_url ? { linkedin_url: parsed.linkedin_url } : {}),
+        ...(parsed.role_interests?.length && !prev.role_interests?.length ? { role_interests: parsed.role_interests } : {}),
+        ...(parsed.industry_experience?.length && !prev.industry_experience?.length ? { industry_experience: parsed.industry_experience } : {}),
+      }));
+      sessionStorage.removeItem(CV_SESSION_KEY);
+      sessionStorage.removeItem(CV_NAME_SESSION_KEY);
+      sessionStorage.removeItem(LINKEDIN_SESSION_KEY);
+      setPendingCvName(null);
+      setCvFillSuccess(true);
+      setTimeout(() => setCvFillSuccess(false), 5000);
+    } catch (err: unknown) {
+      setCvError(err instanceof Error ? err.message : 'CV analysis failed');
+    } finally {
+      setCvParsing(false);
+    }
+  };
+
+  const dismissCvBanner = () => {
+    sessionStorage.removeItem(CV_SESSION_KEY);
+    sessionStorage.removeItem(CV_NAME_SESSION_KEY);
+    setPendingCvName(null);
+  };
 
   // Completion Progress Calculation
   const progress = useMemo(() => {
@@ -197,6 +261,36 @@ export default function ProfileSetup({ profile, onUpdate }: Props) {
           </div>
         </div>
       </div>
+
+      {/* CV auto-fill banner */}
+      {pendingCvName && (
+        <div className="mx-0 px-6 py-3 bg-sky-50 border-b border-sky-100 flex items-center gap-3">
+          <Sparkles size={16} className="text-sky-500 shrink-0" />
+          <div className="flex-1 min-w-0">
+            <p className="text-xs font-semibold text-sky-800">CV ready to analyze</p>
+            <p className="text-[11px] text-sky-600 truncate">{pendingCvName}</p>
+          </div>
+          {cvError && <p className="text-[11px] text-red-500 shrink-0">{cvError}</p>}
+          <button
+            type="button"
+            onClick={handleCvAutoFill}
+            disabled={cvParsing}
+            className="flex items-center gap-1.5 rounded-md bg-sky-600 px-3 py-1.5 text-[11px] font-bold text-white hover:bg-sky-700 disabled:opacity-60 transition-all shrink-0"
+          >
+            {cvParsing ? <><Loader2 size={12} className="animate-spin" /> Analyzing...</> : <>Auto-fill Profile</>}
+          </button>
+          <button type="button" onClick={dismissCvBanner} className="text-sky-400 hover:text-sky-600 shrink-0">
+            <X size={14} />
+          </button>
+        </div>
+      )}
+
+      {cvFillSuccess && (
+        <div className="mx-0 px-6 py-3 bg-green-50 border-b border-green-100 flex items-center gap-2">
+          <CheckCircle size={15} className="text-green-600 shrink-0" />
+          <p className="text-xs font-semibold text-green-700">Profile fields filled from your CV. Review each tab and save.</p>
+        </div>
+      )}
 
       <div className="flex border-b border-gray-200 overflow-x-auto">
         {tabs.map(tab => (
