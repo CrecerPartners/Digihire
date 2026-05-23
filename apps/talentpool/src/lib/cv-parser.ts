@@ -1,3 +1,10 @@
+import * as pdfjsLib from 'pdfjs-dist';
+import type { TextItem } from 'pdfjs-dist/types/src/display/api';
+
+// Use Vite's ?url import so the worker is served as a static asset
+import pdfjsWorkerUrl from 'pdfjs-dist/build/pdf.worker?url';
+pdfjsLib.GlobalWorkerOptions.workerSrc = pdfjsWorkerUrl;
+
 const ROLE_OPTIONS = ['B2B Sales', 'Tech Sales', 'SaaS Sales', 'SDR', 'BDR', 'Account Executive', 'Business Development', 'Sales Ops', 'Merchandiser', 'Field Sales', 'Closer'];
 const INDUSTRY_OPTIONS = ['Tech', 'Fintech', 'SaaS', 'Healthtech', 'Financial Services', 'Telecoms', 'Retail', 'FMCG'];
 
@@ -18,11 +25,54 @@ export interface ParsedCvData {
   industry_experience?: string[];
 }
 
-export async function parseCvWithClaude(cvBase64: string): Promise<ParsedCvData> {
-  const apiKey = import.meta.env.VITE_ANTHROPIC_API_KEY;
-  if (!apiKey) throw new Error('CV parsing is not configured (missing VITE_ANTHROPIC_API_KEY)');
+async function extractTextFromPdf(base64: string): Promise<string> {
+  const binaryString = atob(base64);
+  const bytes = new Uint8Array(binaryString.length);
+  for (let i = 0; i < binaryString.length; i++) {
+    bytes[i] = binaryString.charCodeAt(i);
+  }
 
-  const prompt = `Extract profile information from this CV/resume. Return ONLY a valid JSON object with these exact keys (use null for missing fields, empty arrays for missing lists):
+  const pdf = await pdfjsLib.getDocument({ data: bytes }).promise;
+  const pages: string[] = [];
+
+  for (let i = 1; i <= pdf.numPages; i++) {
+    const page = await pdf.getPage(i);
+    const content = await page.getTextContent();
+    const text = content.items
+      .filter((item): item is TextItem => 'str' in item)
+      .map(item => item.str)
+      .join(' ');
+    pages.push(text);
+  }
+
+  return pages.join('\n');
+}
+
+export async function parseCvWithOpenAI(cvBase64: string): Promise<ParsedCvData> {
+  const apiKey = import.meta.env.VITE_OPENAI_API_KEY;
+  if (!apiKey) throw new Error('CV parsing is not configured (missing VITE_OPENAI_API_KEY)');
+
+  const cvText = await extractTextFromPdf(cvBase64);
+  if (!cvText.trim()) throw new Error('Could not extract text from this PDF — try a text-based PDF (not a scanned image)');
+
+  const response = await fetch('https://api.openai.com/v1/chat/completions', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${apiKey}`,
+    },
+    body: JSON.stringify({
+      model: 'gpt-4o-mini',
+      max_tokens: 1500,
+      response_format: { type: 'json_object' },
+      messages: [
+        {
+          role: 'system',
+          content: 'You are a CV/resume parser. Extract structured information and return only valid JSON.',
+        },
+        {
+          role: 'user',
+          content: `Extract profile information from the CV text below. Return ONLY a valid JSON object with these exact keys (use null for missing fields, empty arrays for missing lists):
 
 {
   "full_name": string or null,
@@ -37,31 +87,12 @@ export async function parseCvWithClaude(cvBase64: string): Promise<ParsedCvData>
   "work_history_summary": "chronological work history as plain text (Company, role, dates each on a new line)" or null,
   "education_summary": "education background as plain text" or null,
   "linkedin_url": string or null,
-  "role_interests": subset of ${JSON.stringify(ROLE_OPTIONS)} that match their roles/experience,
+  "role_interests": subset of ${JSON.stringify(ROLE_OPTIONS)} that match their roles,
   "industry_experience": subset of ${JSON.stringify(INDUSTRY_OPTIONS)} that match their background
-}`;
+}
 
-  const response = await fetch('https://api.anthropic.com/v1/messages', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      'x-api-key': apiKey,
-      'anthropic-version': '2023-06-01',
-      'anthropic-dangerous-direct-browser-access': 'true',
-    },
-    body: JSON.stringify({
-      model: 'claude-haiku-4-5-20251001',
-      max_tokens: 1500,
-      messages: [
-        {
-          role: 'user',
-          content: [
-            {
-              type: 'document',
-              source: { type: 'base64', media_type: 'application/pdf', data: cvBase64 },
-            },
-            { type: 'text', text: prompt },
-          ],
+CV TEXT:
+${cvText.slice(0, 12000)}`,
         },
       ],
     }),
@@ -72,13 +103,10 @@ export async function parseCvWithClaude(cvBase64: string): Promise<ParsedCvData>
     throw new Error((err as { error?: { message?: string } }).error?.message || `CV parsing failed (${response.status})`);
   }
 
-  const result = await response.json() as { content?: { text?: string }[] };
-  const text = result.content?.[0]?.text ?? '';
+  const result = await response.json() as { choices?: { message?: { content?: string } }[] };
+  const text = result.choices?.[0]?.message?.content ?? '';
 
-  const jsonMatch = text.match(/\{[\s\S]*\}/);
-  if (!jsonMatch) throw new Error('Could not read CV response — try uploading a text-based PDF');
-
-  const parsed = JSON.parse(jsonMatch[0]) as Record<string, unknown>;
+  const parsed = JSON.parse(text) as Record<string, unknown>;
 
   return {
     full_name: (parsed.full_name as string) || undefined,

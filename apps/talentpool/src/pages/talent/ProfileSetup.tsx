@@ -6,7 +6,7 @@ import { supabase as _supabase } from '@digihire/shared';
 const supabase = _supabase as any;
 import { motion } from 'motion/react';
 import { Save, User, MapPin, Briefcase, GraduationCap, Link as LinkIcon, Camera, Upload, CheckCircle, AlertCircle, FileText, Settings, Heart, Sparkles, Loader2, X } from 'lucide-react';
-import { parseCvWithClaude, CV_SESSION_KEY, CV_NAME_SESSION_KEY, LINKEDIN_SESSION_KEY } from '../../lib/cv-parser';
+import { parseCvWithOpenAI, CV_SESSION_KEY, CV_NAME_SESSION_KEY, LINKEDIN_SESSION_KEY } from '../../lib/cv-parser';
 
 interface Props {
   profile: TalentProfile | null;
@@ -52,7 +52,7 @@ export default function ProfileSetup({ profile, onUpdate }: Props) {
     setCvParsing(true);
     setCvError(null);
     try {
-      const parsed = await parseCvWithClaude(cvBase64);
+      const parsed = await parseCvWithOpenAI(cvBase64);
       setFormData(prev => ({
         ...prev,
         ...(parsed.full_name && !prev.full_name ? { full_name: parsed.full_name } : {}),
