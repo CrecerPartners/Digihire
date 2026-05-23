@@ -116,7 +116,7 @@ export default function BrandHome() {
                   className="flex items-center justify-between rounded-lg p-3 hover:bg-secondary/40 transition-colors"
                 >
                   <div className="min-w-0 flex-1">
-                    <p className="truncate font-medium text-sm">{c.title}</p>
+                    <p className="truncate font-medium text-sm">{c.campaign_name}</p>
                     <p className="text-xs text-muted-foreground capitalize">{c.status}</p>
                   </div>
                   <ChevronRight className="h-4 w-4 text-muted-foreground ml-2 shrink-0" />
