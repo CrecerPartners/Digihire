@@ -11,9 +11,10 @@ const targets = [
   "apps/brands/public",
   "apps/talentpool/public",
   "apps/admin/public",
+  "public",
 ];
 
-const files = ["nav-partial.html", "nav-loader.js"];
+const files = ["nav-partial.html", "nav-loader.js", "footer-partial.html", "footer-loader.js"];
 
 for (const target of targets) {
   const dest = resolve(root, target);

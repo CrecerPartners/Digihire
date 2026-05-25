@@ -1,4 +1,5 @@
 import { useRef, useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import {
   ArrowRight,
   Zap,
@@ -175,6 +176,7 @@ function Checkbox({ options, selected, onChange }: { options: string[]; selected
 
 export default function LandingPage() {
   const formRef   = useRef<HTMLDivElement>(null);
+  const servicesRef = useRef<HTMLDivElement>(null);
   const [form, setForm]         = useState<FormData>(blank);
   const [submitting, setSubmitting] = useState(false);
   const [submitted, setSubmitted]   = useState(false);
@@ -188,6 +190,7 @@ export default function LandingPage() {
   }, []);
 
   const scrollToForm = () => formRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+  const scrollToServices = () => servicesRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
   const set = (k: keyof FormData) => (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) =>
     setForm(p => ({ ...p, [k]: e.target.value }));
 
@@ -217,6 +220,69 @@ export default function LandingPage() {
     border: `1px solid ${V.cyanBorder}`, color: V.cyanDim,
     display: "flex", alignItems: "center", justifyContent: "center", fontSize: 11,
   };
+
+  const servicesList = [
+    {
+      icon: Zap,
+      title: "VoltSquad Campaigns",
+      desc: "Launch performance-based campaigns to acquire users, boost app downloads, and drive sales through our campus & digital seller networks.",
+      cta: "Launch VoltSquad Campaign",
+      color: "#EAB308", 
+      bg: "rgba(234,179,8,0.1)",
+      border: "rgba(234,179,8,0.2)",
+      link: "/signup?service=voltsquad",
+      hoverBorder: "hover:border-yellow-500/40",
+      hoverBg: "hover:bg-yellow-500 hover:text-white"
+    },
+    {
+      icon: UserCheck,
+      title: "Hire Full-Time Sales Talent",
+      desc: "Recruit dedicated, full-time sales professionals — SDRs, BDRs, Account Executives, and B2B closers — fully pre-vetted for your industry.",
+      cta: "Hire Full-Time Talent",
+      color: "#00C2FF", 
+      bg: "rgba(0,194,255,0.1)",
+      border: "rgba(0,194,255,0.2)",
+      link: "/signup?service=recruitment-fulltime",
+      hoverBorder: "hover:border-cyan-500/40",
+      hoverBg: "hover:bg-cyan-500 hover:text-navy"
+    },
+    {
+      icon: Briefcase,
+      title: "Hire Part-Time & Contract Sales",
+      desc: "Scale your sales force flexibly with campaign-based or project-based contract professionals built for rapid market expansion.",
+      cta: "Hire Contract Talent",
+      color: "#10B981", 
+      bg: "rgba(16,185,129,0.1)",
+      border: "rgba(16,185,129,0.2)",
+      link: "/signup?service=recruitment-parttime",
+      hoverBorder: "hover:border-emerald-500/40",
+      hoverBg: "hover:bg-emerald-500 hover:text-white"
+    },
+    {
+      icon: ClipboardList,
+      title: "Request Merchandisers & Staff",
+      desc: "Access qualified merchandisers, in-store promoters, and short-term staff for retail coverage, audits, and physical distribution.",
+      cta: "Request Field Staff",
+      color: "#F97316", 
+      bg: "rgba(249,115,22,0.1)",
+      border: "rgba(249,115,22,0.2)",
+      link: "/signup?service=merchandisers",
+      hoverBorder: "hover:border-orange-500/40",
+      hoverBg: "hover:bg-orange-500 hover:text-white"
+    },
+    {
+      icon: Target,
+      title: "Activations & Field Marketing",
+      desc: "Deploy promoters and execution teams for on-ground mall activations, campus roadshows, and street-level marketing support.",
+      cta: "Plan Activations",
+      color: "#8B5CF6", 
+      bg: "rgba(139,92,246,0.1)",
+      border: "rgba(139,92,246,0.2)",
+      link: "/signup?service=activations",
+      hoverBorder: "hover:border-violet-500/40",
+      hoverBg: "hover:bg-violet-500 hover:text-white"
+    }
+  ];
 
   return (
     <div className="brands-landing" style={{ fontFamily: "CenturyGothic, sans-serif", background: "#fff", color: V.navy, overflowX: "hidden" }}>
@@ -255,8 +321,8 @@ export default function LandingPage() {
             </p>
 
             <div style={{ display: "flex", gap: 14, justifyContent: "center", flexWrap: "wrap", marginBottom: 64 }}>
-              <button onClick={scrollToForm} className="vs-btn-cyan">
-                Hire Sales Talent <ArrowRight size={16} />
+              <button onClick={scrollToServices} className="vs-btn-cyan">
+                Explore Services &amp; Hire <ArrowRight size={16} />
               </button>
               <a href="mailto:hire@digihire.io" className="vs-btn-outline-white">
                 <Phone size={15} /> Talk to Our Team
@@ -292,6 +358,43 @@ export default function LandingPage() {
                 />
               </div>
             ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ══ SERVICES GRID ════════════════════════════════ */}
+      <section ref={servicesRef} id="services" style={{ background: "#fff", padding: "110px 0 80px", borderBottom: `1px solid ${V.border}` }}>
+        <div style={{ maxWidth: 1140, margin: "0 auto", padding: "0 28px" }}>
+          <div className="reveal" style={{ textAlign: "center", marginBottom: 56 }}>
+            <p style={{ fontSize: 11, letterSpacing: "0.1em", textTransform: "uppercase", color: V.cyanDim, marginBottom: 10 }}>Services Available</p>
+            <h2 style={{ fontFamily: "CenturyGothic, sans-serif", fontSize: "clamp(26px,3.5vw,40px)", color: V.navy, marginBottom: 14, letterSpacing: "-0.02em" }}>
+              What You Can Do on DigiHire
+            </h2>
+            <p style={{ fontSize: 16, color: V.subText, maxWidth: 640, margin: "0 auto", lineHeight: 1.6 }}>
+              Select a service below to get started. Each option opens a customized signup and onboarding flow tailored to your requirements, connecting directly to your brand dashboard.
+            </p>
+          </div>
+
+          <div className="stagger-grid" style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(320px, 1fr))", gap: 24 }}>
+            {servicesList.map(s => {
+              const Icon = s.icon;
+              return (
+                <div key={s.title} className={`bg-card border border-border/80 rounded-[24px] p-8 flex flex-col justify-between transition-all duration-300 hover:shadow-xl hover:-translate-y-1 ${s.hoverBorder}`} style={{ minHeight: 320 }}>
+                  <div className="flex flex-col gap-5 flex-grow">
+                    <div className="w-11 h-11 rounded-xl flex items-center justify-center border" style={{ background: s.bg, borderColor: s.border, color: s.color }}>
+                      <Icon size={20} />
+                    </div>
+                    <div>
+                      <h3 className="text-lg font-bold text-foreground tracking-tight mb-2" style={{ fontFamily: "CenturyGothic, sans-serif" }}>{s.title}</h3>
+                      <p className="text-sm text-muted-foreground leading-relaxed mb-6">{s.desc}</p>
+                    </div>
+                  </div>
+                  <Link to={s.link} className={`inline-flex items-center justify-center gap-1.5 w-full py-3 px-4 rounded-xl border font-semibold text-sm transition-all duration-200 ${s.hoverBg}`} style={{ borderColor: s.border, color: V.navy }}>
+                    {s.cta} <ArrowRight size={14} />
+                  </Link>
+                </div>
+              );
+            })}
           </div>
         </div>
       </section>
@@ -440,7 +543,7 @@ export default function LandingPage() {
               Whether you need one closer or a full sales force, Crecer helps you hire and deploy sales talent that performs.
             </p>
             <div style={{ display: "flex", gap: 14, justifyContent: "center", flexWrap: "wrap" }}>
-              <button onClick={scrollToForm} className="vs-btn-cyan">
+              <button onClick={scrollToServices} className="vs-btn-cyan">
                 Hire Sales Talent <ArrowRight size={16} />
               </button>
               <a href="mailto:hire@digihire.io" className="vs-btn-outline-white">

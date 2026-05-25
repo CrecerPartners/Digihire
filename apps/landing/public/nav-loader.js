@@ -26,6 +26,30 @@
     if (svg) el.appendChild(svg);
   }
 
+  function rewriteLocalLinks(container) {
+    var host = window.location.hostname;
+    var isLocal = host === 'localhost' || host === '127.0.0.1';
+    if (!isLocal) return;
+
+    var mappings = [
+      { prod: 'https://brands.digihire.io', local: 'http://localhost:8084' },
+      { prod: 'https://voltsquad.digihire.io', local: 'http://localhost:8081' },
+      { prod: 'https://talents.digihire.io', local: 'http://localhost:8083' },
+      { prod: 'https://digihire.io', local: 'http://localhost:8080' }
+    ];
+
+    container.querySelectorAll('a').forEach(function (a) {
+      var href = a.getAttribute('href') || '';
+      for (var i = 0; i < mappings.length; i++) {
+        var m = mappings[i];
+        if (href.indexOf(m.prod) === 0) {
+          a.href = href.replace(m.prod, m.local);
+          break;
+        }
+      }
+    });
+  }
+
   /* ── Apply context: auth state + app-specific CTA ────────── */
   function applyContext(root) {
     var host = window.location.hostname;
@@ -88,6 +112,8 @@
 
     }
     /* else: main landing — keep all defaults regardless of auth */
+
+    rewriteLocalLinks(root);
   }
 
   /* ── Mobile menu accordion ────────────────────────────────── */
@@ -151,6 +177,7 @@
         }
 
         applyContext(root);
+        rewriteLocalLinks(document);
 
         /* Scroll-shrink behaviour */
         var nav = document.getElementById('navbar');
