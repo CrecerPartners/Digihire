@@ -122,9 +122,9 @@ const Calculator_Page = () => {
       return `• ${p.name} x${item.quantity} = ${formatNaira(calculateCommission(item))}`;
     }).filter(Boolean);
     if (mode === "target") {
-      return `🎯 Goal: ${formatNaira(targetNum)} in 1 ${timeframe.replace('ly', '')}\n🔥 Progress: ${progressPercent}%\n\n${lines.join("\n")}\n\n💰 Total: ${formatNaira(totalEarnings)}\n\nJoin VoltSquad & start earning! ⚡ voltsquad.digihire.io`;
+      return `🎯 Goal: ${formatNaira(targetNum)} in 1 ${timeframe.replace('ly', '')}\n🔥 Progress: ${progressPercent}%\n\n${lines.join("\n")}\n\n💰 Total: ${formatNaira(totalEarnings)}\n\nJoin VoltSquad & start earning! ⚡ talents.digihire.io`;
     }
-    return `🔥 My VoltSquad Earnings Plan\n\n${lines.join("\n")}\n\n💰 Total: ${formatNaira(totalEarnings)} from ${totalSales} sales!\n\nJoin VoltSquad & start earning! ⚡ voltsquad.digihire.io`;
+    return `🔥 My VoltSquad Earnings Plan\n\n${lines.join("\n")}\n\n💰 Total: ${formatNaira(totalEarnings)} from ${totalSales} sales!\n\nJoin VoltSquad & start earning! ⚡ talents.digihire.io`;
   };
 
   const shareToWhatsApp = () => {

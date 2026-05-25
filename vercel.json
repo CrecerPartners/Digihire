@@ -11,12 +11,12 @@
     { "source": "/admin/:path*", "destination": "${ADMIN_VERCEL_URL}/admin/:path*" }
   ],
   "redirects": [
-    { "source": "/login", "destination": "https://voltsquad.digihire.io/login", "permanent": false },
-    { "source": "/signup", "destination": "https://voltsquad.digihire.io/join-now", "permanent": false },
-    { "source": "/join-now", "destination": "https://voltsquad.digihire.io/join-now", "permanent": false },
-    { "source": "/dashboard", "destination": "https://voltsquad.digihire.io/dashboard", "permanent": false },
-    { "source": "/dashboard/:path*", "destination": "https://voltsquad.digihire.io/dashboard/:path*", "permanent": false },
-    { "source": "/onboarding/:path*", "destination": "https://voltsquad.digihire.io/onboarding/:path*", "permanent": false },
+    { "source": "/login", "destination": "https://talents.digihire.io/login", "permanent": false },
+    { "source": "/signup", "destination": "https://talents.digihire.io/join-now", "permanent": false },
+    { "source": "/join-now", "destination": "https://talents.digihire.io/join-now", "permanent": false },
+    { "source": "/dashboard", "destination": "https://talents.digihire.io/dashboard", "permanent": false },
+    { "source": "/dashboard/:path*", "destination": "https://talents.digihire.io/dashboard/:path*", "permanent": false },
+    { "source": "/onboarding/:path*", "destination": "https://talents.digihire.io/onboarding/:path*", "permanent": false },
     { "source": "/brand", "destination": "https://brands.digihire.io", "permanent": false },
     { "source": "/brand/:path*", "destination": "https://brands.digihire.io/brand/:path*", "permanent": false },
     { "source": "/talent", "destination": "https://talents.digihire.io", "permanent": false },

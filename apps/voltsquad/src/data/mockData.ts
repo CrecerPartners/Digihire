@@ -7,7 +7,7 @@ export const currentUser = {
   avatar: "",
   university: "University of Lagos",
   referralCode: "VOLT-CHID23",
-  referralLink: "https://voltsquad.digihire.io/join-now?ref=VOLT-CHID23",
+  referralLink: "https://talents.digihire.io/join-now?ref=VOLT-CHID23",
   whatsapp: "+2348012345678",
   bankName: "GTBank",
   accountNumber: "0123456789",

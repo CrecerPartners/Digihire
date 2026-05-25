@@ -11,7 +11,7 @@ the app folder it owns. Per-app deploys are driven by each app's own
 |---|---|---|---|
 | `digihire-landing` | `apps/landing` | `apps/landing/vercel.json` | digihire.io |
 | `digihire-brands` | `apps/brands` | `apps/brands/vercel.json` | brands.digihire.io |
-| `digihire-voltsquad` | `apps/voltsquad` | `apps/voltsquad/vercel.json` | voltsquad.digihire.io |
+| `digihire-voltsquad` | `apps/voltsquad` | `apps/voltsquad/vercel.json` | talents.digihire.io |
 | `digihire-talentpool` | `apps/talentpool` | `apps/talentpool/vercel.json` | talents.digihire.io |
 | `digihire-admin` | `apps/admin` | `apps/admin/vercel.json` | served via `digihire.io/admin/*` proxy |
 

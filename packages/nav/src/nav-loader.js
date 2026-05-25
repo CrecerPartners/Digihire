@@ -33,7 +33,7 @@
 
     var mappings = [
       { prod: 'https://brands.digihire.io', local: 'http://localhost:8084' },
-      { prod: 'https://voltsquad.digihire.io', local: 'http://localhost:8081' },
+      { prod: 'https://talents.digihire.io', local: 'http://localhost:8081' },
       { prod: 'https://talents.digihire.io', local: 'http://localhost:8083' },
       { prod: 'https://digihire.io', local: 'http://localhost:8080' }
     ];
@@ -56,7 +56,7 @@
     var port = window.location.port;
 
     var isBrands    = host === 'brands.digihire.io'    || port === '8084';
-    var isVoltsquad = host === 'voltsquad.digihire.io' || port === '8081';
+    var isVoltsquad = host === 'talents.digihire.io' || port === '8081';
     var isApp       = isBrands || isVoltsquad;
 
     var session   = getAuthSession();
