@@ -330,7 +330,7 @@ export default function LandingPage() {
             </div>
 
             <div style={{ maxWidth: 900, margin: "0 auto", borderRadius: 20, overflow: "hidden", border: `1px solid rgba(0,194,255,0.18)` }}>
-              <img src="/hero-sales.png" alt="Sales Talent" style={{ width: "100%", height: "auto", display: "block" }} />
+              <img src="https://crecerpartners.com/wp-content/uploads/2025/08/WhatsApp-Image-2025-09-08-at-08.48.44_9afe4066.jpg" alt="Sales Talent" style={{ width: "100%", height: "auto", display: "block" }} />
             </div>
           </div>
         </div>
