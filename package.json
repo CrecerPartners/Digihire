@@ -22,6 +22,7 @@
     "build:admin": "npm run build --workspace=apps/admin",
     "build:all": "npm run sync:nav && npm run build --workspaces --if-present",
     "sync:nav": "node packages/nav/build.js",
+    "build:vercel": "node scripts/vercel-build.cjs",
     "lint": "eslint .",
     "test": "npm run test --workspace=apps/voltsquad",
     "test:all": "vitest --workspace vitest.workspace.ts",

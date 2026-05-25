@@ -1,5 +1,5 @@
 {
-  "buildCommand": "npm run build:landing",
+  "buildCommand": "npm run build:vercel",
   "outputDirectory": "apps/landing/dist",
   "rewrites": [
     { "source": "/about", "destination": "/about.html" },
