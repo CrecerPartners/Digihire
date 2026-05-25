@@ -2,6 +2,9 @@
   "installCommand": "cd ../.. && npm install",
   "buildCommand": "cd ../.. && npm run build:admin",
   "outputDirectory": "dist",
+  "redirects": [
+    { "source": "/", "destination": "/admin/", "permanent": false }
+  ],
   "headers": [
     {
       "source": "/admin/assets/(.*)",
@@ -10,16 +13,11 @@
     {
       "source": "/admin/((?!assets/).*)",
       "headers": [{ "key": "Cache-Control", "value": "no-store" }]
-    },
-    {
-      "source": "/",
-      "headers": [{ "key": "Cache-Control", "value": "no-store" }]
     }
   ],
   "rewrites": [
     { "source": "/admin/assets/:path*", "destination": "/assets/:path*" },
     { "source": "/admin/fonts/:path*", "destination": "/fonts/:path*" },
-    { "source": "/admin/:path*", "destination": "/index.html" },
-    { "source": "/", "destination": "/index.html" }
+    { "source": "/admin/:path*", "destination": "/index.html" }
   ]
 }
