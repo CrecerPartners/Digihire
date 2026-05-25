@@ -1,6 +1,6 @@
 {
-  "installCommand": "npm install",
-  "buildCommand": "npm run build:landing",
+  "installCommand": "cd ../.. && npm install",
+  "buildCommand": "cd ../.. && npm run build:landing",
   "outputDirectory": "dist",
   "rewrites": [
     { "source": "/about", "destination": "/about.html" },
