@@ -18,6 +18,8 @@
   "rewrites": [
     { "source": "/admin/assets/:path*", "destination": "/assets/:path*" },
     { "source": "/admin/fonts/:path*", "destination": "/fonts/:path*" },
+    { "source": "/admin", "destination": "/index.html" },
+    { "source": "/admin/", "destination": "/index.html" },
     { "source": "/admin/:path*", "destination": "/index.html" }
   ]
 }
