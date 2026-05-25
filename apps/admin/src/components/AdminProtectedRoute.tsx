@@ -5,17 +5,18 @@ import { useEffect } from "react";
 import { toast } from "sonner";
 
 export function AdminProtectedRoute({ children }: { children: React.ReactNode }) {
-  const { user, loading: authLoading } = useAuth();
+  const { user, loading: authLoading, signOut } = useAuth();
   const { isAdmin, isLoading } = useAdminRole();
   const location = useLocation();
 
   useEffect(() => {
     if (!authLoading && !isLoading && user && !isAdmin) {
       toast.error("Access denied. Admin privileges required.", {
-        description: "You've been redirected to your dashboard."
+        description: "You've been signed out of this session."
       });
+      signOut({ skipRedirect: true });
     }
-  }, [authLoading, isLoading, user, isAdmin]);
+  }, [authLoading, isLoading, user, isAdmin, signOut]);
 
   if (authLoading || isLoading) {
     return (
@@ -27,7 +28,6 @@ export function AdminProtectedRoute({ children }: { children: React.ReactNode })
 
   if (!user) return <Navigate to="/login" state={{ from: location }} replace />;
   if (!isAdmin) {
-    window.location.href = "/";
     return null;
   }
   return <>{children}</>;

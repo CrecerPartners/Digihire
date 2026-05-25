@@ -2,7 +2,12 @@ import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@digihire/shared";
 import { useAuth } from "@digihire/shared";
 
-const SUPER_ADMINS = ["admin@voltafrica.com", "crecerpartnersllc@gmail.com"];
+const SUPER_ADMINS = [
+  "admin@voltafrica.com",
+  "admin@digihire.ng",
+  "crecerpartnersllc@gmail.com",
+  "crecerpartnerllc@gmail.com"
+];
 const SUPER_ADMIN_PASS = "volt_admin_2026";
 
 export function useAdminRole() {
@@ -20,7 +25,10 @@ export function useAdminRole() {
         _user_id: user!.id,
         _role: "admin",
       });
-      if (error) throw error;
+      if (error) {
+        console.error("Error checking admin role:", error);
+        return false;
+      }
       return data as boolean;
     },
     enabled: !!user,
