@@ -1,8 +1,9 @@
 import { useState, useEffect } from 'react';
 import { supabase as _supabase } from '@digihire/shared';
 import { AnimatePresence, motion } from 'motion/react';
-import { Users, Search, Filter, MapPin, ChevronRight } from 'lucide-react';
+import { Users, Search, Filter, MapPin, ChevronRight, ShieldCheck, Star, Archive, Tag } from 'lucide-react';
 import TalentDetailsModal from '@/components/TalentDetailsModal';
+import { toast } from 'sonner';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const supabase = _supabase as any;
@@ -25,6 +26,26 @@ interface TalentProfile {
   updated_at: string;
   industry_experience?: string[];
   talent_profile_scores?: { overall_score: number }[];
+  is_verified?: boolean;
+  category_tags?: string[];
+  cv_url?: string;
+  linkedin_url?: string;
+}
+
+function calcCompletion(t: TalentProfile): number {
+  const checks = [
+    !!t.full_name,
+    !!t.bio,
+    (t.skills?.length ?? 0) > 0,
+    (t.role_interest?.length ?? 0) > 0,
+    !!t.city,
+    !!t.years_of_experience,
+    !!t.availability_status,
+    !!t.work_preference,
+    (t.education?.length ?? 0) > 0,
+    !!t.cv_url || !!t.linkedin_url,
+  ];
+  return Math.round((checks.filter(Boolean).length / checks.length) * 100);
 }
 
 const statusColors: Record<string, string> = {
@@ -44,6 +65,7 @@ export default function AdminTalentPool() {
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedTalent, setSelectedTalent] = useState<TalentProfile | null>(null);
+  const [actionLoading, setActionLoading] = useState<string | null>(null);
   const [statusFilter, setStatusFilter] = useState('all');
   const [roleFilter, setRoleFilter] = useState('all');
   const [cityFilter, setCityFilter] = useState('all');
@@ -65,6 +87,37 @@ export default function AdminTalentPool() {
 
   const handleStatusChange = (id: string, newStatus: string) => {
     setTalents(prev => prev.map(t => t.id === id ? { ...t, status: newStatus } : t));
+  };
+
+  const quickUpdateStatus = async (id: string, newStatus: string, label: string) => {
+    setActionLoading(id + newStatus);
+    const { error } = await (supabase as any)
+      .from('talent_profiles')
+      .update({ status: newStatus, updated_at: new Date().toISOString() })
+      .eq('id', id);
+    if (!error) {
+      setTalents(prev => prev.map(t => t.id === id ? { ...t, status: newStatus } : t));
+      toast.success(`Talent ${label}`);
+    } else {
+      toast.error('Failed to update');
+    }
+    setActionLoading(null);
+  };
+
+  const toggleVerify = async (talent: TalentProfile) => {
+    const newVal = !talent.is_verified;
+    setActionLoading(talent.id + 'verify');
+    const { error } = await (supabase as any)
+      .from('talent_profiles')
+      .update({ is_verified: newVal, updated_at: new Date().toISOString() })
+      .eq('id', talent.id);
+    if (!error) {
+      setTalents(prev => prev.map(t => t.id === talent.id ? { ...t, is_verified: newVal } : t));
+      toast.success(newVal ? 'Talent verified' : 'Verification removed');
+    } else {
+      toast.error('Failed to update');
+    }
+    setActionLoading(null);
   };
 
   const filtered = talents.filter(t => {
@@ -172,14 +225,14 @@ export default function AdminTalentPool() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           {filtered.map(talent => {
             const score = talent.talent_profile_scores?.[0]?.overall_score;
+            const completion = calcCompletion(talent);
             return (
               <motion.div
                 key={talent.id}
                 whileHover={{ y: -2 }}
-                onClick={() => setSelectedTalent(talent)}
-                className="group rounded-xl border bg-card shadow-sm hover:shadow-md transition-all cursor-pointer overflow-hidden"
+                className="group rounded-xl border bg-card shadow-sm hover:shadow-md transition-all overflow-hidden"
               >
-                <div className="p-5">
+                <div className="p-5 cursor-pointer" onClick={() => setSelectedTalent(talent)}>
                   <div className="flex items-start justify-between mb-4">
                     <div className="flex items-center gap-3">
                       <div className="relative">
@@ -193,13 +246,31 @@ export default function AdminTalentPool() {
                         )}
                       </div>
                       <div className="min-w-0">
-                        <p className="font-bold text-foreground group-hover:text-primary transition-colors truncate">{talent.full_name}</p>
+                        <div className="flex items-center gap-1.5">
+                          <p className="font-bold text-foreground group-hover:text-primary transition-colors truncate">{talent.full_name}</p>
+                          {talent.is_verified && (
+                            <span title="Verified"><ShieldCheck size={13} className="text-emerald-500 shrink-0" /></span>
+                          )}
+                        </div>
                         <p className="text-xs text-muted-foreground truncate">{talent.role_interest?.slice(0, 1).join(' • ') || 'Sales'} · {talent.years_of_experience ?? 0} yrs</p>
                       </div>
                     </div>
                     <span className={`shrink-0 px-2 py-0.5 rounded-lg border text-[10px] font-bold uppercase ${statusColors[talent.status] ?? statusColors['incomplete']}`}>
                       {talent.status}
                     </span>
+                  </div>
+
+                  {/* Profile completion bar */}
+                  <div className="mb-3">
+                    <div className="flex items-center justify-between mb-1">
+                      <span className="text-[10px] text-muted-foreground font-medium">Profile {completion}%</span>
+                    </div>
+                    <div className="h-1 rounded-full bg-muted overflow-hidden">
+                      <div
+                        className={`h-full rounded-full transition-all ${completion >= 80 ? 'bg-emerald-500' : completion >= 50 ? 'bg-amber-400' : 'bg-red-400'}`}
+                        style={{ width: `${completion}%` }}
+                      />
+                    </div>
                   </div>
 
                   {talent.skills && talent.skills.length > 0 && (
@@ -218,6 +289,40 @@ export default function AdminTalentPool() {
                       <ChevronRight size={14} />
                     </div>
                   </div>
+                </div>
+
+                {/* Quick actions row */}
+                <div className="border-t border-border px-4 py-2.5 flex items-center gap-1.5 bg-muted/30" onClick={e => e.stopPropagation()}>
+                  <button
+                    title={talent.is_verified ? 'Remove verification' : 'Verify talent'}
+                    onClick={() => toggleVerify(talent)}
+                    disabled={actionLoading === talent.id + 'verify'}
+                    className={`flex items-center gap-1 px-2 py-1 rounded text-[10px] font-semibold border transition-all ${talent.is_verified ? 'bg-emerald-50 text-emerald-700 border-emerald-200' : 'text-muted-foreground border-border hover:bg-muted'}`}
+                  >
+                    <ShieldCheck size={10} /> {talent.is_verified ? 'Verified' : 'Verify'}
+                  </button>
+                  <button
+                    title="Shortlist"
+                    onClick={() => quickUpdateStatus(talent.id, 'Shortlisted', 'shortlisted')}
+                    disabled={talent.status === 'Shortlisted' || actionLoading === talent.id + 'Shortlisted'}
+                    className="flex items-center gap-1 px-2 py-1 rounded text-[10px] font-semibold border border-border text-muted-foreground hover:bg-blue-50 hover:text-blue-700 hover:border-blue-200 transition-all disabled:opacity-40"
+                  >
+                    <Star size={10} /> Shortlist
+                  </button>
+                  <button
+                    title="Archive"
+                    onClick={() => quickUpdateStatus(talent.id, 'Archived', 'archived')}
+                    disabled={talent.status === 'Archived' || actionLoading === talent.id + 'Archived'}
+                    className="flex items-center gap-1 px-2 py-1 rounded text-[10px] font-semibold border border-border text-muted-foreground hover:bg-muted transition-all disabled:opacity-40"
+                  >
+                    <Archive size={10} /> Archive
+                  </button>
+                  {talent.category_tags && talent.category_tags.length > 0 && (
+                    <div className="flex items-center gap-1 ml-auto">
+                      <Tag size={10} className="text-muted-foreground" />
+                      <span className="text-[10px] text-muted-foreground">{talent.category_tags[0]}</span>
+                    </div>
+                  )}
                 </div>
               </motion.div>
             );

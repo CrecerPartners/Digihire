@@ -5,9 +5,22 @@ import { motion } from 'motion/react';
 import { Mail, RefreshCw, LogOut, ArrowRight } from 'lucide-react';
 import { Button, Card, CardContent } from '@digihire/shared';
 
+const SERVICE_NEXT: Record<string, string> = {
+  voltsquad: 'Log in to your brand dashboard. Our team will be in touch within 48 hours to activate your VoltSquad campaign.',
+  'recruitment-fulltime': 'Log in to monitor the recruitment process. Our team will review your requirements and match you with qualified candidates.',
+  'recruitment-parttime': 'Log in to monitor the recruitment process. Our team will match you with part-time and contract sales talent.',
+  recruitment: 'Log in to monitor the recruitment process stage by stage from your brand dashboard.',
+  merchandisers: 'Log in to your brand dashboard. Our staffing team will confirm availability and deployment details.',
+  activations: 'Log in to monitor your activation request. Our activations team will reach out to discuss your brief and timeline.',
+};
+
 export default function VerifyEmail() {
   const { signOut } = useAuth();
   const [email] = useState(() => sessionStorage.getItem('pending_verify_email') ?? '');
+  const [nextStep] = useState(() => {
+    const svc = sessionStorage.getItem('pending_service') ?? '';
+    return SERVICE_NEXT[svc] ?? 'Log in to your brand dashboard to get started.';
+  });
   const [otp, setOtp] = useState(['', '', '', '', '', '']);
   const [verifying, setVerifying] = useState(false);
   const [sending, setSending] = useState(false);
@@ -59,6 +72,7 @@ export default function VerifyEmail() {
       inputRefs.current[0]?.focus();
     } else {
       sessionStorage.removeItem('pending_verify_email');
+      sessionStorage.removeItem('pending_service');
       setSuccess('Email verified! Redirecting...');
       setTimeout(() => navigate('/brand'), 1000);
     }
@@ -127,6 +141,11 @@ export default function VerifyEmail() {
                 {sending ? <RefreshCw className="h-4 w-4 animate-spin" /> : <RefreshCw className="h-4 w-4" />}
                 {sending ? 'Sending...' : 'Resend Code'}
               </Button>
+            </div>
+
+            <div className="rounded-lg bg-primary/5 border border-primary/10 p-3 text-left">
+              <p className="text-xs font-semibold text-primary mb-1">What's next after verification</p>
+              <p className="text-xs text-muted-foreground">{nextStep}</p>
             </div>
 
             <div className="pt-2 border-t border-border/50">

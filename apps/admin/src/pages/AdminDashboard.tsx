@@ -3,12 +3,56 @@ import { Button } from "@digihire/shared";
 import { useAdminUsers, useAdminSales, useAdminPayouts, useAdminTransactions, useAdminProducts } from "@/hooks/useAdminData";
 import { useAdminReviews } from "@/hooks/useAdminReviews";
 import { useAdminOrders } from "@/hooks/useAdminOrders";
-import { Users, ShoppingCart, Wallet, TrendingUp, Clock, AlertTriangle, ArrowRight, Star, ShieldCheck, ClipboardList, Package } from "lucide-react";
+import { Users, ShoppingCart, Wallet, TrendingUp, Clock, AlertTriangle, ArrowRight, Star, ShieldCheck, ClipboardList, Package, Building2, UserSearch, Megaphone, Zap, CalendarDays, Briefcase, MessageSquare } from "lucide-react";
 import { Link } from "react-router-dom";
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer } from "recharts";
-import { useMemo } from "react";
+import { useMemo, useEffect, useState } from "react";
+import { supabase as _supabase } from '@digihire/shared';
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const supabase = _supabase as any;
+
+interface PlatformCounts {
+  brands: number;
+  talent: number;
+  activeCampaigns: number;
+  recruitmentRequests: number;
+  activationRequests: number;
+  eventSignups: number;
+  voltSquadSellers: number;
+  pendingActions: number;
+}
+
+function usePlatformCounts() {
+  const [counts, setCounts] = useState<PlatformCounts | null>(null);
+  useEffect(() => {
+    Promise.all([
+      supabase.from('brand_profiles').select('id', { count: 'exact', head: true }),
+      supabase.from('talent_profiles').select('id', { count: 'exact', head: true }),
+      supabase.from('brand_campaigns').select('id', { count: 'exact', head: true }).eq('status', 'active'),
+      supabase.from('recruitment_requests').select('id', { count: 'exact', head: true }),
+      supabase.from('activation_requests').select('id', { count: 'exact', head: true }),
+      supabase.from('event_registrations').select('id', { count: 'exact', head: true }),
+      supabase.from('profiles').select('id', { count: 'exact', head: true }),
+      supabase.from('recruitment_requests').select('id', { count: 'exact', head: true }).eq('status', 'open'),
+    ]).then(results => {
+      setCounts({
+        brands:               results[0].count ?? 0,
+        talent:               results[1].count ?? 0,
+        activeCampaigns:      results[2].count ?? 0,
+        recruitmentRequests:  results[3].count ?? 0,
+        activationRequests:   results[4].count ?? 0,
+        eventSignups:         results[5].count ?? 0,
+        voltSquadSellers:     results[6].count ?? 0,
+        pendingActions:       results[7].count ?? 0,
+      });
+    });
+  }, []);
+  return counts;
+}
 
 export default function AdminDashboard() {
+  const platformCounts = usePlatformCounts();
   const { data: users } = useAdminUsers();
   const { data: sales } = useAdminSales();
   const { data: payouts } = useAdminPayouts();
@@ -84,9 +128,44 @@ export default function AdminDashboard() {
 
   const hasPendingAlerts = pendingSales > 0 || pendingPayouts > 0 || pendingVerifications > 0;
 
+  const platformCards = [
+    { label: 'Total Brands', value: platformCounts?.brands ?? '—', icon: Building2, path: '/brands', color: 'text-blue-500' },
+    { label: 'Total Talent', value: platformCounts?.talent ?? '—', icon: UserSearch, path: '/talent-pool', color: 'text-purple-500' },
+    { label: 'Active Campaigns', value: platformCounts?.activeCampaigns ?? '—', icon: Megaphone, path: '/brand-campaigns', color: 'text-green-500' },
+    { label: 'Recruitment Requests', value: platformCounts?.recruitmentRequests ?? '—', icon: ClipboardList, path: '/recruitment', color: 'text-orange-500' },
+    { label: 'Activation Requests', value: platformCounts?.activationRequests ?? '—', icon: Zap, path: '/activations', color: 'text-yellow-500' },
+    { label: 'Event Signups', value: platformCounts?.eventSignups ?? '—', icon: CalendarDays, path: '/events', color: 'text-pink-500' },
+    { label: 'VoltSquad Sellers', value: platformCounts?.voltSquadSellers ?? '—', icon: Briefcase, path: '/volt-squad', color: 'text-cyan-500' },
+    { label: 'Pending Actions', value: platformCounts?.pendingActions ?? '—', icon: AlertTriangle, path: '/recruitment', color: 'text-red-500' },
+  ];
+
   return (
     <div className="space-y-6">
       <h2 className="text-2xl font-bold">Dashboard Overview</h2>
+
+      {/* Platform-wide overview */}
+      <div>
+        <div className="flex items-center gap-2 mb-3">
+          <MessageSquare className="h-4 w-4 text-primary" />
+          <h3 className="text-sm font-bold uppercase tracking-wider text-muted-foreground">Platform Overview</h3>
+        </div>
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+          {platformCards.map(card => (
+            <Link key={card.label} to={card.path}>
+              <div className="rounded-xl border bg-card p-4 shadow-sm hover:shadow-md transition-all cursor-pointer group">
+                <div className="flex items-center justify-between mb-2">
+                  <p className="text-xs text-muted-foreground font-medium uppercase tracking-wider leading-tight">{card.label}</p>
+                  <card.icon className={`h-4 w-4 ${card.color} opacity-70 group-hover:opacity-100 transition-opacity`} />
+                </div>
+                <p className={`text-2xl font-bold ${card.color}`}>{card.value}</p>
+              </div>
+            </Link>
+          ))}
+        </div>
+      </div>
+
+      <div className="border-t border-border" />
+      <h3 className="text-sm font-bold uppercase tracking-wider text-muted-foreground">VoltSquad Commerce</h3>
 
       {/* Pending alerts */}
       {hasPendingAlerts && (

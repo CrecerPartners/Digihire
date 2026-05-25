@@ -18,7 +18,7 @@ export function AdminLayout() {
             {isMobile ? (
               <Link to="/" className="flex items-center">
                 <img
-                  src="/assets/logo-color.png"
+                  src={`${import.meta.env.BASE_URL}assets/logo-color.png`}
                   alt="DigiHire"
                   className="h-7 w-auto object-contain"
                 />

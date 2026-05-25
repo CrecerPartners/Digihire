@@ -1,5 +1,7 @@
+import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Card, CardContent, Button } from '@digihire/shared';
+import { useAuth, supabase as _supabase } from '@digihire/shared';
 import {
   Megaphone,
   Users,
@@ -10,18 +12,74 @@ import {
   MapPin,
   FileText,
   ChevronRight,
+  Lock,
+  Unlock,
 } from 'lucide-react';
 import { useBrandProfile } from '../../hooks/useBrandProfile';
 import { useBrandCampaigns } from '../../hooks/useBrandCampaigns';
 import { useRecruitmentRequests } from '../../hooks/useRecruitmentRequests';
 import { useActivationRequests } from '../../hooks/useActivationRequests';
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const supabase = _supabase as any;
+
+type ModuleKey = 'voltsquad' | 'recruitment' | 'activations';
+
+const MODULE_CONFIG: Record<ModuleKey, {
+  label: string;
+  description: string;
+  actions: { label: string; icon: React.FC<{ className?: string }>; subtitle: string; path: string }[];
+}> = {
+  voltsquad: {
+    label: 'VoltSquad Campaigns',
+    description: 'Deploy sellers to promote your products and track performance live.',
+    actions: [
+      { label: 'Launch a Campaign', icon: Megaphone, subtitle: 'Deploy sellers to promote your product', path: '/brand/campaigns/new' },
+      { label: 'Browse Campaigns', icon: BarChart3, subtitle: 'View and manage all campaigns', path: '/brand/campaigns' },
+    ],
+  },
+  recruitment: {
+    label: 'Sales Recruitment',
+    description: 'Request pre-vetted sales professionals and manage your hiring pipeline.',
+    actions: [
+      { label: 'Recruitment Request', icon: Users, subtitle: 'Request pre-vetted sales talent', path: '/brand/recruitment/new' },
+      { label: 'Recruitment Pipeline', icon: Briefcase, subtitle: 'Track open requests & candidates', path: '/brand/recruitment' },
+    ],
+  },
+  activations: {
+    label: 'Field Activations',
+    description: 'Book trained activation staff for on-ground brand activations and field marketing.',
+    actions: [
+      { label: 'Book an Activation', icon: MapPin, subtitle: 'Request field marketing support', path: '/brand/activations' },
+    ],
+  },
+};
+
+const MODULE_ORDER: ModuleKey[] = ['voltsquad', 'recruitment', 'activations'];
+
 export default function BrandHome() {
   const navigate = useNavigate();
+  const { user } = useAuth();
   const { profile } = useBrandProfile();
   const { campaigns } = useBrandCampaigns();
   const { requests: recruitmentRequests } = useRecruitmentRequests();
   const { requests: activationRequests } = useActivationRequests();
+  const [activating, setActivating] = useState<ModuleKey | null>(null);
+
+  const activeModules: string[] = (user?.user_metadata?.active_modules as string[] | undefined) ?? [];
+  const isModuleActive = (mod: ModuleKey) => activeModules.includes(mod);
+
+  const handleActivate = async (mod: ModuleKey) => {
+    setActivating(mod);
+    try {
+      await supabase.auth.updateUser({
+        data: { active_modules: [...activeModules, mod] },
+      });
+      // onAuthStateChange fires USER_UPDATED → auth context re-renders
+    } finally {
+      setActivating(null);
+    }
+  };
 
   const activeCampaigns = campaigns.filter(c => c.status === 'active').length;
   const totalCampaigns = campaigns.length;
@@ -33,15 +91,6 @@ export default function BrandHome() {
     { label: 'Total Campaigns', value: String(totalCampaigns), icon: BarChart3 },
     { label: 'Open Recruitment', value: String(openRecruitment), icon: Users },
     { label: 'Pending Activations', value: String(pendingActivations), icon: Zap },
-  ];
-
-  const quickActions = [
-    { label: 'Launch a Campaign', icon: Megaphone, subtitle: 'Deploy sellers to promote your product', onClick: () => navigate('/brand/campaigns/new') },
-    { label: 'Browse Campaigns', icon: BarChart3, subtitle: 'View and manage all campaigns', onClick: () => navigate('/brand/campaigns') },
-    { label: 'Recruitment Request', icon: Users, subtitle: 'Request pre-vetted sales talent', onClick: () => navigate('/brand/recruitment/new') },
-    { label: 'Recruitment Pipeline', icon: Briefcase, subtitle: 'Track open requests & candidates', onClick: () => navigate('/brand/recruitment') },
-    { label: 'Book an Activation', icon: MapPin, subtitle: 'Request field marketing support', onClick: () => navigate('/brand/activations') },
-    { label: 'View Reports', icon: FileText, subtitle: 'Performance & activity insights', onClick: () => navigate('/brand/reports') },
   ];
 
   const recentCampaigns = campaigns.slice(0, 5);
@@ -71,27 +120,95 @@ export default function BrandHome() {
         ))}
       </div>
 
-      {/* Quick Actions */}
-      <div>
-        <h2 className="text-lg font-semibold font-display mb-3">Quick Actions</h2>
-        <div className="grid grid-cols-2 lg:grid-cols-3 gap-3 md:gap-4">
-          {quickActions.map(action => (
+      {/* Module Sections */}
+      <div className="space-y-5">
+        <h2 className="text-lg font-semibold font-display">Quick Actions</h2>
+
+        {MODULE_ORDER.map(mod => {
+          const config = MODULE_CONFIG[mod];
+          const unlocked = isModuleActive(mod);
+
+          return (
+            <div key={mod} className="space-y-2">
+              <div className="flex items-center gap-2">
+                {unlocked
+                  ? <Unlock className="h-3.5 w-3.5 text-green-500" />
+                  : <Lock className="h-3.5 w-3.5 text-muted-foreground/50" />}
+                <span className={`text-xs font-semibold uppercase tracking-wider ${unlocked ? 'text-foreground' : 'text-muted-foreground/60'}`}>
+                  {config.label}
+                </span>
+              </div>
+
+              {unlocked ? (
+                <div className="grid grid-cols-2 lg:grid-cols-3 gap-3 md:gap-4">
+                  {config.actions.map(action => (
+                    <Card
+                      key={action.label}
+                      onClick={() => navigate(action.path)}
+                      className="border-border/50 hover:border-primary/50 hover:shadow-md transition-all cursor-pointer"
+                    >
+                      <CardContent className="p-4 flex items-start gap-3">
+                        <div className="h-9 w-9 rounded-full bg-primary/10 flex items-center justify-center shrink-0">
+                          <action.icon className="h-4 w-4 text-primary" />
+                        </div>
+                        <div className="min-w-0">
+                          <p className="font-medium text-sm">{action.label}</p>
+                          <p className="text-xs text-muted-foreground">{action.subtitle}</p>
+                        </div>
+                      </CardContent>
+                    </Card>
+                  ))}
+                </div>
+              ) : (
+                <Card className="border-border/40 bg-muted/30">
+                  <CardContent className="p-4 flex items-center justify-between gap-4">
+                    <div className="flex items-center gap-3">
+                      <div className="h-9 w-9 rounded-full bg-muted flex items-center justify-center shrink-0">
+                        <Lock className="h-4 w-4 text-muted-foreground/50" />
+                      </div>
+                      <div>
+                        <p className="font-medium text-sm text-muted-foreground">{config.label} not activated</p>
+                        <p className="text-xs text-muted-foreground/70">{config.description}</p>
+                      </div>
+                    </div>
+                    <Button
+                      size="sm"
+                      variant="outline"
+                      className="shrink-0"
+                      disabled={activating === mod}
+                      onClick={() => handleActivate(mod)}
+                    >
+                      {activating === mod ? 'Activating...' : `Activate`}
+                    </Button>
+                  </CardContent>
+                </Card>
+              )}
+            </div>
+          );
+        })}
+
+        {/* Always accessible */}
+        <div className="space-y-2">
+          <div className="flex items-center gap-2">
+            <Unlock className="h-3.5 w-3.5 text-green-500" />
+            <span className="text-xs font-semibold uppercase tracking-wider text-foreground">Reports</span>
+          </div>
+          <div className="grid grid-cols-2 lg:grid-cols-3 gap-3 md:gap-4">
             <Card
-              key={action.label}
-              onClick={action.onClick}
+              onClick={() => navigate('/brand/reports')}
               className="border-border/50 hover:border-primary/50 hover:shadow-md transition-all cursor-pointer"
             >
               <CardContent className="p-4 flex items-start gap-3">
                 <div className="h-9 w-9 rounded-full bg-primary/10 flex items-center justify-center shrink-0">
-                  <action.icon className="h-4 w-4 text-primary" />
+                  <FileText className="h-4 w-4 text-primary" />
                 </div>
                 <div className="min-w-0">
-                  <p className="font-medium text-sm">{action.label}</p>
-                  <p className="text-xs text-muted-foreground">{action.subtitle}</p>
+                  <p className="font-medium text-sm">View Reports</p>
+                  <p className="text-xs text-muted-foreground">Performance & activity insights</p>
                 </div>
               </CardContent>
             </Card>
-          ))}
+          </div>
         </div>
       </div>
 
@@ -134,7 +251,7 @@ export default function BrandHome() {
             </div>
             <p className="text-sm text-muted-foreground flex-1">
               {isProfileComplete
-                ? 'Your brand profile is live. Launch a campaign, request talent, or book an activation when you’re ready.'
+                ? 'Your brand profile is live. Launch a campaign, request talent, or book an activation when you\'re ready.'
                 : 'Complete your brand profile to unlock campaigns, recruitment, and activations.'}
             </p>
             <Button

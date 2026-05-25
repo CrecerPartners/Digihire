@@ -10,8 +10,8 @@ import { EmailChangeEmail } from '../_shared/email-templates/email-change.tsx'
 import { ReauthenticationEmail } from '../_shared/email-templates/reauthentication.tsx'
 
 const RESEND_API_KEY = Deno.env.get('RESEND_API_KEY')
-const SITE_NAME = "Volt ⚡"
-const SENDER_EMAIL = "Volt <hello@tryvoltapp.com>"
+const SITE_NAME = "Digihire"
+const SENDER_EMAIL = "Digihire <hello@digihire.io>"
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
@@ -19,12 +19,12 @@ const corsHeaders = {
 }
 
 const EMAIL_SUBJECTS: Record<string, string> = {
-  signup: 'Verify your Volt account ⚡',
-  invite: "You're invited to join Volt ⚡",
-  magiclink: 'Your Volt login code ⚡',
-  recovery: 'Reset your Volt password',
-  email_change: 'Confirm your new email — Volt',
-  reauthentication: 'Your Volt verification code',
+  signup: 'Verify your Digihire account',
+  invite: "You're invited to join Digihire",
+  magiclink: 'Your Digihire login code',
+  recovery: 'Reset your Digihire password',
+  email_change: 'Confirm your new email — Digihire',
+  reauthentication: 'Your Digihire verification code',
 }
 
 const EMAIL_TEMPLATES: Record<string, React.ComponentType<any>> = {
@@ -54,13 +54,21 @@ serve(async (req) => {
       throw new Error(`Unknown email type: ${type}`)
     }
 
+    // Extract module/service from user metadata for per-path email copy
+    const userMeta = payload.user_metadata || payload.data?.user_metadata || {}
+    const activeModules: string[] = userMeta.active_modules || []
+    const userModule = activeModules[0]
+    const userService = userModule // brands use active_modules as service key too
+
     const templateProps = {
       siteName: SITE_NAME,
-      siteUrl: "https://tryvoltapp.com",
+      siteUrl: "https://digihire.io",
       recipient: payload.email || payload.data?.email,
       token: payload.token || payload.data?.token,
       url: payload.url || payload.data?.url,
       newEmail: payload.new_email || payload.data?.new_email,
+      userModule,
+      userService,
     }
 
     const html = await renderAsync(React.createElement(EmailTemplate, templateProps))

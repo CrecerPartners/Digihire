@@ -6,9 +6,20 @@ import { Mail, RefreshCw, LogOut, ArrowRight } from 'lucide-react';
 
 import { Button, Card, CardContent } from '@digihire/shared';
 
+const MODULE_NEXT: Record<string, string> = {
+  talent_pool: 'Log in and complete your talent profile. Brands will be able to find you and match you to real opportunities.',
+  voltsquad: 'Log in to access your VoltSquad dashboard. Browse live brand campaigns and start earning commissions.',
+  gigs: 'Log in to complete the gigs section of your profile. Our team will match you with available field roles.',
+  events: 'Log in to view upcoming events and register for the ones that interest you.',
+};
+
 export default function VerifyEmail() {
   const { signOut } = useAuth();
   const [email] = useState(() => sessionStorage.getItem('pending_verify_email') ?? '');
+  const [nextStep] = useState(() => {
+    const mod = sessionStorage.getItem('pending_module') ?? '';
+    return MODULE_NEXT[mod] ?? 'Log in to access your dashboard and get started.';
+  });
   const [otp, setOtp] = useState(['', '', '', '', '', '']);
   const [verifying, setVerifying] = useState(false);
   const [sending, setSending] = useState(false);
@@ -60,6 +71,7 @@ export default function VerifyEmail() {
       inputRefs.current[0]?.focus();
     } else {
       sessionStorage.removeItem('pending_verify_email');
+      sessionStorage.removeItem('pending_module');
       setSuccess('Email verified! Redirecting...');
       setTimeout(() => navigate('/talent'), 1000);
     }
@@ -128,6 +140,11 @@ export default function VerifyEmail() {
                 {sending ? <RefreshCw className="h-4 w-4 animate-spin" /> : <RefreshCw className="h-4 w-4" />}
                 {sending ? 'Sending...' : 'Resend Code'}
               </Button>
+            </div>
+
+            <div className="rounded-lg bg-primary/5 border border-primary/10 p-3 text-left">
+              <p className="text-xs font-semibold text-primary mb-1">What's next after verification</p>
+              <p className="text-xs text-muted-foreground">{nextStep}</p>
             </div>
 
             <div className="pt-2 border-t border-border/50">

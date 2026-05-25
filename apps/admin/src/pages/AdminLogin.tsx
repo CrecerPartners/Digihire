@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@digihire/shared";
 import { Input } from "@digihire/shared";
@@ -23,9 +23,11 @@ export default function AdminLogin() {
   // If already logged in as admin, redirect immediately
   const { isAdmin, isLoading: roleLoading } = useAdminRole();
 
-  if (!authLoading && !roleLoading && user && isAdmin) {
-    navigate("/", { replace: true });
-  }
+  useEffect(() => {
+    if (!authLoading && !roleLoading && user && isAdmin) {
+      navigate("/", { replace: true });
+    }
+  }, [authLoading, roleLoading, user, isAdmin, navigate]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -82,7 +84,7 @@ export default function AdminLogin() {
       <Card className="w-full max-w-md relative z-10 border-border/50">
         <CardHeader className="text-center space-y-4">
           <div className="flex justify-center">
-            <img src="/assets/logo-color.png" alt="DigiHire" className="h-12 w-auto object-contain" />
+            <img src={`${import.meta.env.BASE_URL}assets/logo-color.png`} alt="DigiHire" className="h-12 w-auto object-contain" />
           </div>
           <div>
             <CardTitle className="text-2xl font-display">Admin Portal</CardTitle>

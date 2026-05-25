@@ -38,6 +38,7 @@ export interface BrandCampaign {
   total_conversions: number;
   total_leads: number;
   tracking_code?: string;
+  asset_urls?: string[];
   created_at: string;
   updated_at: string;
 }
@@ -84,6 +85,10 @@ export interface ActivationRequest {
   goals?: string;
   approximate_scale?: string;
   notes?: string;
+  num_talents?: number;
+  talent_types?: string[];
+  talent_duties?: string;
+  budget_details?: string;
   booking_type: string;
   meeting_slot?: string;
   status: string;

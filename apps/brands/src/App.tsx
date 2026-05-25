@@ -24,12 +24,12 @@ export default function App() {
             <Toaster />
             <BrowserRouter>
               <Routes>
-                <Route path="/" element={<LandingPage />} />
+                <Route path="/" element={<Signup />} />
                 <Route path="/login" element={<Login />} />
                 <Route path="/signup" element={<Signup />} />
                 <Route path="/verify-email" element={<VerifyEmail />} />
                 <Route path="/brand/*" element={<ProtectedRoute><BrandDashboard /></ProtectedRoute>} />
-                <Route path="*" element={<Login />} />
+                <Route path="*" element={<Signup />} />
               </Routes>
             </BrowserRouter>
           </TooltipProvider>

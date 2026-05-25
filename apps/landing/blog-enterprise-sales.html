@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Closing the Enterprise Deal: What Most Reps Get Wrong — Digihire Blog</title>
+  <link rel="icon" type="image/png" href="assets/favicon.png" />
+  <link rel="apple-touch-icon" href="assets/favicon.png" />
+  <style>
+    @font-face { font-family: 'CenturyGothic'; src: url('fonts/CenturyGothicPaneuropeanRegular.ttf') format('truetype'); font-weight: 400; font-style: normal; }
+    @font-face { font-family: 'CenturyGothic'; src: url('fonts/CenturyGothicPaneuropeanBold.ttf') format('truetype'); font-weight: 700; font-style: normal; }
+    @font-face { font-family: 'CenturyGothic'; src: url('fonts/CenturyGothicPaneuropeanExtraBold.ttf') format('truetype'); font-weight: 800; font-style: normal; }
+    @font-face { font-family: 'CenturyGothic'; src: url('fonts/CenturyGothicPaneuropeanBlack.ttf') format('truetype'); font-weight: 900; font-style: normal; }
+    @font-face { font-family: 'CenturyGothic'; src: url('fonts/CenturyGothicPaneuropeanLight.ttf') format('truetype'); font-weight: 300; font-style: normal; }
+  </style>
+  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; font-weight: 400 !important; }
+    :root { --navy: #06111F; --navy-2: #0F2544; --navy-3: #162E52; --navy-4: #1D3A64; --cyan: #00C2FF; --cyan-dim: #0096C7; --cyan-soft: #33CFFF; --cyan-ghost: rgba(0,194,255,0.07); --cyan-border: rgba(0,194,255,0.18); --white: #FFFFFF; --gray-2: #7A9CC5; --gray-3: #3D5A7E; --gray-bg: #F4F8FF; --border: rgba(0,194,255,0.12); }
+    html { scroll-behavior: smooth; }
+    body { font-family: 'CenturyGothic', sans-serif; background: var(--white); color: #111827; line-height: 1.6; overflow-x: hidden; }
+    .lucide { display: inline-block; vertical-align: middle; flex-shrink: 0; stroke: currentColor; }
+    .ic-sm { width: 14px; height: 14px; } .ic-md { width: 16px; height: 16px; } .ic-lg { width: 20px; height: 20px; }
+    .container { max-width: 1140px; margin: 0 auto; padding: 0 28px; }
+    .btn { display: inline-flex; align-items: center; gap: 8px; padding: 11px 24px; border-radius: 8px; cursor: pointer; font-family: 'CenturyGothic', sans-serif; font-size: 14px; border: none; text-decoration: none; transition: all 0.22s ease; white-space: nowrap; }
+    .btn-cyan { background: var(--cyan); color: var(--navy); box-shadow: 0 4px 20px rgba(0,194,255,0.35); }
+    .btn-cyan:hover { background: var(--cyan-soft); transform: translateY(-1px); }
+    .btn-lg { padding: 14px 32px; font-size: 15px; border-radius: 10px; }
+    .reveal { opacity: 0; transform: translateY(28px); transition: opacity 0.65s ease, transform 0.65s ease; }
+    .reveal.in { opacity: 1; transform: none; }
+    .stagger-grid > * { opacity: 0; transform: translateY(22px); transition: opacity 0.55s ease, transform 0.55s ease; }
+    .stagger-grid.in > *:nth-child(1) { opacity:1;transform:none;transition-delay:0s } .stagger-grid.in > *:nth-child(2) { opacity:1;transform:none;transition-delay:.1s } .stagger-grid.in > *:nth-child(3) { opacity:1;transform:none;transition-delay:.2s }
+    #navbar { position: fixed; top: 0; left: 0; right: 0; z-index: 200; background: transparent; border-bottom: 1px solid transparent; transition: top 0.45s cubic-bezier(0.34,1.56,0.64,1), left 0.45s, right 0.45s, background 0.3s ease, border-radius 0.45s ease, box-shadow 0.3s ease; }
+    #navbar.scrolled { top: 14px; left: 20%; right: 20%; background: rgba(255,255,255,0.78); backdrop-filter: blur(22px); border-radius: 999px; border-bottom: 1px solid rgba(255,255,255,0.55); box-shadow: 0 8px 32px rgba(0,0,0,0.12), inset 0 1px 0 rgba(255,255,255,0.9); }
+    .nav-inner { display: flex; align-items: center; justify-content: space-between; height: 72px; max-width: 1340px; width: 100%; margin: 0 auto; padding: 0 28px; transition: height 0.3s ease; }
+    #navbar.scrolled .nav-inner { height: 54px; padding: 0 24px; }
+    .nav-left { display: flex; align-items: center; }
+    .nav-logo { display: flex; align-items: center; text-decoration: none; flex-shrink: 0; margin-right: 32px; }
+    .nav-logo-img { height: 36px; width: auto; display: block; transition: opacity 0.3s; }
+    .nav-logo-img.logo-white { opacity: 1; } .nav-logo-img.logo-color { opacity: 0; position: absolute; }
+    #navbar.scrolled .nav-logo-img.logo-white { opacity: 0; } #navbar.scrolled .nav-logo-img.logo-color { opacity: 1; }
+    .nav-logo-wrap-img { position: relative; display: flex; align-items: center; }
+    .nav-links { display: flex; align-items: center; gap: 2px; list-style: none; }
+    .nav-links a { font-size: 14px; color: rgba(255,255,255,0.82); text-decoration: none; padding: 6px 14px; border-radius: 6px; transition: color 0.2s, background 0.2s; }
+    .nav-links a:hover { color: #fff; background: rgba(255,255,255,0.10); }
+    #navbar.scrolled .nav-links a { color: #374151; } #navbar.scrolled .nav-links a:hover { color: var(--navy); background: rgba(0,0,0,0.05); }
+    .nav-actions { display: flex; align-items: center; gap: 10px; }
+    .btn-get-started { display: inline-flex; align-items: center; gap: 6px; padding: 9px 18px; border-radius: 8px; cursor: pointer; font-family: 'CenturyGothic', sans-serif; font-size: 14px; border: 1.5px solid rgba(255,255,255,0.45); background: transparent; color: #fff; text-decoration: none; transition: all 0.2s; white-space: nowrap; }
+    .btn-get-started:hover { border-color: rgba(255,255,255,0.8); background: rgba(255,255,255,0.08); }
+    .btn-get-started svg { width: 14px; height: 14px; }
+    #navbar.scrolled .btn-get-started { color: #1E293B; border-color: #CBD5E1; }
+    .nav-dropdown-wrap { position: relative; }
+    .nav-dropdown { position: absolute; top: calc(100% + 10px); right: 0; background: #fff; border: 1px solid #E2ECF5; border-radius: 16px; padding: 20px 20px 16px; min-width: 210px; z-index: 300; box-shadow: 0 16px 48px rgba(0,0,0,0.12); opacity: 0; visibility: hidden; transform: translateY(-6px); transition: opacity 0.2s ease, transform 0.2s ease, visibility 0.2s; }
+    .nav-dropdown-wrap:hover .nav-dropdown, .nav-dropdown-wrap:focus-within .nav-dropdown { opacity: 1; visibility: visible; transform: translateY(0); }
+    .dd-section-label { font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; color: #9AAFC7; margin-bottom: 6px; }
+    .nav-dropdown a { display: flex; align-items: center; justify-content: space-between; padding: 9px 0; text-decoration: none; font-size: 14px; color: #374151; transition: color 0.15s; }
+    .nav-dropdown a:hover { color: var(--cyan); } .nav-dropdown a .dd-arrow { font-size: 13px; color: #C0CCDA; }
+    .nav-dropdown-divider { height: 1px; background: #EEF2F8; margin: 14px 0; }
+    .btn-launch { display: inline-flex; align-items: center; gap: 7px; padding: 10px 20px; border-radius: 8px; font-family: 'CenturyGothic', sans-serif; font-size: 14px; border: none; background: var(--cyan); color: var(--navy); text-decoration: none; transition: all 0.22s ease; white-space: nowrap; box-shadow: 0 3px 16px rgba(0,194,255,0.35); cursor: pointer; }
+    .btn-launch:hover { background: #33CFFF; transform: translateY(-1px); }
+    .nav-mega-wrap { position: static; }
+    .nav-mega-trigger { display: inline-flex; align-items: center; gap: 5px; font-size: 14px; color: rgba(255,255,255,0.82); padding: 6px 14px; border-radius: 6px; transition: color 0.2s, background 0.2s; cursor: pointer; border: none; background: transparent; font-family: 'CenturyGothic', sans-serif; }
+    .nav-mega-trigger:hover, .nav-mega-wrap:hover .nav-mega-trigger, .nav-mega-wrap:focus-within .nav-mega-trigger { color: var(--cyan) !important; background: var(--cyan-ghost) !important; }
+    .nav-mega-trigger svg { width: 13px; height: 13px; transition: transform 0.25s; }
+    .nav-mega-wrap:hover .nav-mega-trigger svg, .nav-mega-wrap:focus-within .nav-mega-trigger svg { transform: rotate(180deg); }
+    #navbar.scrolled .nav-mega-trigger { color: #374151; }
+    .nav-mega { position: fixed; left: 32px; top: 76px; width: min(1000px, 72vw); background: #fff; border-radius: 20px; border: 1px solid #E8EEF5; box-shadow: 0 24px 64px rgba(0,0,0,0.13); z-index: 190; opacity: 0; visibility: hidden; transform: translateY(-10px); transition: opacity 0.25s ease, transform 0.25s ease, visibility 0.25s; overflow: hidden; display: grid; grid-template-columns: 320px 1fr; }
+    .nav-mega-wrap:hover .nav-mega, .nav-mega-wrap:focus-within .nav-mega { opacity: 1; visibility: visible; transform: translateY(0); }
+    #navbar.scrolled .nav-mega { top: 82px; }
+    .mega-left { background: var(--navy); padding: 32px 32px 28px; display: flex; flex-direction: column; }
+    .mega-headline { font-family: 'CenturyGothic', sans-serif; font-size: 18px; color: #fff; line-height: 1.3; letter-spacing: -0.02em; margin-bottom: 12px; }
+    .mega-body { font-size: 13px; color: rgba(255,255,255,0.58); line-height: 1.65; margin-bottom: 18px; flex: 1; }
+    .mega-learn { display: inline-flex; align-items: center; gap: 5px; font-size: 13px; color: var(--cyan); text-decoration: none; font-family: 'CenturyGothic', sans-serif; transition: gap 0.2s; margin-bottom: 24px; }
+    .mega-visual-svg { border-radius: 14px; background: linear-gradient(135deg, var(--navy-2) 0%, var(--navy-4) 100%); border: 1px solid rgba(0,194,255,0.12); flex: 1; min-height: 180px; position: relative; display: flex; align-items: center; justify-content: center; }
+    @keyframes ringPulse { 0% { transform: translate(-50%,-50%) scale(1); opacity: 0.5; } 100% { transform: translate(-50%,-50%) scale(2.2); opacity: 0; } }
+    .mv-ring { position: absolute; top: 50%; left: 50%; width: 48px; height: 48px; border-radius: 50%; border: 1.5px solid rgba(0,194,255,0.4); animation: ringPulse 2.2s ease-out infinite; }
+    .mv-ring:nth-child(2) { animation-delay: 0.7s; } .mv-ring:nth-child(3) { animation-delay: 1.4s; }
+    .mv-center { position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%); width: 44px; height: 44px; border-radius: 50%; background: var(--cyan); z-index: 2; display: flex; align-items: center; justify-content: center; font-family: 'CenturyGothic', sans-serif; font-size: 9px; color: var(--navy); text-align: center; line-height: 1.1; }
+    .mv-node { position: absolute; width: 34px; height: 34px; border-radius: 50%; background: var(--navy-3); border: 2px solid rgba(0,194,255,0.3); display: flex; align-items: center; justify-content: center; z-index: 2; }
+    .mv-node .lucide { color: rgba(0,194,255,0.7); }
+    .mv-svg { position: absolute; inset: 0; width: 100%; height: 100%; }
+    .mega-right { padding: 28px 28px 24px; display: flex; flex-direction: column; gap: 20px; }
+    .mega-top-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+    .mega-info-card { padding: 18px 16px; border-radius: 12px; border: 1px solid #EEF2F8; text-decoration: none; transition: border-color 0.18s, background 0.18s; display: flex; flex-direction: column; gap: 6px; }
+    .mega-info-card:hover { border-color: rgba(0,194,255,0.3); background: #F7FBFF; }
+    .mic-icon { width: 32px; height: 32px; border-radius: 8px; margin-bottom: 4px; display: flex; align-items: center; justify-content: center; }
+    .mic-icon.i1 { background: #E6F4FF; } .mic-icon.i2 { background: #FFF5E6; } .mic-icon.i3 { background: #E8FDF5; }
+    .mic-icon.i1 .lucide { color: #0096C7; } .mic-icon.i2 .lucide { color: #B86800; } .mic-icon.i3 .lucide { color: #00875A; }
+    .mic-title { font-family: 'CenturyGothic', sans-serif; font-size: 13px; color: #0D1B33; }
+    .mic-desc { font-size: 12px; color: #6B849E; line-height: 1.5; flex: 1; }
+    .mic-cta { display: inline-flex; align-items: center; gap: 4px; font-size: 12px; color: var(--cyan); font-family: 'CenturyGothic', sans-serif; margin-top: 6px; }
+    .mega-divider { height: 1px; background: #EEF2F8; }
+    .mega-feat-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+    .mega-feat-card { border-radius: 14px; padding: 20px 20px 18px; text-decoration: none; position: relative; overflow: hidden; transition: transform 0.2s; }
+    .mega-feat-card:hover { transform: translateY(-2px); }
+    .mfc-voltsquad { background: linear-gradient(135deg, var(--navy) 0%, var(--navy-3) 100%); border: 1px solid rgba(0,194,255,0.2); }
+    .mfc-voltsquad::before { content: ''; position: absolute; top: -30px; right: -30px; width: 120px; height: 120px; border-radius: 50%; background: radial-gradient(circle, rgba(0,194,255,0.25) 0%, transparent 70%); }
+    .mfc-volt-badge { display: inline-flex; align-items: center; gap: 5px; background: var(--cyan); color: var(--navy); font-size: 10px; padding: 3px 9px; border-radius: 5px; font-family: 'CenturyGothic', sans-serif; margin-bottom: 10px; }
+    .mfc-volt-badge .lucide { width: 10px; height: 10px; }
+    .mfc-title { font-family: 'CenturyGothic', sans-serif; font-size: 14px; margin-bottom: 6px; }
+    .mfc-voltsquad .mfc-title { color: #fff; } .mfc-voltsquad .mfc-desc { font-size: 12px; color: rgba(255,255,255,0.58); line-height: 1.55; margin-bottom: 12px; }
+    .mfc-cta { display: inline-flex; align-items: center; gap: 4px; font-size: 12px; font-family: 'CenturyGothic', sans-serif; }
+    .mfc-voltsquad .mfc-cta { color: var(--cyan); }
+    .mfc-solutions { background: #F4F8FF; border: 1px solid #E2ECF5; }
+    .mfc-sol-badge { display: inline-flex; align-items: center; gap: 5px; background: rgba(0,194,255,0.12); color: var(--cyan-dim); font-size: 10px; padding: 3px 9px; border-radius: 5px; font-family: 'CenturyGothic', sans-serif; margin-bottom: 10px; }
+    .mfc-sol-badge .lucide { width: 10px; height: 10px; }
+    .mfc-solutions .mfc-title { color: #0D1B33; } .mfc-solutions .mfc-desc { font-size: 12px; color: #6B849E; line-height: 1.55; margin-bottom: 12px; } .mfc-solutions .mfc-cta { color: var(--cyan-dim); }
+    .brands-mega { grid-template-columns: 320px 1fr; }
+    .brands-right { padding: 28px 28px 24px; display: flex; flex-direction: column; gap: 12px; }
+    .brand-supp-card { padding: 20px 20px 18px; border-radius: 12px; border: 1px solid #EEF2F8; text-decoration: none; display: flex; flex-direction: column; gap: 6px; transition: border-color 0.18s, background 0.18s; flex: 1; }
+    .brand-supp-card:hover { border-color: rgba(0,194,255,0.3); background: #F7FBFF; }
+    .bsc-icon { width: 34px; height: 34px; border-radius: 9px; margin-bottom: 4px; display: flex; align-items: center; justify-content: center; }
+    .bsc-icon.i1 { background: #E6F4FF; } .bsc-icon.i2 { background: #E8FDF5; } .bsc-icon.i3 { background: linear-gradient(135deg, #06111F 0%, #0F2544 100%); }
+    .bsc-icon.i1 .lucide { color: #0096C7; } .bsc-icon.i2 .lucide { color: #00875A; } .bsc-icon.i3 .lucide { color: var(--cyan); }
+    .bsc-title { font-family: 'CenturyGothic', sans-serif; font-size: 13px; color: #0D1B33; }
+    .bsc-desc { font-size: 12px; color: #6B849E; line-height: 1.55; flex: 1; }
+    .bsc-cta { display: inline-flex; align-items: center; gap: 4px; font-size: 12px; color: var(--cyan); font-family: 'CenturyGothic', sans-serif; margin-top: 6px; }
+    @media (max-width: 960px) { .nav-links { display: none; } .nav-actions { display: none; } .nav-hamburger { display: flex; align-items: center; justify-content: center; } }
+    .nav-hamburger { display: none; background: transparent; border: none; cursor: pointer; padding: 6px; border-radius: 6px; line-height: 0; color: rgba(255,255,255,0.9); }
+    #navbar.scrolled .nav-hamburger { color: #1E3A5F; }
+    .nav-mobile-overlay { position: fixed; inset: 0; z-index: 198; background: #06111F; transform: translateX(100%); transition: transform 0.38s cubic-bezier(0.4,0,0.2,1); display: flex; flex-direction: column; overflow: hidden; }
+    .nav-mobile-overlay.nm-open { transform: translateX(0); }
+    .nm-top { display: flex; align-items: center; justify-content: space-between; padding: 0 24px; height: 68px; flex-shrink: 0; border-bottom: 1px solid rgba(0,194,255,0.1); }
+    .nm-close-btn { background: transparent; border: none; cursor: pointer; color: rgba(255,255,255,0.65); padding: 6px; border-radius: 6px; display: flex; }
+    .nm-body { flex: 1; overflow-y: auto; padding: 8px 24px 32px; display: flex; flex-direction: column; }
+    .nm-section { border-bottom: 1px solid rgba(255,255,255,0.07); }
+    .nm-trigger { display: flex; align-items: center; justify-content: space-between; width: 100%; background: transparent; border: none; cursor: pointer; padding: 18px 0; font-family: 'CenturyGothic', sans-serif; font-size: 17px; color: rgba(255,255,255,0.85); transition: color 0.2s; }
+    .nm-trigger:hover { color: #00C2FF; } .nm-trigger svg { width: 16px; height: 16px; flex-shrink: 0; transition: transform 0.25s; } .nm-trigger.nm-active { color: #00C2FF; } .nm-trigger.nm-active svg { transform: rotate(180deg); }
+    .nm-submenu { max-height: 0; overflow: hidden; transition: max-height 0.32s ease; }
+    .nm-submenu.nm-open { max-height: 400px; padding-bottom: 10px; }
+    .nm-sub-item { display: block; padding: 10px 14px; margin: 3px 0; font-family: 'CenturyGothic', sans-serif; font-size: 14px; color: rgba(255,255,255,0.55); text-decoration: none; border-left: 2px solid rgba(0,194,255,0.18); border-radius: 0 6px 6px 0; transition: color 0.2s, border-color 0.2s; }
+    .nm-sub-item:hover { color: #00C2FF; border-left-color: #00C2FF; background: rgba(0,194,255,0.06); }
+    .nm-actions { margin-top: auto; padding-top: 28px; display: flex; flex-direction: column; gap: 12px; }
+    .nm-btn-outline { display: flex; align-items: center; justify-content: center; padding: 14px; border-radius: 10px; text-decoration: none; font-family: 'CenturyGothic', sans-serif; font-size: 15px; border: 1.5px solid rgba(255,255,255,0.25); background: transparent; color: rgba(255,255,255,0.85); transition: all 0.2s; }
+    .nm-btn-outline:hover { border-color: #00C2FF; color: #00C2FF; }
+    .nm-btn-cyan { display: flex; align-items: center; justify-content: center; gap: 8px; padding: 14px; border-radius: 10px; text-decoration: none; font-family: 'CenturyGothic', sans-serif; font-size: 15px; background: #00C2FF; color: #06111F; border: none; }
+    .nm-btn-cyan:hover { background: #33CFFF; }
+    @media (max-width: 600px) { .btn-get-started { display: none; } }
+    footer { background: var(--navy); border-top: 1px solid var(--border); padding: 56px 0 28px; }
+    .footer-grid { display: grid; grid-template-columns: 2.2fr 1fr 1fr 1fr 1fr; gap: 40px; margin-bottom: 48px; }
+    .footer-logo-wrap { margin-bottom: 14px; }
+    .footer-logo { display: flex; align-items: center; gap: 8px; font-family: 'CenturyGothic', sans-serif; font-size: 18px; color: var(--white); text-decoration: none; }
+    .footer-tagline { font-size: 13px; color: var(--gray-2); line-height: 1.6; max-width: 220px; margin-bottom: 20px; }
+    .footer-socials { display: flex; gap: 10px; }
+    .footer-social { width: 34px; height: 34px; border-radius: 8px; background: var(--navy-2); border: 1px solid var(--border); display: flex; align-items: center; justify-content: center; font-size: 14px; text-decoration: none; color: var(--gray-2); transition: all 0.2s; }
+    .footer-social:hover { background: var(--cyan-ghost); border-color: var(--cyan-border); color: var(--cyan); }
+    .footer-col-title { font-family: 'CenturyGothic', sans-serif; font-size: 12px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--gray-3); margin-bottom: 16px; }
+    .footer-col-links { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+    .footer-col-links a { font-size: 14px; color: var(--gray-2); text-decoration: none; transition: color 0.2s; }
+    .footer-col-links a:hover { color: var(--white); }
+    .footer-bottom { padding-top: 24px; border-top: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px; }
+    .footer-copy { font-size: 13px; color: var(--gray-3); }
+    .footer-locations { font-size: 12px; color: var(--gray-3); display: flex; gap: 8px; flex-wrap: wrap; }
+    .footer-location-item { display: flex; align-items: center; gap: 4px; }
+    @media (max-width: 900px) { .footer-grid { grid-template-columns: 1fr 1fr 1fr; } .footer-grid > :first-child { grid-column: 1 / -1; } }
+    @media (max-width: 560px) { .footer-grid { grid-template-columns: 1fr 1fr; } }
+    .blog-cat-pill { display: inline-flex; background: rgba(0,194,255,0.12); color: var(--cyan-dim); font-size: 11px; padding: 5px 12px; border-radius: 6px; letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 20px; align-self: flex-start; }
+    .blog-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 32px; }
+    .blog-card { background: white; border-radius: 20px; border: 1px solid #E8EEF5; overflow: hidden; transition: transform 0.3s, box-shadow 0.3s, border-color 0.3s; display: flex; flex-direction: column; text-decoration: none; }
+    .blog-card:hover { transform: translateY(-6px); box-shadow: 0 20px 48px rgba(0,0,0,0.08); border-color: rgba(0,194,255,0.3); }
+    .bc-img-wrap { overflow: hidden; height: 240px; }
+    .bc-img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.6s ease; }
+    .blog-card:hover .bc-img { transform: scale(1.05); }
+    .bc-content { padding: 28px; display: flex; flex-direction: column; flex: 1; }
+    .bc-meta { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; }
+    .bc-date { font-size: 13px; color: #9AAFC7; }
+    .bc-title { font-family: 'CenturyGothic', sans-serif; font-size: 20px; color: #0D1B33; line-height: 1.3; margin-bottom: 12px; transition: color 0.2s; }
+    .blog-card:hover .bc-title { color: var(--cyan-dim); }
+    .bc-excerpt { font-size: 15px; color: #6B849E; line-height: 1.65; flex: 1; margin-bottom: 24px; }
+    .bc-cta { display: inline-flex; align-items: center; gap: 4px; font-size: 13px; color: var(--cyan-dim); font-family: 'CenturyGothic', sans-serif; transition: gap 0.2s, color 0.2s; }
+    .blog-card:hover .bc-cta { gap: 8px; color: var(--cyan); }
+    .newsletter-cta { background: linear-gradient(135deg, var(--navy) 0%, var(--navy-3) 100%); padding: 100px 0; text-align: center; position: relative; overflow: hidden; border-top: 1px solid rgba(0,194,255,0.1); }
+    .nl-glow { position: absolute; top: -50%; left: 50%; transform: translateX(-50%); width: 800px; height: 800px; background: radial-gradient(circle, rgba(0,194,255,0.15) 0%, transparent 70%); pointer-events: none; }
+    .nl-title { font-family: 'CenturyGothic', sans-serif; font-size: clamp(32px, 4.5vw, 48px); color: white; margin-bottom: 16px; position: relative; z-index: 1; letter-spacing: -0.02em; }
+    .nl-sub { font-size: 18px; color: rgba(255,255,255,0.6); max-width: 540px; margin: 0 auto 40px; position: relative; z-index: 1; line-height: 1.6; }
+    .nl-form { display: flex; max-width: 520px; margin: 0 auto; position: relative; z-index: 1; gap: 12px; background: rgba(255,255,255,0.06); padding: 8px; border-radius: 14px; border: 1px solid rgba(255,255,255,0.1); backdrop-filter: blur(10px); }
+    .nl-input { flex: 1; padding: 16px 20px; border-radius: 8px; border: none; background: transparent; color: white; font-size: 16px; outline: none; }
+    .nl-input::placeholder { color: rgba(255,255,255,0.4); }
+    .btn-nl { border-radius: 8px; padding: 16px 28px; }
+    @media (max-width: 900px) { .blog-grid { grid-template-columns: repeat(2, 1fr); gap: 24px; } }
+    @media (max-width: 600px) { .blog-grid { grid-template-columns: 1fr; } .nl-form { flex-direction: column; padding: 16px; background: transparent; border: none; gap: 16px; } .nl-input { background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.2); } .btn-nl { width: 100%; justify-content: center; } }
+    .art-hero { position: relative; height: 560px; display: flex; align-items: flex-end; overflow: hidden; }
+    .art-hero-bg { position: absolute; inset: 0; background-size: cover; background-position: center; }
+    .art-hero-overlay { position: absolute; inset: 0; background: linear-gradient(to top, rgba(6,17,31,0.90) 0%, rgba(6,17,31,0.45) 60%, rgba(6,17,31,0.15) 100%); }
+    .art-hero-content { position: relative; z-index: 2; padding-bottom: 56px; }
+    .art-back { display: inline-flex; align-items: center; gap: 6px; color: rgba(255,255,255,0.7); font-size: 13px; text-decoration: none; margin-bottom: 20px; transition: color 0.2s; }
+    .art-back:hover { color: var(--cyan); }
+    .art-title { font-family: 'CenturyGothic', sans-serif; font-size: clamp(28px, 4.5vw, 52px); color: white; line-height: 1.15; max-width: 820px; margin: 12px 0 24px; letter-spacing: -0.02em; }
+    .art-meta { display: flex; align-items: center; gap: 14px; }
+    .art-author-av { width: 44px; height: 44px; border-radius: 50%; object-fit: cover; border: 2px solid rgba(255,255,255,0.3); }
+    .art-author-name { font-size: 14px; color: white; }
+    .art-meta-row { font-size: 13px; color: rgba(255,255,255,0.6); display: flex; gap: 8px; align-items: center; margin-top: 2px; }
+    .art-dot { opacity: 0.4; }
+    .art-body { padding: 72px 0 80px; background: var(--white); }
+    .art-container { max-width: 740px; }
+    .art-body h2 { font-family: 'CenturyGothic', sans-serif; font-size: 24px; color: #0D1B33; margin: 48px 0 16px; letter-spacing: -0.01em; }
+    .art-body p { font-size: 17px; color: #374151; line-height: 1.75; margin-bottom: 20px; }
+    .art-body ul, .art-body ol { margin: 0 0 24px 24px; }
+    .art-body li { font-size: 17px; color: #374151; line-height: 1.7; margin-bottom: 8px; }
+    .art-body blockquote { border-left: 4px solid var(--cyan); margin: 36px 0; padding: 20px 28px; background: rgba(0,194,255,0.04); border-radius: 0 12px 12px 0; }
+    .art-body blockquote p { font-size: 19px; font-style: italic; color: #0D1B33; margin: 0; line-height: 1.55; }
+    .art-body .art-img-wrap { margin: 40px 0; border-radius: 16px; overflow: hidden; }
+    .art-body .art-img-wrap img { width: 100%; height: 420px; object-fit: cover; display: block; }
+    .art-body .art-cta-box { background: linear-gradient(135deg, var(--navy) 0%, var(--navy-3) 100%); border-radius: 20px; padding: 40px 48px; margin: 56px 0 0; text-align: center; }
+    .art-body .art-cta-box h3 { font-family: 'CenturyGothic', sans-serif; font-size: 24px; color: white; margin-bottom: 12px; }
+    .art-body .art-cta-box p { font-size: 15px; color: rgba(255,255,255,0.7); margin-bottom: 24px; }
+    .art-related { padding: 80px 0; background: var(--gray-bg); }
+    .art-related-title { font-family: 'CenturyGothic', sans-serif; font-size: 28px; color: #0D1B33; margin-bottom: 40px; letter-spacing: -0.01em; }
+  </style>
+</head>
+<body>
+
+<nav id="navbar">
+  <div class="nav-inner">
+    <div class="nav-left">
+      <a href="/" class="nav-logo"><div class="nav-logo-wrap-img"><img src="assets/logo-white.png" alt="DigiHire" class="nav-logo-img logo-white" /><img src="assets/logo-color.png" alt="DigiHire" class="nav-logo-img logo-color" /></div></a>
+      <ul class="nav-links">
+        <li class="nav-mega-wrap"><button class="nav-mega-trigger">Why DigiHire?<svg viewBox="0 0 16 16" fill="none"><path d="M4 6l4 4 4-4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></button><div class="nav-mega"><div class="mega-left"><h3 class="mega-headline">Building the sales network where <em>brands, talent,</em> and opportunity connect.</h3><p class="mega-body">DigiHire helps brands grow through structured sales campaigns, recruitment, activations, and training.</p><a href="#" class="mega-learn">Learn more <span>→</span></a><div class="mega-visual-svg"><div class="mv-ring"></div><div class="mv-ring"></div><div class="mv-ring"></div><div class="mv-center">DIGI<br>HIRE</div><div class="mv-node" style="top:18%;left:18%;"><i data-lucide="building-2" class="lucide ic-md"></i></div><div class="mv-node" style="top:18%;right:18%;"><i data-lucide="target" class="lucide ic-md"></i></div><div class="mv-node" style="bottom:18%;left:18%;"><i data-lucide="user" class="lucide ic-md"></i></div><div class="mv-node" style="bottom:18%;right:18%;"><i data-lucide="zap" class="lucide ic-md"></i></div><svg class="mv-svg" viewBox="0 0 280 200" preserveAspectRatio="none"><line x1="140" y1="100" x2="55" y2="45" stroke="rgba(0,194,255,0.25)" stroke-width="1" stroke-dasharray="4 4"/><line x1="140" y1="100" x2="225" y2="45" stroke="rgba(0,194,255,0.25)" stroke-width="1" stroke-dasharray="4 4"/><line x1="140" y1="100" x2="55" y2="155" stroke="rgba(0,194,255,0.25)" stroke-width="1" stroke-dasharray="4 4"/><line x1="140" y1="100" x2="225" y2="155" stroke="rgba(0,194,255,0.25)" stroke-width="1" stroke-dasharray="4 4"/></svg></div></div><div class="mega-right"><div class="mega-top-row"><a href="/about" class="mega-info-card"><div class="mic-icon i1"><i data-lucide="info" class="lucide ic-md"></i></div><p class="mic-title">About Us</p><p class="mic-desc">Get to know who we are and how Digihire helps brands and talent grow together.</p><span class="mic-cta">Learn more →</span></a><a href="/blog" class="mega-info-card"><div class="mic-icon i2"><i data-lucide="book-open" class="lucide ic-md"></i></div><p class="mic-title">Blogs</p><p class="mic-desc">Insights, strategies, and stories on sales, growth, activations, hiring, and the future of work.</p><span class="mic-cta">Learn more →</span></a><a href="#" class="mega-info-card"><div class="mic-icon i3"><i data-lucide="calendar" class="lucide ic-md"></i></div><p class="mic-title">Events</p><p class="mic-desc">Stay connected to our latest events, campaigns, and community experiences.</p><span class="mic-cta">Learn more →</span></a></div><div class="mega-divider"></div><div class="mega-feat-row"><a href="#" class="mega-feat-card mfc-voltsquad"><span class="mfc-volt-badge"><i data-lucide="zap" class="lucide"></i> VoltSquad</span><p class="mfc-title">Campaign Marketplace</p><p class="mfc-desc">Our campaign marketplace for sales talent.</p><span class="mfc-cta">Explore VoltSquad →</span></a><a href="#" class="mega-feat-card mfc-solutions"><span class="mfc-sol-badge"><i data-lucide="link-2" class="lucide"></i> Solutions</span><p class="mfc-title">Wider Solutions</p><p class="mfc-desc">Explore Digihire's wider solutions for brands and talent.</p><span class="mfc-cta">See all solutions →</span></a></div></div></div></li>
+        <li class="nav-mega-wrap"><button class="nav-mega-trigger">Brands<svg viewBox="0 0 16 16" fill="none"><path d="M4 6l4 4 4-4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></button><div class="nav-mega brands-mega"><div class="mega-left"><h3 class="mega-headline">Launch campaigns, hire sales talent, and activate markets with <em>Digihire.</em></h3><p class="mega-body">Digihire helps brands grow through structured sales campaigns and field activations.</p><a href="/about" class="mega-learn">Explore all solutions <span>→</span></a></div><div class="mega-right brands-right"><a href="https://voltsquad.digihire.io" class="brand-supp-card"><div class="bsc-icon i3"><i data-lucide="zap" class="lucide ic-lg"></i></div><p class="bsc-title">VoltSquad</p><p class="bsc-desc">Launch structured sales campaigns across target audiences.</p><span class="bsc-cta">Explore VoltSquad →</span></a><a href="#" class="brand-supp-card"><div class="bsc-icon i1"><i data-lucide="users" class="lucide ic-lg"></i></div><p class="bsc-title">Sales Recruitment</p><p class="bsc-desc">Hire the right sales talent for your business.</p><span class="bsc-cta">Learn more →</span></a><a href="#" class="brand-supp-card"><div class="bsc-icon i2"><i data-lucide="map-pin" class="lucide ic-lg"></i></div><p class="bsc-title">Activations &amp; Field Marketing</p><p class="bsc-desc">Take your product to the field through mall activations and high-traffic campaigns.</p><span class="bsc-cta">Learn more →</span></a></div></div></li>
+        <li class="nav-mega-wrap"><button class="nav-mega-trigger">For Talents<svg viewBox="0 0 16 16" fill="none"><path d="M4 6l4 4 4-4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></button><div class="nav-mega brands-mega"><div class="mega-left"><h3 class="mega-headline">Work with brands. Earn through sales. Grow with <em>Digihire.</em></h3><p class="mega-body">Access sales gigs, commission-based campaigns, job opportunities, and practical training.</p><a href="/about" class="mega-learn">Explore all opportunities <span>→</span></a></div><div class="mega-right brands-right"><a href="https://voltsquad.digihire.io/join-now" class="brand-supp-card"><div class="bsc-icon i3"><i data-lucide="zap" class="lucide ic-lg"></i></div><p class="bsc-title">VoltSquad</p><p class="bsc-desc">Join brand campaigns, earn commissions, track your wallet.</p><span class="bsc-cta">Join VoltSquad →</span></a><a href="#" class="brand-supp-card"><div class="bsc-icon i1"><i data-lucide="user-plus" class="lucide ic-lg"></i></div><p class="bsc-title">Enter Our Talent Pool</p><p class="bsc-desc">Create your profile and get discovered for sales roles.</p><span class="bsc-cta">Learn more →</span></a><a href="#" class="brand-supp-card"><div class="bsc-icon i2"><i data-lucide="graduation-cap" class="lucide ic-lg"></i></div><p class="bsc-title">Sales Academy</p><p class="bsc-desc">Learn practical sales skills and get certified for stronger opportunities.</p><span class="bsc-cta">Learn more →</span></a></div></div></li>
+      </ul>
+    </div>
+    <button class="nav-hamburger" id="nav-hamburger-btn" aria-label="Open menu"><svg viewBox="0 0 24 24" fill="none" width="22" height="22" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 7h18M3 12h18M3 17h18"/></svg></button>
+    <div class="nav-actions">
+      <div class="nav-dropdown-wrap"><a href="/login?role=talent" class="btn-get-started">Get Started<svg viewBox="0 0 16 16" fill="none"><path d="M4 6l4 4 4-4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></a><div class="nav-dropdown"><p class="dd-section-label">Talent</p><a href="/login?role=talent"><span>Log in</span><span class="dd-arrow">›</span></a><a href="/join-now?role=talent"><span>Sign up</span><span class="dd-arrow">›</span></a><div class="nav-dropdown-divider"></div><p class="dd-section-label">Brand</p><a href="/login?role=brand"><span>Log in</span><span class="dd-arrow">›</span></a><a href="/join-now?role=brand"><span>Sign up</span><span class="dd-arrow">›</span></a></div></div>
+      <a href="/login?role=brand" class="btn-launch">Launch a Campaign<svg viewBox="0 0 16 16" fill="none" width="14" height="14"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+    </div>
+  </div>
+</nav>
+
+<div class="art-hero">
+  <div class="art-hero-bg" style="background-image:url('https://images.unsplash.com/photo-1610251064409-8d94b0939629?w=1400&h=700&fit=crop&crop=center&q=85')"></div>
+  <div class="art-hero-overlay"></div>
+  <div class="art-hero-content container">
+    <a href="/blog" class="art-back"><i data-lucide="arrow-left" class="lucide ic-sm"></i> Back to Blog</a>
+    <span class="blog-cat-pill">Sales</span>
+    <h1 class="art-title">Closing the Enterprise Deal: What Most Reps Get Wrong</h1>
+    <div class="art-meta">
+      <img class="art-author-av" src="https://images.unsplash.com/photo-1709810529099-0ce6102692df?w=80&h=80&fit=crop&crop=face&q=80" alt="Author" />
+      <div>
+        <div class="art-author-name">Digihire Editorial</div>
+        <div class="art-meta-row"><span>Mar 15, 2026</span><span class="art-dot">·</span><span>7 min read</span></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="art-body">
+  <div class="container art-container">
+    <p>Enterprise sales is not a faster version of SMB sales. It is an entirely different game — one with longer cycles, multiple decision-makers, procurement gatekeepers, legal reviews, and budget approval chains that can stretch months. Most sales reps who struggle with enterprise deals are not failing because they lack product knowledge. They are failing because they are applying the wrong mental model to the process.</p>
+    <p>Understanding exactly where enterprise deals die — and why — is the first step toward closing more of them.</p>
+
+    <h2>The Multi-Stakeholder Trap</h2>
+    <p>The most common reason enterprise deals stall is that the rep is selling to one person who does not have the authority to say yes. In enterprise organisations, a buying decision typically involves three to seven stakeholders: a technical evaluator, a business owner, a financial approver, a legal reviewer, and often a procurement officer. A deal can progress beautifully with the technical champion and die completely when it reaches the CFO who has never heard of your product.</p>
+    <p>The solution is to map the buying committee early and deliberately. In your first discovery call, ask your champion directly: "When your organisation makes a purchasing decision like this, who else is typically involved?" Build a stakeholder map. Know the name, title, and primary concern of every person who will touch this deal. Then create a plan to get your message in front of each of them — not just through your champion, but through direct conversation, executive briefings, or tailored materials they can circulate internally.</p>
+
+    <h2>Demos That Impress Without Advancing the Deal</h2>
+    <p>Enterprise reps are often excellent at running product demonstrations. The problem is that a great demo and a deal that advances are not the same thing. A stakeholder can leave a demo genuinely impressed, tell their team about it enthusiastically, and then do nothing for six weeks because no one defined a clear next step with accountability attached to it.</p>
+    <p>Every interaction in an enterprise deal must end with a mutually agreed next action that has a specific owner and a specific date. Not "we'll follow up next week" — but "I'll send you a security questionnaire by Thursday, and your IT team will review it by the following Wednesday." The rep who controls the timeline controls the deal. The rep who waits for the prospect to dictate the next step will spend most of their time waiting.</p>
+
+    <div class="art-img-wrap">
+      <img src="https://images.unsplash.com/photo-1709810529099-0ce6102692df?w=900&h=500&fit=crop&q=80" alt="Enterprise sales team in a business meeting" />
+    </div>
+
+    <h2>Misreading Where the Deal Actually Is</h2>
+    <p>Enterprise reps frequently overestimate deal probability. They hear "we're very interested" and move the opportunity to 70% in the pipeline. But interest is not intention, and intention without a budget, a timeline, and an executive sponsor is not a deal — it is a conversation.</p>
+    <p>Use a structured qualification framework consistently. The most reliable model for enterprise deals requires confirming four things: Is there a clear, compelling business problem your product solves? Is there a confirmed budget or a path to securing one? Is there a decision-making process you understand and are actively engaged in? Is there a business event driving urgency — a quarter-end, a contract renewal, a competitive threat? If you cannot confirm all four, you do not have a qualified enterprise opportunity. You have an interesting conversation that needs more development before it deserves pipeline space.</p>
+
+    <blockquote>
+      <p>"Most enterprise deals don't die at the close. They die at the discovery stage, when reps qualify too loosely and build a pipeline full of hope instead of evidence."</p>
+    </blockquote>
+
+    <h2>Losing to the Status Quo</h2>
+    <p>In enterprise sales, your most dangerous competitor is rarely the other vendor in the evaluation. It is the decision to do nothing. Enterprise organisations have inertia built in — processes, systems, and people who are accustomed to the way things work. Changing that requires a clear, quantified business case that makes the cost of inaction more visible than the cost of change.</p>
+    <p>Build your business case around numbers your economic buyer cares about. Revenue impact. Cost reduction. Time saved. Risk mitigated. A technical champion who says "this product is amazing" will lose the budget battle to the status quo every time unless they can walk into the CFO's office and say "implementing this will reduce our customer acquisition cost by 18% and recover the investment in 14 months." Your job is to help your champion build that case, not just give them product features to quote.</p>
+
+    <h2>The Legal and Procurement Stage Is Not the Finish Line</h2>
+    <p>Many reps mentally check out when a deal moves to legal and procurement review. This is a mistake. Deals die in procurement with alarming regularity — due to security questionnaire delays, contract redlines that create standoffs, or budget freezes that emerge mid-review. Treat the procurement and legal stage as an active sales stage, not an administrative formality.</p>
+    <p>Maintain communication with your champion throughout the process. Understand the procurement team's typical review timeline and flag delays before they become crises. If contract redlines are creating friction, escalate to your commercial leadership rather than letting negotiations drag on at a working level that has no authority to resolve them. The reps who close enterprise deals consistently are the ones who stay engaged and move obstacles at every stage — not just the front end of the process.</p>
+
+    <h2>Shortening the Cycle Without Discounting</h2>
+    <p>The temptation to discount in order to move a stalled enterprise deal is real. Resist it. Discounting trains enterprise buyers to stall deliberately, knowing a better price is coming. Instead, use business events to create genuine urgency: an end-of-quarter deadline for implementation support, a product release that aligns with their expressed priorities, a pilot programme that offers risk-free entry into the relationship. These create momentum without eroding the value of your product in the buyer's mind.</p>
+    <p>Enterprise sales rewards patience, preparation, and process. The reps who close large deals are not necessarily the most charismatic or the most aggressive. They are the most disciplined — the ones who map every stakeholder, qualify every opportunity rigorously, control every timeline, and stay engaged through every stage until the contract is signed.</p>
+
+    <div class="art-cta-box">
+      <h3>Build a sales team that closes enterprise deals</h3>
+      <p>Access enterprise-ready sales talent through Digihire. We help brands recruit and deploy professionals trained in complex sales cycles.</p>
+      <a href="https://brands.digihire.io" class="btn btn-cyan btn-lg">Hire Enterprise Sales Talent</a>
+    </div>
+  </div>
+</div>
+
+<section class="art-related">
+  <div class="container">
+    <h2 class="art-related-title">Related Articles</h2>
+    <div class="blog-grid stagger-grid">
+      <a href="blog-performance-campaign.html" class="blog-card">
+        <div class="bc-img-wrap"><img src="https://plus.unsplash.com/premium_photo-1674586421844-99330bd20c65?w=600&h=400&fit=crop&q=80" alt="Performance Campaign" class="bc-img" /></div>
+        <div class="bc-content"><div class="bc-meta"><span class="blog-cat-pill" style="margin-bottom:0;">Sales Strategy</span><span class="bc-date">May 10, 2026</span></div><h3 class="bc-title">How to Structure a Performance-Based Sales Campaign That Actually Converts</h3><p class="bc-excerpt">Learn the exact framework top-performing brands use to launch commission-based campaigns that drive measurable results.</p><span class="bc-cta">Read More →</span></div>
+      </a>
+      <a href="blog-gig-economy.html" class="blog-card">
+        <div class="bc-img-wrap"><img src="https://plus.unsplash.com/premium_photo-1707155465391-5cfc46746a34?w=600&h=400&fit=crop&q=80" alt="Gig Economy" class="bc-img" /></div>
+        <div class="bc-content"><div class="bc-meta"><span class="blog-cat-pill" style="margin-bottom:0;">Future of Work</span><span class="bc-date">Mar 22, 2026</span></div><h3 class="bc-title">The Gig Economy is Changing Sales Forever</h3><p class="bc-excerpt">Why fractional sales professionals and commission-only reps are becoming the standard for rapid growth in African markets.</p><span class="bc-cta">Read More →</span></div>
+      </a>
+      <a href="blog-tech-sales.html" class="blog-card">
+        <div class="bc-img-wrap"><img src="https://plus.unsplash.com/premium_photo-1677553953699-e62954777d8f?w=600&h=400&fit=crop&q=80" alt="Tech Sales" class="bc-img" /></div>
+        <div class="bc-content"><div class="bc-meta"><span class="blog-cat-pill" style="margin-bottom:0;">Talent Growth</span><span class="bc-date">Mar 28, 2026</span></div><h3 class="bc-title">How to Break Into Tech Sales with Zero Experience</h3><p class="bc-excerpt">The practical roadmap for ambitious professionals who want to enter tech sales without a traditional background.</p><span class="bc-cta">Read More →</span></div>
+      </a>
+    </div>
+  </div>
+</section>
+
+<section class="newsletter-cta">
+  <div class="nl-glow"></div>
+  <div class="container reveal">
+    <h2 class="nl-title">Get Digihire insights delivered to you</h2>
+    <p class="nl-sub">Stay updated with our latest insights, strategies, and platform news straight to your inbox. No spam, just value.</p>
+    <form class="nl-form" onsubmit="event.preventDefault(); alert('Subscribed!');">
+      <input type="email" class="nl-input" placeholder="Enter your email address" required />
+      <button type="submit" class="btn btn-cyan btn-nl">Subscribe</button>
+    </form>
+  </div>
+</section>
+
+<footer>
+  <div class="container">
+    <div class="footer-grid">
+      <div><div class="footer-logo-wrap"><a href="/" class="footer-logo"><img src="assets/logo-white.png" alt="DigiHire" style="height:32px;width:auto;" /></a></div><p class="footer-tagline">Africa's premier tech sales talent platform. Connecting top professionals with forward-thinking companies.</p><div class="footer-socials"><a href="#" class="footer-social">𝕏</a><a href="#" class="footer-social">in</a><a href="#" class="footer-social">f</a><a href="#" class="footer-social">ig</a></div></div>
+      <div><p class="footer-col-title">Company</p><ul class="footer-col-links"><li><a href="/about">About Us</a></li><li><a href="/contact">Contact</a></li><li><a href="/events">Events</a></li><li><a href="/blog">Blog</a></li></ul></div>
+      <div><p class="footer-col-title">Solutions</p><ul class="footer-col-links"><li><a href="https://voltsquad.digihire.io">VoltSquad</a></li><li><a href="https://brands.digihire.io">Sales Recruitment</a></li><li><a href="/sales-activations">Activations &amp; Field Marketing</a></li><li><a href="https://talents.digihire.io/academy">Sales Academy</a></li></ul></div>
+      <div><p class="footer-col-title">Talent</p><ul class="footer-col-links"><li><a href="https://talents.digihire.io">Join the Talent Pool</a></li><li><a href="https://talents.digihire.io/academy">Sales Academy</a></li><li><a href="https://voltsquad.digihire.io">VoltSquad</a></li></ul></div>
+      <div><p class="footer-col-title">Brands</p><ul class="footer-col-links"><li><a href="https://voltsquad.digihire.io">VoltSquad</a></li><li><a href="https://brands.digihire.io">Sales Recruitment</a></li><li><a href="/sales-activations">Activations &amp; Field Marketing</a></li></ul></div>
+    </div>
+    <div class="footer-bottom">
+      <p class="footer-copy">© 2025 DigiHire Africa Ltd. All rights reserved.</p>
+      <div class="footer-locations"><div class="footer-location-item"><i data-lucide="map-pin" class="lucide ic-sm"></i> <span>Lagos, Nigeria — 7 Adewale Close, Surulere</span></div><div class="footer-location-item"><i data-lucide="map-pin" class="lucide ic-sm"></i> <span>Accra, Ghana</span></div><div class="footer-location-item"><i data-lucide="map-pin" class="lucide ic-sm"></i> <span>Nairobi, Kenya — Kilimani Business Hub</span></div></div>
+    </div>
+  </div>
+</footer>
+
+<div class="nav-mobile-overlay" id="nav-mobile-overlay" aria-hidden="true">
+  <div class="nm-top"><a href="/" style="display:flex;align-items:center;line-height:0;"><img src="assets/logo-white.png" alt="DigiHire" style="height:30px;width:auto;" /></a><button class="nm-close-btn" id="nm-close-btn" aria-label="Close menu"><svg viewBox="0 0 24 24" fill="none" width="22" height="22" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M18 6L6 18M6 6l12 12"/></svg></button></div>
+  <div class="nm-body">
+    <div class="nm-section"><button class="nm-trigger" data-nm-target="nm-why">Why DigiHire?<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6l4 4 4-4"/></svg></button><div class="nm-submenu" id="nm-why"><a href="/about" class="nm-sub-item">About Us</a><a href="/blog" class="nm-sub-item">Blog</a><a href="/events" class="nm-sub-item">Events</a><a href="https://voltsquad.digihire.io" class="nm-sub-item">VoltSquad</a></div></div>
+    <div class="nm-section"><button class="nm-trigger" data-nm-target="nm-brands">Brands<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6l4 4 4-4"/></svg></button><div class="nm-submenu" id="nm-brands"><a href="https://voltsquad.digihire.io" class="nm-sub-item">VoltSquad</a><a href="https://brands.digihire.io" class="nm-sub-item">Sales Recruitment</a><a href="/sales-activations" class="nm-sub-item">Activations &amp; Field Marketing</a></div></div>
+    <div class="nm-section"><button class="nm-trigger" data-nm-target="nm-talents">For Talents<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6l4 4 4-4"/></svg></button><div class="nm-submenu" id="nm-talents"><a href="https://voltsquad.digihire.io/join-now" class="nm-sub-item">VoltSquad</a><a href="https://talents.digihire.io" class="nm-sub-item">Enter Talent Pool</a><a href="https://talents.digihire.io/academy" class="nm-sub-item">Sales Academy</a></div></div>
+    <div class="nm-actions"><a href="/login?role=talent" class="nm-btn-outline">Get Started</a><a href="https://brands.digihire.io/login" class="nm-btn-cyan">Launch a Campaign<svg viewBox="0 0 16 16" fill="none" width="14" height="14" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8h10M9 4l4 4-4 4"/></svg></a></div>
+  </div>
+</div>
+
+<script>
+  lucide.createIcons();
+  const nav = document.getElementById('navbar');
+  window.addEventListener('scroll', () => { nav.classList.toggle('scrolled', window.scrollY > 60); }, { passive: true });
+  const revealObs = new IntersectionObserver((entries) => { entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); revealObs.unobserve(e.target); } }); }, { threshold: 0.12 });
+  document.querySelectorAll('.reveal, .stagger-grid').forEach(el => revealObs.observe(el));
+  (function () { var overlay = document.getElementById('nav-mobile-overlay'); var openBtn = document.getElementById('nav-hamburger-btn'); var closeBtn = document.getElementById('nm-close-btn'); if (!overlay || !openBtn) return; function open() { overlay.classList.add('nm-open'); document.body.style.overflow = 'hidden'; } function close() { overlay.classList.remove('nm-open'); document.body.style.overflow = ''; } openBtn.addEventListener('click', open); if (closeBtn) closeBtn.addEventListener('click', close); overlay.querySelectorAll('a').forEach(function (a) { a.addEventListener('click', close); }); overlay.querySelectorAll('.nm-trigger[data-nm-target]').forEach(function (btn) { btn.addEventListener('click', function () { var sm = document.getElementById(btn.getAttribute('data-nm-target')); var isOpen = sm && sm.classList.contains('nm-open'); overlay.querySelectorAll('.nm-submenu.nm-open').forEach(function (el) { el.classList.remove('nm-open'); }); overlay.querySelectorAll('.nm-trigger.nm-active').forEach(function (el) { el.classList.remove('nm-active'); }); if (!isOpen && sm) { sm.classList.add('nm-open'); btn.classList.add('nm-active'); } }); }); })();
+</script>
+</body>
+</html>

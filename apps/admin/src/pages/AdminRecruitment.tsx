@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { supabase as _supabase } from '@digihire/shared';
-import { Users, ChevronDown, ChevronUp, Save } from 'lucide-react';
+import { Users, ChevronDown, ChevronUp, Save, MessageSquare } from 'lucide-react';
+import { toast } from 'sonner';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const supabase = _supabase as any;
@@ -32,12 +33,23 @@ interface RecruitmentRequest {
   brand_profiles?: { company_name?: string };
 }
 
-const STATUS_OPTIONS = ['open', 'in_review', 'shortlisting', 'closed'];
+const STATUS_OPTIONS = [
+  { value: 'open',         label: 'Request Received' },
+  { value: 'sourcing',     label: 'Sourcing in Progress' },
+  { value: 'in_review',    label: 'Screening' },
+  { value: 'shortlisting', label: 'Shortlisting' },
+  { value: 'interview',    label: 'Interview Stage' },
+  { value: 'offer',        label: 'Offer Stage' },
+  { value: 'closed',       label: 'Completed / Hired' },
+];
 const STATUS_COLOR: Record<string, string> = {
-  open: 'bg-blue-50 text-blue-700 border-blue-100',
-  in_review: 'bg-yellow-50 text-yellow-700 border-yellow-100',
+  open:         'bg-blue-50 text-blue-700 border-blue-100',
+  sourcing:     'bg-cyan-50 text-cyan-700 border-cyan-100',
+  in_review:    'bg-yellow-50 text-yellow-700 border-yellow-100',
   shortlisting: 'bg-violet-50 text-violet-700 border-violet-100',
-  closed: 'bg-gray-50 text-gray-500 border-gray-100',
+  interview:    'bg-orange-50 text-orange-700 border-orange-100',
+  offer:        'bg-green-50 text-green-700 border-green-100',
+  closed:       'bg-gray-50 text-gray-500 border-gray-100',
 };
 
 export default function AdminRecruitment() {
@@ -46,7 +58,8 @@ export default function AdminRecruitment() {
   const [fetchError, setFetchError] = useState<string | null>(null);
   const [expanded, setExpanded] = useState<string | null>(null);
   const [saving, setSaving] = useState<string | null>(null);
-  const [edits, setEdits] = useState<Record<string, { status: string; assigned_support: string; applicant_count: number; shortlist_count: number }>>({});
+  const [edits, setEdits] = useState<Record<string, { status: string; assigned_support: string; applicant_count: number; shortlist_count: number; admin_notes: string }>>({});
+  const [notesOpen, setNotesOpen] = useState<string | null>(null);
 
   useEffect(() => {
     supabase
@@ -64,6 +77,7 @@ export default function AdminRecruitment() {
             assigned_support: r.assigned_support ?? '',
             applicant_count: r.applicant_count,
             shortlist_count: r.shortlist_count,
+            admin_notes: (r as any).admin_notes ?? '',
           };
         });
         setEdits(initialEdits);
@@ -81,11 +95,15 @@ export default function AdminRecruitment() {
         assigned_support: edit.assigned_support || null,
         applicant_count: Number(edit.applicant_count),
         shortlist_count: Number(edit.shortlist_count),
+        admin_notes: edit.admin_notes || null,
         updated_at: new Date().toISOString(),
       })
       .eq('id', id);
     if (!error) {
       setRequests(prev => prev.map(r => r.id === id ? { ...r, ...edit } : r));
+      toast.success('Saved');
+    } else {
+      toast.error('Failed to save');
     }
     setSaving(null);
   };
@@ -166,7 +184,7 @@ export default function AdminRecruitment() {
                       <div className="space-y-1">
                         <label className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">Status</label>
                         <select value={edit.status} onChange={e => setEdit(r.id, 'status', e.target.value)} className="w-full rounded-lg border bg-background px-3 py-2 text-sm focus:outline-none focus:border-primary">
-                          {STATUS_OPTIONS.map(s => <option key={s} value={s}>{s.replace('_', ' ')}</option>)}
+                          {STATUS_OPTIONS.map(s => <option key={s.value} value={s.value}>{s.label}</option>)}
                         </select>
                       </div>
                       <div className="space-y-1">
@@ -182,6 +200,26 @@ export default function AdminRecruitment() {
                         <input type="number" min={0} value={edit.shortlist_count} onChange={e => setEdit(r.id, 'shortlist_count', e.target.value)} className="w-full rounded-lg border bg-background px-3 py-2 text-sm focus:outline-none focus:border-primary" />
                       </div>
                     </div>
+                    {/* Internal Admin Notes */}
+                    <div className="border-t border-border pt-4">
+                      <button
+                        onClick={() => setNotesOpen(notesOpen === r.id ? null : r.id)}
+                        className="flex items-center gap-2 text-xs font-semibold text-muted-foreground hover:text-foreground mb-2"
+                      >
+                        <MessageSquare size={13} />
+                        Internal Notes {notesOpen === r.id ? '▲' : '▼'}
+                      </button>
+                      {notesOpen === r.id && (
+                        <textarea
+                          rows={3}
+                          placeholder="Add internal notes (WhatsApp/call/email summaries, follow-ups)..."
+                          value={edit.admin_notes}
+                          onChange={e => setEdit(r.id, 'admin_notes', e.target.value)}
+                          className="w-full rounded-lg border bg-background px-3 py-2 text-sm focus:outline-none focus:border-primary resize-none"
+                        />
+                      )}
+                    </div>
+
                     <div className="flex justify-end">
                       <button onClick={() => handleSave(r.id)} disabled={saving === r.id} className="flex items-center gap-2 rounded-lg bg-primary text-primary-foreground px-5 py-2 text-sm font-bold hover:opacity-90 disabled:opacity-50 transition-all">
                         {saving === r.id ? 'Saving...' : <><Save className="h-4 w-4" /> Save Changes</>}

@@ -9,7 +9,10 @@ import CampaignDetail from './CampaignDetail';
 import RecruitmentRequest from './RecruitmentRequest';
 import RecruitmentDashboard from './RecruitmentDashboard';
 import ActivationRequest from './ActivationRequest';
+import ActivationList from './ActivationList';
+import ActivationDetail from './ActivationDetail';
 import Reports from './Reports';
+import BrandSettings from './BrandSettings';
 
 export default function BrandDashboard() {
   const { profile, loading } = useBrandProfile();
@@ -34,8 +37,11 @@ export default function BrandDashboard() {
         <Route path="/campaigns/:id" element={<CampaignDetail />} />
         <Route path="/recruitment" element={<RecruitmentDashboard />} />
         <Route path="/recruitment/new" element={<RecruitmentRequest />} />
-        <Route path="/activations" element={<ActivationRequest />} />
+        <Route path="/activations" element={<ActivationList />} />
+        <Route path="/activations/new" element={<ActivationRequest />} />
+        <Route path="/activations/:id" element={<ActivationDetail />} />
         <Route path="/reports" element={<Reports />} />
+        <Route path="/settings" element={<BrandSettings />} />
       </Routes>
     </DashboardLayout>
   );

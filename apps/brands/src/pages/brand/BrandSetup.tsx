@@ -1,23 +1,61 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { BrandProfile } from '../../types';
 import { useBrandProfile } from '../../hooks/useBrandProfile';
+import { useAuth, supabase as _supabase } from '@digihire/shared';
 import { motion } from 'motion/react';
-import { Save, Building2, Globe, MapPin } from 'lucide-react';
+import { Save, Building2, Globe, MapPin, Upload, X, ImageIcon } from 'lucide-react';
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const supabase = _supabase as any;
 
 export default function BrandSetup() {
+  const { user } = useAuth();
   const { profile, updateProfile } = useBrandProfile();
   const [formData, setFormData] = useState<Partial<BrandProfile>>(profile || {});
   const [saving, setSaving] = useState(false);
+  const [logoFile, setLogoFile] = useState<File | null>(null);
+  const [logoPreview, setLogoPreview] = useState<string | null>(null);
+  const [logoUploading, setLogoUploading] = useState(false);
+  const logoInputRef = useRef<HTMLInputElement>(null);
 
-  // Sync formData when profile loads
   React.useEffect(() => {
     if (profile) setFormData(profile);
   }, [profile]);
+
+  const handleLogoSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    setLogoFile(file);
+    setLogoPreview(URL.createObjectURL(file));
+  };
+
+  const uploadLogo = async (): Promise<string | null> => {
+    if (!logoFile || !user) return null;
+    setLogoUploading(true);
+    try {
+      const ext = logoFile.name.split('.').pop();
+      const path = `logos/${user.id}.${ext}`;
+      const { error: uploadErr } = await supabase.storage
+        .from('brand-assets')
+        .upload(path, logoFile, { upsert: true });
+      if (uploadErr) throw uploadErr;
+      const { data } = supabase.storage.from('brand-assets').getPublicUrl(path);
+      return data.publicUrl as string;
+    } finally {
+      setLogoUploading(false);
+    }
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setSaving(true);
     try {
+      let logoUrl = formData.logo_url;
+      if (logoFile) {
+        const uploaded = await uploadLogo();
+        if (uploaded) logoUrl = uploaded;
+      }
+
       const { error: err } = await updateProfile({
         company_name: formData.company_name,
         contact_name: formData.contact_name,
@@ -29,11 +67,14 @@ export default function BrandSetup() {
         city: formData.city,
         country: formData.country,
         primary_goal: formData.primary_goal,
+        description: formData.description,
+        logo_url: logoUrl,
       });
       if (err) {
-        console.error('Failed to update profile:', err);
         alert('Failed to update company profile.');
       } else {
+        if (logoUrl) setFormData(prev => ({ ...prev, logo_url: logoUrl ?? undefined }));
+        setLogoFile(null);
         alert('Company profile updated!');
       }
     } finally {
@@ -41,9 +82,12 @@ export default function BrandSetup() {
     }
   };
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const handleChange = (e: any) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
+
+  const currentLogo = logoPreview || formData.logo_url;
 
   return (
     <div className="rounded-2xl bg-white shadow-sm border border-gray-100 overflow-hidden">
@@ -53,11 +97,57 @@ export default function BrandSetup() {
       </div>
 
       <form onSubmit={handleSubmit} className="p-8 space-y-8">
+        {/* Logo Upload */}
+        <div className="space-y-2">
+          <label className="block text-xs font-normal uppercase text-gray-500">Brand Logo</label>
+          <div className="flex items-center gap-4">
+            <div className="h-16 w-16 rounded-xl border border-gray-200 bg-gray-50 overflow-hidden flex items-center justify-center shrink-0">
+              {currentLogo ? (
+                <img src={currentLogo} alt="Brand logo" className="h-full w-full object-cover" />
+              ) : (
+                <ImageIcon className="h-6 w-6 text-gray-300" />
+              )}
+            </div>
+            <div className="flex items-center gap-2">
+              <input
+                ref={logoInputRef}
+                type="file"
+                accept="image/png,image/jpeg,image/webp,image/svg+xml"
+                className="hidden"
+                onChange={handleLogoSelect}
+              />
+              <button
+                type="button"
+                onClick={() => logoInputRef.current?.click()}
+                className="flex items-center gap-2 rounded-xl border border-gray-200 px-4 py-2 text-sm text-gray-600 hover:bg-gray-50 transition-all"
+              >
+                <Upload size={15} />
+                {currentLogo ? 'Change Logo' : 'Upload Logo'}
+              </button>
+              {currentLogo && (
+                <button
+                  type="button"
+                  onClick={() => {
+                    setLogoFile(null);
+                    setLogoPreview(null);
+                    setFormData(prev => ({ ...prev, logo_url: undefined }));
+                    if (logoInputRef.current) logoInputRef.current.value = '';
+                  }}
+                  className="flex items-center gap-1 rounded-xl border border-gray-200 px-3 py-2 text-sm text-gray-400 hover:text-red-500 transition-colors"
+                >
+                  <X size={14} />
+                </button>
+              )}
+            </div>
+          </div>
+          <p className="text-xs text-gray-400">PNG, JPG, WebP or SVG. Recommended: 200×200px or larger.</p>
+        </div>
+
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <Input label="Company Name" name="company_name" value={formData.company_name} onChange={handleChange} icon={<Building2 size={18} />} />
-          <Input label="Website" name="website" value={formData.website} onChange={handleChange} icon={<Globe size={18} />} placeholder="https://company.com" />
-          <Input label="Contact Person" name="contact_name" value={formData.contact_name} onChange={handleChange} />
-          <Input label="Industry" name="industry" value={formData.industry} onChange={handleChange} placeholder="e.g. SaaS, E-commerce, Fintech" />
+          <FormInput label="Company Name" name="company_name" value={formData.company_name} onChange={handleChange} icon={<Building2 size={18} />} />
+          <FormInput label="Website" name="website" value={formData.website} onChange={handleChange} icon={<Globe size={18} />} placeholder="https://company.com" />
+          <FormInput label="Contact Person" name="contact_name" value={formData.contact_name} onChange={handleChange} />
+          <FormInput label="Industry" name="industry" value={formData.industry} onChange={handleChange} placeholder="e.g. SaaS, E-commerce, Fintech" />
 
           <div className="space-y-1">
             <label className="block text-xs font-normal uppercase text-gray-500">Company Size</label>
@@ -81,17 +171,31 @@ export default function BrandSetup() {
             </select>
           </div>
 
-          <Input label="City" name="city" value={formData.city} onChange={handleChange} icon={<MapPin size={18} />} />
-          <Input label="Country" name="country" value={formData.country} onChange={handleChange} icon={<MapPin size={18} />} />
+          <FormInput label="City" name="city" value={formData.city} onChange={handleChange} icon={<MapPin size={18} />} />
+          <FormInput label="Country" name="country" value={formData.country} onChange={handleChange} icon={<MapPin size={18} />} />
+        </div>
+
+        {/* Description — full width */}
+        <div className="space-y-1">
+          <label className="block text-xs font-normal uppercase text-gray-500">Company Description</label>
+          <textarea
+            name="description"
+            value={formData.description || ''}
+            onChange={handleChange}
+            placeholder="Tell potential talent about your brand, culture, and what makes you a great place to work with..."
+            rows={4}
+            className="w-full rounded-xl border border-gray-200 bg-gray-50 px-4 py-3 text-sm focus:bg-white focus:outline-none transition-all resize-none"
+          />
+          <p className="text-xs text-gray-400">Shown to candidates and sellers reviewing your brand profile.</p>
         </div>
 
         <div className="pt-8 border-t border-gray-100 flex justify-end">
           <button
             type="submit"
-            disabled={saving}
-            className="flex items-center gap-2 rounded-xl bg-[#2563eb] px-8 py-3 text-sm font-normal text-white hover:bg-[#1d4ed8] transition-all shadow-lg shadow-blue-100"
+            disabled={saving || logoUploading}
+            className="flex items-center gap-2 rounded-xl bg-[#2563eb] px-8 py-3 text-sm font-normal text-white hover:bg-[#1d4ed8] transition-all shadow-lg shadow-blue-100 disabled:opacity-60"
           >
-            {saving ? 'Updating...' : 'Save Company Details'}
+            {saving || logoUploading ? 'Saving...' : 'Save Company Details'}
             <Save size={18} />
           </button>
         </div>
@@ -100,7 +204,11 @@ export default function BrandSetup() {
   );
 }
 
-function Input({ label, name, type = "text", value, onChange, placeholder, icon }: any) {
+function FormInput({ label, name, type = "text", value, onChange, placeholder, icon }: {
+  label: string; name: string; type?: string; value?: string;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  onChange: (e: any) => void; placeholder?: string; icon?: React.ReactNode;
+}) {
   return (
     <div className="space-y-1">
       <label className="block text-xs font-normal uppercase text-gray-500">{label}</label>

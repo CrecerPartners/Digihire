@@ -28,6 +28,8 @@ export interface TalentProfile {
   salary_min?: number;
   salary_max?: number;
   availability?: string;
+  gig_availability?: string;
+  gig_cities?: string[];
   status: TalentStatus;
   profile_completion?: number;
   created_at?: string;

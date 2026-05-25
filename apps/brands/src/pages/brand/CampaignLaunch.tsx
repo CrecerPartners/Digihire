@@ -1,19 +1,26 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useBrandCampaigns } from '../../hooks/useBrandCampaigns';
 import { useBrandProfile } from '../../hooks/useBrandProfile';
-import { CheckCircle2, ArrowLeft, ArrowRight } from 'lucide-react';
+import { useAuth, supabase as _supabase } from '@digihire/shared';
+import { CheckCircle2, ArrowLeft, ArrowRight, Upload, X, FileText, Image } from 'lucide-react';
 import type { BrandCampaign } from '../../types';
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const supabase = _supabase as any;
 
 type FormData = Omit<BrandCampaign, 'id' | 'brand_id' | 'status' | 'total_sellers' | 'total_conversions' | 'total_leads' | 'tracking_code' | 'created_at' | 'updated_at'>;
 
 export default function CampaignLaunch() {
   const navigate = useNavigate();
+  const { user } = useAuth();
   const { profile } = useBrandProfile();
   const { createCampaign } = useBrandCampaigns();
   const [submitting, setSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
   const [error, setError] = useState('');
+  const [assetFiles, setAssetFiles] = useState<File[]>([]);
+  const assetInputRef = useRef<HTMLInputElement>(null);
   const [form, setForm] = useState<FormData>({
     campaign_name: '',
     brand_name: profile?.company_name ?? '',
@@ -41,6 +48,29 @@ export default function CampaignLaunch() {
     (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) =>
       setForm(p => ({ ...p, [field]: e.target.value }));
 
+  const uploadAssets = async (): Promise<string[]> => {
+    if (!assetFiles.length || !user) return [];
+    const urls: string[] = [];
+    for (const file of assetFiles) {
+      const ext = file.name.split('.').pop();
+      const path = `campaign-assets/${user.id}/${Date.now()}-${file.name.replace(/[^a-zA-Z0-9._-]/g, '_')}`;
+      const { error: uploadErr } = await supabase.storage
+        .from('brand-assets')
+        .upload(path, file, { upsert: false });
+      if (!uploadErr) {
+        const { data } = supabase.storage.from('brand-assets').getPublicUrl(path);
+        if (data?.publicUrl) urls.push(data.publicUrl as string);
+      }
+    }
+    return urls;
+  };
+
+  const handleAssetSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = Array.from(e.target.files ?? []);
+    setAssetFiles(prev => [...prev, ...files]);
+    if (assetInputRef.current) assetInputRef.current.value = '';
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError('');
@@ -50,9 +80,11 @@ export default function CampaignLaunch() {
     }
     setSubmitting(true);
     try {
+      const assetUrls = await uploadAssets();
       const { error: err } = await createCampaign({
         ...form,
         target_volume: form.target_volume ? Number(form.target_volume) : undefined,
+        asset_urls: assetUrls.length > 0 ? assetUrls : undefined,
       });
       if (err) throw err;
       setSubmitted(true);
@@ -199,10 +231,35 @@ export default function CampaignLaunch() {
         <section className="space-y-5">
           <SectionLabel n="5" title="Assets & Notes" />
           <Field label="Campaign Assets">
-            <div className="rounded-xl border-2 border-dashed border-gray-200 bg-gray-50 p-6 text-center">
-              <p className="text-xs text-gray-400 font-medium">Asset upload will be available in the next update.</p>
-              <p className="text-[10px] text-gray-300 mt-1">For now, share links to assets in the notes field below.</p>
+            <input
+              ref={assetInputRef}
+              type="file"
+              accept="image/*,.pdf"
+              multiple
+              className="hidden"
+              onChange={handleAssetSelect}
+            />
+            <div
+              onClick={() => assetInputRef.current?.click()}
+              className="rounded-xl border-2 border-dashed border-gray-200 bg-gray-50 p-5 cursor-pointer hover:border-[#2563eb]/40 hover:bg-blue-50 transition-all text-center"
+            >
+              <Upload size={18} className="mx-auto text-gray-300 mb-2" />
+              <p className="text-xs text-gray-400 font-medium">Click to upload images or PDFs</p>
+              <p className="text-[10px] text-gray-300 mt-0.5">Branding assets, product images, pitch decks</p>
             </div>
+            {assetFiles.length > 0 && (
+              <div className="mt-2 space-y-1.5">
+                {assetFiles.map((file, i) => (
+                  <div key={i} className="flex items-center gap-2 rounded-lg border border-gray-200 bg-white px-3 py-2 text-xs">
+                    {file.type.startsWith('image/') ? <Image size={13} className="text-blue-400 shrink-0" /> : <FileText size={13} className="text-gray-400 shrink-0" />}
+                    <span className="flex-1 truncate text-gray-600">{file.name}</span>
+                    <button type="button" onClick={() => setAssetFiles(p => p.filter((_, j) => j !== i))} className="text-gray-300 hover:text-red-400 transition-colors">
+                      <X size={13} />
+                    </button>
+                  </div>
+                ))}
+              </div>
+            )}
           </Field>
           <Field label="Notes / Instructions">
             <textarea value={form.notes ?? ''} onChange={set('notes')} rows={4} placeholder="Any specific instructions, asset links, or context for our team..." className={inputCls + ' resize-none'} />

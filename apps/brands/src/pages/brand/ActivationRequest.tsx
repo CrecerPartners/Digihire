@@ -1,11 +1,22 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useActivationRequests } from '../../hooks/useActivationRequests';
 import { useBrandProfile } from '../../hooks/useBrandProfile';
-import { CheckCircle2, FileText, Calendar } from 'lucide-react';
+import { FileText, Calendar } from 'lucide-react';
 
 const inputCls = 'w-full rounded-xl border border-gray-200 bg-gray-50 px-4 py-3 text-sm focus:bg-white focus:outline-none focus:border-[#2563eb] transition-all';
 
 const ACTIVATION_TYPES = ['Brand Activation', 'Field Marketing', 'Campus Activation', 'Pop-up / Experience', 'Product Demo', 'B2B Roadshow', 'Other'];
+
+const TALENT_TYPE_OPTIONS = [
+  'Promoters',
+  'Merchandisers',
+  'Skaters / Flyer Distributors',
+  'In-store Promoters',
+  'Field Marketers',
+  'Shop Floor Staff',
+  'Activation Staff',
+];
 
 const MEETING_SLOTS = [
   'Mon 9:00 AM WAT', 'Mon 11:00 AM WAT', 'Mon 2:00 PM WAT',
@@ -16,11 +27,11 @@ const MEETING_SLOTS = [
 ];
 
 export default function ActivationRequest() {
+  const navigate = useNavigate();
   const { profile } = useBrandProfile();
-  const { createRequest, requests } = useActivationRequests();
+  const { createRequest } = useActivationRequests();
   const [mode, setMode] = useState<'form' | 'book'>('form');
   const [submitting, setSubmitting] = useState(false);
-  const [submitted, setSubmitted] = useState(false);
   const [error, setError] = useState('');
   const [form, setForm] = useState({
     company_name: profile?.company_name ?? '',
@@ -34,7 +45,11 @@ export default function ActivationRequest() {
     goals: '',
     approximate_scale: '',
     notes: '',
+    num_talents: '' as string | number,
+    talent_duties: '',
+    budget_details: '',
   });
+  const [selectedTalentTypes, setSelectedTalentTypes] = useState<string[]>([]);
   const [selectedSlot, setSelectedSlot] = useState('');
 
   React.useEffect(() => {
@@ -60,11 +75,16 @@ export default function ActivationRequest() {
     setSubmitting(true);
     try {
       const payload = mode === 'form'
-        ? { ...form, booking_type: 'form' as const }
-        : { ...form, booking_type: 'meeting' as const, meeting_slot: selectedSlot };
+        ? {
+            ...form,
+            booking_type: 'form' as const,
+            num_talents: form.num_talents !== '' ? Number(form.num_talents) : undefined,
+            talent_types: selectedTalentTypes.length > 0 ? selectedTalentTypes : undefined,
+          }
+        : { ...form, booking_type: 'meeting' as const, meeting_slot: selectedSlot, num_talents: undefined, talent_types: undefined };
       const { error: err } = await createRequest(payload);
       if (err) throw err;
-      setSubmitted(true);
+      navigate('/brand/activations');
     } catch (err: unknown) {
       setError(err instanceof Error ? err.message : 'Failed to submit.');
     } finally {
@@ -72,41 +92,11 @@ export default function ActivationRequest() {
     }
   };
 
-  const pendingCount = requests.filter(r => r.status === 'pending').length;
-
-  if (submitted) {
-    return (
-      <div className="rounded-2xl bg-white border border-gray-100 p-12 text-center shadow-sm">
-        <div className="h-16 w-16 rounded-full bg-amber-50 text-amber-500 flex items-center justify-center mx-auto mb-6">
-          <CheckCircle2 size={32} />
-        </div>
-        <h3 className="text-xl font-normal text-[#1a1a1a] mb-2">
-          {mode === 'form' ? 'Activation Request Submitted!' : 'Meeting Booked!'}
-        </h3>
-        <p className="text-sm text-gray-500 mb-8">
-          {mode === 'form'
-            ? 'Our field team will review and get back to you within 48 hours.'
-            : `Your meeting slot (${selectedSlot}) is confirmed. You'll receive a calendar invite.`}
-        </p>
-        <button onClick={() => { setSubmitted(false); setSelectedSlot(''); }} className="rounded-xl bg-amber-500 text-white px-6 py-2.5 text-sm font-normal hover:bg-amber-600 transition-all">
-          Submit Another
-        </button>
-      </div>
-    );
-  }
-
   return (
     <div className="space-y-6">
-      <div className="flex items-center justify-between">
-        <div>
-          <h2 className="text-xl font-normal text-[#1a1a1a]">Activations & Field Marketing</h2>
-          <p className="text-sm text-gray-400">Request field marketing support or book a strategy call.</p>
-        </div>
-        {pendingCount > 0 && (
-          <span className="px-3 py-1.5 rounded-xl bg-amber-50 border border-amber-100 text-xs font-normal text-amber-600">
-            {pendingCount} pending
-          </span>
-        )}
+      <div>
+        <h2 className="text-xl font-normal text-[#1a1a1a]">New Activation Request</h2>
+        <p className="text-sm text-gray-400">Request field marketing support or book a strategy call.</p>
       </div>
 
       {/* Mode toggle */}
@@ -170,8 +160,40 @@ export default function ActivationRequest() {
                     <option>Large (200+ people / multi-city)</option>
                   </select>
                 </Field>
+                <Field label="Number of Talents Needed">
+                  <input type="number" min={1} value={form.num_talents as string} onChange={set('num_talents')} placeholder="e.g. 10" className={inputCls} />
+                </Field>
                 <Field label="Goals" className="md:col-span-2">
                   <textarea value={form.goals} onChange={set('goals')} rows={3} placeholder="What do you want to achieve?" className={inputCls + ' resize-none'} />
+                </Field>
+                <Field label="Type of Talents Required" className="md:col-span-2">
+                  <div className="flex flex-wrap gap-2 pt-1">
+                    {TALENT_TYPE_OPTIONS.map(opt => {
+                      const selected = selectedTalentTypes.includes(opt);
+                      return (
+                        <button
+                          key={opt}
+                          type="button"
+                          onClick={() => setSelectedTalentTypes(prev =>
+                            selected ? prev.filter(t => t !== opt) : [...prev, opt]
+                          )}
+                          className={`rounded-lg border px-3 py-1.5 text-xs font-normal transition-all ${
+                            selected
+                              ? 'bg-amber-500 border-amber-500 text-white'
+                              : 'bg-gray-50 border-gray-200 text-gray-600 hover:border-amber-300'
+                          }`}
+                        >
+                          {opt}
+                        </button>
+                      );
+                    })}
+                  </div>
+                </Field>
+                <Field label="What Will the Talents Be Doing?" className="md:col-span-2">
+                  <textarea value={form.talent_duties} onChange={set('talent_duties')} rows={3} placeholder="Describe the specific duties and responsibilities..." className={inputCls + ' resize-none'} />
+                </Field>
+                <Field label="Payment / Budget Details" className="md:col-span-2">
+                  <textarea value={form.budget_details} onChange={set('budget_details')} rows={3} placeholder="Describe the payment structure, daily rate, or total budget..." className={inputCls + ' resize-none'} />
                 </Field>
                 <Field label="Additional Notes" className="md:col-span-2">
                   <textarea value={form.notes} onChange={set('notes')} rows={3} placeholder="Anything else our team should know..." className={inputCls + ' resize-none'} />
@@ -213,23 +235,6 @@ export default function ActivationRequest() {
         </form>
       </div>
 
-      {/* Past requests */}
-      {requests.length > 0 && (
-        <div className="space-y-3">
-          <h3 className="font-normal text-[#1a1a1a] text-sm">Past Requests</h3>
-          {requests.map(r => (
-            <div key={r.id} className="flex items-center justify-between rounded-2xl bg-white border border-gray-100 p-4 shadow-sm text-sm">
-              <div>
-                <p className="font-normal text-[#1a1a1a]">{r.activation_type || (r.booking_type === 'meeting' ? `Meeting: ${r.meeting_slot}` : 'Activation Request')}</p>
-                <p className="text-xs text-gray-400">{r.location} · {new Date(r.created_at).toLocaleDateString()}</p>
-              </div>
-              <span className={`px-2.5 py-1 rounded-lg border text-[10px] font-normal uppercase tracking-wider ${r.status === 'pending' ? 'bg-yellow-50 text-yellow-700 border-yellow-100' : r.status === 'confirmed' ? 'bg-green-50 text-green-700 border-green-100' : 'bg-gray-50 text-gray-500 border-gray-100'}`}>
-                {r.status}
-              </span>
-            </div>
-          ))}
-        </div>
-      )}
     </div>
   );
 }

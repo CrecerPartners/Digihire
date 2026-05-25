@@ -12,6 +12,7 @@ import {
   GraduationCap,
   Trophy,
   ClipboardList,
+  Settings,
   LogOut,
 } from "lucide-react";
 import { useIsMobile, useAuth } from "@digihire/shared";
@@ -33,6 +34,7 @@ const moreTabs = [
   { label: "Training", path: "/training", icon: GraduationCap },
   { label: "Referrals", path: "/referrals", icon: Users },
   { label: "Leaderboard", path: "/leaderboard", icon: Trophy },
+  { label: "Settings", path: "/settings", icon: Settings },
 ];
 
 export function AdminMobileBottomNav() {
@@ -97,7 +99,7 @@ export function AdminMobileBottomNav() {
         <DrawerContent>
           <DrawerHeader className="pb-2">
             <DrawerTitle className="flex items-center gap-2 justify-center">
-              <img src="/assets/logo-color.png" alt="DigiHire" className="h-6 w-auto object-contain" />
+              <img src={`${import.meta.env.BASE_URL}assets/logo-color.png`} alt="DigiHire" className="h-6 w-auto object-contain" />
               <span className="font-bold">Admin</span>
             </DrawerTitle>
           </DrawerHeader>

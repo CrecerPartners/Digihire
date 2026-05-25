@@ -28,8 +28,16 @@ import AdminCampaignForm from "@/pages/AdminCampaignForm";
 import AdminTalentPool from "@/pages/AdminTalentPool";
 import AdminBrands from "@/pages/AdminBrands";
 import AdminRecruitment from "@/pages/AdminRecruitment";
+import AdminBrandCampaigns from "@/pages/AdminBrandCampaigns";
+import AdminActivations from "@/pages/AdminActivations";
 import AdminTalentAcademy from "@/pages/AdminTalentAcademy";
 import AdminWebinars from "@/pages/AdminWebinars";
+import AdminEvents from "@/pages/AdminEvents";
+import AdminVoltSquad from "@/pages/AdminVoltSquad";
+import AdminGigs from "@/pages/AdminGigs";
+import AdminCommunication from "@/pages/AdminCommunication";
+import AdminSettings from "@/pages/AdminSettings";
+import AdminBlog from "@/pages/AdminBlog";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -77,6 +85,14 @@ export default function App() {
                   <Route path="/webinars" element={<AdminWebinars />} />
                   <Route path="/brands" element={<AdminBrands />} />
                   <Route path="/recruitment" element={<AdminRecruitment />} />
+                  <Route path="/brand-campaigns" element={<AdminBrandCampaigns />} />
+                  <Route path="/activations" element={<AdminActivations />} />
+                  <Route path="/events" element={<AdminEvents />} />
+                  <Route path="/volt-squad" element={<AdminVoltSquad />} />
+                  <Route path="/gigs" element={<AdminGigs />} />
+                  <Route path="/communication" element={<AdminCommunication />} />
+                  <Route path="/settings" element={<AdminSettings />} />
+                  <Route path="/blog" element={<AdminBlog />} />
                 </Route>
               </Routes>
             </BrowserRouter>

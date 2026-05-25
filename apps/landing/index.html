@@ -1129,7 +1129,7 @@
     }
     .phc-visual-bg {
       position: absolute; inset: 0;
-      background: url('https://images.unsplash.com/photo-1556761175-5973dc0f32e7?w=900&h=600&fit=crop&crop=center&q=80') center/cover no-repeat;
+      background: url('https://plus.unsplash.com/premium_photo-1672997189701-7719c27a81af?w=900&h=600&fit=crop&crop=center&q=80') center/cover no-repeat;
     }
     .phc-visual-bg::after {
       content: ''; position: absolute; inset: 0;
@@ -1339,6 +1339,7 @@
       display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px;
     }
     .insight-card {
+      display: block; text-decoration: none; color: inherit;
       border: 1px solid #E2EBF5; border-radius: var(--radius-lg); overflow: hidden;
       transition: transform 0.3s, box-shadow 0.3s; cursor: pointer;
     }
@@ -1451,7 +1452,7 @@
 
     /* ── What You Can Do (talent) ─────────────────── */
     .talent-what-section { background: #F4F8FF; padding: 80px 0; }
-    .talent-what-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 24px; }
+    .talent-what-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 24px; }
     .twc {
       border-radius: 20px; padding: 36px 28px;
       border: 1px solid #E8EEF5; display: flex; flex-direction: column; gap: 10px;
@@ -1461,6 +1462,7 @@
     .twc-1 { background: linear-gradient(135deg, var(--navy) 0%, var(--navy-3) 100%); border-color: rgba(0,194,255,0.2); }
     .twc-2 { background: var(--white); }
     .twc-3 { background: linear-gradient(135deg, #E8FDF5 0%, #CCF5E8 100%); border-color: rgba(0,150,100,0.15); }
+    .twc-4 { background: linear-gradient(135deg, #FFF8E6 0%, #FFE8B0 100%); border-color: rgba(200,130,0,0.15); }
     .twc-tag { font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase; margin-bottom: 6px; }
     .twc-1 .twc-tag { color: rgba(0,194,255,0.8); }
     .twc-2 .twc-tag, .twc-3 .twc-tag { color: var(--cyan-dim); }
@@ -1470,9 +1472,13 @@
     .twc-desc { font-size: 14px; line-height: 1.65; flex: 1; }
     .twc-1 .twc-desc { color: rgba(255,255,255,0.65); }
     .twc-2 .twc-desc, .twc-3 .twc-desc { color: #6B849E; }
+    .twc-4 .twc-tag { color: #B86800; }
+    .twc-4 .twc-title { color: #0D1B33; }
+    .twc-4 .twc-desc { color: #7A6840; }
     .twc-cta { display: inline-flex; align-items: center; gap: 5px; font-size: 13px; margin-top: 8px; text-decoration: none; transition: gap 0.15s; }
     .twc-1 .twc-cta { color: var(--cyan); }
     .twc-2 .twc-cta, .twc-3 .twc-cta { color: var(--cyan-dim); }
+    .twc-4 .twc-cta { color: #B86800; }
     .twc:hover .twc-cta { gap: 9px; }
 
     /* ── Talent polaroid split section ──────────────── */
@@ -1563,11 +1569,13 @@
     .twb:hover { background: rgba(0,194,255,0.08); border-color: rgba(0,194,255,0.3); }
     .twb-check { width: 22px; height: 22px; border-radius: 50%; flex-shrink: 0; background: var(--cyan); display: flex; align-items: center; justify-content: center; color: var(--navy); font-size: 10px; margin-top: 2px; }
     .twb-text { font-size: 14px; color: rgba(255,255,255,0.75); line-height: 1.5; }
+    @media (max-width: 1024px) { .talent-what-grid { grid-template-columns: repeat(2, 1fr); } }
     @media (max-width: 900px) {
       .talent-why-inner { grid-template-columns: 1fr; gap: 40px; }
       .talent-why-benefits { grid-template-columns: 1fr; }
-      .talent-what-grid { grid-template-columns: 1fr; }
+      .talent-what-grid { grid-template-columns: repeat(2, 1fr); }
     }
+    @media (max-width: 600px) { .talent-what-grid { grid-template-columns: 1fr; } }
   </style>
 </head>
 <body>
@@ -1683,25 +1691,31 @@
               <a href="/about" class="mega-learn">Explore all solutions <span>→</span></a>
             </div>
 
-            <!-- RIGHT: 3 service cards (VoltSquad, Recruitment, Activations) -->
-            <div class="mega-right brands-right">
-              <a href="https://voltsquad.digihire.io" class="brand-supp-card">
+            <!-- RIGHT: 4 service cards -->
+            <div class="mega-right brands-right" style="grid-template-columns: repeat(2,1fr);">
+              <a href="https://brands.digihire.io/signup?service=voltsquad" class="brand-supp-card">
                 <div class="bsc-icon i3"><i data-lucide="zap" class="lucide ic-lg"></i></div>
-                <p class="bsc-title">VoltSquad</p>
-                <p class="bsc-desc">Launch structured sales campaigns. Activate sellers across target audiences and locations, drive users or sales, and grow through performance-based selling.</p>
-                <span class="bsc-cta">Explore VoltSquad →</span>
+                <p class="bsc-title">VoltSquad Campaigns</p>
+                <p class="bsc-desc">Launch performance-based sales campaigns. Activate sellers across campuses, communities, and cities to drive signups, users, leads, and sales.</p>
+                <span class="bsc-cta">Launch a Campaign →</span>
               </a>
-              <a href="https://brands.digihire.io/signup" class="brand-supp-card">
+              <a href="https://brands.digihire.io/signup?service=recruitment-fulltime" class="brand-supp-card">
                 <div class="bsc-icon i1"><i data-lucide="users" class="lucide ic-lg"></i></div>
-                <p class="bsc-title">Sales Recruitment</p>
-                <p class="bsc-desc">Hire the right sales talent for your business, from tech sales and B2B sales to field reps, closers, SDRs, merchandisers, and contract sales roles.</p>
-                <span class="bsc-cta">Learn more →</span>
+                <p class="bsc-title">Hire Sales Talent</p>
+                <p class="bsc-desc">Hire full-time, part-time, or contract sales professionals — SDRs, closers, B2B reps, and field executives screened and ready.</p>
+                <span class="bsc-cta">Start Hiring →</span>
               </a>
-              <a href="#" class="brand-supp-card">
+              <a href="https://brands.digihire.io/signup?service=merchandisers" class="brand-supp-card">
+                <div class="bsc-icon i2"><i data-lucide="package" class="lucide ic-lg"></i></div>
+                <p class="bsc-title">Merchandisers & Short-Term Staff</p>
+                <p class="bsc-desc">Request trained merchandisers, in-store promoters, and short-term field staff for retail, distribution, and on-ground coverage.</p>
+                <span class="bsc-cta">Request Staff →</span>
+              </a>
+              <a href="https://brands.digihire.io/signup?service=activations" class="brand-supp-card">
                 <div class="bsc-icon i2"><i data-lucide="map-pin" class="lucide ic-lg"></i></div>
                 <p class="bsc-title">Activations & Field Marketing</p>
-                <p class="bsc-desc">Take your product to the field through mall activations, high-traffic area campaigns, neighbourhood outreach, and temporary field support built for visibility and traction.</p>
-                <span class="bsc-cta">Learn more →</span>
+                <p class="bsc-desc">Run mall activations, high-traffic campaigns, and on-ground field marketing built to create awareness, engagement, and conversions.</p>
+                <span class="bsc-cta">Plan an Activation →</span>
               </a>
             </div>
           </div>
@@ -1721,25 +1735,31 @@
               <a href="/about" class="mega-learn">Explore all opportunities <span>→</span></a>
             </div>
 
-            <!-- RIGHT: 3 service cards (VoltSquad, Talent Pool, Academy) -->
-            <div class="mega-right brands-right">
+            <!-- RIGHT: 4 service cards (Talent Pool, VoltSquad, Gigs, Events) -->
+            <div class="mega-right brands-right" style="grid-template-columns: repeat(2,1fr);">
+              <a href="https://talents.digihire.io/signup?module=talent_pool" class="brand-supp-card">
+                <div class="bsc-icon i1"><i data-lucide="user-plus" class="lucide ic-lg"></i></div>
+                <p class="bsc-title">Talent Pool</p>
+                <p class="bsc-desc">Get discovered for full-time, part-time, contract, and project-based roles with brands hiring through Digihire.</p>
+                <span class="bsc-cta">Join the Talent Pool →</span>
+              </a>
               <a href="https://voltsquad.digihire.io/join-now" class="brand-supp-card">
                 <div class="bsc-icon i3"><i data-lucide="zap" class="lucide ic-lg"></i></div>
                 <p class="bsc-title">VoltSquad</p>
-                <p class="bsc-desc">Campaign marketplace for sales talent. Join brand campaigns, earn commissions, track your wallet, and grow your income through real sales opportunities.</p>
+                <p class="bsc-desc">Join brand campaigns, earn commissions, track your wallet, and grow your income through real sales opportunities.</p>
                 <span class="bsc-cta">Join VoltSquad →</span>
               </a>
-              <a href="https://talents.digihire.io/login" class="brand-supp-card">
-                <div class="bsc-icon i1"><i data-lucide="user-plus" class="lucide ic-lg"></i></div>
-                <p class="bsc-title">Enter Our Talent Pool</p>
-                <p class="bsc-desc">Create your profile, upload your CV, and get discovered for part-time, full-time, and project-based sales roles with brands hiring through Digihire.</p>
-                <span class="bsc-cta">Learn more →</span>
+              <a href="https://talents.digihire.io/signup?module=gigs" class="brand-supp-card">
+                <div class="bsc-icon i2"><i data-lucide="briefcase" class="lucide ic-lg"></i></div>
+                <p class="bsc-title">Short-Term Gigs</p>
+                <p class="bsc-desc">Apply for merchandising, field marketing, in-store promotions, activation staff, and event staffing roles.</p>
+                <span class="bsc-cta">Apply for Gigs →</span>
               </a>
-              <a href="https://talents.digihire.io/login" class="brand-supp-card">
-                <div class="bsc-icon i2"><i data-lucide="graduation-cap" class="lucide ic-lg"></i></div>
-                <p class="bsc-title">Sales Academy</p>
-                <p class="bsc-desc">Learn practical sales skills, get certified, and gain hands-on experience that prepares you for stronger opportunities, internships, and long-term career growth.</p>
-                <span class="bsc-cta">Learn more →</span>
+              <a href="https://talents.digihire.io/signup?module=events" class="brand-supp-card">
+                <div class="bsc-icon i1"><i data-lucide="calendar" class="lucide ic-lg"></i></div>
+                <p class="bsc-title">Events</p>
+                <p class="bsc-desc">Register for upcoming brand events, activations, networking sessions, and industry gatherings.</p>
+                <span class="bsc-cta">Register for Events →</span>
               </a>
             </div>
           </div>
@@ -1761,40 +1781,51 @@
           </svg>
         </a>
         <div class="nav-dropdown">
-          <!-- Talent section -->
-          <p class="dd-section-label">Talent</p>
-          <a href="https://talents.digihire.io/login">
-            <span>Log in</span>
-            <span class="dd-arrow">›</span>
-          </a>
-          <a href="https://talents.digihire.io/signup">
-            <span>Sign up</span>
-            <span class="dd-arrow">›</span>
-          </a>
-
-          <div class="nav-dropdown-divider"></div>
-
-          <!-- Brand section -->
-          <p class="dd-section-label">Brand</p>
-          <a href="https://brands.digihire.io/login">
-            <span>Log in</span>
-            <span class="dd-arrow">›</span>
-          </a>
-          <a href="https://brands.digihire.io/signup">
-            <span>Sign up</span>
-            <span class="dd-arrow">›</span>
-          </a>
-
-          <div class="nav-dropdown-divider"></div>
-
-          <!-- VoltSquad section -->
-          <p class="dd-section-label">VoltSquad</p>
-          <a href="https://voltsquad.digihire.io/login">
-            <span>Log in</span>
+          <!-- For Talent -->
+          <p class="dd-section-label">For Talent</p>
+          <a href="https://talents.digihire.io/signup?module=talent_pool">
+            <span>Join the Talent Pool</span>
             <span class="dd-arrow">›</span>
           </a>
           <a href="https://voltsquad.digihire.io/join-now">
-            <span>Sign up</span>
+            <span>Join VoltSquad</span>
+            <span class="dd-arrow">›</span>
+          </a>
+          <a href="https://talents.digihire.io/signup?module=gigs">
+            <span>Apply for Gigs / Field Roles</span>
+            <span class="dd-arrow">›</span>
+          </a>
+          <a href="https://talents.digihire.io/signup?module=events">
+            <span>Register for Events</span>
+            <span class="dd-arrow">›</span>
+          </a>
+          <a href="https://talents.digihire.io/login" style="opacity:0.6;font-size:12px;">
+            <span>Talent login</span>
+            <span class="dd-arrow">›</span>
+          </a>
+
+          <div class="nav-dropdown-divider"></div>
+
+          <!-- For Brands -->
+          <p class="dd-section-label">For Brands</p>
+          <a href="https://brands.digihire.io/signup?service=voltsquad">
+            <span>Launch VoltSquad Campaign</span>
+            <span class="dd-arrow">›</span>
+          </a>
+          <a href="https://brands.digihire.io/signup?service=recruitment-fulltime">
+            <span>Hire Sales Talent</span>
+            <span class="dd-arrow">›</span>
+          </a>
+          <a href="https://brands.digihire.io/signup?service=merchandisers">
+            <span>Hire Merchandisers / Short-Term Staff</span>
+            <span class="dd-arrow">›</span>
+          </a>
+          <a href="https://brands.digihire.io/signup?service=activations">
+            <span>Plan Activations / Field Marketing</span>
+            <span class="dd-arrow">›</span>
+          </a>
+          <a href="https://brands.digihire.io/login" style="opacity:0.6;font-size:12px;">
+            <span>Brand login</span>
             <span class="dd-arrow">›</span>
           </a>
         </div>
@@ -1878,25 +1909,32 @@
     </div>
     <div class="talent-what-grid stagger-grid">
 
+      <div class="twc twc-2">
+        <div class="twc-tag">Get discovered for roles</div>
+        <h3 class="twc-title">Join the Talent Pool</h3>
+        <p class="twc-desc">Create your profile, upload your CV, and get discovered for full-time, part-time, contract, and project-based opportunities with brands hiring through Digihire.</p>
+        <a href="https://talents.digihire.io/signup?module=talent_pool" class="twc-cta">Set Up Your Profile →</a>
+      </div>
+
       <div class="twc twc-1">
-        <div class="twc-tag">Be a part of campaigns and start earning</div>
+        <div class="twc-tag">Join campaigns and start earning</div>
         <h3 class="twc-title">Join VoltSquad</h3>
-        <p class="twc-desc">Campaign marketplace for sales talent. Join active brand campaigns, promote apps and products, earn commissions, track your wallet, set revenue targets, and grow your income through real sales opportunities.</p>
+        <p class="twc-desc">Campaign marketplace for sales talent. Join active brand campaigns, promote apps and products, earn commissions, track your wallet, and grow your income through real sales opportunities.</p>
         <a href="https://voltsquad.digihire.io/join-now" class="twc-cta">Join VoltSquad →</a>
       </div>
 
-      <div class="twc twc-2">
-        <div class="twc-tag">Get discovered for roles</div>
-        <h3 class="twc-title">Join Our Talent Pool</h3>
-        <p class="twc-desc">Create your profile, upload your CV, and position yourself for part-time, full-time, and project-based opportunities with brands hiring through Digihire.</p>
-        <a href="https://talents.digihire.io/login" class="twc-cta">Set Up Your Profile →</a>
+      <div class="twc twc-3">
+        <div class="twc-tag">Flexible short-term roles</div>
+        <h3 class="twc-title">Apply for Short-Term Gigs</h3>
+        <p class="twc-desc">Merchandising roles, field marketing, in-store promotions, activation staff, and event staffing — flexible, short-term, and paid. Each role has its own sign-up flow.</p>
+        <a href="https://talents.digihire.io/signup?module=gigs" class="twc-cta">Apply for Gigs →</a>
       </div>
 
-      <div class="twc twc-3">
-        <div class="twc-tag">Learn, get certified, and grow</div>
-        <h3 class="twc-title">Join our Sales Academy</h3>
-        <p class="twc-desc">Join the Digihire Sales Academy to learn practical sales skills, earn certifications, gain internship experience, and prepare for stronger opportunities in the future of work.</p>
-        <a href="https://talents.digihire.io/login" class="twc-cta">Join the Academy →</a>
+      <div class="twc twc-4">
+        <div class="twc-tag">Brand events and activations</div>
+        <h3 class="twc-title">Sign Up for Events</h3>
+        <p class="twc-desc">Register for upcoming brand events, field activations, networking sessions, and industry gatherings. Stay ahead of what's happening and get first access.</p>
+        <a href="https://talents.digihire.io/signup?module=events" class="twc-cta">Register for Events →</a>
       </div>
 
     </div>
@@ -1928,7 +1966,7 @@
             </div>
           </div>
           <div class="tpcard tpcard-2">
-            <img class="tpcard-photo" src="https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=300&h=400&fit=crop&crop=face&q=80" alt="Seller" />
+            <img class="tpcard-photo" src="https://images.unsplash.com/photo-1560250097-0b93528c311a?w=300&h=400&fit=crop&crop=face&q=80" alt="Seller" />
             <div class="tpcard-badge b-cyan"><i data-lucide="zap" class="lucide"></i></div>
             <div class="tpcard-body">
               <div class="tpcard-bar"></div>
@@ -2072,7 +2110,7 @@
             <div class="feature-icon-wrap"><i data-lucide="graduation-cap" class="lucide ic-xl"></i></div>
             <div>
               <p class="feature-item-title">Learn Skills &amp; Earn Certifications</p>
-              <p class="feature-item-desc">Join the Sales Academy, complete practical courses, earn recognised certifications, and access internship and career growth pathways.</p>
+              <p class="feature-item-desc">Build your sales skills, earn recognised certifications, and access internship and career growth pathways through verified brand campaigns.</p>
             </div>
           </div>
           <div class="feature-item">
@@ -2179,6 +2217,59 @@
 <!-- ▼ BRAND MODE ▼ -->
 <div class="mode-brand">
 
+<!-- ════ B0. WHAT BRANDS CAN DO ═════════════════════ -->
+<section class="talent-what-section">
+  <div class="container">
+    <div class="platform-header reveal">
+      <p class="section-label">Services</p>
+      <h2 class="section-heading">What Brands Can Do on Digihire</h2>
+      <p class="section-sub">Every service has its own sign-up flow and connects into the same brand dashboard.</p>
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:24px;" class="stagger-grid" id="brand-paths-grid">
+
+      <div class="twc" style="background:linear-gradient(135deg,var(--navy) 0%,var(--navy-3) 100%);border-color:rgba(0,194,255,0.2);">
+        <div class="twc-tag" style="color:rgba(0,194,255,0.8);">Performance-based selling</div>
+        <h3 class="twc-title" style="color:#fff;">Launch Campaigns on VoltSquad</h3>
+        <p class="twc-desc" style="color:rgba(255,255,255,0.65);">Activate sellers across campuses, communities, and cities. Drive signups, users, leads, and product sales through structured performance-based campaigns.</p>
+        <a href="https://brands.digihire.io/signup?service=voltsquad" class="twc-cta" style="color:var(--cyan);">Launch a Campaign →</a>
+      </div>
+
+      <div class="twc" style="background:#fff;">
+        <div class="twc-tag" style="color:var(--cyan-dim);">Permanent placement</div>
+        <h3 class="twc-title" style="color:#0D1B33;">Hire Full-Time Sales Talent</h3>
+        <p class="twc-desc" style="color:#6B849E;">Recruit dedicated sales professionals — SDRs, closers, B2B reps, and sales executives — for long-term placement in your team.</p>
+        <a href="https://brands.digihire.io/signup?service=recruitment-fulltime" class="twc-cta" style="color:var(--cyan-dim);">Start Hiring Full-Time →</a>
+      </div>
+
+      <div class="twc" style="background:linear-gradient(135deg,#E8FDF5 0%,#CCF5E8 100%);border-color:rgba(0,150,100,0.15);">
+        <div class="twc-tag" style="color:var(--cyan-dim);">Flexible workforce</div>
+        <h3 class="twc-title" style="color:#0D1B33;">Hire Part-Time / Contract Talent</h3>
+        <p class="twc-desc" style="color:#6B849E;">Scale your sales force with part-time reps or contract talent — perfect for project campaigns, seasonal peaks, and market expansions.</p>
+        <a href="https://brands.digihire.io/signup?service=recruitment-parttime" class="twc-cta" style="color:var(--cyan-dim);">Start Hiring Part-Time →</a>
+      </div>
+
+      <div class="twc" style="background:linear-gradient(135deg,#FFF8E6 0%,#FFE8B0 100%);border-color:rgba(200,130,0,0.15);">
+        <div class="twc-tag" style="color:#B86800;">Short-term staff</div>
+        <h3 class="twc-title" style="color:#0D1B33;">Request Merchandisers &amp; Short-Term Staff</h3>
+        <p class="twc-desc" style="color:#7A6840;">Get trained merchandisers, in-store promoters, and field staff for retail coverage, distribution support, and on-ground visibility.</p>
+        <a href="https://brands.digihire.io/signup?service=merchandisers" class="twc-cta" style="color:#B86800;">Request Staff →</a>
+      </div>
+
+      <div class="twc" style="background:linear-gradient(135deg,#EEF2FF 0%,#D4DDFF 100%);border-color:rgba(80,80,200,0.12);">
+        <div class="twc-tag" style="color:#4444BB;">On-ground presence</div>
+        <h3 class="twc-title" style="color:#0D1B33;">Request Activations &amp; Field Marketing</h3>
+        <p class="twc-desc" style="color:#5B6A9E;">Run mall activations, high-traffic area campaigns, and neighbourhood outreach. Field marketing that creates awareness, engagement, and conversions.</p>
+        <a href="https://brands.digihire.io/signup?service=activations" class="twc-cta" style="color:#4444BB;">Plan an Activation →</a>
+      </div>
+
+    </div>
+  </div>
+</section>
+<style>
+  @media (max-width: 1024px) { #brand-paths-grid { grid-template-columns: repeat(2,1fr) !important; } }
+  @media (max-width: 600px) { #brand-paths-grid { grid-template-columns: 1fr !important; } }
+</style>
+
 <!-- ════ B1. TALENT GRID ══════════════════════════ -->
 <section class="talent-unlock" id="brand-talent">
   <div class="container">
@@ -2187,7 +2278,7 @@
     </div>
     <div class="talent-cards stagger-grid">
       <div class="talent-card">
-        <img class="talent-card-img" src="https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=400&h=533&fit=crop&crop=face&q=80" alt="Sales Rep" />
+        <img class="talent-card-img" src="https://images.unsplash.com/photo-1560250097-0b93528c311a?w=400&h=533&fit=crop&crop=face&q=80" alt="Sales Rep" />
         <div class="talent-card-overlay">
           <div class="talent-card-name">Sales Executive</div>
           <div class="talent-card-role">B2B & Tech Sales</div>
@@ -2243,9 +2334,9 @@
         <div class="phc-visual-bg"></div>
         <div class="phc-visual-body">
           <div class="phc-avatars">
-            <img class="phc-avatar" src="https://images.unsplash.com/photo-1531123897727-8f129e1688ce?w=104&h=104&fit=crop&crop=face&q=80" alt="Seller" />
-            <img class="phc-avatar" src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=104&h=104&fit=crop&crop=face&q=80" alt="Field Agent" />
-            <img class="phc-avatar" src="https://images.unsplash.com/photo-1573164713988-8665fc963095?w=104&h=104&fit=crop&crop=face&q=80" alt="Brand Driver" />
+            <img class="phc-avatar" src="https://images.unsplash.com/photo-1588178454780-441fa5b99fa5?w=104&h=104&fit=crop&crop=face&q=80" alt="Seller" />
+            <img class="phc-avatar" src="https://images.unsplash.com/photo-1561406636-b80293969660?w=104&h=104&fit=crop&crop=face&q=80" alt="Field Agent" />
+            <img class="phc-avatar" src="https://images.unsplash.com/photo-1611581186957-4b3c92be2e6f?w=104&h=104&fit=crop&crop=face&q=80" alt="Brand Driver" />
           </div>
           <div class="phc-cards-row">
             <div class="phc-stat-card">
@@ -2268,7 +2359,7 @@
         <h4 class="psc-title">Launch sales campaigns on VoltSquad</h4>
         <p class="psc-desc">Performance-based campaigns tied to real outcomes, signups, users, leads, and sales across campuses, communities, and cities.</p>
         <div class="psc-visual psc-visual-img">
-          <img src="https://images.unsplash.com/photo-1605647540924-852290f6b0d5?w=700&h=320&fit=crop&crop=center&q=80" alt="Sales campaign team" />
+          <img src="https://plus.unsplash.com/premium_photo-1713821698191-7db0f93bec40?w=700&h=320&fit=crop&crop=center&q=80" alt="Sales campaign team" />
         </div>
       </div>
       <div class="psc psc-2">
@@ -2276,7 +2367,7 @@
         <h4 class="psc-title">Hire sales talent built for<br>execution</h4>
         <p class="psc-desc">From tech sales reps and SDRs to merchandisers, closers, and field teams project-based or long-term hires that can sell.</p>
         <div class="psc-visual psc-visual-img">
-          <img src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=700&h=320&fit=crop&crop=top&q=80" alt="Sales recruitment interview" />
+          <img src="https://images.unsplash.com/photo-1739285452621-59d92842fcc8?w=700&h=320&fit=crop&crop=top&q=80" alt="Sales recruitment interview" />
         </div>
       </div>
       <div class="psc psc-3">
@@ -2284,7 +2375,7 @@
         <h4 class="psc-title">Run on-ground activations that drive traction</h4>
         <p class="psc-desc">Malls, campuses, high-traffic areas, and target locations, field marketing that creates awareness, engagement, and conversions.</p>
         <div class="psc-visual psc-visual-img">
-          <img src="https://images.unsplash.com/photo-1571260899304-425eee4c7efc?w=700&h=320&fit=crop&crop=center&q=80" alt="Field activation event" />
+          <img src="https://crecerpartners.com/wp-content/uploads/2025/08/WhatsApp-Image-2025-09-08-at-08.48.44_9afe4066.jpg" alt="Field activation event" />
         </div>
       </div>
     </div>
@@ -2445,36 +2536,36 @@
       <a href="#" class="insights-link">Explore our Blog →</a>
     </div>
     <div class="insights-grid stagger-grid" id="insights-grid">
-      <div class="insight-card">
+      <a href="blog-tech-sales.html" class="insight-card">
         <div class="insight-card-img">
-          <img src="https://images.unsplash.com/photo-1521737711867-e3b97375f902?w=700&h=360&fit=crop&crop=center&q=80" alt="Career Growth" />
+          <img src="https://plus.unsplash.com/premium_photo-1677553953699-e62954777d8f?w=700&h=360&fit=crop&crop=center&q=80" alt="Career Growth" />
         </div>
         <div class="insight-card-body">
           <div class="insight-card-cat">Career Growth</div>
           <h4 class="insight-card-title">How to Break Into Tech Sales with Zero Experience</h4>
           <p class="insight-card-desc">A practical guide to landing your first tech sales role in Africa's booming technology sector — even without prior experience.</p>
         </div>
-      </div>
-      <div class="insight-card">
+      </a>
+      <a href="blog-remote-hiring.html" class="insight-card">
         <div class="insight-card-img">
-          <img src="https://images.unsplash.com/photo-1600880292203-757bb62b4baf?w=700&h=360&fit=crop&crop=center&q=80" alt="Hiring Strategy" />
+          <img src="https://images.unsplash.com/photo-1611432579402-7037e3e2c1e4?w=700&h=360&fit=crop&crop=center&q=80" alt="Hiring Strategy" />
         </div>
         <div class="insight-card-body">
           <div class="insight-card-cat">Hiring Strategy</div>
           <h4 class="insight-card-title">Why African Companies Are Winning with Remote-First Hiring</h4>
           <p class="insight-card-desc">Discover how forward-thinking companies are accessing top talent pools across the continent with DigiHire's remote hiring solutions.</p>
         </div>
-      </div>
-      <div class="insight-card">
+      </a>
+      <a href="blog-ai-resume.html" class="insight-card">
         <div class="insight-card-img">
-          <img src="https://images.unsplash.com/photo-1551434678-e076c223a692?w=700&h=360&fit=crop&crop=center&q=80" alt="Platform Update" />
+          <img src="https://plus.unsplash.com/premium_photo-1681398563948-c2045c0c8660?w=700&h=360&fit=crop&crop=center&q=80" alt="Platform Update" />
         </div>
         <div class="insight-card-body">
           <div class="insight-card-cat">Platform Update</div>
           <h4 class="insight-card-title">DigiHire Launches Advanced AI Resume Optimization</h4>
           <p class="insight-card-desc">Our new AI-powered resume builder helps professionals get past ATS filters and land interviews at top global tech companies.</p>
         </div>
-      </div>
+      </a>
     </div>
   </div>
 </section>
@@ -2514,10 +2605,10 @@
       <div>
         <p class="footer-col-title">Solutions</p>
         <ul class="footer-col-links">
-          <li><a href="https://voltsquad.digihire.io">VoltSquad</a></li>
-          <li><a href="https://brands.digihire.io">Sales Recruitment</a></li>
-          <li><a href="/sales-activations">Activations &amp; Field Marketing</a></li>
-          <li><a href="https://talents.digihire.io/academy">Sales Academy</a></li>
+          <li><a href="https://brands.digihire.io/signup?service=voltsquad">VoltSquad Campaigns</a></li>
+          <li><a href="https://brands.digihire.io/signup?service=recruitment-fulltime">Sales Recruitment</a></li>
+          <li><a href="https://brands.digihire.io/signup?service=merchandisers">Merchandisers &amp; Short-Term Staff</a></li>
+          <li><a href="https://brands.digihire.io/signup?service=activations">Activations &amp; Field Marketing</a></li>
         </ul>
       </div>
 
@@ -2525,9 +2616,10 @@
       <div>
         <p class="footer-col-title">Talent</p>
         <ul class="footer-col-links">
-          <li><a href="https://talents.digihire.io">Join the Talent Pool</a></li>
-          <li><a href="https://talents.digihire.io/academy">Sales Academy</a></li>
-          <li><a href="https://voltsquad.digihire.io">VoltSquad</a></li>
+          <li><a href="https://talents.digihire.io/signup?module=talent_pool">Join the Talent Pool</a></li>
+          <li><a href="https://voltsquad.digihire.io/join-now">Join VoltSquad</a></li>
+          <li><a href="https://talents.digihire.io/signup?module=gigs">Apply for Gigs</a></li>
+          <li><a href="https://talents.digihire.io/signup?module=events">Register for Events</a></li>
         </ul>
       </div>
 
@@ -2535,9 +2627,10 @@
       <div>
         <p class="footer-col-title">Brands</p>
         <ul class="footer-col-links">
-          <li><a href="https://voltsquad.digihire.io">VoltSquad</a></li>
-          <li><a href="https://brands.digihire.io">Sales Recruitment</a></li>
-          <li><a href="/sales-activations">Activations &amp; Field Marketing</a></li>
+          <li><a href="https://brands.digihire.io/signup?service=voltsquad">Launch a Campaign</a></li>
+          <li><a href="https://brands.digihire.io/signup?service=recruitment-fulltime">Hire Sales Talent</a></li>
+          <li><a href="https://brands.digihire.io/signup?service=merchandisers">Hire Merchandisers</a></li>
+          <li><a href="https://brands.digihire.io/signup?service=activations">Plan an Activation</a></li>
         </ul>
       </div>
     </div>
@@ -2760,9 +2853,10 @@
         <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6l4 4 4-4"/></svg>
       </button>
       <div class="nm-submenu" id="nm-brands">
-        <a href="https://voltsquad.digihire.io" class="nm-sub-item">VoltSquad</a>
-        <a href="https://brands.digihire.io" class="nm-sub-item">Sales Recruitment</a>
-        <a href="/sales-activations" class="nm-sub-item">Activations &amp; Field Marketing</a>
+        <a href="https://brands.digihire.io/signup?service=voltsquad" class="nm-sub-item">Launch VoltSquad Campaign</a>
+        <a href="https://brands.digihire.io/signup?service=recruitment-fulltime" class="nm-sub-item">Hire Sales Talent</a>
+        <a href="https://brands.digihire.io/signup?service=merchandisers" class="nm-sub-item">Hire Merchandisers / Short-Term Staff</a>
+        <a href="https://brands.digihire.io/signup?service=activations" class="nm-sub-item">Plan Activations / Field Marketing</a>
       </div>
     </div>
     <div class="nm-section">
@@ -2770,9 +2864,10 @@
         <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6l4 4 4-4"/></svg>
       </button>
       <div class="nm-submenu" id="nm-talents">
-        <a href="https://voltsquad.digihire.io/join-now" class="nm-sub-item">VoltSquad</a>
-        <a href="https://talents.digihire.io" class="nm-sub-item">Enter Talent Pool</a>
-        <a href="https://talents.digihire.io/academy" class="nm-sub-item">Sales Academy</a>
+        <a href="https://talents.digihire.io/signup?module=talent_pool" class="nm-sub-item">Join the Talent Pool</a>
+        <a href="https://voltsquad.digihire.io/join-now" class="nm-sub-item">Join VoltSquad</a>
+        <a href="https://talents.digihire.io/signup?module=gigs" class="nm-sub-item">Apply for Gigs / Field Roles</a>
+        <a href="https://talents.digihire.io/signup?module=events" class="nm-sub-item">Register for Events</a>
       </div>
     </div>
     <div class="nm-actions">
