@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Jobs & Gigs — DigiHire</title>
+  <link rel="icon" type="image/png" href="assets/favicon.png" />
+  <link rel="apple-touch-icon" href="assets/favicon.png" />
+  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+  <style>
+    @font-face { font-family:'CenturyGothic';src:url('fonts/CenturyGothicPaneuropeanRegular.ttf') format('truetype');font-weight:400; }
+    @font-face { font-family:'CenturyGothic';src:url('fonts/CenturyGothicPaneuropeanSemiBold.ttf') format('truetype');font-weight:600; }
+    @font-face { font-family:'CenturyGothic';src:url('fonts/CenturyGothicPaneuropeanBold.ttf') format('truetype');font-weight:700; }
+    @font-face { font-family:'CenturyGothic';src:url('fonts/CenturyGothicPaneuropeanExtraBold.ttf') format('truetype');font-weight:800; }
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+    :root{
+      --navy:#06111F;--navy-1:#0B1D33;--navy-2:#0F2544;
+      --cyan:#00C2FF;--cyan-dim:#0096C7;--cyan-border:rgba(0,194,255,0.18);--cyan-ghost:rgba(0,194,255,0.07);
+      --white:#FFFFFF;--gray-1:#C8DBF0;--gray-2:#7A9CC5;--gray-3:#3D5A7E;
+      --border:rgba(0,194,255,0.12);--radius:10px;--radius-lg:16px;
+    }
+    html{scroll-behavior:smooth;}
+    body{font-family:'CenturyGothic',sans-serif;background:var(--white);color:#111827;line-height:1.6;}
+    .container{max-width:1120px;margin:0 auto;padding:0 24px;}
+
+    /* Nav */
+    .nav{position:sticky;top:0;z-index:100;background:rgba(255,255,255,0.95);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);height:64px;display:flex;align-items:center;}
+    .nav-inner{display:flex;align-items:center;justify-content:space-between;width:100%;}
+    .nav-logo img{height:32px;}
+    .nav-links{display:flex;align-items:center;gap:24px;}
+    .nav-links a{font-size:14px;color:#374151;text-decoration:none;font-weight:600;}
+    .nav-links a:hover{color:var(--navy);}
+    .btn-nav{background:var(--navy);color:#fff;padding:8px 20px;border-radius:var(--radius);font-size:13px;font-weight:700;text-decoration:none;transition:background 0.2s;}
+    .btn-nav:hover{background:var(--navy-2);}
+
+    /* Hero */
+    .jobs-hero{background:var(--navy);padding:60px 0 48px;text-align:center;}
+    .jobs-hero h1{font-size:clamp(28px,5vw,48px);font-weight:800;color:#fff;line-height:1.15;margin-bottom:12px;}
+    .jobs-hero p{font-size:16px;color:var(--gray-1);max-width:520px;margin:0 auto 32px;}
+
+    /* Filters */
+    .filters-bar{background:var(--white);border-bottom:1px solid var(--border);padding:16px 0;position:sticky;top:64px;z-index:90;}
+    .filters-inner{display:flex;flex-wrap:wrap;gap:10px;align-items:center;}
+    .filter-input{position:relative;flex:1;min-width:200px;max-width:340px;}
+    .filter-input svg{position:absolute;left:11px;top:50%;transform:translateY(-50%);color:var(--gray-2);}
+    .filter-input input{width:100%;height:40px;border:1px solid var(--border);border-radius:var(--radius);background:var(--white);padding:0 12px 0 34px;font-family:inherit;font-size:14px;color:#111827;outline:none;}
+    .filter-input input:focus{border-color:var(--cyan);}
+    select.filter-select{height:40px;border:1px solid var(--border);border-radius:var(--radius);background:var(--white);padding:0 12px;font-family:inherit;font-size:13px;color:#374151;outline:none;cursor:pointer;}
+    select.filter-select:focus{border-color:var(--cyan);}
+    .filter-tag{display:inline-flex;align-items:center;gap:6px;height:36px;padding:0 12px;border-radius:20px;border:1px solid var(--border);font-size:12px;font-weight:600;cursor:pointer;transition:all 0.15s;background:var(--white);color:#374151;}
+    .filter-tag.active{background:var(--navy);color:#fff;border-color:var(--navy);}
+
+    /* Main layout */
+    .jobs-main{padding:40px 0 80px;}
+    .jobs-layout{display:grid;grid-template-columns:1fr;gap:24px;}
+    @media(min-width:900px){.jobs-layout{grid-template-columns:280px 1fr;}}
+
+    /* Sidebar */
+    .jobs-sidebar{display:none;}
+    @media(min-width:900px){.jobs-sidebar{display:block;}}
+    .sidebar-card{background:var(--white);border:1px solid var(--border);border-radius:var(--radius-lg);padding:20px;margin-bottom:16px;}
+    .sidebar-title{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:var(--gray-2);margin-bottom:12px;}
+    .category-item{display:flex;align-items:center;justify-content:space-between;padding:6px 0;cursor:pointer;border-radius:6px;transition:all 0.15s;}
+    .category-item:hover{padding-left:4px;}
+    .category-item span:first-child{font-size:14px;color:#374151;}
+    .category-count{font-size:12px;color:var(--gray-2);background:var(--cyan-ghost);padding:1px 7px;border-radius:10px;}
+    .category-item.active span:first-child{color:var(--navy);font-weight:700;}
+
+    /* Job cards */
+    .jobs-results-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;}
+    .jobs-count{font-size:14px;color:var(--gray-2);}
+    .jobs-list{display:grid;gap:12px;}
+    .job-card{background:var(--white);border:1px solid var(--border);border-radius:var(--radius-lg);padding:20px;cursor:pointer;transition:border-color 0.2s,box-shadow 0.2s,transform 0.15s;}
+    .job-card:hover{border-color:var(--cyan-border);box-shadow:0 4px 24px rgba(0,194,255,0.1);transform:translateY(-2px);}
+    .job-card.featured{background:rgba(0,194,255,0.025);border-color:rgba(0,194,255,0.2);}
+    .job-card-top{display:flex;align-items:flex-start;gap:14px;}
+    .job-icon{width:44px;height:44px;border-radius:12px;background:var(--cyan-ghost);display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+    .job-title{font-size:16px;font-weight:700;color:var(--navy);margin-bottom:3px;}
+    .job-company{font-size:13px;color:var(--gray-2);}
+    .job-meta{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px;align-items:center;}
+    .badge{display:inline-flex;align-items:center;font-size:11px;font-weight:600;padding:3px 9px;border-radius:20px;border:1px solid;}
+    .badge-full_time{background:rgba(59,130,246,0.08);color:#2563eb;border-color:rgba(59,130,246,0.2);}
+    .badge-part_time{background:rgba(139,92,246,0.08);color:#7c3aed;border-color:rgba(139,92,246,0.2);}
+    .badge-contract{background:rgba(234,88,12,0.08);color:#c2410c;border-color:rgba(234,88,12,0.2);}
+    .badge-gig{background:rgba(22,163,74,0.08);color:#15803d;border-color:rgba(22,163,74,0.2);}
+    .badge-internship{background:rgba(219,39,119,0.08);color:#be185d;border-color:rgba(219,39,119,0.2);}
+    .badge-remote{background:rgba(16,185,129,0.08);color:#047857;border-color:rgba(16,185,129,0.2);}
+    .badge-hybrid{background:rgba(245,158,11,0.08);color:#b45309;border-color:rgba(245,158,11,0.2);}
+    .badge-onsite{background:rgba(100,116,139,0.08);color:#475569;border-color:rgba(100,116,139,0.2);}
+    .meta-item{font-size:12px;color:var(--gray-2);display:flex;align-items:center;gap:4px;}
+    .skills-row{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px;}
+    .skill-chip{font-size:11px;background:#F4F8FF;border:1px solid var(--border);color:#374151;padding:2px 9px;border-radius:20px;}
+
+    /* Detail panel */
+    .detail-overlay{display:none;position:fixed;inset:0;background:rgba(6,17,31,0.5);z-index:200;backdrop-filter:blur(4px);}
+    .detail-overlay.open{display:flex;align-items:flex-end;justify-content:flex-end;}
+    @media(min-width:640px){.detail-overlay.open{align-items:center;justify-content:center;}}
+    .detail-panel{background:var(--white);width:100%;max-width:640px;max-height:92vh;overflow-y:auto;border-radius:20px 20px 0 0;padding:28px 24px;position:relative;}
+    @media(min-width:640px){.detail-panel{border-radius:20px;}}
+    .detail-close{position:absolute;top:16px;right:16px;width:32px;height:32px;border-radius:50%;border:1px solid var(--border);background:var(--white);cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--gray-2);}
+    .detail-close:hover{background:#f3f4f6;}
+    .detail-section-title{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:var(--gray-2);margin-bottom:8px;}
+    .detail-body{font-size:14px;color:#374151;line-height:1.7;white-space:pre-line;}
+    .cta-box{background:var(--cyan-ghost);border:1px solid var(--cyan-border);border-radius:var(--radius-lg);padding:20px;margin-top:24px;}
+    .cta-box h4{font-size:15px;font-weight:700;color:var(--navy);margin-bottom:6px;}
+    .cta-box p{font-size:13px;color:var(--gray-2);margin-bottom:14px;}
+    .btn-cta{display:inline-block;background:var(--navy);color:#fff;padding:10px 22px;border-radius:var(--radius);font-size:13px;font-weight:700;text-decoration:none;transition:background 0.2s;}
+    .btn-cta:hover{background:var(--cyan-dim);}
+
+    /* Loading */
+    .spinner{width:36px;height:36px;border:3px solid var(--border);border-top-color:var(--cyan);border-radius:50%;animation:spin 0.7s linear infinite;margin:60px auto;}
+    @keyframes spin{to{transform:rotate(360deg);}}
+
+    footer{background:var(--navy);padding:40px 0;text-align:center;}
+    footer p{font-size:13px;color:var(--gray-3);}
+    footer a{color:var(--gray-2);text-decoration:none;}
+    footer a:hover{color:var(--cyan);}
+  </style>
+</head>
+<body>
+
+<!-- Nav -->
+<nav class="nav">
+  <div class="container">
+    <div class="nav-inner">
+      <a class="nav-logo" href="index.html"><img src="assets/logo-color.png" alt="DigiHire" /></a>
+      <div class="nav-links">
+        <a href="index.html">Home</a>
+        <a href="blog.html">Blog</a>
+        <a href="https://talent.digihire.io/signup" class="btn-nav">Join as Talent</a>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<!-- Hero -->
+<div class="jobs-hero">
+  <div class="container">
+    <h1>Jobs &amp; Gigs</h1>
+    <p>Full-time, part-time, contract, and short-term roles posted by brands hiring on Digihire across Nigeria.</p>
+  </div>
+</div>
+
+<!-- Sticky filters -->
+<div class="filters-bar">
+  <div class="container">
+    <div class="filters-inner">
+      <div class="filter-input">
+        <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+        <input id="search-input" type="text" placeholder="Search title, company, skill, location..." />
+      </div>
+      <select class="filter-select" id="type-select">
+        <option value="all">All Types</option>
+        <option value="full_time">Full-Time</option>
+        <option value="part_time">Part-Time</option>
+        <option value="contract">Contract</option>
+        <option value="gig">Gig</option>
+        <option value="internship">Internship</option>
+      </select>
+      <select class="filter-select" id="mode-select">
+        <option value="all">All Modes</option>
+        <option value="onsite">Onsite</option>
+        <option value="remote">Remote</option>
+        <option value="hybrid">Hybrid</option>
+      </select>
+    </div>
+  </div>
+</div>
+
+<!-- Main -->
+<div class="jobs-main">
+  <div class="container">
+    <div class="jobs-layout">
+
+      <!-- Sidebar -->
+      <aside class="jobs-sidebar">
+        <div class="sidebar-card">
+          <div class="sidebar-title">Categories</div>
+          <div id="categories-list"></div>
+        </div>
+        <div class="sidebar-card">
+          <div class="sidebar-title">Looking for talent?</div>
+          <p style="font-size:13px;color:var(--gray-2);margin-bottom:12px;">Post your jobs and gigs to reach thousands of sales professionals on Digihire.</p>
+          <a href="https://brands.digihire.io/signup" class="btn-cta" style="font-size:12px;padding:8px 16px;">Post a Job →</a>
+        </div>
+      </aside>
+
+      <!-- Results -->
+      <div>
+        <div class="jobs-results-header">
+          <span class="jobs-count" id="results-count"></span>
+        </div>
+        <div id="jobs-list">
+          <div class="spinner"></div>
+        </div>
+        <div id="empty-state" style="display:none;text-align:center;padding:60px 0;">
+          <svg width="40" height="40" fill="none" stroke="#C8DBF0" stroke-width="1.5" viewBox="0 0 24 24" style="margin:0 auto 16px;display:block;"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/></svg>
+          <p style="color:var(--gray-2);font-size:15px;">No jobs match your filters.</p>
+          <p style="font-size:13px;color:var(--gray-3);margin-top:4px;">Try a different search or check back later.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Detail panel -->
+<div class="detail-overlay" id="detail-overlay" onclick="closeDetail(event)">
+  <div class="detail-panel" id="detail-panel">
+    <button class="detail-close" onclick="closeDetail()">
+      <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M18 6 6 18M6 6l12 12"/></svg>
+    </button>
+    <div id="detail-content"></div>
+  </div>
+</div>
+
+<footer>
+  <div class="container">
+    <p>© 2025 DigiHire · <a href="index.html">Home</a> · <a href="blog.html">Blog</a> · <a href="https://brands.digihire.io">For Brands</a> · <a href="https://talent.digihire.io">For Talent</a></p>
+  </div>
+</footer>
+
+<script>
+var SUPABASE_URL = 'https://yaojxewpkrjonrvqpsxi.supabase.co';
+var SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inlhb2p4ZXdwa3Jqb25ydnFwc3hpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzI4MDM2NjUsImV4cCI6MjA4ODM3OTY2NX0.QReagLpKOyB40i2bvjfIw8zlZkAAgJa-sFxIYYpykMU';
+
+var allJobs = [];
+var activeType = 'all';
+var activeMode = 'all';
+var activeCategory = 'all';
+var searchVal = '';
+var focusedJob = null;
+
+var TYPE_LABELS = { full_time:'Full-Time', part_time:'Part-Time', contract:'Contract', gig:'Gig', internship:'Internship' };
+var EXP_LABELS = { any:'Any level', entry:'Entry level', mid:'Mid level', senior:'Senior level' };
+
+function fmtSalary(min, max, pt) {
+  if (!min && !max) return null;
+  function f(n) { return n >= 1000 ? '₦' + (n/1000).toFixed(0) + 'k' : '₦' + n; }
+  var r = (min && max) ? f(min)+' – '+f(max) : min ? 'From '+f(min) : 'Up to '+f(max);
+  var s = pt === 'hourly' ? '/hr' : pt === 'per_gig' ? '/gig' : pt === 'commission' ? ' (comm.)' : '/mo';
+  return r + s;
+}
+
+function timeAgo(d) {
+  var diff = Date.now() - new Date(d).getTime();
+  var days = Math.floor(diff / 86400000);
+  if (days === 0) return 'Today';
+  if (days === 1) return 'Yesterday';
+  if (days < 7) return days + 'd ago';
+  if (days < 30) return Math.floor(days/7) + 'w ago';
+  return Math.floor(days/30) + 'mo ago';
+}
+
+function getFiltered() {
+  var q = searchVal.toLowerCase();
+  return allJobs.filter(function(j) {
+    var mq = !q || j.title.toLowerCase().includes(q) || j.company_name.toLowerCase().includes(q) || (j.location||'').toLowerCase().includes(q) || (j.skills||[]).some(function(s){return s.toLowerCase().includes(q);});
+    var mt = activeType === 'all' || j.job_type === activeType;
+    var mm = activeMode === 'all' || j.work_mode === activeMode;
+    var mc = activeCategory === 'all' || j.category === activeCategory;
+    return mq && mt && mm && mc;
+  });
+}
+
+function renderCategories() {
+  var counts = {};
+  allJobs.forEach(function(j) { counts[j.category] = (counts[j.category]||0)+1; });
+  var cats = Object.keys(counts).sort();
+  var html = '<div class="category-item'+(activeCategory==='all'?' active':'')+'" onclick="setCategory(\'all\')">'
+    + '<span>All Categories</span><span class="category-count">'+allJobs.length+'</span></div>';
+  cats.forEach(function(c) {
+    html += '<div class="category-item'+(activeCategory===c?' active':'')+'" onclick="setCategory(\''+c+'\')"><span>'+c+'</span><span class="category-count">'+counts[c]+'</span></div>';
+  });
+  document.getElementById('categories-list').innerHTML = html;
+}
+
+function setCategory(cat) {
+  activeCategory = cat;
+  renderCategories();
+  renderJobs();
+}
+
+function renderJobs() {
+  var filtered = getFiltered();
+  var cnt = document.getElementById('results-count');
+  var list = document.getElementById('jobs-list');
+  var empty = document.getElementById('empty-state');
+
+  cnt.textContent = filtered.length + ' job' + (filtered.length !== 1 ? 's' : '') + ' found';
+
+  if (filtered.length === 0) {
+    list.innerHTML = '';
+    empty.style.display = 'block';
+    return;
+  }
+  empty.style.display = 'none';
+
+  var featured = filtered.filter(function(j){return j.featured;});
+  var regular = filtered.filter(function(j){return !j.featured;});
+  var ordered = featured.concat(regular);
+
+  list.innerHTML = '<div class="jobs-list">' + ordered.map(function(j) {
+    var sal = fmtSalary(j.salary_min, j.salary_max, j.pay_type);
+    var modeTag = j.work_mode ? '<span class="badge badge-'+j.work_mode+'">'+j.work_mode+'</span>' : '';
+    var skillsHtml = (j.skills && j.skills.length) ? '<div class="skills-row">'+j.skills.slice(0,4).map(function(s){return '<span class="skill-chip">'+s+'</span>';}).join('')+(j.skills.length>4?'<span class="skill-chip">+'+( j.skills.length-4)+' more</span>':'')+' </div>' : '';
+    return '<div class="job-card'+(j.featured?' featured':'')+'" onclick="openDetail(\''+j.id+'\')">'
+      + '<div class="job-card-top">'
+      + '<div class="job-icon"><svg width="20" height="20" fill="none" stroke="#00C2FF" stroke-width="2" viewBox="0 0 24 24"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/></svg></div>'
+      + '<div style="flex:1;min-width:0;">'
+      + '<div style="display:flex;align-items:center;gap:6px;">'
+      + '<div class="job-title">'+j.title+'</div>'
+      + (j.featured?'<svg width="13" height="13" fill="#f59e0b" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87L18.18 21 12 17.77 5.82 21 7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>':'')
+      + '</div>'
+      + '<div class="job-company">'+j.company_name+'</div>'
+      + '</div></div>'
+      + '<div class="job-meta">'
+      + '<span class="badge badge-'+j.job_type+'">'+( TYPE_LABELS[j.job_type]||j.job_type)+'</span>'
+      + modeTag
+      + (j.experience_level && j.experience_level!=='any' ? '<span class="badge" style="background:#f1f5f9;color:#475569;border-color:#e2e8f0;">'+EXP_LABELS[j.experience_level]+'</span>' : '')
+      + '</div>'
+      + '<div style="display:flex;flex-wrap:wrap;gap:12px;margin-top:10px;">'
+      + (j.location?'<span class="meta-item"><svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>'+j.location+'</span>':'')
+      + (sal?'<span class="meta-item">'+sal+'</span>':'')
+      + (j.slots&&j.slots>1?'<span class="meta-item"><svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>'+j.slots+' slots</span>':'')
+      + '<span class="meta-item">'+timeAgo(j.created_at)+'</span>'
+      + '</div>'
+      + skillsHtml
+      + '</div>';
+  }).join('') + '</div>';
+}
+
+function openDetail(id) {
+  var job = allJobs.find(function(j){return j.id===id;});
+  if (!job) return;
+  focusedJob = job;
+  var sal = fmtSalary(job.salary_min, job.salary_max, job.pay_type);
+  var modeTag = job.work_mode ? '<span class="badge badge-'+job.work_mode+'" style="margin-right:6px;">'+job.work_mode+'</span>' : '';
+  var html = '<div style="display:flex;align-items:flex-start;gap:14px;margin-bottom:20px;">'
+    + '<div class="job-icon"><svg width="22" height="22" fill="none" stroke="#00C2FF" stroke-width="2" viewBox="0 0 24 24"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/></svg></div>'
+    + '<div><h2 style="font-size:20px;font-weight:800;color:var(--navy);">'+job.title+'</h2>'
+    + '<p style="font-size:14px;color:var(--gray-2);margin-top:2px;">'+job.company_name+'</p></div>'
+    + '</div>'
+    + '<div style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:20px;">'
+    + '<span class="badge badge-'+job.job_type+'">'+( TYPE_LABELS[job.job_type]||job.job_type)+'</span>'
+    + modeTag
+    + (job.experience_level && job.experience_level!=='any' ? '<span class="badge" style="background:#f1f5f9;color:#475569;border-color:#e2e8f0;">'+EXP_LABELS[job.experience_level]+'</span>' : '')
+    + (job.category ? '<span class="badge" style="background:var(--cyan-ghost);color:#0369a1;border-color:var(--cyan-border);">'+job.category+'</span>' : '')
+    + '</div>'
+    + '<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:20px;">'
+    + (job.location ? '<div style="font-size:13px;color:var(--gray-2);display:flex;align-items:center;gap:6px;"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>'+job.location+'</div>' : '')
+    + (sal ? '<div style="font-size:13px;color:var(--gray-2);display:flex;align-items:center;gap:6px;"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>'+sal+'</div>' : '')
+    + (job.slots ? '<div style="font-size:13px;color:var(--gray-2);display:flex;align-items:center;gap:6px;"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>'+job.slots+' position'+(job.slots!==1?'s':'')+' available</div>' : '')
+    + (job.deadline ? '<div style="font-size:13px;color:var(--gray-2);display:flex;align-items:center;gap:6px;"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>Apply by '+new Date(job.deadline).toLocaleDateString('en-NG',{dateStyle:'long'})+'</div>' : '')
+    + (job.duration ? '<div style="font-size:13px;color:var(--gray-2);">Duration: '+job.duration+'</div>' : '')
+    + '</div>';
+
+  if (job.skills && job.skills.length) {
+    html += '<div style="margin-bottom:20px;"><div class="detail-section-title">Skills</div><div class="skills-row">'
+      + job.skills.map(function(s){return '<span class="skill-chip">'+s+'</span>';}).join('')
+      + '</div></div>';
+  }
+  if (job.description) {
+    html += '<div style="margin-bottom:20px;"><div class="detail-section-title">About the Role</div><p class="detail-body">'+job.description+'</p></div>';
+  }
+  if (job.requirements) {
+    html += '<div style="margin-bottom:20px;"><div class="detail-section-title">Requirements</div><p class="detail-body">'+job.requirements+'</p></div>';
+  }
+  html += '<div class="cta-box">'
+    + '<h4>Interested in this role?</h4>'
+    + '<p>Create your Digihire talent profile — brands use it to find and shortlist candidates for roles like this.</p>'
+    + '<a href="https://talent.digihire.io/signup" class="btn-cta">Create Your Profile</a>'
+    + '</div>';
+
+  document.getElementById('detail-content').innerHTML = html;
+  document.getElementById('detail-overlay').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeDetail(e) {
+  if (e && e.target !== document.getElementById('detail-overlay')) return;
+  document.getElementById('detail-overlay').classList.remove('open');
+  document.body.style.overflow = '';
+  focusedJob = null;
+}
+
+document.getElementById('search-input').addEventListener('input', function(e) { searchVal = e.target.value; renderJobs(); });
+document.getElementById('type-select').addEventListener('change', function(e) { activeType = e.target.value; renderJobs(); });
+document.getElementById('mode-select').addEventListener('change', function(e) { activeMode = e.target.value; renderJobs(); });
+document.addEventListener('keydown', function(e) { if (e.key === 'Escape') closeDetail(); });
+
+// Check URL for ?id=
+var urlId = new URLSearchParams(window.location.search).get('id');
+
+fetch(SUPABASE_URL + '/rest/v1/job_listings?status=eq.published&order=featured.desc,created_at.desc', {
+  headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY }
+}).then(function(r) { return r.json(); }).then(function(data) {
+  allJobs = Array.isArray(data) ? data : [];
+  renderCategories();
+  renderJobs();
+  if (urlId) {
+    setTimeout(function() { openDetail(urlId); }, 100);
+  }
+}).catch(function() {
+  document.getElementById('jobs-list').innerHTML = '<p style="text-align:center;color:var(--gray-2);padding:60px 0;">Failed to load jobs. Please try again later.</p>';
+});
+</script>
+</body>
+</html>

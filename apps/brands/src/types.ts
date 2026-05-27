@@ -71,6 +71,31 @@ export interface RecruitmentRequest {
   updated_at: string;
 }
 
+export interface JobListing {
+  id: string;
+  brand_id?: string;
+  company_name: string;
+  title: string;
+  job_type: 'full_time' | 'part_time' | 'contract' | 'gig' | 'internship';
+  category: string;
+  location?: string;
+  work_mode?: 'onsite' | 'remote' | 'hybrid';
+  salary_min?: number;
+  salary_max?: number;
+  pay_type?: 'salary' | 'commission' | 'hourly' | 'per_gig';
+  description?: string;
+  requirements?: string;
+  skills?: string[];
+  experience_level?: 'entry' | 'mid' | 'senior' | 'any';
+  duration?: string;
+  slots?: number;
+  deadline?: string;
+  status: 'draft' | 'published' | 'closed';
+  featured?: boolean;
+  created_at: string;
+  updated_at: string;
+}
+
 export interface ActivationRequest {
   id: string;
   brand_id: string;

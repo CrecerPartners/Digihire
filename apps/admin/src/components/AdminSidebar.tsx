@@ -52,6 +52,7 @@ const navGroups = [
     items: [
       { label: "Brands", path: "/brands", icon: Building2 },
       { label: "Brand Campaigns", path: "/brand-campaigns", icon: Megaphone },
+      { label: "Job Listings", path: "/job-listings", icon: Briefcase },
       { label: "Recruitment", path: "/recruitment", icon: ClipboardCheck },
       { label: "Activations", path: "/activations", icon: Zap },
       { label: "Communication", path: "/communication", icon: MessageSquare },

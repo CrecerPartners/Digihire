@@ -13,6 +13,7 @@ import ActivationList from './ActivationList';
 import ActivationDetail from './ActivationDetail';
 import Reports from './Reports';
 import BrandSettings from './BrandSettings';
+import JobListings from './JobListings';
 
 export default function BrandDashboard() {
   const { profile, loading } = useBrandProfile();
@@ -35,6 +36,7 @@ export default function BrandDashboard() {
         <Route path="/campaigns" element={<CampaignList />} />
         <Route path="/campaigns/new" element={<CampaignLaunch />} />
         <Route path="/campaigns/:id" element={<CampaignDetail />} />
+        <Route path="/jobs" element={<JobListings />} />
         <Route path="/recruitment" element={<RecruitmentDashboard />} />
         <Route path="/recruitment/new" element={<RecruitmentRequest />} />
         <Route path="/activations" element={<ActivationList />} />

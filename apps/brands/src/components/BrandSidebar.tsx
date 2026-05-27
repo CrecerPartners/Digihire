@@ -8,6 +8,7 @@ import {
   Lock,
   Settings,
   LogOut,
+  Briefcase,
 } from "lucide-react";
 import { NavLink } from "@/components/NavLink";
 import { useLocation, useNavigate } from "react-router-dom";
@@ -31,6 +32,7 @@ type ModuleKey = 'voltsquad' | 'recruitment' | 'activations';
 const navItems = [
   { label: "Overview", path: "/brand", icon: LayoutDashboard, exact: true, module: null as ModuleKey | null },
   { label: "Campaigns", path: "/brand/campaigns", icon: Megaphone, exact: false, module: 'voltsquad' as ModuleKey },
+  { label: "Job Listings", path: "/brand/jobs", icon: Briefcase, exact: false, module: null as ModuleKey | null },
   { label: "Recruitment", path: "/brand/recruitment", icon: Users, exact: false, module: 'recruitment' as ModuleKey },
   { label: "Activations", path: "/brand/activations", icon: Zap, exact: false, module: 'activations' as ModuleKey },
   { label: "Reports", path: "/brand/reports", icon: BarChart3, exact: false, module: null as ModuleKey | null },

@@ -38,7 +38,8 @@ const VOLTSQUAD_ITEMS: NavItem[] = [
 ];
 
 const GIGS_ITEMS: NavItem[] = [
-  { label: "Gig Preferences", path: "/talent/gigs", icon: Briefcase, exact: false },
+  { label: "Jobs & Gigs Board", path: "/talent/jobs", icon: Briefcase, exact: false },
+  { label: "My Gig Preferences", path: "/talent/gigs", icon: Briefcase, exact: false },
 ];
 
 const EVENTS_ITEMS: NavItem[] = [

@@ -6,6 +6,7 @@ import TalentProfileView from './TalentProfileView';
 import MyLearning from './MyLearning';
 import TalentHome from './TalentHome';
 import GigsPage from './GigsPage';
+import JobsPage from './JobsPage';
 import EventsPage from './EventsPage';
 import Campaigns from '../voltsquad/Campaigns';
 import CampaignDetail from '../voltsquad/CampaignDetail';
@@ -40,7 +41,8 @@ export default function TalentDashboard() {
         <Route path="/setup" element={<ProfileSetup profile={profile} onUpdate={setProfile} />} />
         <Route path="/learning" element={<MyLearning />} />
 
-        {/* Short-Term Gigs */}
+        {/* Jobs & Gigs */}
+        <Route path="/jobs" element={<JobsPage />} />
         <Route path="/gigs" element={<GigsPage />} />
 
         {/* Events */}

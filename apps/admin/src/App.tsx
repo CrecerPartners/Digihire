@@ -38,6 +38,7 @@ import AdminGigs from "@/pages/AdminGigs";
 import AdminCommunication from "@/pages/AdminCommunication";
 import AdminSettings from "@/pages/AdminSettings";
 import AdminBlog from "@/pages/AdminBlog";
+import AdminJobListings from "@/pages/AdminJobListings";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -93,6 +94,7 @@ export default function App() {
                   <Route path="/communication" element={<AdminCommunication />} />
                   <Route path="/settings" element={<AdminSettings />} />
                   <Route path="/blog" element={<AdminBlog />} />
+                  <Route path="/job-listings" element={<AdminJobListings />} />
                 </Route>
               </Routes>
             </BrowserRouter>
