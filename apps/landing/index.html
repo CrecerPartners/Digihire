@@ -223,6 +223,29 @@
     .btn-get-started:hover svg { transform: rotate(180deg); }
 
     /* Dropdown */
+    /* ── Logged-in user button in nav ────── */
+    .nav-user-btn {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 7px 14px; border-radius: 8px; cursor: pointer;
+      background: transparent; border: 1.5px solid rgba(255,255,255,0.35);
+      color: #fff; font-family: 'CenturyGothic', sans-serif;
+      font-size: 13px; font-weight: 700; text-decoration: none;
+      transition: all 0.2s ease; white-space: nowrap;
+    }
+    .nav-user-btn:hover { background: rgba(255,255,255,0.10); border-color: rgba(255,255,255,0.6); }
+    #navbar.scrolled .nav-user-btn { color: #1E293B; border-color: #CBD5E1; }
+    #navbar.scrolled .nav-user-btn:hover { background: rgba(0,0,0,0.05); border-color: #94A3B8; }
+    .nav-user-avatar {
+      width: 24px; height: 24px; border-radius: 50%;
+      background: var(--cyan); color: var(--navy);
+      display: inline-flex; align-items: center; justify-content: center;
+      font-size: 11px; font-weight: 800; flex-shrink: 0;
+    }
+    .nav-user-chevron { width: 12px; height: 12px; opacity: 0.7; }
+    .nav-user-dropdown { min-width: 190px; right: 0; left: auto; }
+    .nav-signout { color: #EF4444 !important; }
+    .nav-signout:hover { color: #DC2626 !important; }
+
     .nav-dropdown-wrap { position: relative; }
     .nav-dropdown {
       position: absolute; top: calc(100% + 10px); right: 0;
@@ -1772,8 +1795,8 @@
       <svg viewBox="0 0 24 24" fill="none" width="22" height="22" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 7h18M3 12h18M3 17h18"/></svg>
     </button>
     <div class="nav-actions">
-      <!-- Get Started with hover dropdown -->
-      <div class="nav-dropdown-wrap">
+      <!-- Get Started with hover dropdown — replaced by JS when user is logged in -->
+      <div class="nav-dropdown-wrap" id="nav-auth-wrap">
         <a href="https://talents.digihire.io/login" class="btn-get-started">
           Get Started
           <svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -2986,6 +3009,87 @@
       });
     });
   })();
+
+  /* ── Auth hint: show user profile in nav when logged in ─ */
+  (function () {
+    function readHint() {
+      var m = document.cookie.match(/(?:^|;\s*)dh_hint=([^;]*)/);
+      return m ? decodeURIComponent(m[1]) : null;
+    }
+
+    function el(tag, cls, href) {
+      var e = document.createElement(tag);
+      if (cls) e.className = cls;
+      if (href) e.setAttribute('href', href);
+      return e;
+    }
+
+    var hint = readHint();
+    if (!hint) return;
+
+    /* Only allow word-character names to prevent injection from a tampered cookie */
+    var safeName = hint.replace(/[^A-Za-z0-9 _'-]/g, '').trim();
+    if (!safeName) return;
+
+    var firstName = safeName.split(' ')[0];
+    var initial = firstName.charAt(0).toUpperCase();
+
+    /* Replace desktop nav auth area using safe DOM construction (no innerHTML for user data) */
+    var wrap = document.getElementById('nav-auth-wrap');
+    if (wrap) {
+      wrap.innerHTML = '';
+
+      /* User button */
+      var btn = el('a', 'nav-user-btn', 'https://talents.digihire.io/talent');
+      var avatar = el('span', 'nav-user-avatar');
+      avatar.textContent = initial;
+      var nameSpan = document.createTextNode(' ' + firstName + ' ');
+      var chevron = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+      chevron.setAttribute('viewBox', '0 0 16 16');
+      chevron.setAttribute('fill', 'none');
+      chevron.setAttribute('width', '12');
+      chevron.setAttribute('height', '12');
+      chevron.setAttribute('stroke', 'currentColor');
+      chevron.setAttribute('stroke-width', '1.8');
+      chevron.setAttribute('stroke-linecap', 'round');
+      chevron.setAttribute('stroke-linejoin', 'round');
+      chevron.innerHTML = '<path d="M4 6l4 4 4-4"/>'; /* static SVG path, safe */
+      btn.appendChild(avatar);
+      btn.appendChild(nameSpan);
+      btn.appendChild(chevron);
+
+      /* Dropdown */
+      var dd = el('div', 'nav-dropdown nav-user-dropdown');
+      [
+        ['My Dashboard',    'https://talents.digihire.io/talent'],
+        ['My Profile',      'https://talents.digihire.io/talent/profile'],
+        ['My Applications', 'https://talents.digihire.io/talent/applications'],
+      ].forEach(function(item) {
+        var a = el('a', '', item[1]);
+        var s = el('span'); s.textContent = item[0];
+        var arr = el('span', 'dd-arrow'); arr.textContent = '›';
+        a.appendChild(s); a.appendChild(arr);
+        dd.appendChild(a);
+      });
+      var divider = el('div', 'nav-dropdown-divider');
+      dd.appendChild(divider);
+      var dashLink = el('a', '', 'https://talents.digihire.io/talent');
+      var ds = el('span'); ds.textContent = 'Go to Dashboard';
+      var da = el('span', 'dd-arrow'); da.textContent = '›';
+      dashLink.appendChild(ds); dashLink.appendChild(da);
+      dd.appendChild(dashLink);
+
+      wrap.appendChild(btn);
+      wrap.appendChild(dd);
+    }
+
+    /* Update mobile menu button */
+    var nmBtn = document.getElementById('nm-auth-btn');
+    if (nmBtn) {
+      nmBtn.textContent = 'My Dashboard';
+      nmBtn.setAttribute('href', 'https://talents.digihire.io/talent');
+    }
+  })();
 </script>
 
 <!-- ════ MOBILE MENU OVERLAY ════════════════════════ -->
@@ -3033,7 +3137,7 @@
       </div>
     </div>
     <div class="nm-actions">
-      <a href="https://talents.digihire.io/login" class="nm-btn-outline">Get Started</a>
+      <a href="https://talents.digihire.io/login" class="nm-btn-outline" id="nm-auth-btn">Get Started</a>
       <a href="https://brands.digihire.io/login" class="nm-btn-cyan">Launch a Campaign
         <svg viewBox="0 0 16 16" fill="none" width="14" height="14" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8h10M9 4l4 4-4 4"/></svg>
       </a>

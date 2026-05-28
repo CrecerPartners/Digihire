@@ -1,8 +1,12 @@
+import { useEffect, useRef } from "react";
 import { SidebarProvider, SidebarTrigger, SidebarInset, Avatar, AvatarFallback } from "@digihire/shared";
 import { useIsMobile, useAuth } from "@digihire/shared";
 import { TalentSidebar } from "@/components/TalentSidebar";
 import { MobileBottomNav } from "@/components/MobileBottomNav";
 import { Link } from "react-router-dom";
+
+// Sign out after 2 hours of no user interaction
+const INACTIVITY_MS = 2 * 60 * 60 * 1000;
 
 interface DashboardLayoutProps {
   children: React.ReactNode;
@@ -10,8 +14,24 @@ interface DashboardLayoutProps {
 
 export function DashboardLayout({ children }: DashboardLayoutProps) {
   const isMobile = useIsMobile();
-  const { user } = useAuth();
+  const { user, signOut } = useAuth();
   const initials = (user?.user_metadata?.name || user?.email || "?").charAt(0).toUpperCase();
+  const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  useEffect(() => {
+    const reset = () => {
+      if (timerRef.current) clearTimeout(timerRef.current);
+      timerRef.current = setTimeout(() => signOut(), INACTIVITY_MS);
+    };
+    const events = ['mousemove', 'mousedown', 'keydown', 'touchstart', 'scroll'];
+    events.forEach(e => window.addEventListener(e, reset, { passive: true }));
+    reset(); // start the timer immediately
+    return () => {
+      events.forEach(e => window.removeEventListener(e, reset));
+      if (timerRef.current) clearTimeout(timerRef.current);
+    };
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <SidebarProvider>

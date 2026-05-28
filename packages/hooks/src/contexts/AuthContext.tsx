@@ -3,6 +3,27 @@ import { Session, User } from "@supabase/supabase-js";
 import { supabase } from "@digihire/supabase";
 import { Capacitor } from "@capacitor/core";
 
+// ── Session hint cookie ────────────────────────────────────
+// A lightweight non-sensitive cookie (just the user's first name) set on
+// .digihire.io so the marketing landing page can detect login state and
+// show the user's name instead of "Get Started".
+const HINT_COOKIE = 'dh_hint';
+
+function setSessionHint(name: string) {
+  if (Capacitor.isNativePlatform()) return;
+  if (typeof document === 'undefined') return;
+  const expires = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toUTCString();
+  const domain = window.location.hostname.endsWith('digihire.io') ? '; domain=.digihire.io' : '';
+  document.cookie = `${HINT_COOKIE}=${encodeURIComponent(name)}; expires=${expires}; path=/${domain}; SameSite=Lax`;
+}
+
+function clearSessionHint() {
+  if (Capacitor.isNativePlatform()) return;
+  if (typeof document === 'undefined') return;
+  const domain = window.location.hostname.endsWith('digihire.io') ? '; domain=.digihire.io' : '';
+  document.cookie = `${HINT_COOKIE}=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/${domain}; SameSite=Lax`;
+}
+
 interface AuthContextType {
   session: Session | null;
   user: User | null;
@@ -41,10 +62,19 @@ export function AuthProvider({ children, signOutRedirect }: { children: ReactNod
       setUser(session?.user ?? null);
       setLoading(false);
 
+      if (event === "SIGNED_IN" && session?.user) {
+        const name =
+          (session.user.user_metadata?.full_name as string | undefined) ||
+          (session.user.user_metadata?.name as string | undefined) ||
+          session.user.email?.split('@')[0] || '';
+        setSessionHint(name);
+      }
+
       // When the token expires / refresh fails, Supabase fires SIGNED_OUT.
       // Redirect to /login so the user isn't left on a broken/404 screen.
       // Skip if the signout was intentional (e.g. during the login OTP flow).
       if (event === "SIGNED_OUT") {
+        clearSessionHint();
         const wasIntentional = intentionalSignOut.current;
         intentionalSignOut.current = false;
         if (!wasIntentional) {
@@ -78,9 +108,8 @@ export function AuthProvider({ children, signOutRedirect }: { children: ReactNod
   };
 
   const signOut = async (options?: { skipRedirect?: boolean }) => {
-    // Mark as intentional BEFORE signOut() so the onAuthStateChange handler
-    // skips its own /login redirect and lets us control the destination below.
     intentionalSignOut.current = true;
+    clearSessionHint();
     await supabase.auth.signOut();
     if (!options?.skipRedirect) {
       if (Capacitor.isNativePlatform()) {
