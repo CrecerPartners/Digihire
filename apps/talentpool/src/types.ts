@@ -61,6 +61,26 @@ export interface JobListing {
   updated_at: string;
 }
 
+export interface JobApplication {
+  id: string;
+  job_id: string;
+  talent_id: string;
+  full_name?: string;
+  email?: string;
+  phone?: string;
+  cover_note?: string;
+  cv_url?: string;
+  status: 'pending' | 'reviewed' | 'shortlisted' | 'rejected' | 'hired';
+  created_at: string;
+  updated_at: string;
+  job_listings?: {
+    title: string;
+    company_name: string;
+    job_type: string;
+    location?: string;
+  };
+}
+
 export interface TalentCourse {
   id: string;
   title: string;

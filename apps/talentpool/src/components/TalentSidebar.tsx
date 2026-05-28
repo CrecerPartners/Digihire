@@ -1,7 +1,7 @@
 import {
   UserCircle, Settings, GraduationCap, LogOut, CalendarDays, BookOpen,
   Zap, Briefcase, ShoppingBag, Wallet, Calculator, Users, Trophy,
-  BarChart3, Lock, LayoutDashboard,
+  BarChart3, Lock, LayoutDashboard, FileText,
 } from "lucide-react";
 import { NavLink } from "@/components/NavLink";
 import { useLocation, useNavigate } from "react-router-dom";
@@ -24,6 +24,7 @@ interface NavItem {
 const TALENT_HUB_ITEMS: NavItem[] = [
   { label: "My Profile", path: "/talent/profile", icon: UserCircle, exact: true },
   { label: "Edit Profile", path: "/talent/profile/setup", icon: Settings, exact: false },
+  { label: "My Applications", path: "/talent/applications", icon: FileText, exact: false },
   { label: "My Learning", path: "/talent/learning", icon: BookOpen, exact: false },
 ];
 

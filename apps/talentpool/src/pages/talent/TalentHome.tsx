@@ -5,7 +5,7 @@ import { supabase as _supabase } from '@digihire/shared';
 import {
   UserCircle, Zap, Briefcase, CalendarDays,
   Lock, ArrowRight, BookOpen, GraduationCap,
-  Users, Wallet, ShoppingBag, Calculator,
+  Users, Wallet, ShoppingBag, Calculator, FileText,
 } from 'lucide-react';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -30,6 +30,7 @@ const MODULE_CONFIG: Record<ModuleKey, {
     actions: [
       { label: 'My Profile', path: '/talent/profile', icon: <UserCircle size={14} /> },
       { label: 'Edit Profile', path: '/talent/profile/setup', icon: <BookOpen size={14} /> },
+      { label: 'My Applications', path: '/talent/applications', icon: <FileText size={14} /> },
       { label: 'My Learning', path: '/talent/learning', icon: <GraduationCap size={14} /> },
     ],
   },
