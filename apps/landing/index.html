@@ -1475,7 +1475,7 @@
 
     /* ── What You Can Do (talent) ─────────────────── */
     .talent-what-section { background: #F4F8FF; padding: 80px 0; }
-    .talent-what-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 24px; }
+    .talent-what-grid { display: grid; grid-template-columns: repeat(2,1fr); gap: 24px; }
     .twc {
       border-radius: 20px; padding: 36px 28px;
       border: 1px solid #E8EEF5; display: flex; flex-direction: column; gap: 10px;
@@ -1592,11 +1592,9 @@
     .twb:hover { background: rgba(0,194,255,0.08); border-color: rgba(0,194,255,0.3); }
     .twb-check { width: 22px; height: 22px; border-radius: 50%; flex-shrink: 0; background: var(--cyan); display: flex; align-items: center; justify-content: center; color: var(--navy); font-size: 10px; margin-top: 2px; }
     .twb-text { font-size: 14px; color: rgba(255,255,255,0.75); line-height: 1.5; }
-    @media (max-width: 1024px) { .talent-what-grid { grid-template-columns: repeat(2, 1fr); } }
     @media (max-width: 900px) {
       .talent-why-inner { grid-template-columns: 1fr; gap: 40px; }
       .talent-why-benefits { grid-template-columns: 1fr; }
-      .talent-what-grid { grid-template-columns: repeat(2, 1fr); }
     }
     @media (max-width: 600px) { .talent-what-grid { grid-template-columns: 1fr; } }
   </style>
@@ -1932,18 +1930,18 @@
     </div>
     <div class="talent-what-grid stagger-grid">
 
-      <div class="twc twc-2">
-        <div class="twc-tag">Get discovered for roles</div>
-        <h3 class="twc-title">Join the Talent Pool</h3>
-        <p class="twc-desc">Create your profile, upload your CV, and get discovered for full-time, part-time, contract, and project-based opportunities with brands hiring through Digihire.</p>
-        <a href="https://talents.digihire.io/signup?module=talent_pool" class="twc-cta">Set Up Your Profile →</a>
-      </div>
-
       <div class="twc twc-1">
         <div class="twc-tag">Join campaigns and start earning</div>
         <h3 class="twc-title">Join VoltSquad</h3>
         <p class="twc-desc">Campaign marketplace for sales talent. Join active brand campaigns, promote apps and products, earn commissions, track your wallet, and grow your income through real sales opportunities.</p>
         <a href="https://talents.digihire.io/join-now" class="twc-cta">Join VoltSquad →</a>
+      </div>
+
+      <div class="twc twc-2">
+        <div class="twc-tag">Get discovered for roles</div>
+        <h3 class="twc-title">Join the Talent Pool</h3>
+        <p class="twc-desc">Create your profile, upload your CV, and get discovered for full-time, part-time, contract, and project-based opportunities with brands hiring through Digihire.</p>
+        <a href="https://talents.digihire.io/signup?module=talent_pool" class="twc-cta">Set Up Your Profile →</a>
       </div>
 
       <div class="twc twc-3">
@@ -2502,39 +2500,13 @@
         </div>
       </div>
     </div>
-  </div>
-</section>
-
-<!-- ════ B5. WHO THIS IS FOR ═════════════════════════ -->
-<section class="brand-who-section">
-  <div class="container reveal">
-    <p class="section-label">Who This Is For</p>
-    <h2 class="section-heading">Built for brands that need traction</h2>
-  </div>
-  <div class="brand-who-slider">
-    <div class="brand-who-track">
-      <span class="bwt">Fintechs</span>
-      <span class="bwt">SaaS products</span>
-      <span class="bwt">Consumer brands</span>
-      <span class="bwt">Telecom-related products</span>
-      <span class="bwt">Businesses entering new cities</span>
-      <span class="bwt">Foreign brands entering Nigeria</span>
-      <span class="bwt">Businesses running product launches</span>
-      <span class="bwt">Companies hiring sales reps &amp; merchandisers</span>
-      <!-- duplicate for seamless loop -->
-      <span class="bwt">Fintechs</span>
-      <span class="bwt">SaaS products</span>
-      <span class="bwt">Consumer brands</span>
-      <span class="bwt">Telecom-related products</span>
-      <span class="bwt">Businesses entering new cities</span>
-      <span class="bwt">Foreign brands entering Nigeria</span>
-      <span class="bwt">Businesses running product launches</span>
-      <span class="bwt">Companies hiring sales reps &amp; merchandisers</span>
+    <div style="margin-top:48px;text-align:center;">
+      <p style="font-size:16px;color:rgba(255,255,255,0.6);margin-bottom:20px;">Ready to activate distribution at scale?</p>
+      <a href="https://brands.digihire.io/signup?service=voltsquad" class="btn btn-cyan btn-lg">
+        <i data-lucide="zap" class="lucide ic-md"></i>
+        Launch a VoltSquad Campaign
+      </a>
     </div>
-  </div>
-  <div class="container">
-    <p class="section-sub" style="text-align:center;max-width:none;white-space:nowrap;margin-top:12px;">People-powered sales infrastructure for growing brands across Africa.</p>
-    <a href="https://brands.digihire.io/signup" class="btn btn-cyan btn-lg" style="margin-top:28px;display:inline-block;">Get Started</a>
   </div>
 </section>
 

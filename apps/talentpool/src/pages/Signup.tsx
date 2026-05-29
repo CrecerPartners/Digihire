@@ -1,4 +1,4 @@
-import { useState, useRef } from 'react';
+import { useState, useRef, useCallback } from 'react';
 import { useNavigate, useSearchParams, Link } from 'react-router-dom';
 import { supabase as _supabase } from '@digihire/shared';
 import { motion } from 'motion/react';
@@ -47,6 +47,25 @@ function MobileDivider({ text = 'Complete the form below to get started' }: { te
   );
 }
 
+function MobileDetails({ children }: { children: React.ReactNode }) {
+  const [open, setOpen] = useState(false);
+  const toggle = useCallback(() => setOpen(v => !v), []);
+  return (
+    <>
+      <button
+        type="button"
+        onClick={toggle}
+        className="lg:hidden flex items-center gap-2 text-xs font-semibold text-primary/80 hover:text-primary transition-colors py-1"
+      >
+        <span>{open ? 'Hide details ▲' : 'Learn more ▼'}</span>
+      </button>
+      <div className={`${open ? 'block' : 'hidden'} lg:block space-y-8`}>
+        {children}
+      </div>
+    </>
+  );
+}
+
 function TalentPoolContent() {
   return (
     <div className="space-y-6 lg:space-y-8">
@@ -64,7 +83,7 @@ function TalentPoolContent() {
 
       <MobileDivider />
 
-      <div className="hidden lg:block space-y-8">
+      <MobileDetails>
         <div className="grid grid-cols-3 gap-3">
           {[['100+', 'brands hiring'], ['5+', 'role types'], ['10+', 'industries']].map(([v, l]) => (
             <div key={l} className="rounded-xl bg-secondary/80 border border-border/50 p-4 text-center">
@@ -112,7 +131,7 @@ function TalentPoolContent() {
             <NextStep n={4} text="Receive opportunities from brands hiring on Digihire" />
           </div>
         </div>
-      </div>
+      </MobileDetails>
     </div>
   );
 }
@@ -134,7 +153,7 @@ function VoltSquadTalentContent() {
 
       <MobileDivider />
 
-      <div className="hidden lg:block space-y-8">
+      <MobileDetails>
         <div>
           <Label>How it works</Label>
           <div className="space-y-2">
@@ -187,7 +206,7 @@ function VoltSquadTalentContent() {
             <NextStep n={4} text="Start promoting and earning commissions" />
           </div>
         </div>
-      </div>
+      </MobileDetails>
     </div>
   );
 }
@@ -212,7 +231,7 @@ function GigsContent() {
 
       <MobileDivider />
 
-      <div className="hidden lg:block space-y-8">
+      <MobileDetails>
         <div>
           <Label>Roles available</Label>
           <div className="flex flex-wrap gap-2">
@@ -248,7 +267,7 @@ function GigsContent() {
             <NextStep n={4} text="Get deployed on brand activations, events, and field campaigns" />
           </div>
         </div>
-      </div>
+      </MobileDetails>
     </div>
   );
 }
@@ -270,7 +289,7 @@ function EventsContent() {
 
       <MobileDivider />
 
-      <div className="hidden lg:block space-y-8">
+      <MobileDetails>
         <div>
           <Label>Event types you can access</Label>
           <div className="space-y-2">
@@ -300,7 +319,7 @@ function EventsContent() {
             <NextStep n={4} text="Receive event details and updates in your dashboard" />
           </div>
         </div>
-      </div>
+      </MobileDetails>
     </div>
   );
 }

@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { QueryClient } from '@tanstack/react-query';
 import { PersistQueryClientProvider } from '@tanstack/react-query-persist-client';
 import { createSyncStoragePersister } from '@tanstack/query-sync-storage-persister';
@@ -35,6 +35,7 @@ export default function App() {
               <Routes>
                 <Route path="/login" element={<Login />} />
                 <Route path="/signup" element={<Signup />} />
+                <Route path="/join-now" element={<Navigate to="/signup?module=voltsquad" replace />} />
                 <Route path="/verify-email" element={<VerifyEmail />} />
                 <Route path="/academy" element={<AcademyPage />} />
                 <Route path="/academy/course/:id" element={<CourseDetailPage />} />
