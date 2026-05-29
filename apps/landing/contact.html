@@ -3,16 +3,12 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:ital,wdth,wght@0,75..100,400..700;1,75..100,400..700&display=swap" rel="stylesheet" />
   <title>Contact Digihire — Talk to Us</title>
   <link rel="icon" type="image/png" href="assets/favicon.png" />
   <link rel="apple-touch-icon" href="assets/favicon.png" />
-  <style>
-    @font-face { font-family: 'CenturyGothic'; src: url('fonts/CenturyGothicPaneuropeanRegular.ttf') format('truetype'); font-weight: 400; }
-    @font-face { font-family: 'CenturyGothic'; src: url('fonts/CenturyGothicPaneuropeanSemiBold.ttf') format('truetype'); font-weight: 600; }
-    @font-face { font-family: 'CenturyGothic'; src: url('fonts/CenturyGothicPaneuropeanBold.ttf') format('truetype'); font-weight: 700; }
-    @font-face { font-family: 'CenturyGothic'; src: url('fonts/CenturyGothicPaneuropeanExtraBold.ttf') format('truetype'); font-weight: 800; }
-    @font-face { font-family: 'CenturyGothic'; src: url('fonts/CenturyGothicPaneuropeanBlack.ttf') format('truetype'); font-weight: 900; }
-  </style>
   <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -35,7 +31,7 @@
     }
 
     html { scroll-behavior: smooth; }
-    body { font-family: 'CenturyGothic', sans-serif; background: var(--white); color: #111827; line-height: 1.6; overflow-x: hidden; }
+    body { font-family: 'Instrument Sans', sans-serif; background: var(--white); color: #111827; line-height: 1.6; overflow-x: hidden; }
 
     .lucide { display: inline-block; vertical-align: middle; flex-shrink: 0; stroke: currentColor; }
     .ic-sm { width: 14px; height: 14px; }
@@ -47,7 +43,7 @@
     .btn {
       display: inline-flex; align-items: center; gap: 8px;
       padding: 11px 24px; border-radius: 8px; cursor: pointer;
-      font-family: 'CenturyGothic', sans-serif; font-size: 14px; font-weight: 700;
+      font-family: 'Instrument Sans', sans-serif; font-size: 14px; font-weight: 700;
       border: none; text-decoration: none; transition: all 0.22s ease; white-space: nowrap;
     }
     .btn-cyan { background: var(--cyan); color: var(--navy); box-shadow: 0 4px 20px rgba(0,194,255,0.35); }
@@ -111,7 +107,7 @@
       font-size: 14px; font-weight: 700; color: rgba(255,255,255,0.88);
       border: 1.5px solid rgba(255,255,255,0.3); border-radius: 8px;
       padding: 7px 18px; background: transparent; cursor: pointer;
-      text-decoration: none; transition: all 0.2s; font-family: 'CenturyGothic', sans-serif;
+      text-decoration: none; transition: all 0.2s; font-family: 'Instrument Sans', sans-serif;
     }
     .btn-get-started:hover { border-color: var(--white); color: var(--white); }
     #navbar.scrolled .btn-get-started { color: var(--navy); border-color: rgba(0,0,0,0.18); }
@@ -119,7 +115,7 @@
     .btn-launch-campaign {
       font-size: 14px; font-weight: 700; background: var(--cyan); color: var(--navy);
       border: none; border-radius: 8px; padding: 9px 20px; cursor: pointer;
-      text-decoration: none; transition: all 0.22s; font-family: 'CenturyGothic', sans-serif;
+      text-decoration: none; transition: all 0.22s; font-family: 'Instrument Sans', sans-serif;
       box-shadow: 0 3px 12px rgba(0,194,255,0.35);
     }
     .btn-launch-campaign:hover { background: var(--cyan-soft); transform: translateY(-1px); }
@@ -141,7 +137,7 @@
       color: rgba(0,194,255,0.7); margin-bottom: 18px;
     }
     .contact-hero-title {
-      font-family: 'CenturyGothic', sans-serif;
+      font-family: 'Instrument Sans', sans-serif;
       font-size: clamp(44px, 7vw, 80px);
       font-weight: 900; color: var(--white); line-height: 1.05;
       letter-spacing: -0.03em; margin-bottom: 22px;
@@ -174,7 +170,7 @@
       color: rgba(0,194,255,0.7); margin-bottom: 16px;
     }
     .contact-talk-title {
-      font-family: 'CenturyGothic', sans-serif; font-size: clamp(24px, 3vw, 32px);
+      font-family: 'Instrument Sans', sans-serif; font-size: clamp(24px, 3vw, 32px);
       font-weight: 800; color: var(--white); line-height: 1.15;
       letter-spacing: -0.02em; margin-bottom: 14px;
     }
@@ -214,7 +210,7 @@
       gap: 40px; flex-wrap: wrap;
     }
     .contact-cta-strip-text h2 {
-      font-family: 'CenturyGothic', sans-serif; font-size: clamp(22px, 3vw, 32px);
+      font-family: 'Instrument Sans', sans-serif; font-size: clamp(22px, 3vw, 32px);
       font-weight: 800; color: var(--navy); margin-bottom: 8px; letter-spacing: -0.015em;
     }
     .contact-cta-strip-text p { font-size: 15px; color: #6B849E; max-width: 440px; line-height: 1.6; }
@@ -292,7 +288,7 @@
     .nm-trigger {
       display: flex; align-items: center; justify-content: space-between; width: 100%;
       background: transparent; border: none; cursor: pointer; padding: 18px 0; text-align: left;
-      font-family: 'CenturyGothic', sans-serif; font-size: 17px; font-weight: 700;
+      font-family: 'Instrument Sans', sans-serif; font-size: 17px; font-weight: 700;
       color: rgba(255,255,255,0.85); transition: color 0.2s;
     }
     .nm-trigger:hover { color: #00C2FF; }
@@ -303,7 +299,7 @@
     .nm-submenu.nm-open { max-height: 400px; padding-bottom: 10px; }
     .nm-sub-item {
       display: block; padding: 10px 14px; margin: 3px 0;
-      font-family: 'CenturyGothic', sans-serif; font-size: 14px; font-weight: 500;
+      font-family: 'Instrument Sans', sans-serif; font-size: 14px; font-weight: 500;
       color: rgba(255,255,255,0.55); text-decoration: none;
       border-left: 2px solid rgba(0,194,255,0.18); border-radius: 0 6px 6px 0;
       transition: color 0.2s, border-color 0.2s, background 0.2s;
@@ -312,13 +308,13 @@
     .nm-actions { margin-top: auto; padding-top: 28px; display: flex; flex-direction: column; gap: 12px; }
     .nm-btn-outline {
       display: flex; align-items: center; justify-content: center; padding: 14px; border-radius: 10px;
-      text-decoration: none; font-family: 'CenturyGothic', sans-serif; font-size: 15px; font-weight: 700;
+      text-decoration: none; font-family: 'Instrument Sans', sans-serif; font-size: 15px; font-weight: 700;
       border: 1.5px solid rgba(255,255,255,0.25); background: transparent; color: rgba(255,255,255,0.85); transition: all 0.2s;
     }
     .nm-btn-outline:hover { border-color: #00C2FF; color: #00C2FF; }
     .nm-btn-cyan {
       display: flex; align-items: center; justify-content: center; gap: 8px; padding: 14px; border-radius: 10px;
-      text-decoration: none; font-family: 'CenturyGothic', sans-serif; font-size: 15px; font-weight: 800;
+      text-decoration: none; font-family: 'Instrument Sans', sans-serif; font-size: 15px; font-weight: 800;
       background: #00C2FF; color: #06111F; border: none; transition: background 0.22s;
     }
     .nm-btn-cyan:hover { background: #33CFFF; }

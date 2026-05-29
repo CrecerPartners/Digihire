@@ -207,7 +207,7 @@ export default function LandingPage() {
   const inputStyle: React.CSSProperties = {
     width: "100%", padding: "11px 16px", borderRadius: 10,
     border: `1px solid ${V.border}`, fontSize: 14, color: V.navy,
-    background: "#fff", outline: "none", fontFamily: "CenturyGothic, sans-serif",
+    background: "#fff", outline: "none", fontFamily: "Instrument Sans, sans-serif",
     transition: "border-color .2s",
   };
   const labelStyle: React.CSSProperties = { display: "block", fontSize: 13, color: V.bodyText, marginBottom: 6 };
@@ -285,7 +285,7 @@ export default function LandingPage() {
   ];
 
   return (
-    <div className="brands-landing" style={{ fontFamily: "CenturyGothic, sans-serif", background: "#fff", color: V.navy, overflowX: "hidden" }}>
+    <div className="brands-landing" style={{ fontFamily: "Instrument Sans, sans-serif", background: "#fff", color: V.navy, overflowX: "hidden" }}>
       <div id="nav-root" />
 
       {/* ══ HERO ══════════════════════════════════════════ */}
@@ -304,7 +304,7 @@ export default function LandingPage() {
             </span>
 
             <h1 style={{
-              fontFamily: "CenturyGothic, sans-serif",
+              fontFamily: "Instrument Sans, sans-serif",
               fontSize: "clamp(34px, 5.5vw, 64px)",
               color: "#fff", lineHeight: 1.08, letterSpacing: "-0.025em",
               marginBottom: 20, maxWidth: 860, marginLeft: "auto", marginRight: "auto",
@@ -367,7 +367,7 @@ export default function LandingPage() {
         <div style={{ maxWidth: 1140, margin: "0 auto", padding: "0 28px" }}>
           <div className="reveal" style={{ textAlign: "center", marginBottom: 56 }}>
             <p style={{ fontSize: 11, letterSpacing: "0.1em", textTransform: "uppercase", color: V.cyanDim, marginBottom: 10 }}>Services Available</p>
-            <h2 style={{ fontFamily: "CenturyGothic, sans-serif", fontSize: "clamp(26px,3.5vw,40px)", color: V.navy, marginBottom: 14, letterSpacing: "-0.02em" }}>
+            <h2 style={{ fontFamily: "Instrument Sans, sans-serif", fontSize: "clamp(26px,3.5vw,40px)", color: V.navy, marginBottom: 14, letterSpacing: "-0.02em" }}>
               What You Can Do on DigiHire
             </h2>
             <p style={{ fontSize: 16, color: V.subText, maxWidth: 640, margin: "0 auto", lineHeight: 1.6 }}>
@@ -385,7 +385,7 @@ export default function LandingPage() {
                       <Icon size={20} />
                     </div>
                     <div>
-                      <h3 className="text-lg font-bold text-foreground tracking-tight mb-2" style={{ fontFamily: "CenturyGothic, sans-serif" }}>{s.title}</h3>
+                      <h3 className="text-lg font-bold text-foreground tracking-tight mb-2" style={{ fontFamily: "Instrument Sans, sans-serif" }}>{s.title}</h3>
                       <p className="text-sm text-muted-foreground leading-relaxed mb-6">{s.desc}</p>
                     </div>
                   </div>
@@ -405,7 +405,7 @@ export default function LandingPage() {
           <div className="reveal" style={{ display: "grid", gridTemplateColumns: "repeat(4,1fr)", gap: 32, textAlign: "center" }}>
             {stats.map(s => (
               <div key={s.label}>
-                <p style={{ fontFamily: "CenturyGothic, sans-serif", fontSize: "clamp(28px,3vw,40px)", color: V.cyan, lineHeight: 1.1 }}>{s.value}</p>
+                <p style={{ fontFamily: "Instrument Sans, sans-serif", fontSize: "clamp(28px,3vw,40px)", color: V.cyan, lineHeight: 1.1 }}>{s.value}</p>
                 <p style={{ fontSize: 14, color: V.subText, marginTop: 6 }}>{s.label}</p>
               </div>
             ))}
@@ -418,7 +418,7 @@ export default function LandingPage() {
         <div style={{ maxWidth: 1140, margin: "0 auto", padding: "0 28px" }}>
           <div className="reveal" style={{ textAlign: "center", marginBottom: 56 }}>
             <p style={{ fontSize: 11, letterSpacing: "0.1em", textTransform: "uppercase", color: V.cyanDim, marginBottom: 10 }}>Talent Roster</p>
-            <h2 style={{ fontFamily: "CenturyGothic, sans-serif", fontSize: "clamp(26px,3.5vw,40px)", color: V.navy, marginBottom: 14, letterSpacing: "-0.02em" }}>Who You Can Hire</h2>
+            <h2 style={{ fontFamily: "Instrument Sans, sans-serif", fontSize: "clamp(26px,3.5vw,40px)", color: V.navy, marginBottom: 14, letterSpacing: "-0.02em" }}>Who You Can Hire</h2>
             <p style={{ fontSize: 16, color: V.subText, maxWidth: 520, margin: "0 auto" }}>Sales talent built for revenue, not just resumes.</p>
           </div>
           <div className="stagger-grid" style={{ display: "grid", gridTemplateColumns: "repeat(3,1fr)", gap: 20 }}>
@@ -447,7 +447,7 @@ export default function LandingPage() {
         <div style={{ maxWidth: 1140, margin: "0 auto", padding: "0 28px" }}>
           <div className="reveal" style={{ textAlign: "center", marginBottom: 56 }}>
             <p style={{ fontSize: 11, letterSpacing: "0.1em", textTransform: "uppercase", color: V.cyanDim, marginBottom: 10 }}>Hiring Models</p>
-            <h2 style={{ fontFamily: "CenturyGothic, sans-serif", fontSize: "clamp(26px,3.5vw,40px)", color: V.navy, marginBottom: 14, letterSpacing: "-0.02em" }}>Flexible Hiring Models</h2>
+            <h2 style={{ fontFamily: "Instrument Sans, sans-serif", fontSize: "clamp(26px,3.5vw,40px)", color: V.navy, marginBottom: 14, letterSpacing: "-0.02em" }}>Flexible Hiring Models</h2>
             <p style={{ fontSize: 16, color: V.subText, maxWidth: 520, margin: "0 auto" }}>Match your growth stage with the right model.</p>
           </div>
           <div className="stagger-grid" style={{ display: "grid", gridTemplateColumns: "repeat(2,1fr)", gap: 24 }}>
@@ -466,7 +466,7 @@ export default function LandingPage() {
                     </div>
                     <span style={{ fontSize: 12, letterSpacing: "0.08em", color: V.cyanDim, background: V.cyanBg, border: `1px solid ${V.cyanBorder}`, borderRadius: 8, padding: "4px 10px" }}>{m.num}</span>
                   </div>
-                  <h3 style={{ fontFamily: "CenturyGothic, sans-serif", fontSize: 20, color: V.navy, marginBottom: 10, letterSpacing: "-0.015em" }}>{m.title}</h3>
+                  <h3 style={{ fontFamily: "Instrument Sans, sans-serif", fontSize: 20, color: V.navy, marginBottom: 10, letterSpacing: "-0.015em" }}>{m.title}</h3>
                   <p style={{ fontSize: 14, color: V.subText, lineHeight: 1.7, marginBottom: 16 }}>{m.sub}</p>
                   <ul style={{ listStyle: "none", display: "flex", flexDirection: "column", gap: 8 }}>
                     {m.points.map(pt => (
@@ -490,14 +490,14 @@ export default function LandingPage() {
         <div style={{ maxWidth: 1140, margin: "0 auto", padding: "0 28px" }}>
           <div className="reveal" style={{ textAlign: "center", marginBottom: 56 }}>
             <p style={{ fontSize: 11, letterSpacing: "0.1em", textTransform: "uppercase", color: V.cyanDim, marginBottom: 10 }}>Why Crecer?</p>
-            <h2 style={{ fontFamily: "CenturyGothic, sans-serif", fontSize: "clamp(26px,3.5vw,40px)", color: V.navy, marginBottom: 14, letterSpacing: "-0.02em" }}>More than recruitment. We deliver sales execution.</h2>
+            <h2 style={{ fontFamily: "Instrument Sans, sans-serif", fontSize: "clamp(26px,3.5vw,40px)", color: V.navy, marginBottom: 14, letterSpacing: "-0.02em" }}>More than recruitment. We deliver sales execution.</h2>
             <p style={{ fontSize: 16, color: V.subText, maxWidth: 540, margin: "0 auto" }}>Two outcomes — structured to help you build and grow your sales team.</p>
           </div>
           <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 28 }}>
             {/* Light col */}
             <div className="reveal" style={{ border: `1px solid ${V.border}`, borderRadius: 28, padding: "44px 40px", background: "linear-gradient(180deg,#FDFEFF 0%,#F7FBFF 100%)" }}>
               <span style={{ fontSize: 11, letterSpacing: "0.12em", textTransform: "uppercase", color: V.cyanDim, display: "block", marginBottom: 14 }}>Why Choose Crecer</span>
-              <h3 style={{ fontFamily: "CenturyGothic, sans-serif", fontSize: 26, color: V.navy, marginBottom: 28, letterSpacing: "-0.02em" }}>Built for sales performance, not just placement.</h3>
+              <h3 style={{ fontFamily: "Instrument Sans, sans-serif", fontSize: 26, color: V.navy, marginBottom: 28, letterSpacing: "-0.02em" }}>Built for sales performance, not just placement.</h3>
               <ul style={{ listStyle: "none", display: "flex", flexDirection: "column", gap: 14 }}>
                 {whyPoints.map(({ icon: Icon, text }) => (
                   <li key={text} style={{ display: "flex", alignItems: "flex-start", gap: 12, fontSize: 15, color: V.bodyText, lineHeight: 1.6 }}>
@@ -512,7 +512,7 @@ export default function LandingPage() {
             {/* Dark col */}
             <div className="reveal" style={{ border: `1px solid rgba(0,194,255,0.16)`, borderRadius: 28, padding: "44px 40px", background: V.navy }}>
               <span style={{ fontSize: 11, letterSpacing: "0.12em", textTransform: "uppercase", color: V.cyan, display: "block", marginBottom: 14 }}>Who This Is For</span>
-              <h3 style={{ fontFamily: "CenturyGothic, sans-serif", fontSize: 26, color: "#fff", marginBottom: 28, letterSpacing: "-0.02em" }}>Scale your sales team without the hiring headache.</h3>
+              <h3 style={{ fontFamily: "Instrument Sans, sans-serif", fontSize: 26, color: "#fff", marginBottom: 28, letterSpacing: "-0.02em" }}>Scale your sales team without the hiring headache.</h3>
               <ul style={{ listStyle: "none", display: "flex", flexDirection: "column", gap: 14 }}>
                 {whoFor.map(item => (
                   <li key={item} style={{ display: "flex", alignItems: "flex-start", gap: 12, fontSize: 15, color: "rgba(255,255,255,0.78)", lineHeight: 1.6 }}>
@@ -536,7 +536,7 @@ export default function LandingPage() {
         <div style={{ position: "absolute", inset: 0, background: "radial-gradient(ellipse 60% 80% at 50% 100%, rgba(0,194,255,0.14) 0%, transparent 70%)", pointerEvents: "none" }} />
         <div style={{ maxWidth: 1140, margin: "0 auto", padding: "0 28px", position: "relative", zIndex: 1 }}>
           <div className="reveal">
-            <h2 style={{ fontFamily: "CenturyGothic, sans-serif", fontSize: "clamp(28px,4.5vw,48px)", color: "#fff", letterSpacing: "-0.025em", marginBottom: 16, lineHeight: 1.1 }}>
+            <h2 style={{ fontFamily: "Instrument Sans, sans-serif", fontSize: "clamp(28px,4.5vw,48px)", color: "#fff", letterSpacing: "-0.025em", marginBottom: 16, lineHeight: 1.1 }}>
               Ready to scale your sales team?
             </h2>
             <p style={{ fontSize: 16, color: "rgba(255,255,255,0.6)", maxWidth: 560, margin: "0 auto 40px", lineHeight: 1.7 }}>
@@ -559,7 +559,7 @@ export default function LandingPage() {
         <div style={{ maxWidth: 780, margin: "0 auto", padding: "0 28px" }}>
           <div className="reveal" style={{ textAlign: "center", marginBottom: 48 }}>
             <p style={{ fontSize: 11, letterSpacing: "0.1em", textTransform: "uppercase", color: V.cyanDim, marginBottom: 10 }}>Get Started</p>
-            <h2 style={{ fontFamily: "CenturyGothic, sans-serif", fontSize: "clamp(26px,3.5vw,40px)", color: V.navy, marginBottom: 14, letterSpacing: "-0.02em" }}>Hire Sales Talent</h2>
+            <h2 style={{ fontFamily: "Instrument Sans, sans-serif", fontSize: "clamp(26px,3.5vw,40px)", color: V.navy, marginBottom: 14, letterSpacing: "-0.02em" }}>Hire Sales Talent</h2>
             <p style={{ fontSize: 16, color: V.subText }}>Tell us about your needs and we'll be in touch within 24–48 hours.</p>
           </div>
 
@@ -568,7 +568,7 @@ export default function LandingPage() {
               <div style={{ width: 64, height: 64, borderRadius: "50%", background: V.cyanBg, border: `1px solid ${V.cyanBorder}`, margin: "0 auto 24px", display: "flex", alignItems: "center", justifyContent: "center", color: V.cyanDim }}>
                 <CheckCircle size={28} />
               </div>
-              <h3 style={{ fontFamily: "CenturyGothic, sans-serif", fontSize: 26, color: V.navy, marginBottom: 12 }}>Request Submitted!</h3>
+              <h3 style={{ fontFamily: "Instrument Sans, sans-serif", fontSize: 26, color: V.navy, marginBottom: 12 }}>Request Submitted!</h3>
               <p style={{ fontSize: 16, color: V.subText, marginBottom: 32 }}>Our team will review your request and get back to you within 24–48 hours.</p>
               <button onClick={() => { setForm(blank); setSubmitted(false); }} className="vs-btn-cyan" style={{ margin: "0 auto" }}>
                 Submit Another Request
