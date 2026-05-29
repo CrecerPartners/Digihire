@@ -63,11 +63,13 @@ export function AuthProvider({ children, signOutRedirect }: { children: ReactNod
       setLoading(false);
 
       if (event === "SIGNED_IN" && session?.user) {
-        const name =
+        const raw =
+          (session.user.user_metadata?.first_name as string | undefined) ||
           (session.user.user_metadata?.full_name as string | undefined) ||
           (session.user.user_metadata?.name as string | undefined) ||
           session.user.email?.split('@')[0] || '';
-        setSessionHint(name);
+        // Cookie stores only the first name for the landing page greeting
+        setSessionHint(raw.split(' ')[0]);
       }
 
       // When the token expires / refresh fails, Supabase fires SIGNED_OUT.

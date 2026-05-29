@@ -15,7 +15,8 @@ interface DashboardLayoutProps {
 export function DashboardLayout({ children }: DashboardLayoutProps) {
   const isMobile = useIsMobile();
   const { user, signOut } = useAuth();
-  const initials = (user?.user_metadata?.name || user?.email || "?").charAt(0).toUpperCase();
+  const displayName = user?.user_metadata?.first_name || user?.user_metadata?.full_name || user?.user_metadata?.name || user?.email || '';
+  const initials = displayName.charAt(0).toUpperCase();
   const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   useEffect(() => {
@@ -54,7 +55,7 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
           <div className="flex items-center gap-3">
             <div className="hidden sm:flex flex-col items-end">
               <span className="text-xs font-semibold text-foreground">
-                {user?.user_metadata?.name || user?.email}
+                {displayName}
               </span>
               <span className="text-[10px] text-muted-foreground font-bold uppercase tracking-widest">talent</span>
             </div>

@@ -337,7 +337,15 @@ export default function Signup() {
   const config = MODULE_FORM[module] ?? MODULE_FORM.talent_pool;
   const ContentComponent = MODULE_CONTENT[module] ?? MODULE_CONTENT.talent_pool;
 
-  const [formData, setFormData] = useState({ fullName: '', email: '', phoneNumber: '', password: '', confirmPassword: '', linkedinUrl: '' });
+  const [formData, setFormData] = useState({
+    firstName: searchParams.get('first_name') ?? '',
+    lastName: searchParams.get('last_name') ?? '',
+    email: searchParams.get('email') ?? '',
+    phoneNumber: '',
+    password: '',
+    confirmPassword: '',
+    linkedinUrl: '',
+  });
   const [cvFile, setCvFile] = useState<File | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
@@ -357,7 +365,14 @@ export default function Signup() {
         password: formData.password,
         options: {
           emailRedirectTo: REDIRECT_URL,
-          data: { account_types: ['talent'], active_modules: [module], full_name: formData.fullName, phone: formData.phoneNumber },
+          data: {
+            account_types: ['talent'],
+            active_modules: [module],
+            first_name: formData.firstName,
+            last_name: formData.lastName,
+            full_name: `${formData.firstName} ${formData.lastName}`.trim(),
+            phone: formData.phoneNumber,
+          },
         },
       });
       if (signUpErr) {
@@ -441,7 +456,10 @@ export default function Signup() {
               )}
 
               <div className="space-y-3">
-                <Field label="Full Name" name="fullName" type="text" placeholder="John Doe" icon={<User size={14} />} value={formData.fullName} onChange={handleChange} />
+                <div className="grid grid-cols-2 gap-3">
+                  <Field label="First Name" name="firstName" type="text" placeholder="John" icon={<User size={14} />} value={formData.firstName} onChange={handleChange} />
+                  <Field label="Last Name" name="lastName" type="text" placeholder="Doe" icon={<User size={14} />} value={formData.lastName} onChange={handleChange} />
+                </div>
                 <Field label="Email" name="email" type="email" placeholder="john@example.com" icon={<Mail size={14} />} value={formData.email} onChange={handleChange} />
                 <Field label="Phone" name="phoneNumber" type="tel" placeholder="+234 800 000 0000" icon={<Phone size={14} />} value={formData.phoneNumber} onChange={handleChange} />
                 <Field label="Password" name="password" type="password" placeholder="••••••••" icon={<Lock size={14} />} value={formData.password} onChange={handleChange} />

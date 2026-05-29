@@ -396,9 +396,198 @@
       background: #00C2FF; color: #06111F; border: none; transition: background 0.22s;
     }
     .nm-btn-cyan:hover { background: #33CFFF; }
+
+    /* ════════════════════════════════
+       EVENT REGISTRATION MODAL
+    ════════════════════════════════ */
+    .evtreg-overlay {
+      position: fixed; inset: 0; z-index: 500;
+      background: rgba(6,17,31,0.72); backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px);
+      display: flex; align-items: center; justify-content: center; padding: 20px;
+      opacity: 0; pointer-events: none;
+      transition: opacity 0.25s ease;
+    }
+    .evtreg-overlay.open { opacity: 1; pointer-events: all; }
+    .evtreg-modal {
+      background: var(--white); border-radius: 24px;
+      width: 100%; max-width: 560px; max-height: 90vh; overflow-y: auto;
+      box-shadow: 0 32px 80px rgba(0,0,0,0.22);
+      transform: translateY(16px) scale(0.98);
+      transition: transform 0.25s ease;
+    }
+    .evtreg-overlay.open .evtreg-modal { transform: translateY(0) scale(1); }
+
+    .evtreg-header {
+      background: var(--navy); border-radius: 24px 24px 0 0;
+      padding: 28px 32px 24px; position: relative;
+    }
+    .evtreg-close {
+      position: absolute; top: 18px; right: 20px;
+      width: 32px; height: 32px; border-radius: 50%;
+      background: rgba(255,255,255,0.10); border: none; cursor: pointer;
+      color: rgba(255,255,255,0.7); display: flex; align-items: center; justify-content: center;
+      transition: background 0.2s, color 0.2s;
+    }
+    .evtreg-close:hover { background: rgba(255,255,255,0.18); color: #fff; }
+    .evtreg-badge {
+      display: inline-flex; align-items: center; gap: 5px;
+      background: rgba(0,194,255,0.12); border: 1px solid rgba(0,194,255,0.2);
+      color: var(--cyan); font-size: 10px; font-weight: 800; letter-spacing: 0.08em;
+      text-transform: uppercase; padding: 4px 12px; border-radius: 999px;
+      font-family: 'CenturyGothic', sans-serif; margin-bottom: 10px;
+    }
+    .evtreg-title {
+      font-family: 'CenturyGothic', sans-serif; font-size: 20px; font-weight: 800;
+      color: var(--white); line-height: 1.2; letter-spacing: -0.015em; margin-bottom: 14px;
+    }
+    .evtreg-meta-row {
+      display: flex; align-items: center; gap: 6px;
+      font-size: 13px; color: rgba(255,255,255,0.55); margin-bottom: 5px;
+    }
+    .evtreg-meta-row .lucide { color: var(--cyan); width: 14px; height: 14px; flex-shrink: 0; }
+
+    .evtreg-body { padding: 28px 32px 32px; }
+    .evtreg-desc {
+      font-size: 14px; color: #6B849E; line-height: 1.7; margin-bottom: 24px;
+      padding-bottom: 24px; border-bottom: 1px solid #EEF3FA;
+    }
+
+    .evtreg-form-title {
+      font-family: 'CenturyGothic', sans-serif; font-size: 15px; font-weight: 800;
+      color: var(--navy); margin-bottom: 16px;
+    }
+    .evtreg-field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 12px; }
+    .evtreg-field { display: flex; flex-direction: column; gap: 5px; margin-bottom: 12px; }
+    .evtreg-label { font-size: 11px; font-weight: 700; color: #6B849E; letter-spacing: 0.04em; text-transform: uppercase; font-family: 'CenturyGothic', sans-serif; }
+    .evtreg-input {
+      height: 42px; border: 1.5px solid #D8E6F2; border-radius: 8px;
+      padding: 0 14px; font-family: 'CenturyGothic', sans-serif; font-size: 14px; color: var(--navy);
+      background: #F8FBFF; outline: none; transition: border-color 0.2s, box-shadow 0.2s;
+    }
+    .evtreg-input:focus { border-color: var(--cyan); box-shadow: 0 0 0 3px rgba(0,194,255,0.12); }
+
+    .evtreg-submit {
+      width: 100%; height: 48px; border: none; border-radius: 10px; cursor: pointer;
+      background: var(--cyan); color: var(--navy);
+      font-family: 'CenturyGothic', sans-serif; font-size: 15px; font-weight: 800;
+      display: flex; align-items: center; justify-content: center; gap: 8px;
+      transition: background 0.22s, transform 0.2s; margin-top: 20px;
+      box-shadow: 0 4px 20px rgba(0,194,255,0.35);
+    }
+    .evtreg-submit:hover { background: #33CFFF; transform: translateY(-1px); }
+
+    .evtreg-note {
+      font-size: 12px; color: #9AAFC7; text-align: center; margin-top: 12px;
+      line-height: 1.6;
+    }
+    .evtreg-note a { color: var(--cyan-dim); text-decoration: none; }
+    .evtreg-note a:hover { text-decoration: underline; }
+
+    /* Success state */
+    .evtreg-success {
+      display: none; text-align: center; padding: 40px 32px;
+    }
+    .evtreg-success.show { display: block; }
+    .evtreg-body.hide { display: none; }
+    .evtreg-success-icon {
+      width: 64px; height: 64px; border-radius: 50%; background: rgba(0,194,255,0.1);
+      border: 2px solid rgba(0,194,255,0.2); margin: 0 auto 20px;
+      display: flex; align-items: center; justify-content: center;
+      color: var(--cyan);
+    }
+    .evtreg-success-title {
+      font-family: 'CenturyGothic', sans-serif; font-size: 22px; font-weight: 800;
+      color: var(--navy); margin-bottom: 10px;
+    }
+    .evtreg-success-sub { font-size: 14px; color: #6B849E; line-height: 1.7; margin-bottom: 24px; }
+    .evtreg-success-steps {
+      background: #F4F8FF; border-radius: 12px; padding: 20px; text-align: left; margin-bottom: 24px;
+    }
+    .evtreg-step { display: flex; align-items: flex-start; gap: 12px; }
+    .evtreg-step + .evtreg-step { margin-top: 14px; }
+    .evtreg-step-num {
+      width: 24px; height: 24px; border-radius: 50%; background: var(--cyan); color: var(--navy);
+      font-size: 11px; font-weight: 800; flex-shrink: 0;
+      display: flex; align-items: center; justify-content: center; margin-top: 2px;
+    }
+    .evtreg-step-text { font-size: 13px; color: #374151; line-height: 1.5; }
+    .evtreg-step-text strong { display: block; font-weight: 800; color: var(--navy); margin-bottom: 2px; }
+
+    @media (max-width: 480px) {
+      .evtreg-modal { border-radius: 20px; }
+      .evtreg-header { padding: 24px 20px 20px; border-radius: 20px 20px 0 0; }
+      .evtreg-body { padding: 20px; }
+      .evtreg-field-row { grid-template-columns: 1fr; }
+    }
   </style>
 </head>
 <body>
+
+<!-- ════ EVENT REGISTRATION MODAL ════════════════════ -->
+<div class="evtreg-overlay" id="evtreg-overlay" aria-modal="true" role="dialog" aria-labelledby="evtreg-title">
+  <div class="evtreg-modal">
+    <div class="evtreg-header">
+      <button class="evtreg-close" id="evtreg-close" aria-label="Close">
+        <svg viewBox="0 0 24 24" fill="none" width="16" height="16" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M18 6L6 18M6 6l12 12"/></svg>
+      </button>
+      <div class="evtreg-badge"><i data-lucide="calendar" class="lucide" style="width:10px;height:10px;"></i> <span id="evtreg-category">Event</span></div>
+      <h2 class="evtreg-title" id="evtreg-title">Event Title</h2>
+      <div id="evtreg-meta"></div>
+    </div>
+
+    <div class="evtreg-body" id="evtreg-body">
+      <p class="evtreg-desc" id="evtreg-desc"></p>
+
+      <h3 class="evtreg-form-title">Register for this event</h3>
+      <form id="evtreg-form" novalidate>
+        <div class="evtreg-field-row">
+          <div class="evtreg-field">
+            <label class="evtreg-label" for="evtreg-firstname">First Name</label>
+            <input class="evtreg-input" id="evtreg-firstname" name="firstName" type="text" placeholder="John" required autocomplete="given-name" />
+          </div>
+          <div class="evtreg-field">
+            <label class="evtreg-label" for="evtreg-lastname">Last Name</label>
+            <input class="evtreg-input" id="evtreg-lastname" name="lastName" type="text" placeholder="Doe" required autocomplete="family-name" />
+          </div>
+        </div>
+        <div class="evtreg-field">
+          <label class="evtreg-label" for="evtreg-email">Email Address</label>
+          <input class="evtreg-input" id="evtreg-email" name="email" type="email" placeholder="john@example.com" required autocomplete="email" />
+        </div>
+        <button type="submit" class="evtreg-submit">
+          <i data-lucide="arrow-right" class="lucide" style="width:16px;height:16px;"></i>
+          Register &amp; Continue
+        </button>
+      </form>
+      <p class="evtreg-note">
+        Already have an account? <a href="https://talents.digihire.io/login">Log in here</a> to register with one click.
+      </p>
+    </div>
+
+    <div class="evtreg-success" id="evtreg-success">
+      <div class="evtreg-success-icon">
+        <i data-lucide="check-circle-2" class="lucide" style="width:28px;height:28px;"></i>
+      </div>
+      <h3 class="evtreg-success-title">You're registered!</h3>
+      <p class="evtreg-success-sub">Check your email to confirm your spot. Here's what happens next:</p>
+      <div class="evtreg-success-steps">
+        <div class="evtreg-step">
+          <div class="evtreg-step-num">1</div>
+          <p class="evtreg-step-text"><strong>Verify your email</strong>Check your inbox for the verification link from Digihire.</p>
+        </div>
+        <div class="evtreg-step">
+          <div class="evtreg-step-num">2</div>
+          <p class="evtreg-step-text"><strong>Set up your profile</strong>Log in and complete your profile — it takes about 3 minutes.</p>
+        </div>
+        <div class="evtreg-step">
+          <div class="evtreg-step-num">3</div>
+          <p class="evtreg-step-text"><strong>Get event details</strong>We'll send you the access link, agenda, and reminders before the event.</p>
+        </div>
+      </div>
+      <a href="https://talents.digihire.io/talent" class="btn btn-cyan btn-lg" style="display:inline-flex;">Go to Your Dashboard →</a>
+    </div>
+  </div>
+</div>
 
 <!-- ════ NAVBAR ════════════════════════════════════ -->
 <nav id="navbar">
@@ -475,7 +664,16 @@
         <h2 class="featured-title">How to Launch Your First Sales Campaign on VoltSquad</h2>
         <p class="featured-desc">Join our team for a live walkthrough of how brands use VoltSquad to launch structured sales campaigns, activate sellers, and drive real user acquisition — from setup to results.</p>
         <div class="featured-cta-row">
-          <a href="https://talents.digihire.io/signup?module=events" class="btn btn-cyan btn-lg">Register Now →</a>
+          <button type="button" class="btn btn-cyan btn-lg evtreg-trigger"
+            data-title="How to Launch Your First Sales Campaign on VoltSquad"
+            data-category="Webinar"
+            data-date="Saturday, 10 May 2025"
+            data-time="2:00 PM — 4:00 PM WAT"
+            data-location="Online — Zoom"
+            data-format="Virtual"
+            data-desc="Join our team for a live walkthrough of how brands use VoltSquad to launch structured sales campaigns, activate sellers, and drive real user acquisition — from setup to results.">
+            Register Now →
+          </button>
           <a href="#upcoming" class="btn btn-outline-navy btn-lg">View All Events</a>
         </div>
       </div>
@@ -509,7 +707,11 @@
           </div>
           <div class="event-card-footer">
             <span class="event-card-seats">Spots left: <span>42</span></span>
-            <a href="https://talents.digihire.io/signup?module=events" class="btn btn-cyan btn-sm">Register</a>
+            <button type="button" class="btn btn-cyan btn-sm evtreg-trigger"
+              data-title="Breaking Into Tech Sales: A Practical Guide for Beginners"
+              data-category="Webinar" data-date="Wednesday, 14 May 2025"
+              data-time="6:00 PM WAT" data-location="Online — Zoom" data-format="Virtual"
+              data-desc="Learn how to land your first tech sales role even with zero prior experience. This webinar covers practical steps, mindset, and tools you need to get started.">Register</button>
           </div>
         </div>
       </div>
@@ -531,7 +733,11 @@
           </div>
           <div class="event-card-footer">
             <span class="event-card-seats">Spots left: <span>18</span></span>
-            <a href="https://talents.digihire.io/signup?module=events" class="btn btn-cyan btn-sm">Register</a>
+            <button type="button" class="btn btn-cyan btn-sm evtreg-trigger"
+              data-title="Digihire Lagos Sales Meetup — May Edition"
+              data-category="Meetup" data-date="Friday, 23 May 2025"
+              data-time="5:00 PM — 8:00 PM WAT" data-location="The Hive, Victoria Island, Lagos" data-format="In-Person"
+              data-desc="A community evening for sales talent, brand reps, and growth-minded professionals in Lagos. Network, share insights, and connect with people who are building sales careers.">Register</button>
           </div>
         </div>
       </div>
@@ -553,7 +759,11 @@
           </div>
           <div class="event-card-footer">
             <span class="event-card-seats">Spots left: <span>60</span></span>
-            <a href="https://talents.digihire.io/signup?module=events" class="btn btn-cyan btn-sm">Register</a>
+            <button type="button" class="btn btn-cyan btn-sm evtreg-trigger"
+              data-title="Sales Academy Bootcamp: Closing Techniques That Work"
+              data-category="Training" data-date="Saturday, 31 May 2025"
+              data-time="10:00 AM — 12:00 PM WAT" data-location="Online — Google Meet" data-format="Virtual"
+              data-desc="A practical two-hour training session on closing frameworks, objection handling, and follow-up systems used by top sales professionals.">Register</button>
           </div>
         </div>
       </div>
@@ -575,7 +785,11 @@
           </div>
           <div class="event-card-footer">
             <span class="event-card-seats">Spots left: <span>35</span></span>
-            <a href="https://talents.digihire.io/signup?module=events" class="btn btn-cyan btn-sm">Register</a>
+            <button type="button" class="btn btn-cyan btn-sm evtreg-trigger"
+              data-title="VoltSquad Seller Community Day — Abuja"
+              data-category="Community" data-date="Saturday, 7 June 2025"
+              data-time="11:00 AM — 2:00 PM WAT" data-location="Transcorp Hilton, Abuja" data-format="In-Person"
+              data-desc="Connect with fellow VoltSquad sellers, share wins, learn from top earners, and get campaign updates directly from the Digihire team.">Register</button>
           </div>
         </div>
       </div>
@@ -597,7 +811,11 @@
           </div>
           <div class="event-card-footer">
             <span class="event-card-seats">Spots left: <span>80</span></span>
-            <a href="https://talents.digihire.io/signup?module=events" class="btn btn-cyan btn-sm">Register</a>
+            <button type="button" class="btn btn-cyan btn-sm evtreg-trigger"
+              data-title="How Brands Win with Human-Led Sales Campaigns"
+              data-category="Webinar" data-date="Thursday, 12 June 2025"
+              data-time="3:00 PM WAT" data-location="Online — Zoom" data-format="Virtual"
+              data-desc="A brand-focused webinar on campaign strategy, field activation planning, and how to use VoltSquad for real user growth across markets.">Register</button>
           </div>
         </div>
       </div>
@@ -619,7 +837,11 @@
           </div>
           <div class="event-card-footer">
             <span class="event-card-seats">Spots left: <span>55</span></span>
-            <a href="https://talents.digihire.io/signup?module=events" class="btn btn-cyan btn-sm">Register</a>
+            <button type="button" class="btn btn-cyan btn-sm evtreg-trigger"
+              data-title="CV &amp; LinkedIn Masterclass for Sales Professionals"
+              data-category="Training" data-date="Saturday, 21 June 2025"
+              data-time="10:00 AM WAT" data-location="Online — Zoom" data-format="Virtual"
+              data-desc="Build a standout CV and optimise your LinkedIn profile to attract recruiters, hiring brands, and campaign managers looking for sales talent.">Register</button>
           </div>
         </div>
       </div>
@@ -839,5 +1061,114 @@
     </div>
   </div>
 </div>
+
+<script>
+  /* ── Event Registration Modal ──────────────────────── */
+  (function() {
+    var overlay  = document.getElementById('evtreg-overlay');
+    var closeBtn = document.getElementById('evtreg-close');
+    var form     = document.getElementById('evtreg-form');
+    var body     = document.getElementById('evtreg-body');
+    var success  = document.getElementById('evtreg-success');
+
+    function openModal(data) {
+      document.getElementById('evtreg-category').textContent = data.category || 'Event';
+      document.getElementById('evtreg-title').textContent = data.title || '';
+      document.getElementById('evtreg-desc').textContent = data.desc || '';
+
+      /* Build meta rows */
+      var meta = document.getElementById('evtreg-meta');
+      meta.innerHTML = '';
+      [
+        ['calendar', data.date],
+        ['clock',    data.time],
+        ['map-pin',  data.location],
+      ].forEach(function(row) {
+        if (!row[1]) return;
+        var d = document.createElement('div');
+        d.className = 'evtreg-meta-row';
+        /* Safe DOM construction — no innerHTML with dynamic data */
+        var icon = document.createElement('i');
+        icon.setAttribute('data-lucide', row[0]); /* row[0] is a hardcoded literal from the array above */
+        icon.className = 'lucide';
+        var txt = document.createTextNode(' ' + row[1]);
+        d.appendChild(icon);
+        d.appendChild(txt);
+        meta.appendChild(d);
+      });
+
+      /* Reset state */
+      body.classList.remove('hide');
+      success.classList.remove('show');
+      form.reset();
+
+      overlay.classList.add('open');
+      document.body.style.overflow = 'hidden';
+      lucide.createIcons();
+
+      /* Focus first input after transition */
+      setTimeout(function() {
+        var f = document.getElementById('evtreg-firstname');
+        if (f) f.focus();
+      }, 260);
+    }
+
+    function closeModal() {
+      overlay.classList.remove('open');
+      document.body.style.overflow = '';
+    }
+
+    /* Trigger buttons */
+    document.addEventListener('click', function(e) {
+      var btn = e.target.closest('.evtreg-trigger');
+      if (btn) {
+        e.preventDefault();
+        openModal({
+          title:    btn.dataset.title,
+          category: btn.dataset.category,
+          date:     btn.dataset.date,
+          time:     btn.dataset.time,
+          location: btn.dataset.location,
+          format:   btn.dataset.format,
+          desc:     btn.dataset.desc,
+        });
+      }
+    });
+
+    closeBtn.addEventListener('click', closeModal);
+
+    /* Close on overlay click outside modal */
+    overlay.addEventListener('click', function(e) {
+      if (e.target === overlay) closeModal();
+    });
+
+    /* Close on Escape */
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape' && overlay.classList.contains('open')) closeModal();
+    });
+
+    /* Form submit — redirect to talent sign-up with pre-filled params */
+    form.addEventListener('submit', function(e) {
+      e.preventDefault();
+      var fn  = document.getElementById('evtreg-firstname').value.trim();
+      var ln  = document.getElementById('evtreg-lastname').value.trim();
+      var em  = document.getElementById('evtreg-email').value.trim();
+      if (!fn || !ln || !em) return;
+
+      /* Show success state immediately */
+      body.classList.add('hide');
+      success.classList.add('show');
+      lucide.createIcons();
+
+      /* After a moment, redirect to signup with pre-filled data */
+      var url = 'https://talents.digihire.io/signup?module=events'
+        + '&first_name=' + encodeURIComponent(fn)
+        + '&last_name='  + encodeURIComponent(ln)
+        + '&email='      + encodeURIComponent(em);
+
+      setTimeout(function() { window.location.href = url; }, 3200);
+    });
+  })();
+</script>
 </body>
 </html>

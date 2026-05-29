@@ -156,7 +156,8 @@ export default function TalentHome() {
     setSuccessMod('gigs');
   };
 
-  const firstName = (user?.user_metadata?.full_name as string | undefined)?.split(' ')[0] ?? 'there';
+  const firstName = (user?.user_metadata?.first_name as string | undefined) ||
+    (user?.user_metadata?.full_name as string | undefined)?.split(' ')[0] || 'there';
 
   return (
     <div className="space-y-8 max-w-5xl mx-auto">

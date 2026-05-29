@@ -343,7 +343,7 @@ export default function Signup() {
   const service = searchParams.get('service') as ServiceKey | null;
   const formConfig = (service && SERVICE_FORM[service]) ? SERVICE_FORM[service] : { cta: 'Create Brand Account' };
 
-  const [formData, setFormData] = useState({ companyName: '', contactName: '', email: '', phoneNumber: '', password: '', confirmPassword: '' });
+  const [formData, setFormData] = useState({ companyName: '', firstName: '', lastName: '', email: '', phoneNumber: '', password: '', confirmPassword: '' });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [accountExists, setAccountExists] = useState(false);
@@ -362,7 +362,15 @@ export default function Signup() {
         password: formData.password,
         options: {
           emailRedirectTo: REDIRECT_URL,
-          data: { account_types: ['brand'], active_modules: activeModules, full_name: formData.contactName, company_name: formData.companyName, phone: formData.phoneNumber },
+          data: {
+            account_types: ['brand'],
+            active_modules: activeModules,
+            first_name: formData.firstName,
+            last_name: formData.lastName,
+            full_name: `${formData.firstName} ${formData.lastName}`.trim(),
+            company_name: formData.companyName,
+            phone: formData.phoneNumber,
+          },
         },
       });
       if (signUpErr) {
@@ -430,7 +438,10 @@ export default function Signup() {
               )}
               <div className="space-y-3">
                 <Field label="Company Name" name="companyName" type="text" placeholder="Acme Inc" icon={<Building2 size={14} />} value={formData.companyName} onChange={handleChange} />
-                <Field label="Contact Name" name="contactName" type="text" placeholder="John Smith" icon={<User size={14} />} value={formData.contactName} onChange={handleChange} />
+                <div className="grid grid-cols-2 gap-3">
+                  <Field label="First Name" name="firstName" type="text" placeholder="John" icon={<User size={14} />} value={formData.firstName} onChange={handleChange} />
+                  <Field label="Last Name" name="lastName" type="text" placeholder="Smith" icon={<User size={14} />} value={formData.lastName} onChange={handleChange} />
+                </div>
                 <Field label="Work Email" name="email" type="email" placeholder="hr@acme.com" icon={<Mail size={14} />} value={formData.email} onChange={handleChange} />
                 <Field label="Phone" name="phoneNumber" type="tel" placeholder="+234 800 000 0000" icon={<Phone size={14} />} value={formData.phoneNumber} onChange={handleChange} />
                 <Field label="Password" name="password" type="password" placeholder="••••••••" icon={<Lock size={14} />} value={formData.password} onChange={handleChange} />
