@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import { supabase as _supabase, useAuth } from '@digihire/shared';
 import { Card, CardContent } from '@digihire/shared';
 import { Badge } from '@digihire/shared';
@@ -82,6 +82,7 @@ export default function JobsPage() {
   const { user } = useAuth();
   const { profile } = useTalentProfile();
   const navigate = useNavigate();
+  const [searchParams, setSearchParams] = useSearchParams();
 
   const [jobs, setJobs] = useState<JobListing[]>([]);
   const [loading, setLoading] = useState(true);
@@ -119,6 +120,19 @@ export default function JobsPage() {
     };
     fetchJobs();
   }, []);
+
+  // Auto-open a job linked from an external source (e.g. landing page job card)
+  useEffect(() => {
+    const jobId = searchParams.get('job');
+    if (!jobId || loading || jobs.length === 0) return;
+    const match = jobs.find(j => j.id === jobId);
+    if (match) {
+      openJob(match);
+      // Remove the param so back/reload doesn't re-open
+      setSearchParams(prev => { prev.delete('job'); return prev; }, { replace: true });
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [jobs, loading]);
 
   // Fetch user's existing applications
   useEffect(() => {

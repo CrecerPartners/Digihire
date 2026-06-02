@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
+import { useNavigate, useSearchParams, Link } from 'react-router-dom';
 import { useAuth } from '@digihire/shared';
 import { motion } from 'motion/react';
 import { Button, Input, Card, CardContent, CardHeader, CardTitle, CardDescription } from '@digihire/shared';
@@ -13,12 +13,25 @@ export default function Login() {
   const [showPassword, setShowPassword] = useState(false);
   const { signIn, user, loading: authLoading } = useAuth();
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+
+  const safeRedirect = (() => {
+    const r = searchParams.get('redirect');
+    if (!r) return '/talent';
+    try {
+      const decoded = decodeURIComponent(r);
+      // Only allow same-origin paths (no protocol or external hosts)
+      return decoded.startsWith('/') && !decoded.startsWith('//') ? decoded : '/talent';
+    } catch {
+      return '/talent';
+    }
+  })();
 
   useEffect(() => {
     if (!authLoading && user) {
-      navigate('/talent');
+      navigate(safeRedirect, { replace: true });
     }
-  }, [user, authLoading, navigate]);
+  }, [user, authLoading, navigate, safeRedirect]);
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -27,7 +40,7 @@ export default function Login() {
     try {
       const { error: err } = await signIn(email, password);
       if (err) { setError(err.message || 'Failed to login'); return; }
-      navigate('/talent');
+      navigate(safeRedirect, { replace: true });
     } finally {
       setLoading(false);
     }
@@ -74,7 +87,7 @@ export default function Login() {
             </form>
             <p className="mt-6 text-center text-sm text-muted-foreground border-t border-border/50 pt-4">
               Need an account?{' '}
-              <Link to="/signup" className="text-primary hover:underline font-medium">Join the Talent Pool</Link>
+              <Link to={`/signup${searchParams.get('redirect') ? `?redirect=${searchParams.get('redirect')}` : ''}`} className="text-primary hover:underline font-medium">Join the Talent Pool</Link>
             </p>
           </CardContent>
         </Card>

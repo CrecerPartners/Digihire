@@ -397,6 +397,8 @@ export default function Signup() {
       }
       sessionStorage.setItem('pending_verify_email', formData.email);
       sessionStorage.setItem('pending_module', module);
+      const redirectParam = searchParams.get('redirect');
+      if (redirectParam) sessionStorage.setItem('pending_redirect', redirectParam);
       navigate('/verify-email');
     } catch (err: unknown) {
       setError(err instanceof Error ? err.message : 'Failed to create account');

@@ -70,10 +70,21 @@ export default function VerifyEmail() {
       setOtp(['', '', '', '', '', '']);
       inputRefs.current[0]?.focus();
     } else {
+      const pendingRedirect = sessionStorage.getItem('pending_redirect');
       sessionStorage.removeItem('pending_verify_email');
       sessionStorage.removeItem('pending_module');
+      sessionStorage.removeItem('pending_redirect');
       setSuccess('Email verified! Redirecting...');
-      setTimeout(() => navigate('/talent'), 1000);
+      const destination = (() => {
+        if (!pendingRedirect) return '/talent';
+        try {
+          const decoded = decodeURIComponent(pendingRedirect);
+          return decoded.startsWith('/') && !decoded.startsWith('//') ? decoded : '/talent';
+        } catch {
+          return '/talent';
+        }
+      })();
+      setTimeout(() => navigate(destination), 1000);
     }
     setVerifying(false);
   };
