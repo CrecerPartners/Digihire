@@ -1,7 +1,7 @@
 import {
   UserCircle, Settings, GraduationCap, LogOut, CalendarDays, BookOpen,
   Zap, Briefcase, ShoppingBag, Wallet, Calculator, Users, Trophy,
-  BarChart3, Lock, LayoutDashboard, FileText,
+  BarChart3, Lock, LayoutDashboard, FileText, Store,
 } from "lucide-react";
 import { NavLink } from "@/components/NavLink";
 import { useLocation, useNavigate } from "react-router-dom";
@@ -29,6 +29,7 @@ const TALENT_HUB_ITEMS: NavItem[] = [
 ];
 
 const VOLTSQUAD_ITEMS: NavItem[] = [
+  { label: "Overview", path: "/talent/voltsquad", icon: LayoutDashboard, exact: true },
   { label: "Campaigns", path: "/talent/voltsquad/campaigns", icon: Zap, exact: false },
   { label: "Marketplace", path: "/talent/voltsquad/marketplace", icon: ShoppingBag, exact: false },
   { label: "Wallet", path: "/talent/voltsquad/wallet", icon: Wallet, exact: false },
@@ -36,6 +37,7 @@ const VOLTSQUAD_ITEMS: NavItem[] = [
   { label: "Referrals", path: "/talent/voltsquad/referrals", icon: Users, exact: false },
   { label: "Leaderboard", path: "/talent/voltsquad/leaderboard", icon: Trophy, exact: false },
   { label: "Sales", path: "/talent/voltsquad/sales", icon: BarChart3, exact: false },
+  { label: "VS Settings", path: "/talent/voltsquad/settings", icon: Store, exact: false },
 ];
 
 const GIGS_ITEMS: NavItem[] = [

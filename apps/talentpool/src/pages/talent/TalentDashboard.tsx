@@ -21,6 +21,8 @@ import Referrals from '../voltsquad/Referrals';
 import Sales from '../voltsquad/Sales';
 import Leaderboard from '../voltsquad/Leaderboard';
 import BuyerOrders from '../voltsquad/BuyerOrders';
+import VoltSquadDashboard from '../voltsquad/Dashboard';
+import VoltSquadSettings from '../voltsquad/VoltSquadSettings';
 import TalentSettings from './TalentSettings';
 
 const SETUP_PROMPTED_KEY = 'dh_setup_prompted';
@@ -104,6 +106,8 @@ export default function TalentDashboard() {
           <Route path="/events" element={<EventsPage />} />
 
           {/* VoltSquad */}
+          <Route path="/voltsquad" element={<VoltSquadDashboard />} />
+          <Route path="/voltsquad/settings" element={<VoltSquadSettings />} />
           <Route path="/voltsquad/campaigns" element={<Campaigns />} />
           <Route path="/voltsquad/campaigns/mine" element={<MyCampaigns />} />
           <Route path="/voltsquad/campaigns/:id" element={<CampaignDetail />} />
