@@ -5,11 +5,13 @@
   "rewrites": [
     { "source": "/about", "destination": "/about.html" },
     { "source": "/blog", "destination": "/blog.html" },
+    { "source": "/blog/:slug", "destination": "/blog-:slug.html" },
     { "source": "/contact", "destination": "/contact.html" },
     { "source": "/events", "destination": "/events.html" },
     { "source": "/voltsquad", "destination": "/voltsquad.html" },
     { "source": "/sales-activations", "destination": "/sales-activations.html" },
     { "source": "/jobs", "destination": "/jobs.html" },
+    { "source": "/jobs/:id", "destination": "/jobs.html" },
     { "source": "/admin/:path*", "destination": "https://digihire-admin.vercel.app/admin/:path*" }
   ],
   "redirects": [
