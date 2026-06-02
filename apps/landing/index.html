@@ -715,10 +715,17 @@
     }
     .bwt:hover { border-color: var(--cyan); color: var(--navy); }
 
+    @media (max-width: 1200px) {
+      #navbar.scrolled { left: 10%; right: 10%; }
+    }
     @media (max-width: 960px) {
       .nav-links { display: none; }
       .nav-actions { display: none; }
       .nav-hamburger { display: flex; align-items: center; justify-content: center; }
+      #navbar.scrolled { left: 12px; right: 12px; top: 10px; border-radius: 16px; }
+    }
+    @media (max-width: 640px) {
+      #navbar.scrolled { left: 0; right: 0; top: 0; border-radius: 0; }
     }
 
     /* ── MOBILE NAV (hamburger + slide-in overlay) ── */
@@ -1466,6 +1473,9 @@
       line-height: 1.4; margin-bottom: 8px;
       font-family: 'Instrument Sans', sans-serif;
     }
+    @media (max-width: 768px) {
+      .logos-label { display: none; }
+    }
 
     /* ── What You Can Do (talent) ─────────────────── */
     .talent-what-section { background: #F4F8FF; padding: 80px 0; }
@@ -1868,19 +1878,19 @@
       <div class="hero-content-box">
         <!-- Toggle: exactly matching Blakskill's "I'm Looking for Jobs / I'm Hiring Talent" -->
         <div class="hero-tabs">
-          <button class="hero-tab" onclick="setHeroTab(this,'job-seeker')">For Talent</button>
-          <button class="hero-tab active" onclick="setHeroTab(this,'employer')">For Brands</button>
+          <button class="hero-tab active" onclick="setHeroTab(this,'job-seeker')">For Talent</button>
+          <button class="hero-tab" onclick="setHeroTab(this,'employer')">For Brands</button>
         </div>
 
         <h1 class="hero-headline" id="hero-headline">
-          Acquire users, recruit sales talent, and run field activations with Digihire
+          Join Digihire to access sales gigs, jobs, and growth opportunities
         </h1>
 
         <p class="hero-sub" id="hero-sub">
-          Digihire helps brands grow through structured sales campaigns, targeted recruitment, and field activations designed to drive visibility, users, and revenue.
+          Access commission-based campaigns, project-based gigs, part-time roles, full-time jobs, and career-building opportunities with brands looking for people who can sell.
         </p>
 
-        <a href="https://brands.digihire.io/signup" class="hero-cta-single" id="hero-cta-primary">Get Started</a>
+        <a href="https://talents.digihire.io/signup" class="hero-cta-single" id="hero-cta-primary">Get Started</a>
       </div>
     </div>
   </section>
@@ -1897,6 +1907,7 @@
           <p class="logos-label">From fintechs and SaaS products to consumer brands and fast-growing businesses, Digihire connects talent to brands looking for sellers, closers, field reps, merchandisers, and sales teams that can drive results.</p>
         </div>
         <div class="logos-label-brand-mode">
+          <p class="logos-label-title">Brands We Work With</p>
           <p class="logos-label">Leading companies worldwide trust DigiHire to source and activate the best sales talent across Africa</p>
         </div>
       </div>
@@ -1955,6 +1966,127 @@
     </div>
   </div>
 </section>
+
+<!-- ════ JOBS & GIGS ═════════════════════════════════════════════ -->
+<section id="jobs" style="padding:80px 0;background:var(--white);">
+  <div class="container">
+    <div class="reveal" style="text-align:center;margin-bottom:48px;">
+      <p class="section-label">Open Opportunities</p>
+      <h2 class="section-heading">Jobs &amp; Gigs Available Now</h2>
+      <p class="section-sub">Browse full-time, part-time, contract, and short-term gig roles posted by brands hiring on Digihire.</p>
+    </div>
+
+    <!-- Filter bar -->
+    <div id="jobs-filters" style="display:flex;flex-wrap:wrap;gap:12px;margin:0 auto 32px;align-items:center;max-width:860px;">
+      <div style="position:relative;flex:1;min-width:200px;">
+        <svg style="position:absolute;left:12px;top:50%;transform:translateY(-50%);width:16px;height:16px;color:#7A9CC5;" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+        <input id="jobs-search" type="text" placeholder="Search jobs..." style="width:100%;height:40px;border:1px solid var(--border);border-radius:var(--radius);background:var(--white);padding:0 12px 0 36px;font-family:inherit;font-size:14px;color:#111827;outline:none;" />
+      </div>
+      <select id="jobs-type-filter" style="height:40px;border:1px solid var(--border);border-radius:var(--radius);background:var(--white);padding:0 12px;font-family:inherit;font-size:13px;color:#111827;outline:none;cursor:pointer;">
+        <option value="all">All Types</option>
+        <option value="full_time">Full-Time</option>
+        <option value="part_time">Part-Time</option>
+        <option value="contract">Contract</option>
+        <option value="gig">Gig</option>
+        <option value="internship">Internship</option>
+      </select>
+      <select id="jobs-mode-filter" style="height:40px;border:1px solid var(--border);border-radius:var(--radius);background:var(--white);padding:0 12px;font-family:inherit;font-size:13px;color:#111827;outline:none;cursor:pointer;">
+        <option value="all">All Modes</option>
+        <option value="onsite">Onsite</option>
+        <option value="remote">Remote</option>
+        <option value="hybrid">Hybrid</option>
+      </select>
+    </div>
+
+    <!-- Jobs grid -->
+    <div style="max-width:860px;margin:0 auto;">
+      <div id="jobs-grid" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:16px;">
+        <div id="jobs-loading" style="grid-column:1/-1;display:flex;justify-content:center;padding:40px 0;">
+          <div style="width:32px;height:32px;border:3px solid var(--border);border-top-color:var(--cyan);border-radius:50%;animation:spin 0.7s linear infinite;"></div>
+        </div>
+      </div>
+    </div>
+
+    <div id="jobs-empty" style="display:none;text-align:center;padding:60px 0;">
+      <p style="color:var(--gray-2);font-size:15px;">No jobs match your search. Try adjusting the filters.</p>
+    </div>
+
+    <div style="text-align:center;margin-top:40px;">
+      <a href="jobs.html" class="btn btn-outline" style="border-color:var(--cyan-border);color:var(--navy);">View All Jobs &amp; Gigs →</a>
+    </div>
+  </div>
+</section>
+
+<style>
+  @keyframes spin { to { transform: rotate(360deg); } }
+  .job-card {
+    background: var(--white); border: 1px solid var(--border); border-radius: var(--radius-lg);
+    padding: 20px; cursor: pointer; transition: border-color 0.2s, box-shadow 0.2s, transform 0.2s;
+    text-decoration: none; display: block;
+  }
+  .job-card:hover { border-color: var(--cyan-border); box-shadow: 0 4px 20px rgba(0,194,255,0.08); transform: translateY(-2px); }
+  .job-card.featured { background: rgba(0,194,255,0.03); border-color: rgba(0,194,255,0.25); }
+  .job-type-badge { display: inline-flex; align-items: center; font-size: 11px; font-weight: 600; padding: 2px 8px; border-radius: 20px; border: 1px solid; }
+  .badge-full_time  { background:rgba(59,130,246,0.08); color:#2563eb; border-color:rgba(59,130,246,0.2); }
+  .badge-part_time  { background:rgba(139,92,246,0.08); color:#7c3aed; border-color:rgba(139,92,246,0.2); }
+  .badge-contract   { background:rgba(234,88,12,0.08);  color:#c2410c; border-color:rgba(234,88,12,0.2); }
+  .badge-gig        { background:rgba(22,163,74,0.08);  color:#15803d; border-color:rgba(22,163,74,0.2); }
+  .badge-internship { background:rgba(219,39,119,0.08); color:#be185d; border-color:rgba(219,39,119,0.2); }
+  .badge-remote  { background:rgba(16,185,129,0.08); color:#047857; border-color:rgba(16,185,129,0.2); }
+  .badge-hybrid  { background:rgba(245,158,11,0.08);  color:#b45309; border-color:rgba(245,158,11,0.2); }
+</style>
+
+<script>
+(function() {
+  var SUPABASE_URL = 'https://yaojxewpkrjonrvqpsxi.supabase.co';
+  var SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inlhb2p4ZXdwa3Jqb25ydnFwc3hpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzI4MDM2NjUsImV4cCI6MjA4ODM3OTY2NX0.QReagLpKOyB40i2bvjfIw8zlZkAAgJa-sFxIYYpykMU';
+  var allJobs = [], activeType = 'all', activeMode = 'all', searchVal = '';
+  var TYPE_LABELS = { full_time:'Full-Time', part_time:'Part-Time', contract:'Contract', gig:'Gig', internship:'Internship' };
+  function esc(s) { return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;'); }
+  function fmtSalary(min, max, pt) {
+    if (!min && !max) return null;
+    function f(n) { return n >= 1000 ? '₦' + (n/1000).toFixed(0) + 'k' : '₦' + n; }
+    var r = (min && max) ? f(min)+' – '+f(max) : min ? 'From '+f(min) : 'Up to '+f(max);
+    return r + (pt === 'hourly' ? '/hr' : pt === 'per_gig' ? '/gig' : pt === 'commission' ? ' (comm.)' : '/mo');
+  }
+  function renderJobs() {
+    var q = searchVal.toLowerCase();
+    var filtered = allJobs.filter(function(j) {
+      return (!q || j.title.toLowerCase().includes(q) || j.company_name.toLowerCase().includes(q) || (j.location||'').toLowerCase().includes(q))
+        && (activeType === 'all' || j.job_type === activeType)
+        && (activeMode === 'all' || j.work_mode === activeMode);
+    });
+    var grid = document.getElementById('jobs-grid');
+    var empty = document.getElementById('jobs-empty');
+    if (filtered.length === 0) { grid.innerHTML = ''; empty.style.display = 'block'; return; }
+    empty.style.display = 'none';
+    grid.innerHTML = filtered.slice(0, 9).map(function(j) {
+      var sal = fmtSalary(j.salary_min, j.salary_max, j.pay_type);
+      var safeType = esc(j.job_type); var safeMode = esc(j.work_mode||'');
+      var modeTag = (j.work_mode && j.work_mode !== 'onsite') ? '<span class="job-type-badge badge-'+safeMode+'" style="margin-left:4px;">'+safeMode+'</span>' : '';
+      return '<a class="job-card'+(j.featured?' featured':'')+'" href="jobs.html?id='+esc(j.id)+'">'
+        + '<div style="display:flex;align-items:flex-start;gap:12px;">'
+        + '<div style="width:40px;height:40px;border-radius:10px;background:rgba(0,194,255,0.08);display:flex;align-items:center;justify-content:center;flex-shrink:0;"><svg width="18" height="18" fill="none" stroke="#00C2FF" stroke-width="2" viewBox="0 0 24 24"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/></svg></div>'
+        + '<div style="flex:1;min-width:0;">'
+        + '<div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;"><span style="font-weight:700;font-size:15px;color:#06111F;">'+esc(j.title)+'</span>'+(j.featured?'<svg width="13" height="13" fill="#f59e0b" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87L18.18 21 12 17.77 5.82 21 7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>':'')+'</div>'
+        + '<p style="font-size:13px;color:#7A9CC5;margin:2px 0 8px;">'+esc(j.company_name)+'</p>'
+        + '<div style="display:flex;flex-wrap:wrap;gap:6px;align-items:center;"><span class="job-type-badge badge-'+safeType+'">'+(TYPE_LABELS[j.job_type]||safeType)+'</span>'+modeTag+'</div>'
+        + '<div style="display:flex;flex-wrap:wrap;gap:12px;margin-top:10px;">'+(j.location?'<span style="font-size:12px;color:#7A9CC5;display:flex;align-items:center;gap:4px;"><svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>'+esc(j.location)+'</span>':'')+(sal?'<span style="font-size:12px;color:#7A9CC5;">'+esc(sal)+'</span>':'')+'</div>'
+        + '</div></div></a>';
+    }).join('');
+  }
+  fetch(SUPABASE_URL + '/rest/v1/job_listings?status=eq.published&order=featured.desc,created_at.desc&limit=30', {
+    headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY }
+  }).then(function(r) { return r.json(); }).then(function(data) {
+    document.getElementById('jobs-loading').style.display = 'none';
+    allJobs = Array.isArray(data) ? data : [];
+    renderJobs();
+  }).catch(function() { document.getElementById('jobs-loading').style.display = 'none'; });
+  document.getElementById('jobs-search').addEventListener('input', function(e) { searchVal = e.target.value; renderJobs(); });
+  document.getElementById('jobs-type-filter').addEventListener('change', function(e) { activeType = e.target.value; renderJobs(); });
+  document.getElementById('jobs-mode-filter').addEventListener('change', function(e) { activeMode = e.target.value; renderJobs(); });
+})();
+</script>
 
 <!-- ════ T2. COMMUNITY + ROLES SPLIT ════════════ -->
 <section class="talent-split-section">
@@ -2517,170 +2649,6 @@
 
 </div><!-- end .mode-brand -->
 
-<!-- ════ JOBS & GIGS — shared across both modes ════════════════════ -->
-<section id="jobs" style="padding:80px 0;background:var(--white);">
-  <div class="container">
-    <div class="reveal" style="text-align:center;margin-bottom:48px;">
-      <p class="section-label">Open Opportunities</p>
-      <h2 class="section-heading">Jobs &amp; Gigs Available Now</h2>
-      <p class="section-sub">Browse full-time, part-time, contract, and short-term gig roles posted by brands hiring on Digihire.</p>
-    </div>
-
-    <!-- Filter bar -->
-    <div id="jobs-filters" style="display:flex;flex-wrap:wrap;gap:12px;margin:0 auto 32px;align-items:center;max-width:860px;">
-      <div style="position:relative;flex:1;min-width:200px;">
-        <svg style="position:absolute;left:12px;top:50%;transform:translateY(-50%);width:16px;height:16px;color:#7A9CC5;" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
-        <input id="jobs-search" type="text" placeholder="Search jobs..." style="width:100%;height:40px;border:1px solid var(--border);border-radius:var(--radius);background:var(--white);padding:0 12px 0 36px;font-family:inherit;font-size:14px;color:#111827;outline:none;" />
-      </div>
-      <select id="jobs-type-filter" style="height:40px;border:1px solid var(--border);border-radius:var(--radius);background:var(--white);padding:0 12px;font-family:inherit;font-size:13px;color:#111827;outline:none;cursor:pointer;">
-        <option value="all">All Types</option>
-        <option value="full_time">Full-Time</option>
-        <option value="part_time">Part-Time</option>
-        <option value="contract">Contract</option>
-        <option value="gig">Gig</option>
-        <option value="internship">Internship</option>
-      </select>
-      <select id="jobs-mode-filter" style="height:40px;border:1px solid var(--border);border-radius:var(--radius);background:var(--white);padding:0 12px;font-family:inherit;font-size:13px;color:#111827;outline:none;cursor:pointer;">
-        <option value="all">All Modes</option>
-        <option value="onsite">Onsite</option>
-        <option value="remote">Remote</option>
-        <option value="hybrid">Hybrid</option>
-      </select>
-    </div>
-
-    <!-- Jobs grid -->
-    <div style="max-width:860px;margin:0 auto;">
-      <div id="jobs-grid" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:16px;">
-        <!-- Loading state -->
-        <div id="jobs-loading" style="grid-column:1/-1;display:flex;justify-content:center;padding:40px 0;">
-          <div style="width:32px;height:32px;border:3px solid var(--border);border-top-color:var(--cyan);border-radius:50%;animation:spin 0.7s linear infinite;"></div>
-        </div>
-      </div>
-    </div>
-
-    <div id="jobs-empty" style="display:none;text-align:center;padding:60px 0;">
-      <p style="color:var(--gray-2);font-size:15px;">No jobs match your search. Try adjusting the filters.</p>
-    </div>
-
-    <div style="text-align:center;margin-top:40px;">
-      <a href="jobs.html" class="btn btn-outline" style="border-color:var(--cyan-border);color:var(--navy);">View All Jobs &amp; Gigs →</a>
-    </div>
-  </div>
-</section>
-
-<style>
-  @keyframes spin { to { transform: rotate(360deg); } }
-
-  .job-card {
-    background: var(--white);
-    border: 1px solid var(--border);
-    border-radius: var(--radius-lg);
-    padding: 20px;
-    cursor: pointer;
-    transition: border-color 0.2s, box-shadow 0.2s, transform 0.2s;
-    text-decoration: none;
-    display: block;
-  }
-  .job-card:hover {
-    border-color: var(--cyan-border);
-    box-shadow: 0 4px 20px rgba(0,194,255,0.08);
-    transform: translateY(-2px);
-  }
-  .job-card.featured { background: rgba(0,194,255,0.03); border-color: rgba(0,194,255,0.25); }
-  .job-type-badge {
-    display: inline-flex; align-items: center;
-    font-size: 11px; font-weight: 600; padding: 2px 8px; border-radius: 20px; border: 1px solid;
-  }
-  .badge-full_time  { background:rgba(59,130,246,0.08); color:#2563eb; border-color:rgba(59,130,246,0.2); }
-  .badge-part_time  { background:rgba(139,92,246,0.08); color:#7c3aed; border-color:rgba(139,92,246,0.2); }
-  .badge-contract   { background:rgba(234,88,12,0.08);  color:#c2410c; border-color:rgba(234,88,12,0.2); }
-  .badge-gig        { background:rgba(22,163,74,0.08);  color:#15803d; border-color:rgba(22,163,74,0.2); }
-  .badge-internship { background:rgba(219,39,119,0.08); color:#be185d; border-color:rgba(219,39,119,0.2); }
-  .badge-remote  { background:rgba(16,185,129,0.08); color:#047857; border-color:rgba(16,185,129,0.2); }
-  .badge-hybrid  { background:rgba(245,158,11,0.08);  color:#b45309; border-color:rgba(245,158,11,0.2); }
-</style>
-
-<script>
-(function() {
-  var SUPABASE_URL = 'https://yaojxewpkrjonrvqpsxi.supabase.co';
-  var SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inlhb2p4ZXdwa3Jqb25ydnFwc3hpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzI4MDM2NjUsImV4cCI6MjA4ODM3OTY2NX0.QReagLpKOyB40i2bvjfIw8zlZkAAgJa-sFxIYYpykMU';
-
-  var allJobs = [];
-  var activeType = 'all';
-  var activeMode = 'all';
-  var searchVal = '';
-
-  var TYPE_LABELS = { full_time:'Full-Time', part_time:'Part-Time', contract:'Contract', gig:'Gig', internship:'Internship' };
-
-  function fmtSalary(min, max, pt) {
-    if (!min && !max) return null;
-    function f(n) { return n >= 1000 ? '₦' + (n/1000).toFixed(0) + 'k' : '₦' + n; }
-    var r = (min && max) ? f(min)+' – '+f(max) : min ? 'From '+f(min) : 'Up to '+f(max);
-    var s = pt === 'hourly' ? '/hr' : pt === 'per_gig' ? '/gig' : pt === 'commission' ? ' (comm.)' : '/mo';
-    return r + s;
-  }
-
-  function renderJobs() {
-    var q = searchVal.toLowerCase();
-    var filtered = allJobs.filter(function(j) {
-      var mq = !q || j.title.toLowerCase().includes(q) || j.company_name.toLowerCase().includes(q) || (j.location||'').toLowerCase().includes(q);
-      var mt = activeType === 'all' || j.job_type === activeType;
-      var mm = activeMode === 'all' || j.work_mode === activeMode;
-      return mq && mt && mm;
-    });
-
-    var grid = document.getElementById('jobs-grid');
-    var empty = document.getElementById('jobs-empty');
-    if (filtered.length === 0) {
-      grid.innerHTML = '';
-      empty.style.display = 'block';
-      return;
-    }
-    empty.style.display = 'none';
-
-    var shown = filtered.slice(0, 9);
-    grid.innerHTML = shown.map(function(j) {
-      var sal = fmtSalary(j.salary_min, j.salary_max, j.pay_type);
-      var modeTag = (j.work_mode && j.work_mode !== 'onsite') ? '<span class="job-type-badge badge-'+j.work_mode+'" style="margin-left:4px;">'+j.work_mode+'</span>' : '';
-      return '<a class="job-card'+(j.featured?' featured':'')+'" href="jobs.html?id='+j.id+'">'
-        + '<div style="display:flex;align-items:flex-start;gap:12px;">'
-        + '<div style="width:40px;height:40px;border-radius:10px;background:rgba(0,194,255,0.08);display:flex;align-items:center;justify-content:center;flex-shrink:0;">'
-        + '<svg width="18" height="18" fill="none" stroke="#00C2FF" stroke-width="2" viewBox="0 0 24 24"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/></svg>'
-        + '</div>'
-        + '<div style="flex:1;min-width:0;">'
-        + '<div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;">'
-        + '<span style="font-weight:700;font-size:15px;color:#06111F;">'+j.title+'</span>'
-        + (j.featured ? '<svg width="13" height="13" fill="#f59e0b" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87L18.18 21 12 17.77 5.82 21 7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>' : '')
-        + '</div>'
-        + '<p style="font-size:13px;color:#7A9CC5;margin:2px 0 8px;">'+j.company_name+'</p>'
-        + '<div style="display:flex;flex-wrap:wrap;gap:6px;align-items:center;">'
-        + '<span class="job-type-badge badge-'+j.job_type+'">'+( TYPE_LABELS[j.job_type]||j.job_type)+'</span>'
-        + modeTag
-        + '</div>'
-        + '<div style="display:flex;flex-wrap:wrap;gap:12px;margin-top:10px;">'
-        + (j.location ? '<span style="font-size:12px;color:#7A9CC5;display:flex;align-items:center;gap:4px;"><svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>'+j.location+'</span>' : '')
-        + (sal ? '<span style="font-size:12px;color:#7A9CC5;">'+sal+'</span>' : '')
-        + '</div>'
-        + '</div></div></a>';
-    }).join('');
-  }
-
-  fetch(SUPABASE_URL + '/rest/v1/job_listings?status=eq.published&order=featured.desc,created_at.desc&limit=30', {
-    headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY }
-  }).then(function(r) { return r.json(); }).then(function(data) {
-    document.getElementById('jobs-loading').style.display = 'none';
-    allJobs = Array.isArray(data) ? data : [];
-    renderJobs();
-  }).catch(function() {
-    document.getElementById('jobs-loading').style.display = 'none';
-  });
-
-  document.getElementById('jobs-search').addEventListener('input', function(e) { searchVal = e.target.value; renderJobs(); });
-  document.getElementById('jobs-type-filter').addEventListener('change', function(e) { activeType = e.target.value; renderJobs(); });
-  document.getElementById('jobs-mode-filter').addEventListener('change', function(e) { activeMode = e.target.value; renderJobs(); });
-})();
-</script>
-
 <!-- ════ INSIGHTS / BLOG — shared across both modes ═══════════════ -->
 <section class="insights" id="insights">
   <div class="container">
@@ -2871,7 +2839,7 @@
   }
 
   /* Set default mode on load */
-  document.body.dataset.mode = 'brand';
+  document.body.dataset.mode = 'talent';
 
   /* ── Scroll reveal ────────────────────────────── */
   /* rootMargin '80px' triggers reveal before element fully enters viewport,

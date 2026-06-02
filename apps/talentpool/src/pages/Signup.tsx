@@ -3,7 +3,7 @@ import { useNavigate, useSearchParams, Link } from 'react-router-dom';
 import { supabase as _supabase } from '@digihire/shared';
 import { motion } from 'motion/react';
 import {
-  Mail, Lock, User, Phone, ArrowRight, Linkedin, FileText, Upload, X,
+  Mail, Lock, User, Phone, ArrowRight, Linkedin, FileText, Upload, X, Eye, EyeOff,
   CheckCircle, TrendingUp, Users, Zap, Briefcase, CalendarDays,
   Wallet, Target, ShoppingBag, Trophy, MapPin, Star, BarChart3,
 } from 'lucide-react';
@@ -514,12 +514,19 @@ function Field({ label, name, type, placeholder, icon, value, onChange, required
   icon: React.ReactNode; value: string; onChange: React.ChangeEventHandler<HTMLInputElement>;
   required?: boolean;
 }) {
+  const [show, setShow] = useState(false);
+  const isPassword = type === 'password';
   return (
     <div className="space-y-1.5">
       <label className="text-xs font-medium text-muted-foreground">{label}</label>
       <div className="relative">
         <div className="absolute inset-y-0 left-0 flex items-center pl-3 text-muted-foreground/60">{icon}</div>
-        <Input name={name} type={type} required={required} placeholder={placeholder} value={value} onChange={onChange} className="pl-9 bg-secondary border-border" />
+        <Input name={name} type={isPassword && show ? 'text' : type} required={required} placeholder={placeholder} value={value} onChange={onChange} className={`pl-9 bg-secondary border-border${isPassword ? ' pr-10' : ''}`} />
+        {isPassword && (
+          <button type="button" onClick={() => setShow(v => !v)} className="absolute inset-y-0 right-0 flex items-center px-3 text-muted-foreground hover:text-foreground transition-colors">
+            {show ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+          </button>
+        )}
       </div>
     </div>
   );
