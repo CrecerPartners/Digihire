@@ -292,8 +292,18 @@ var TYPE_LABELS = { full_time:'Full-Time', part_time:'Part-Time', contract:'Cont
 var EXP_LABELS = { any:'Any level', entry:'Entry level', mid:'Mid level', senior:'Senior level' };
 
 // Detect mode from URL: /jobs/:id → detail page; /jobs → list
-var pathMatch = window.location.pathname.match(/^\/jobs\/(.+)/);
-var PAGE_JOB_ID = pathMatch ? pathMatch[1] : null;
+// Extract job ID from path — supports both /jobs/UUID and /jobs/title-slug-UUID
+var _pathSegment = window.location.pathname.replace(/^\/jobs\/?/, '');
+var _uuidMatch = _pathSegment.match(/([0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12})/i);
+var PAGE_JOB_ID = _uuidMatch ? _uuidMatch[1] : (_pathSegment || null);
+
+function slugify(s) {
+  return String(s).toLowerCase().replace(/[^a-z0-9\s-]/g,'').trim().replace(/\s+/g,'-').replace(/-+/g,'-');
+}
+
+function jobPath(j) {
+  return '/jobs/' + slugify(j.title) + '-' + j.id;
+}
 
 function esc(s) {
   return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');
@@ -454,7 +464,7 @@ function renderJobs() {
     var sal = fmtSalary(j.salary_min, j.salary_max, j.pay_type);
     var modeTag = j.work_mode ? '<span class="badge badge-'+esc(j.work_mode)+'">'+esc(j.work_mode)+'</span>' : '';
     var skillsHtml = (j.skills && j.skills.length) ? '<div class="skills-row">'+j.skills.slice(0,4).map(function(s){return '<span class="skill-chip">'+esc(s)+'</span>';}).join('')+(j.skills.length>4?'<span class="skill-chip">+'+(j.skills.length-4)+' more</span>':'')+' </div>' : '';
-    return '<a class="job-card'+(j.featured?' featured':'')+'" href="/jobs/'+esc(j.id)+'">'
+    return '<a class="job-card'+(j.featured?' featured':'')+'" href="'+esc(jobPath(j))+'">'
       + '<div class="job-card-top">'
       + '<div class="job-icon"><svg width="20" height="20" fill="none" stroke="#00C2FF" stroke-width="2" viewBox="0 0 24 24"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/></svg></div>'
       + '<div style="flex:1;min-width:0;">'
