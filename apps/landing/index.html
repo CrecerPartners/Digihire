@@ -753,7 +753,7 @@
       #navbar.scrolled { left: 0; right: 0; top: 0; border-radius: 0; }
     }
     .nav-mobile-overlay {
-      position: fixed; inset: 0; z-index: 198; background: #06111F;
+      position: fixed; inset: 0; z-index: 210; background: #06111F;
       transform: translateX(100%); transition: transform 0.38s cubic-bezier(0.4,0,0.2,1);
       display: flex; flex-direction: column; overflow: hidden;
     }
@@ -3109,7 +3109,9 @@
   if (!overlay || !openBtn) return;
   function openMenu() { overlay.classList.add('nm-open'); overlay.setAttribute('aria-hidden', 'false'); document.body.style.overflow = 'hidden'; }
   function closeMenu() { overlay.classList.remove('nm-open'); overlay.setAttribute('aria-hidden', 'true'); document.body.style.overflow = ''; }
-  openBtn.addEventListener('click', openMenu);
+  openBtn.addEventListener('click', function () {
+    if (overlay.classList.contains('nm-open')) { closeMenu(); } else { openMenu(); }
+  });
   if (closeBtn) closeBtn.addEventListener('click', closeMenu);
   overlay.querySelectorAll('a').forEach(function (a) { a.addEventListener('click', closeMenu); });
   overlay.querySelectorAll('.nm-trigger[data-nm-target]').forEach(function (btn) {
