@@ -916,8 +916,9 @@
     .hero-ctas { display: flex; gap: 12px; flex-wrap: wrap; }
 
     @media (max-width: 768px) {
-      .hero-content { padding: 60px 16px 60px; }
-      .hero-content-box { padding: 36px 24px 40px; border-radius: 16px; }
+      .hero { min-height: auto; padding-top: 24px; padding-bottom: 40px; }
+      .hero-content { padding: 32px 16px 32px; }
+      .hero-content-box { padding: 32px 20px 36px; border-radius: 16px; }
       .hero-tabs { margin-bottom: 24px; }
       .hero-tab { padding: 8px 18px; font-size: 13px; }
       .hero-headline { margin-bottom: 16px; }
@@ -925,7 +926,7 @@
       .hero-cta-single { padding: 14px 32px; font-size: 15px; width: 100%; max-width: 320px; }
     }
     @media (max-width: 480px) {
-      .hero-content-box { padding: 28px 16px 32px; }
+      .hero-content-box { padding: 24px 16px 28px; }
       .hero-tabs { gap: 0; }
       .hero-tab { padding: 8px 14px; font-size: 12px; }
     }
@@ -2672,7 +2673,7 @@
   <div class="container">
     <div class="insights-header reveal" id="insights-hdr">
       <h2>Insights &amp; Resources</h2>
-      <a href="#" class="insights-link">Explore our Blog →</a>
+      <a href="/blog" class="insights-link">Explore our Blog →</a>
     </div>
     <div class="insights-grid stagger-grid" id="insights-grid">
       <a href="blog-tech-sales.html" class="insight-card">
