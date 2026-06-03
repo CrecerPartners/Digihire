@@ -24,13 +24,27 @@
 
     /* Nav */
     .nav{position:sticky;top:0;z-index:100;background:rgba(255,255,255,0.95);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);height:64px;display:flex;align-items:center;}
+    .nav .container{position:relative;width:100%;}
     .nav-inner{display:flex;align-items:center;justify-content:space-between;width:100%;}
     .nav-logo img{height:32px;}
     .nav-links{display:flex;align-items:center;gap:24px;}
     .nav-links a{font-size:14px;color:#374151;text-decoration:none;font-weight:600;}
     .nav-links a:hover{color:var(--navy);}
-    .btn-nav{background:var(--navy);color:#fff;padding:8px 20px;border-radius:var(--radius);font-size:13px;font-weight:700;text-decoration:none;transition:background 0.2s;}
-    .btn-nav:hover{background:var(--navy-2);}
+    .btn-nav{background:var(--cyan);color:var(--navy);padding:9px 20px;border-radius:var(--radius);font-size:13px;font-weight:800;text-decoration:none;transition:background 0.2s;box-shadow:0 2px 12px rgba(0,194,255,0.28);}
+    .btn-nav:hover{background:#33CFFF;}
+
+    /* Mobile nav */
+    .nav-hamburger-btn{display:none;background:transparent;border:none;cursor:pointer;padding:6px;border-radius:6px;line-height:0;color:var(--navy);}
+    .nav-hamburger-btn:hover{background:rgba(0,0,0,0.05);}
+    @media(max-width:768px){
+      .nav-links{display:none;}
+      .nav-hamburger-btn{display:flex;align-items:center;justify-content:center;}
+    }
+    .nav-mobile-menu{display:none;position:absolute;top:64px;left:0;right:0;z-index:200;background:var(--white);border-bottom:2px solid var(--border);padding:8px 24px 16px;box-shadow:0 8px 32px rgba(0,0,0,0.10);flex-direction:column;}
+    .nav-mobile-menu.open{display:flex;}
+    .nav-mobile-menu a{display:block;padding:14px 8px;font-size:15px;font-weight:600;color:#374151;text-decoration:none;border-bottom:1px solid var(--border);}
+    .nav-mobile-menu a:last-child{border-bottom:none;}
+    .nav-mobile-menu .btn-nav-mobile{display:flex;align-items:center;justify-content:center;margin-top:12px;padding:14px;background:var(--cyan);color:var(--navy);border-radius:var(--radius);font-weight:800;border-bottom:none;}
 
     /* Hero */
     .jobs-hero{background:var(--navy);padding:60px 0 48px;text-align:center;}
@@ -165,6 +179,16 @@
         <a href="/blog">Blog</a>
         <a href="https://talents.digihire.io/join-now" class="btn-nav">Join as Talent</a>
       </div>
+      <button class="nav-hamburger-btn" id="jobs-hamburger" aria-label="Open menu">
+        <svg viewBox="0 0 24 24" fill="none" width="22" height="22" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+          <path d="M3 7h18M3 12h18M3 17h18"/>
+        </svg>
+      </button>
+    </div>
+    <div class="nav-mobile-menu" id="jobs-mobile-menu">
+      <a href="/">Home</a>
+      <a href="/blog">Blog</a>
+      <a href="https://talents.digihire.io/join-now" class="btn-nav-mobile">Join as Talent →</a>
     </div>
   </div>
 </nav>
@@ -515,6 +539,18 @@ fetch(SUPABASE_URL + '/rest/v1/job_listings?status=eq.published&order=featured.d
     document.getElementById('jobs-list').innerHTML = '<p style="text-align:center;color:var(--gray-2);padding:60px 0;">Failed to load jobs. Please try again later.</p>';
   }
 });
+
+(function() {
+  var hamburger = document.getElementById('jobs-hamburger');
+  var mobileMenu = document.getElementById('jobs-mobile-menu');
+  if (!hamburger || !mobileMenu) return;
+  hamburger.addEventListener('click', function() {
+    mobileMenu.classList.toggle('open');
+  });
+  mobileMenu.querySelectorAll('a').forEach(function(a) {
+    a.addEventListener('click', function() { mobileMenu.classList.remove('open'); });
+  });
+})();
 </script>
 </body>
 </html>

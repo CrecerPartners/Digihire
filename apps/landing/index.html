@@ -720,7 +720,8 @@
     }
     @media (max-width: 960px) {
       .nav-links { display: none; }
-      .nav-actions { display: none; }
+      .nav-dropdown-wrap { display: none; }
+      .btn-launch { display: none; }
       .nav-hamburger { display: flex; align-items: center; justify-content: center; }
       #navbar.scrolled { left: 12px; right: 12px; top: 10px; border-radius: 16px; }
     }
@@ -913,6 +914,21 @@
 
     /* keep .hero-ctas for any other use */
     .hero-ctas { display: flex; gap: 12px; flex-wrap: wrap; }
+
+    @media (max-width: 768px) {
+      .hero-content { padding: 60px 16px 60px; }
+      .hero-content-box { padding: 36px 24px 40px; border-radius: 16px; }
+      .hero-tabs { margin-bottom: 24px; }
+      .hero-tab { padding: 8px 18px; font-size: 13px; }
+      .hero-headline { margin-bottom: 16px; }
+      .hero-sub { margin-bottom: 28px; font-size: 14px; }
+      .hero-cta-single { padding: 14px 32px; font-size: 15px; width: 100%; max-width: 320px; }
+    }
+    @media (max-width: 480px) {
+      .hero-content-box { padding: 28px 16px 32px; }
+      .hero-tabs { gap: 0; }
+      .hero-tab { padding: 8px 14px; font-size: 12px; }
+    }
 
     /* ════════════════════════════════════════════════
        3. LOGOS STRIP
