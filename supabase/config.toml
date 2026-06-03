@@ -45,7 +45,7 @@ entrypoint = "./functions/verify-bank-details/index.ts"
 
 [functions.r2-storage]
 enabled = true
-verify_jwt = true
+verify_jwt = false  # Function enforces auth itself via auth.getUser()
 import_map = "./functions/r2-storage/deno.json"
 entrypoint = "./functions/r2-storage/index.ts"
 
