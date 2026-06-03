@@ -6,7 +6,12 @@ import { Capacitor } from '@capacitor/core';
 import { Preferences } from '@capacitor/preferences';
 
 const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL?.trim() || 'https://placeholder.supabase.co';
-const SUPABASE_PUBLISHABLE_KEY = import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY?.trim()?.replace(/^["'](.+)["']$/, '$1') || 'placeholder';
+// Support both naming conventions: VITE_SUPABASE_ANON_KEY (current .env.example) and
+// VITE_SUPABASE_PUBLISHABLE_KEY (legacy name). Anon key takes priority if both are set.
+const SUPABASE_PUBLISHABLE_KEY = (
+  import.meta.env.VITE_SUPABASE_ANON_KEY?.trim() ||
+  import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY?.trim()
+)?.replace(/^["'](.+)["']$/, '$1') || 'placeholder';
 
 // Custom Storage adapter to bridge Supabase Auth with Capacitor Preferences
 const capacitorStorageAdapter = {
