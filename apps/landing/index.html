@@ -1824,9 +1824,6 @@
     </div>
 
     <!-- Right: Get Started dropdown + Launch a Campaign CTA -->
-    <button class="nav-hamburger" id="nav-hamburger-btn" aria-label="Open menu">
-      <svg viewBox="0 0 24 24" fill="none" width="22" height="22" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 7h18M3 12h18M3 17h18"/></svg>
-    </button>
     <div class="nav-actions">
       <!-- Get Started with hover dropdown — replaced by JS when user is logged in -->
       <div class="nav-dropdown-wrap" id="nav-auth-wrap">
@@ -1894,6 +1891,10 @@
           <path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
         </svg>
       </a>
+      <!-- Hamburger — inside nav-actions so it stays right-aligned -->
+      <button class="nav-hamburger" id="nav-hamburger-btn" aria-label="Open menu">
+        <svg viewBox="0 0 24 24" fill="none" width="22" height="22" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 7h18M3 12h18M3 17h18"/></svg>
+      </button>
     </div>
   </div>
 </nav>
@@ -2965,27 +2966,6 @@
     }
   }, { passive: true });
 
-  /* Mobile menu */
-  (function () {
-    var overlay = document.getElementById('nav-mobile-overlay');
-    var openBtn = document.getElementById('nav-hamburger-btn');
-    var closeBtn = document.getElementById('nm-close-btn');
-    if (!overlay || !openBtn) return;
-    function open() { overlay.classList.add('nm-open'); overlay.setAttribute('aria-hidden', 'false'); document.body.style.overflow = 'hidden'; }
-    function close() { overlay.classList.remove('nm-open'); overlay.setAttribute('aria-hidden', 'true'); document.body.style.overflow = ''; }
-    openBtn.addEventListener('click', open);
-    if (closeBtn) closeBtn.addEventListener('click', close);
-    overlay.querySelectorAll('a').forEach(function (a) { a.addEventListener('click', close); });
-    overlay.querySelectorAll('.nm-trigger[data-nm-target]').forEach(function (btn) {
-      btn.addEventListener('click', function () {
-        var sm = document.getElementById(btn.getAttribute('data-nm-target'));
-        var isOpen = sm && sm.classList.contains('nm-open');
-        overlay.querySelectorAll('.nm-submenu.nm-open').forEach(function (el) { el.classList.remove('nm-open'); });
-        overlay.querySelectorAll('.nm-trigger.nm-active').forEach(function (el) { el.classList.remove('nm-active'); });
-        if (!isOpen && sm) { sm.classList.add('nm-open'); btn.classList.add('nm-active'); }
-      });
-    });
-  })();
 
   /* ── Auth hint: show user profile in nav when logged in ─ */
   (function () {
@@ -3121,5 +3101,27 @@
     </div>
   </div>
 </div>
+<script>
+(function () {
+  var overlay = document.getElementById('nav-mobile-overlay');
+  var openBtn = document.getElementById('nav-hamburger-btn');
+  var closeBtn = document.getElementById('nm-close-btn');
+  if (!overlay || !openBtn) return;
+  function openMenu() { overlay.classList.add('nm-open'); overlay.setAttribute('aria-hidden', 'false'); document.body.style.overflow = 'hidden'; }
+  function closeMenu() { overlay.classList.remove('nm-open'); overlay.setAttribute('aria-hidden', 'true'); document.body.style.overflow = ''; }
+  openBtn.addEventListener('click', openMenu);
+  if (closeBtn) closeBtn.addEventListener('click', closeMenu);
+  overlay.querySelectorAll('a').forEach(function (a) { a.addEventListener('click', closeMenu); });
+  overlay.querySelectorAll('.nm-trigger[data-nm-target]').forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      var sm = document.getElementById(btn.getAttribute('data-nm-target'));
+      var isOpen = sm && sm.classList.contains('nm-open');
+      overlay.querySelectorAll('.nm-submenu.nm-open').forEach(function (el) { el.classList.remove('nm-open'); });
+      overlay.querySelectorAll('.nm-trigger.nm-active').forEach(function (el) { el.classList.remove('nm-active'); });
+      if (!isOpen && sm) { sm.classList.add('nm-open'); btn.classList.add('nm-active'); }
+    });
+  });
+})();
+</script>
 </body>
 </html>
