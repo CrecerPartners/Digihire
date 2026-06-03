@@ -723,7 +723,21 @@
       .nav-dropdown-wrap { display: none; }
       .btn-launch { display: none; }
       .nav-hamburger { display: flex; align-items: center; justify-content: center; }
-      #navbar.scrolled { left: 12px; right: 12px; top: 10px; border-radius: 16px; }
+      /* Always show a solid navy bar on mobile so the hamburger is always visible */
+      #navbar {
+        background: rgba(6,17,31,0.96);
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+        border-bottom: 1px solid rgba(0,194,255,0.12);
+      }
+      #navbar.scrolled {
+        left: 0; right: 0; top: 0;
+        border-radius: 0;
+        background: rgba(6,17,31,0.96);
+        box-shadow: 0 2px 16px rgba(0,0,0,0.18);
+      }
+      .nav-logo-img.logo-white { opacity: 1 !important; }
+      .nav-logo-img.logo-color { opacity: 0 !important; }
     }
     @media (max-width: 640px) {
       #navbar.scrolled { left: 0; right: 0; top: 0; border-radius: 0; }
@@ -1627,7 +1641,7 @@
   <div class="nav-inner">
     <!-- LEFT: logo + links grouped together -->
     <div class="nav-left">
-      <a href="#" class="nav-logo">
+      <a href="/" class="nav-logo">
         <div class="nav-logo-wrap-img">
           <!-- White version: visible on transparent hero navbar -->
           <img src="assets/logo-white.png" alt="DigiHire" class="nav-logo-img logo-white" />
