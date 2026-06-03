@@ -12,7 +12,7 @@ import { useProfile, useUpdateProfile, useUploadAvatar } from "@digihire/shared"
 import { useMyShopItems, useRemoveFromShop } from "@/hooks/useSellerShop";
 import { useProducts } from "@digihire/shared";
 import { useAuth } from "@digihire/shared";
-import { supabase } from "@digihire/shared";
+import { supabase, uploadFileToR2 } from "@digihire/shared";
 import { formatNaira } from "@digihire/shared";
 import {
   User, Building2, Phone, CreditCard, Save, Loader2, Camera,
@@ -239,10 +239,8 @@ const VoltSquadSettings = () => {
     try {
       const ext = file.name.split(".").pop();
       const path = `${user.id}/logo.${ext}`;
-      const { error } = await supabase.storage.from("shop-logos").upload(path, file, { upsert: true });
-      if (error) throw error;
-      const { data: urlData } = supabase.storage.from("shop-logos").getPublicUrl(path);
-      const shop_logo_url = urlData.publicUrl + "?t=" + Date.now();
+      const logoUrl = await uploadFileToR2("shop-logos", path, file);
+      const shop_logo_url = logoUrl + "?t=" + Date.now();
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       await updateProfile.mutateAsync({ shop_logo_url } as any);
       toast.success("Shop logo updated!");
@@ -258,10 +256,9 @@ const VoltSquadSettings = () => {
     try {
       const ext = file.name.split(".").pop();
       const path = `${user.id}/id-doc.${ext}`;
-      const { error } = await supabase.storage.from("verification-docs").upload(path, file, { upsert: true });
-      if (error) throw error;
+      const uploadedPath = await uploadFileToR2("verification-docs", path, file);
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      await updateProfile.mutateAsync({ id_document_url: path, verification_status: "pending" } as any);
+      await updateProfile.mutateAsync({ id_document_url: uploadedPath, verification_status: "pending" } as any);
       toast.success("ID document uploaded! Verification pending.");
     } catch (err: unknown) { toast.error(err instanceof Error ? err.message : "Failed to upload document"); }
     finally { setUploadingDoc(false); }

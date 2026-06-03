@@ -1,7 +1,7 @@
 import React, { useState, useRef, useMemo, useEffect, useCallback } from 'react';
 import { TalentProfile } from '../../types';
 import { useNavigate } from 'react-router-dom';
-import { supabase as _supabase } from '@digihire/shared';
+import { supabase as _supabase, uploadFileToR2 } from '@digihire/shared';
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const supabase = _supabase as any;
 import { motion } from 'motion/react';
@@ -211,15 +211,7 @@ export default function ProfileSetup({ profile, onUpdate }: Props) {
     try {
       const fileExt = file.name.split('.').pop();
       const fileName = `${profile?.id || 'new'}-${field}-${Math.random().toString(36).substring(2)}.${fileExt}`;
-      const { error: uploadError } = await supabase.storage
-        .from('talent-assets')
-        .upload(fileName, file);
-
-      if (uploadError) throw uploadError;
-
-      const { data: { publicUrl } } = supabase.storage
-        .from('talent-assets')
-        .getPublicUrl(fileName);
+      const publicUrl = await uploadFileToR2('talent-assets', fileName, file);
 
       if (field === 'certifications') {
         setFormData(prev => ({

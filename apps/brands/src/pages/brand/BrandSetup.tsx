@@ -1,7 +1,7 @@
 import React, { useState, useRef } from 'react';
 import { BrandProfile } from '../../types';
 import { useBrandProfile } from '../../hooks/useBrandProfile';
-import { useAuth, supabase as _supabase } from '@digihire/shared';
+import { useAuth, supabase as _supabase, uploadFileToR2 } from '@digihire/shared';
 import { motion } from 'motion/react';
 import { Save, Building2, Globe, MapPin, Upload, X, ImageIcon } from 'lucide-react';
 
@@ -35,12 +35,8 @@ export default function BrandSetup() {
     try {
       const ext = logoFile.name.split('.').pop();
       const path = `logos/${user.id}.${ext}`;
-      const { error: uploadErr } = await supabase.storage
-        .from('brand-assets')
-        .upload(path, logoFile, { upsert: true });
-      if (uploadErr) throw uploadErr;
-      const { data } = supabase.storage.from('brand-assets').getPublicUrl(path);
-      return data.publicUrl as string;
+      const logoUrl = await uploadFileToR2('brand-assets', path, logoFile);
+      return logoUrl;
     } finally {
       setLogoUploading(false);
     }

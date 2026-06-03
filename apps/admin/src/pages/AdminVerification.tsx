@@ -9,7 +9,7 @@ import { Badge } from "@digihire/shared";
 import { toast } from "@digihire/shared";
 import { CheckCircle, XCircle, ExternalLink } from "lucide-react";
 import { AdminTablePagination, paginateItems } from "@/components/AdminTablePagination";
-import { supabase } from "@digihire/shared";
+import { supabase, getSignedUrlFromR2 } from "@digihire/shared";
 
 const PAGE_SIZE = 20;
 
@@ -45,10 +45,13 @@ export default function AdminVerification() {
     );
   };
 
-  const getDocUrl = (path: string) => {
-    if (!path) return null;
-    const { data } = supabase.storage.from("verification-docs").getPublicUrl(path);
-    return data?.publicUrl;
+  const handleViewDoc = async (path: string) => {
+    try {
+      const url = await getSignedUrlFromR2("verification-docs", path);
+      window.open(url, "_blank");
+    } catch (e: any) {
+      toast({ title: "Error", description: "Failed to load document", variant: "destructive" });
+    }
   };
 
   return (
@@ -103,9 +106,9 @@ export default function AdminVerification() {
                   </TableCell>
                   <TableCell>
                     {p.id_document_url ? (
-                      <a href={getDocUrl(p.id_document_url) || "#"} target="_blank" rel="noopener noreferrer" className="text-primary text-sm flex items-center gap-1 hover:underline">
+                      <button onClick={() => handleViewDoc(p.id_document_url)} className="text-primary text-sm flex items-center gap-1 hover:underline bg-transparent border-0 cursor-pointer p-0 font-medium">
                         View <ExternalLink className="h-3 w-3" />
-                      </a>
+                      </button>
                     ) : (
                       <span className="text-xs text-muted-foreground">No document</span>
                     )}

@@ -9,7 +9,7 @@ import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrig
 import { toast } from "@digihire/shared";
 import { Plus, Pencil, Trash2, Upload, X, Image as ImageIcon, Search } from "lucide-react";
 import { Textarea } from "@digihire/shared";
-import { supabase } from "@digihire/shared";
+import { supabase, uploadFileToR2 } from "@digihire/shared";
 import { AdminTablePagination, paginateItems } from "@/components/AdminTablePagination";
 import { Label } from "@digihire/shared";
 import { PRODUCT_TAXONOMY, PRODUCT_TYPES, getCategoriesByType, getProductTypeForCategory, getSubcategoriesByCategory } from "@digihire/shared";
@@ -340,23 +340,21 @@ export default function AdminProducts() {
 
   const uploadImage = async (file: File) => {
     setUploading(true);
-    const ext = file.name.split(".").pop();
-    const path = `${crypto.randomUUID()}.${ext}`;
-    const { error } = await supabase.storage.from("product-images").upload(path, file);
-    if (error) {
+    try {
+      const ext = file.name.split(".").pop();
+      const path = `${crypto.randomUUID()}.${ext}`;
+      const url = await uploadFileToR2("product-images", path, file);
+      setForm((f) => ({
+        ...f,
+        assets: { ...f.assets, images: [...(f.assets?.images || []), url] },
+        image: f.image || url,
+      }));
+      toast({ title: "Image uploaded" });
+    } catch (error: any) {
       toast({ title: "Upload failed", description: error.message, variant: "destructive" });
+    } finally {
       setUploading(false);
-      return;
     }
-    const { data: urlData } = supabase.storage.from("product-images").getPublicUrl(path);
-    const url = urlData.publicUrl;
-    setForm((f) => ({
-      ...f,
-      assets: { ...f.assets, images: [...(f.assets?.images || []), url] },
-      image: f.image || url,
-    }));
-    setUploading(false);
-    toast({ title: "Image uploaded" });
   };
 
   const uploadImages = async (files: FileList | File[]) => {
@@ -367,21 +365,19 @@ export default function AdminProducts() {
     let successCount = 0;
 
     for (const file of fileArray) {
-      const ext = file.name.split(".").pop();
-      const path = `${crypto.randomUUID()}.${ext}`;
-      const { error } = await supabase.storage.from("product-images").upload(path, file);
-      if (error) {
+      try {
+        const ext = file.name.split(".").pop();
+        const path = `${crypto.randomUUID()}.${ext}`;
+        const url = await uploadFileToR2("product-images", path, file);
+        setForm((f) => ({
+          ...f,
+          assets: { ...f.assets, images: [...(f.assets?.images || []), url] },
+          image: f.image || url,
+        }));
+        successCount++;
+      } catch (error: any) {
         toast({ title: "Upload failed", description: `${file.name}: ${error.message}`, variant: "destructive" });
-        continue;
       }
-      const { data: urlData } = supabase.storage.from("product-images").getPublicUrl(path);
-      const url = urlData.publicUrl;
-      setForm((f) => ({
-        ...f,
-        assets: { ...f.assets, images: [...(f.assets?.images || []), url] },
-        image: f.image || url,
-      }));
-      successCount++;
     }
 
     setUploading(false);

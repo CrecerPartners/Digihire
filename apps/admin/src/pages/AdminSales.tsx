@@ -9,7 +9,7 @@ import { Badge } from "@digihire/shared";
 import { Checkbox } from "@digihire/shared";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@digihire/shared";
 import { toast } from "@digihire/shared";
-import { supabase } from "@digihire/shared";
+import { supabase, getSignedUrlFromR2 } from "@digihire/shared";
 import { Check, X, Download, Eye, Search } from "lucide-react";
 import { useSearchParams } from "react-router-dom";
 import { exportToCsv } from "@digihire/shared";
@@ -155,18 +155,26 @@ export default function AdminSales() {
   };
 
   const viewProof = async (url: string) => {
-    const { data, error } = await supabase.storage.from("sale-proofs").createSignedUrl(url, 300);
-    if (error || !data) { toast({ title: "Error loading proof", variant: "destructive" }); return; }
-    setProofUrl(data.signedUrl);
+    try {
+      const signedUrl = await getSignedUrlFromR2("sale-proofs", url);
+      setProofUrl(signedUrl);
+    } catch (error) {
+      toast({ title: "Error loading proof", variant: "destructive" });
+    }
   };
 
   const downloadProof = async (url: string) => {
-    const { data, error } = await supabase.storage.from("sale-proofs").download(url);
-    if (error) { toast({ title: "Error downloading", variant: "destructive" }); return; }
-    const a = document.createElement("a");
-    a.href = URL.createObjectURL(data);
-    a.download = url.split("/").pop() || "proof";
-    a.click();
+    try {
+      const signedUrl = await getSignedUrlFromR2("sale-proofs", url);
+      const res = await fetch(signedUrl);
+      const blob = await res.blob();
+      const a = document.createElement("a");
+      a.href = URL.createObjectURL(blob);
+      a.download = url.split("/").pop() || "proof";
+      a.click();
+    } catch (error) {
+      toast({ title: "Error downloading", variant: "destructive" });
+    }
   };
 
   const handleExport = () => {

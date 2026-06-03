@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
-import { supabase as _supabase, useAuth } from '@digihire/shared';
+import { supabase as _supabase, useAuth, uploadFileToR2 } from '@digihire/shared';
 import { Card, CardContent } from '@digihire/shared';
 import { Badge } from '@digihire/shared';
 import { Input } from '@digihire/shared';
@@ -179,13 +179,7 @@ export default function JobsPage() {
       if (!useStoredCv && newCvFile) {
         const fileExt = newCvFile.name.split('.').pop();
         const fileName = `${user.id}-apply-${selectedJob.id}-${Date.now()}.${fileExt}`;
-        const { error: uploadErr } = await supabase.storage
-          .from('talent-assets')
-          .upload(fileName, newCvFile);
-        if (uploadErr) throw uploadErr;
-        const { data: { publicUrl } } = supabase.storage
-          .from('talent-assets')
-          .getPublicUrl(fileName);
+        const publicUrl = await uploadFileToR2('talent-assets', fileName, newCvFile);
         cvUrl = publicUrl;
       }
 

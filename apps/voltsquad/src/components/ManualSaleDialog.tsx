@@ -17,6 +17,7 @@ import {
   useProducts,
   useAuth,
   supabase,
+  uploadFileToR2,
   formatNaira,
 } from "@digihire/shared";
 import { Upload, Calculator, Loader2, Minus, Plus, ImageIcon } from "lucide-react";
@@ -63,11 +64,8 @@ export function ManualSaleDialog({ open, onOpenChange }: ManualSaleDialogProps) 
 
       if (proofFile) {
         const fileName = `${user.id}/${Date.now()}_${proofFile.name}`;
-        const { error: uploadError } = await supabase.storage
-          .from("sale-proofs")
-          .upload(fileName, proofFile);
-        if (uploadError) throw uploadError;
-        proofFileName = fileName;
+        const uploadedPath = await uploadFileToR2("sale-proofs", fileName, proofFile);
+        proofFileName = uploadedPath;
       }
 
       const saleData: any = {

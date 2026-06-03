@@ -4,7 +4,7 @@ import { Button } from "@digihire/shared";
 import { Input } from "@digihire/shared";
 import { useAuth } from "@digihire/shared";
 import { useProfile, useUpdateProfile } from "@digihire/shared";
-import { supabase } from "@digihire/shared";
+import { supabase, uploadFileToR2 } from "@digihire/shared";
 import { Loader2, Upload, CheckCircle2 } from "lucide-react";
 import { toast } from "sonner";
 
@@ -35,11 +35,8 @@ export function KYCModal({ open, onOpenChange, onSuccess }: KYCModalProps) {
     try {
       const ext = file.name.split(".").pop();
       const path = `${user.id}/proof_of_address-${Date.now()}.${ext}`;
-      const { error } = await supabase.storage.from("kyc-documents").upload(path, file, { upsert: true });
-      if (error) throw error;
-
-      const { data: urlData } = supabase.storage.from("kyc-documents").getPublicUrl(path);
-      setProofUrl(urlData.publicUrl);
+      const uploadedPath = await uploadFileToR2("kyc-documents", path, file);
+      setProofUrl(uploadedPath);
       toast.success("Proof of Address uploaded successfully!");
     } catch (err) {
       toast.error((err as Error).message || "Failed to upload document");

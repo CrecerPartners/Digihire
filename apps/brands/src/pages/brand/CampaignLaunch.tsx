@@ -2,7 +2,7 @@ import React, { useState, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useBrandCampaigns } from '../../hooks/useBrandCampaigns';
 import { useBrandProfile } from '../../hooks/useBrandProfile';
-import { useAuth, supabase as _supabase } from '@digihire/shared';
+import { useAuth, supabase as _supabase, uploadFileToR2 } from '@digihire/shared';
 import { CheckCircle2, ArrowLeft, ArrowRight, Upload, X, FileText, Image } from 'lucide-react';
 import type { BrandCampaign } from '../../types';
 
@@ -52,14 +52,13 @@ export default function CampaignLaunch() {
     if (!assetFiles.length || !user) return [];
     const urls: string[] = [];
     for (const file of assetFiles) {
-      const ext = file.name.split('.').pop();
-      const path = `campaign-assets/${user.id}/${Date.now()}-${file.name.replace(/[^a-zA-Z0-9._-]/g, '_')}`;
-      const { error: uploadErr } = await supabase.storage
-        .from('brand-assets')
-        .upload(path, file, { upsert: false });
-      if (!uploadErr) {
-        const { data } = supabase.storage.from('brand-assets').getPublicUrl(path);
-        if (data?.publicUrl) urls.push(data.publicUrl as string);
+      try {
+        const ext = file.name.split('.').pop();
+        const path = `campaign-assets/${user.id}/${Date.now()}-${file.name.replace(/[^a-zA-Z0-9._-]/g, '_')}`;
+        const url = await uploadFileToR2('brand-assets', path, file);
+        urls.push(url);
+      } catch (uploadErr) {
+        console.error("Failed to upload campaign asset:", uploadErr);
       }
     }
     return urls;

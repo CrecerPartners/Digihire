@@ -1,5 +1,5 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { supabase } from "@digihire/supabase";
+import { supabase, uploadFileToR2 } from "@digihire/supabase";
 import { useAuth } from "../contexts/AuthContext";
 
 export interface Profile {
@@ -83,24 +83,16 @@ export function useUploadAvatar() {
       const fileExt = file.name.split(".").pop();
       const filePath = `${user!.id}/avatar.${fileExt}`;
 
-      const { error: uploadError } = await supabase.storage
-        .from("avatars")
-        .upload(filePath, file, { upsert: true });
-      if (uploadError) throw uploadError;
-
-      const { data: urlData } = supabase.storage
-        .from("avatars")
-        .getPublicUrl(filePath);
-
-      const avatar_url = urlData.publicUrl + "?t=" + Date.now();
+      const avatar_url = await uploadFileToR2("avatars", filePath, file);
+      const finalUrl = avatar_url + "?t=" + Date.now();
 
       const { error: updateError } = await supabase
         .from("profiles" as any)
-        .update({ avatar_url } as any)
+        .update({ avatar_url: finalUrl } as any)
         .eq("user_id", user!.id);
       if (updateError) throw updateError;
 
-      return avatar_url;
+      return finalUrl;
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["profile", user?.id] });
