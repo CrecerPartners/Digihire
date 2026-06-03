@@ -227,12 +227,12 @@ export default function JobListings() {
 
   const handleSave = async () => {
     if (!form.title.trim()) { toast.error('Job title is required'); return; }
-    if (!form.company_name.trim()) { toast.error('Company name is required'); return; }
+    if (!form.anonymous && !form.company_name.trim()) { toast.error('Company name is required'); return; }
     setSaving(true);
 
     const payload = {
       brand_id: user?.id,
-      company_name: form.company_name,
+      company_name: form.anonymous ? 'Anonymous Employer' : form.company_name,
       title: form.title,
       job_type: form.job_type,
       category: form.category,
@@ -520,15 +520,32 @@ export default function JobListings() {
             <DialogTitle>{editJob ? 'Edit Job' : 'Post a New Job'}</DialogTitle>
           </DialogHeader>
           <div className="space-y-4 py-2">
-            <div className="grid grid-cols-2 gap-3">
+            <label className="flex items-start gap-3 rounded-lg border border-border/50 bg-secondary/30 p-4 cursor-pointer hover:bg-secondary/50 transition-colors">
+              <input
+                type="checkbox"
+                className="mt-0.5 accent-primary h-4 w-4 shrink-0"
+                checked={form.anonymous}
+                onChange={e => setForm(f => ({ ...f, anonymous: e.target.checked }))}
+              />
+              <div>
+                <p className="text-sm font-medium text-foreground">Post as anonymous employer</p>
+                <p className="text-xs text-muted-foreground mt-0.5">
+                  Your company name will be hidden from applicants. They'll see "Anonymous Employer" on the listing.
+                </p>
+              </div>
+            </label>
+
+            <div className={`grid gap-3 ${form.anonymous ? 'grid-cols-1' : 'grid-cols-2'}`}>
               <div className="space-y-1.5">
                 <Label>Job Title *</Label>
                 <Input value={form.title} onChange={set('title')} placeholder="e.g. Sales Executive" />
               </div>
-              <div className="space-y-1.5">
-                <Label>Company Name *</Label>
-                <Input value={form.company_name} onChange={set('company_name')} placeholder="Your company name" />
-              </div>
+              {!form.anonymous && (
+                <div className="space-y-1.5">
+                  <Label>Company Name *</Label>
+                  <Input value={form.company_name} onChange={set('company_name')} placeholder="Your company name" />
+                </div>
+              )}
             </div>
 
             <div className="grid grid-cols-3 gap-3">
@@ -621,20 +638,6 @@ export default function JobListings() {
               </select>
             </div>
 
-            <label className="flex items-start gap-3 rounded-lg border border-border/50 bg-secondary/30 p-4 cursor-pointer hover:bg-secondary/50 transition-colors">
-              <input
-                type="checkbox"
-                className="mt-0.5 accent-primary h-4 w-4 shrink-0"
-                checked={form.anonymous}
-                onChange={e => setForm(f => ({ ...f, anonymous: e.target.checked }))}
-              />
-              <div>
-                <p className="text-sm font-medium text-foreground">Post as anonymous employer</p>
-                <p className="text-xs text-muted-foreground mt-0.5">
-                  Your company name will be hidden from applicants. They'll see "Anonymous Employer" on the listing.
-                </p>
-              </div>
-            </label>
           </div>
           <DialogFooter>
             <Button variant="outline" onClick={() => setFormOpen(false)}>Cancel</Button>
