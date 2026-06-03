@@ -81,8 +81,35 @@ function LogSaleModal({ visible, onClose, onSuccess }: { visible: boolean; onClo
         const fileName = `${user.id}/${Date.now()}_proof.${ext}`;
         const response = await fetch(proofUri);
         const blob = await response.blob();
-        const { error: uploadError } = await supabase.storage.from("sale-proofs").upload(fileName, blob, { contentType: `image/${ext}` });
-        if (uploadError) throw uploadError;
+        const contentType = `image/${ext}`;
+
+        const { data, error: invokeError } = await supabase.functions.invoke("r2-storage", {
+          body: {
+            bucket: "sale-proofs",
+            key: fileName,
+            action: "upload",
+            contentType,
+          },
+        });
+
+        if (invokeError || !data) {
+          throw new Error(invokeError?.message || "Failed to generate presigned R2 URL");
+        }
+
+        const { url } = data;
+
+        const uploadResponse = await fetch(url, {
+          method: "PUT",
+          body: blob,
+          headers: {
+            "Content-Type": contentType,
+          },
+        });
+
+        if (!uploadResponse.ok) {
+          throw new Error(`Failed to upload to Cloudflare R2: ${uploadResponse.statusText}`);
+        }
+
         proofFileName = fileName;
       }
 

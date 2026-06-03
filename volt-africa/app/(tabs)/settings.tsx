@@ -80,10 +80,35 @@ export default function SettingsScreen() {
     const ext = uri.split(".").pop() || "jpg";
     const response = await fetch(uri);
     const blob = await response.blob();
-    const { error } = await supabase.storage.from(bucket).upload(path, blob, { contentType: `image/${ext}`, upsert: true });
-    if (error) throw error;
-    const { data } = supabase.storage.from(bucket).getPublicUrl(path);
-    return data.publicUrl;
+    const contentType = `image/${ext}`;
+
+    const { data, error: invokeError } = await supabase.functions.invoke("r2-storage", {
+      body: { bucket, key: path, action: "upload", contentType },
+    });
+
+    if (invokeError || !data) {
+      throw new Error(invokeError?.message || "Failed to generate presigned R2 URL");
+    }
+
+    const { url, publicUrl } = data;
+
+    const uploadResponse = await fetch(url, {
+      method: "PUT",
+      body: blob,
+      headers: {
+        "Content-Type": contentType,
+      },
+    });
+
+    if (!uploadResponse.ok) {
+      throw new Error(`Failed to upload to Cloudflare R2: ${uploadResponse.statusText}`);
+    }
+
+    const PUBLIC_BUCKETS = ["avatars", "shop-logos", "product-images", "brand-assets", "talent-assets"];
+    if (PUBLIC_BUCKETS.includes(bucket)) {
+      return publicUrl || path;
+    }
+    return path;
   };
 
   const submitKyc = async () => {
