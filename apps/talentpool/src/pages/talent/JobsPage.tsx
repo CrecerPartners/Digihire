@@ -178,7 +178,7 @@ export default function JobsPage() {
       // Upload new CV if provided
       if (!useStoredCv && newCvFile) {
         const fileExt = newCvFile.name.split('.').pop();
-        const fileName = `${user.id}-apply-${selectedJob.id}-${Date.now()}.${fileExt}`;
+        const fileName = `${user.id}/apply-${selectedJob.id}-${Date.now()}.${fileExt}`;
         const publicUrl = await uploadFileToR2('talent-assets', fileName, newCvFile);
         cvUrl = publicUrl;
       }

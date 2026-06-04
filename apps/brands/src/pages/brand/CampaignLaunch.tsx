@@ -54,7 +54,7 @@ export default function CampaignLaunch() {
     for (const file of assetFiles) {
       try {
         const ext = file.name.split('.').pop();
-        const path = `campaign-assets/${user.id}/${Date.now()}-${file.name.replace(/[^a-zA-Z0-9._-]/g, '_')}`;
+        const path = `${user.id}/campaign-${Date.now()}-${file.name.replace(/[^a-zA-Z0-9._-]/g, '_')}`;
         const url = await uploadFileToR2('brand-assets', path, file);
         urls.push(url);
       } catch (uploadErr) {

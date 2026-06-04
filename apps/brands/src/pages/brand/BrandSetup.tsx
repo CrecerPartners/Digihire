@@ -34,7 +34,7 @@ export default function BrandSetup() {
     setLogoUploading(true);
     try {
       const ext = logoFile.name.split('.').pop();
-      const path = `logos/${user.id}.${ext}`;
+      const path = `${user.id}/logo.${ext}`;
       const logoUrl = await uploadFileToR2('brand-assets', path, logoFile);
       return logoUrl;
     } finally {

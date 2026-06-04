@@ -1,7 +1,7 @@
 import React, { useState, useRef, useMemo, useEffect, useCallback } from 'react';
 import { TalentProfile } from '../../types';
 import { useNavigate } from 'react-router-dom';
-import { supabase as _supabase, uploadFileToR2 } from '@digihire/shared';
+import { supabase as _supabase, uploadFileToR2, useAuth } from '@digihire/shared';
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const supabase = _supabase as any;
 import { motion } from 'motion/react';
@@ -17,6 +17,7 @@ const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5MB
 
 export default function ProfileSetup({ profile, onUpdate }: Props) {
   const navigate = useNavigate();
+  const { user } = useAuth();
   const [formData, setFormData] = useState<Partial<TalentProfile>>(profile || {});
   const [saving, setSaving] = useState(false);
   const [saveSuccess, setSaveSuccess] = useState(false);
@@ -210,7 +211,7 @@ export default function ProfileSetup({ profile, onUpdate }: Props) {
     setError(null);
     try {
       const fileExt = file.name.split('.').pop();
-      const fileName = `${profile?.id || 'new'}-${field}-${Math.random().toString(36).substring(2)}.${fileExt}`;
+      const fileName = `${user?.id || profile?.id || 'new'}/${field}-${Math.random().toString(36).substring(2)}.${fileExt}`;
       const publicUrl = await uploadFileToR2('talent-assets', fileName, file);
 
       if (field === 'certifications') {
