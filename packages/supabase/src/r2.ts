@@ -16,8 +16,16 @@ export async function getR2PresignedUrl(
   action: "upload" | "download",
   contentType?: string
 ): Promise<R2PresignedResponse> {
+  // Explicitly read the session and forward the access token so the edge
+  // function receives a valid Authorization header regardless of timing.
+  const { data: { session } } = await supabase.auth.getSession();
+  if (!session?.access_token) {
+    throw new Error("Not authenticated — please sign in before uploading files");
+  }
+
   const { data, error } = await supabase.functions.invoke("r2-storage", {
     body: { bucket, key, action, contentType },
+    headers: { Authorization: `Bearer ${session.access_token}` },
   });
 
   if (error || !data) {
