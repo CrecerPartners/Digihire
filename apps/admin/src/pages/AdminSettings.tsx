@@ -1,11 +1,12 @@
-import { useState, useEffect } from 'react';
-import { supabase as _supabase, useAuth } from '@digihire/shared';
+import { useState, useEffect, useRef } from 'react';
+import { supabase as _supabase, useAuth, uploadFileToR2 } from '@digihire/shared';
+import { Avatar, AvatarFallback, AvatarImage } from '@digihire/shared';
 import { useTheme } from 'next-themes';
 import { toast } from 'sonner';
 import {
   User, Lock, Shield, Bell, Palette, AlertTriangle,
   Save, Trash2, UserPlus, LogOut, Sun, Moon, Monitor,
-  ToggleLeft, ToggleRight,
+  ToggleLeft, ToggleRight, Camera, Loader2,
 } from 'lucide-react';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -96,6 +97,29 @@ function AccountTab() {
   const [pwForm, setPwForm] = useState({ newPw: '', confirmPw: '' });
   const [pwSaving, setPwSaving] = useState(false);
   const [pwError, setPwError] = useState('');
+  const [avatarUrl, setAvatarUrl] = useState<string | undefined>(
+    user?.user_metadata?.avatar_url as string | undefined
+  );
+  const [uploadingAvatar, setUploadingAvatar] = useState(false);
+  const avatarInputRef = useRef<HTMLInputElement>(null);
+
+  const handleAvatarChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file || !user) return;
+    const ext = file.name.split('.').pop();
+    setUploadingAvatar(true);
+    try {
+      const url = await uploadFileToR2('avatars', `${user.id}/avatar.${ext}`, file, { contentType: file.type });
+      await supabase.auth.updateUser({ data: { avatar_url: url } });
+      setAvatarUrl(url);
+      toast.success('Profile photo updated');
+    } catch (err: unknown) {
+      toast.error((err as { message?: string })?.message || 'Upload failed');
+    } finally {
+      setUploadingAvatar(false);
+      e.target.value = '';
+    }
+  };
 
   const saveName = async () => {
     setSaving(true);
@@ -115,15 +139,43 @@ function AccountTab() {
     setPwSaving(false);
   };
 
-  const initials = (name || user?.email || '?').charAt(0).toUpperCase();
-
   return (
     <div className="space-y-5">
+      <SectionCard title="Profile Photo" description="Appears as your avatar in the admin portal header.">
+        <div className="flex items-center gap-5">
+          <div className="relative group">
+            <Avatar className="h-20 w-20">
+              <AvatarImage src={avatarUrl} alt="Profile photo" />
+              <AvatarFallback className="bg-primary/15 text-2xl font-bold text-primary">
+                {(name || user?.email || '?').charAt(0).toUpperCase()}
+              </AvatarFallback>
+            </Avatar>
+            <button
+              onClick={() => avatarInputRef.current?.click()}
+              disabled={uploadingAvatar}
+              className="absolute inset-0 flex items-center justify-center rounded-full bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity"
+            >
+              {uploadingAvatar
+                ? <Loader2 className="h-5 w-5 text-white animate-spin" />
+                : <Camera className="h-5 w-5 text-white" />}
+            </button>
+          </div>
+          <div className="space-y-1">
+            <button
+              onClick={() => avatarInputRef.current?.click()}
+              disabled={uploadingAvatar}
+              className="flex items-center gap-2 rounded-lg border border-border bg-secondary px-4 py-2 text-sm font-medium hover:bg-muted transition-colors disabled:opacity-50"
+            >
+              {uploadingAvatar ? <><Loader2 className="h-4 w-4 animate-spin" /> Uploading…</> : <><Camera className="h-4 w-4" /> Change Photo</>}
+            </button>
+            <p className="text-xs text-muted-foreground">JPG, PNG or WebP · max 5 MB</p>
+          </div>
+        </div>
+        <input ref={avatarInputRef} type="file" accept="image/jpeg,image/png,image/webp" className="hidden" onChange={handleAvatarChange} />
+      </SectionCard>
+
       <SectionCard title="Profile" description="Your admin account display name.">
         <div className="flex items-center gap-4">
-          <div className="h-14 w-14 rounded-full bg-primary/15 flex items-center justify-center text-primary text-xl font-bold shrink-0">
-            {initials}
-          </div>
           <div className="flex-1 space-y-1">
             <label className="text-xs font-medium text-muted-foreground">Display Name</label>
             <input

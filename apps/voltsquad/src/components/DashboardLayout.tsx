@@ -1,12 +1,16 @@
 import { SidebarProvider, SidebarTrigger } from "@digihire/shared";
 import { AppSidebar } from "@/components/AppSidebar";
-import { LogOut, Zap, ArrowLeft } from "lucide-react";
+import { ArrowLeft, Settings, LogOut } from "lucide-react";
 import { Button } from "@digihire/shared";
 import { ThemeToggle } from "@/components/ThemeToggle";
 import { useProfile } from "@digihire/shared";
 import { useAuth } from "@digihire/shared";
 import { Outlet, useNavigate, useLocation, Link } from "react-router-dom";
 import { Avatar, AvatarImage, AvatarFallback } from "@digihire/shared";
+import {
+  DropdownMenu, DropdownMenuTrigger, DropdownMenuContent,
+  DropdownMenuItem, DropdownMenuSeparator,
+} from "@digihire/shared";
 import { useIsMobile } from "@digihire/shared";
 import { MobileBottomNav } from "@/components/MobileBottomNav";
 import { NotificationsPopover } from "@/components/NotificationsPopover";
@@ -63,22 +67,29 @@ export function DashboardLayout() {
             <div className="flex items-center gap-3">
               <ThemeToggle />
               <NotificationsPopover />
-              <div className="flex items-center gap-2">
-                <Avatar className="h-8 w-8">
-                  {profile?.avatar_url ? (
-                    <AvatarImage src={profile.avatar_url} alt={profile.name} />
-                  ) : null}
-                  <AvatarFallback className="bg-primary/20 text-sm font-semibold text-primary">
-                    {initials}
-                  </AvatarFallback>
-                </Avatar>
-              </div>
-              {/* Logout button — desktop only */}
-              {!isMobile && (
-                <Button variant="ghost" size="icon" onClick={handleLogout} title="Logout">
-                  <LogOut className="h-4 w-4" />
-                </Button>
-              )}
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <button className="rounded-full focus:outline-none focus:ring-2 focus:ring-primary/40 focus:ring-offset-2 focus:ring-offset-background">
+                    <Avatar className="h-8 w-8 cursor-pointer">
+                      <AvatarImage src={profile?.avatar_url} alt={profile?.name} />
+                      <AvatarFallback className="bg-primary/20 text-sm font-semibold text-primary">
+                        {initials}
+                      </AvatarFallback>
+                    </Avatar>
+                  </button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end" className="w-44">
+                  <DropdownMenuItem onClick={() => navigate("/profile")} className="gap-2 cursor-pointer">
+                    <Settings className="h-4 w-4" />
+                    Profile & Settings
+                  </DropdownMenuItem>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem onClick={handleLogout} className="gap-2 cursor-pointer text-destructive focus:text-destructive">
+                    <LogOut className="h-4 w-4" />
+                    Sign Out
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
             </div>
           </header>
           <main className="flex-1 p-4 md:p-6 overflow-auto pb-20 md:pb-6">

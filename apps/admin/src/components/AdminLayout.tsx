@@ -1,13 +1,27 @@
-import { Outlet, Link } from "react-router-dom";
-import { SidebarProvider, SidebarTrigger, SidebarInset, Avatar, AvatarFallback } from "@digihire/shared";
+import { Outlet, Link, useNavigate } from "react-router-dom";
+import { SidebarProvider, SidebarTrigger, SidebarInset } from "@digihire/shared";
+import { Avatar, AvatarFallback, AvatarImage } from "@digihire/shared";
+import {
+  DropdownMenu, DropdownMenuTrigger, DropdownMenuContent,
+  DropdownMenuItem, DropdownMenuSeparator,
+} from "@digihire/shared";
 import { useIsMobile, useAuth, cn } from "@digihire/shared";
 import { AdminSidebar } from "@/components/AdminSidebar";
 import { AdminMobileBottomNav } from "@/components/AdminMobileBottomNav";
+import { Settings, LogOut } from "lucide-react";
 
 export function AdminLayout() {
   const isMobile = useIsMobile();
-  const { user } = useAuth();
+  const { user, signOut } = useAuth();
+  const navigate = useNavigate();
+
   const initials = (user?.user_metadata?.name || user?.email || "?").charAt(0).toUpperCase();
+  const avatarUrl = user?.user_metadata?.avatar_url as string | undefined;
+
+  const handleSignOut = async () => {
+    await signOut({ skipRedirect: true });
+    navigate("/login");
+  };
 
   return (
     <SidebarProvider>
@@ -27,12 +41,38 @@ export function AdminLayout() {
               <SidebarTrigger />
             )}
           </div>
+
           <div className="flex items-center gap-3">
-            <Avatar className="h-8 w-8">
-              <AvatarFallback className="bg-primary/20 text-sm font-semibold text-primary">
-                {initials}
-              </AvatarFallback>
-            </Avatar>
+            <div className="hidden sm:flex flex-col items-end">
+              <span className="text-xs font-normal text-foreground">
+                {user?.user_metadata?.name || user?.email}
+              </span>
+              <span className="text-[10px] text-muted-foreground font-normal uppercase tracking-widest">admin</span>
+            </div>
+
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <button className="rounded-full focus:outline-none focus:ring-2 focus:ring-primary/40 focus:ring-offset-2 focus:ring-offset-background">
+                  <Avatar className="h-8 w-8 cursor-pointer">
+                    <AvatarImage src={avatarUrl} alt={user?.user_metadata?.name || "admin"} />
+                    <AvatarFallback className="bg-primary/20 text-sm font-semibold text-primary">
+                      {initials}
+                    </AvatarFallback>
+                  </Avatar>
+                </button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end" className="w-44">
+                <DropdownMenuItem onClick={() => navigate("/settings")} className="gap-2 cursor-pointer">
+                  <Settings className="h-4 w-4" />
+                  Settings
+                </DropdownMenuItem>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem onClick={handleSignOut} className="gap-2 cursor-pointer text-destructive focus:text-destructive">
+                  <LogOut className="h-4 w-4" />
+                  Sign Out
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
           </div>
         </header>
 
