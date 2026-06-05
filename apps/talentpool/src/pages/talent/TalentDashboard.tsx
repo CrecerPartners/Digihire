@@ -9,6 +9,7 @@ import MyLearning from './MyLearning';
 import TalentHome from './TalentHome';
 import GigsPage from './GigsPage';
 import JobsPage from './JobsPage';
+import JobDetailPage from './JobDetailPage';
 import EventsPage from './EventsPage';
 import MyApplications from './MyApplications';
 import Campaigns from '../voltsquad/Campaigns';
@@ -100,6 +101,7 @@ export default function TalentDashboard() {
 
           {/* Jobs & Gigs */}
           <Route path="/jobs" element={<JobsPage />} />
+          <Route path="/jobs/:id" element={<JobDetailPage />} />
           <Route path="/gigs" element={<GigsPage />} />
 
           {/* Events */}
