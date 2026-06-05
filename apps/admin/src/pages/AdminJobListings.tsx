@@ -38,6 +38,7 @@ interface JobListing {
   deadline?: string;
   status: string;
   featured?: boolean;
+  anonymous?: boolean;
   created_at: string;
   brand_profiles?: { company_name: string };
 }
@@ -61,6 +62,7 @@ const emptyForm = {
   deadline: "",
   status: "draft",
   featured: false,
+  anonymous: false,
 };
 
 const JOB_TYPES = ["full_time", "part_time", "contract", "gig", "internship"];
@@ -137,6 +139,7 @@ export default function AdminJobListings() {
       deadline: job.deadline ? job.deadline.slice(0, 10) : "",
       status: job.status,
       featured: job.featured || false,
+      anonymous: job.anonymous || false,
     });
     setFormOpen(true);
   };
@@ -148,11 +151,11 @@ export default function AdminJobListings() {
 
   const handleSave = async () => {
     if (!form.title.trim()) { toast.error("Title is required"); return; }
-    if (!form.company_name.trim()) { toast.error("Company name is required"); return; }
+    if (!form.anonymous && !form.company_name.trim()) { toast.error("Company name is required"); return; }
     setSaving(true);
 
     const payload = {
-      company_name: form.company_name,
+      company_name: form.anonymous ? "Anonymous Employer" : form.company_name,
       title: form.title,
       job_type: form.job_type,
       category: form.category,
@@ -170,6 +173,7 @@ export default function AdminJobListings() {
       deadline: form.deadline || null,
       status: form.status,
       featured: form.featured,
+      anonymous: form.anonymous,
       updated_at: new Date().toISOString(),
     };
 
@@ -274,8 +278,15 @@ export default function AdminJobListings() {
                       </div>
                       <div>
                         <div className="font-medium text-sm truncate">{job.title}</div>
-                        <div className="text-xs text-muted-foreground">{job.company_name}</div>
-                        {job.featured && <span className="text-[10px] text-amber-500 font-semibold">★ Featured</span>}
+                        <div className="text-xs text-muted-foreground">
+                          {job.anonymous ? (
+                            <span className="italic text-muted-foreground/70">Anonymous Employer</span>
+                          ) : job.company_name}
+                        </div>
+                        <div className="flex gap-1 mt-0.5">
+                          {job.featured && <span className="text-[10px] text-amber-500 font-semibold">★ Featured</span>}
+                          {job.anonymous && <span className="text-[10px] text-blue-400 font-semibold">🔒 Anon</span>}
+                        </div>
                       </div>
                     </div>
                   </TableCell>
@@ -320,15 +331,36 @@ export default function AdminJobListings() {
             <DialogTitle>{editJob ? "Edit Job" : "New Job Listing"}</DialogTitle>
           </DialogHeader>
           <div className="space-y-4 py-2">
-            <div className="grid grid-cols-2 gap-3">
+            {/* Anonymous employer toggle */}
+            <div className="flex items-start gap-3 p-3 rounded-lg bg-secondary/50 border border-border/50">
+              <input
+                type="checkbox"
+                id="anonymous"
+                checked={form.anonymous}
+                onChange={set("anonymous")}
+                className="h-4 w-4 mt-0.5 cursor-pointer"
+              />
+              <div>
+                <label htmlFor="anonymous" className="text-sm font-medium text-foreground cursor-pointer">
+                  Post as anonymous employer
+                </label>
+                <p className="text-xs text-muted-foreground mt-0.5">
+                  The company name will be hidden from candidates and shown as "Anonymous Employer"
+                </p>
+              </div>
+            </div>
+
+            <div className={`grid gap-3 ${form.anonymous ? "grid-cols-1" : "grid-cols-2"}`}>
               <div className="space-y-1.5">
                 <Label>Job Title *</Label>
                 <Input value={form.title} onChange={set("title")} placeholder="e.g. Sales Executive" />
               </div>
-              <div className="space-y-1.5">
-                <Label>Company Name *</Label>
-                <Input value={form.company_name} onChange={set("company_name")} placeholder="e.g. Acme Corp" />
-              </div>
+              {!form.anonymous && (
+                <div className="space-y-1.5">
+                  <Label>Company Name *</Label>
+                  <Input value={form.company_name} onChange={set("company_name")} placeholder="e.g. Acme Corp" />
+                </div>
+              )}
             </div>
 
             <div className="grid grid-cols-3 gap-3">
