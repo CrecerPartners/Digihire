@@ -12,6 +12,8 @@ import {
   TrendingUp, BarChart2, ExternalLink
 } from 'lucide-react';
 import { useTalentProfile } from '../../hooks/useTalentProfile';
+import Lottie from 'lottie-react';
+import successLottie from '../../../public/assets/success-1.json';
 
 const supabase = _supabase as any;
 
@@ -717,8 +719,8 @@ export default function JobDetailPage() {
 
           {submitSuccess ? (
             <div className="py-8 text-center space-y-4">
-              <div className="h-16 w-16 rounded-full bg-green-500/10 flex items-center justify-center mx-auto text-green-500">
-                <CheckCircle2 className="h-8 w-8" />
+              <div className="w-24 h-24 mx-auto flex items-center justify-center">
+                <Lottie animationData={successLottie} loop={false} style={{ width: 96, height: 96 }} />
               </div>
               <div className="space-y-1">
                 <h3 className="text-lg font-bold text-foreground">Application Submitted!</h3>

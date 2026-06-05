@@ -1,12 +1,14 @@
 import React, { useState, useRef, useMemo, useEffect, useCallback } from 'react';
 import { TalentProfile } from '../../types';
 import { useNavigate } from 'react-router-dom';
-import { supabase as _supabase, uploadFileToR2, useAuth } from '@digihire/shared';
+import { supabase as _supabase, uploadFileToR2, useAuth, Dialog, DialogContent, DialogHeader, DialogTitle, Button } from '@digihire/shared';
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const supabase = _supabase as any;
 import { motion } from 'motion/react';
 import { Save, User, MapPin, Briefcase, GraduationCap, Link as LinkIcon, Camera, Upload, CheckCircle, AlertCircle, FileText, Settings, Heart, Loader2, X } from 'lucide-react';
 import { parseCvWithOpenAI, CV_SESSION_KEY, CV_NAME_SESSION_KEY, LINKEDIN_SESSION_KEY } from '../../lib/cv-parser';
+import Lottie from 'lottie-react';
+import trophyLottie from '../../../public/assets/success-trophy.json';
 
 interface Props {
   profile: TalentProfile | null;
@@ -21,6 +23,7 @@ export default function ProfileSetup({ profile, onUpdate }: Props) {
   const [formData, setFormData] = useState<Partial<TalentProfile>>(profile || {});
   const [saving, setSaving] = useState(false);
   const [saveSuccess, setSaveSuccess] = useState(false);
+  const [showSuccessModal, setShowSuccessModal] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [activeTab, setActiveTab] = useState('basic');
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -172,8 +175,7 @@ export default function ProfileSetup({ profile, onUpdate }: Props) {
         setActiveTab(tabs[currentTabIndex + 1].id);
         window.scrollTo({ top: 0, behavior: 'smooth' });
       } else if (currentTabIndex === tabs.length - 1) {
-        alert('Profile completed successfully!');
-        navigate('/talent');
+        setShowSuccessModal(true);
       }
     } catch (err: unknown) {
       setError(err instanceof Error ? err.message : 'Update failed');
@@ -570,6 +572,32 @@ export default function ProfileSetup({ profile, onUpdate }: Props) {
            </div>
         </div>
       </form>
+
+      {/* Success Modal with Lottie animation */}
+      <Dialog open={showSuccessModal} onOpenChange={open => { if (!open) { setShowSuccessModal(false); navigate('/talent'); } }}>
+        <DialogContent className="max-w-md rounded-2xl bg-card border-border/60 p-6 text-center space-y-6">
+          <div className="w-32 h-32 mx-auto flex items-center justify-center">
+            <Lottie animationData={trophyLottie} loop={true} style={{ width: 128, height: 128 }} />
+          </div>
+          <div className="space-y-2">
+            <h3 className="text-xl font-bold text-foreground">Profile Completed!</h3>
+            <p className="text-sm text-muted-foreground leading-relaxed">
+              Congratulations! Your profile is now 100% complete. You are fully ready to match and apply for premium jobs.
+            </p>
+          </div>
+          <div className="pt-2">
+            <Button
+              className="w-full rounded-xl bg-sky-600 hover:bg-sky-700 text-white font-semibold py-3.5"
+              onClick={() => {
+                setShowSuccessModal(false);
+                navigate('/talent');
+              }}
+            >
+              Go to Dashboard
+            </Button>
+          </div>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }
