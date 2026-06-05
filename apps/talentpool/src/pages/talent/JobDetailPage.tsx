@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
-import { supabase as _supabase, useAuth, uploadFileToR2 } from '@digihire/shared';
+import { supabase as _supabase, useAuth, uploadFileToR2, RichTextContent } from '@digihire/shared';
 import { Card, CardContent } from '@digihire/shared';
 import { Badge } from '@digihire/shared';
 import { Button } from '@digihire/shared';
@@ -506,18 +506,22 @@ export default function JobDetailPage() {
           {/* Company details or generic placeholder */}
           <div className="space-y-2">
             <h3 className="text-sm font-bold text-foreground uppercase tracking-widest text-primary-dim dark:text-cyan">Company Description</h3>
-            <p className="text-sm text-muted-foreground leading-relaxed">
-              {isAnonymous
-                ? `This is an anonymous employer hiring in the ${job.brand_profiles?.industry || 'Sales'} sector. They are looking to grow their presence and recruit top talent for their team.`
-                : (job.brand_profiles?.description || `Learn more about opportunities at ${job.company_name}. They are committed to building high-performing sales teams.`)}
-            </p>
+            {isAnonymous || !job.brand_profiles?.description ? (
+              <p className="text-sm text-muted-foreground leading-relaxed">
+                {isAnonymous
+                  ? `This is an anonymous employer hiring in the ${job.brand_profiles?.industry || 'Sales'} sector. They are looking to grow their presence and recruit top talent for their team.`
+                  : `Learn more about opportunities at ${job.company_name}. They are committed to building high-performing sales teams.`}
+              </p>
+            ) : (
+              <RichTextContent html={job.brand_profiles.description} className="text-muted-foreground" />
+            )}
           </div>
 
           {/* Role Description */}
           {job.description && (
             <div className="space-y-2 pt-2">
               <h3 className="text-sm font-bold text-foreground uppercase tracking-widest text-primary-dim dark:text-cyan">Role Description</h3>
-              <p className="text-sm text-muted-foreground leading-relaxed whitespace-pre-line">{job.description}</p>
+              <RichTextContent html={job.description} className="text-muted-foreground" />
             </div>
           )}
 
@@ -525,7 +529,7 @@ export default function JobDetailPage() {
           {job.requirements && (
             <div className="space-y-2 pt-2">
               <h3 className="text-sm font-bold text-foreground uppercase tracking-widest text-primary-dim dark:text-cyan">Requirements & Qualifications</h3>
-              <p className="text-sm text-muted-foreground leading-relaxed whitespace-pre-line">{job.requirements}</p>
+              <RichTextContent html={job.requirements} className="text-muted-foreground" />
             </div>
           )}
 
