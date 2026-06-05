@@ -39,6 +39,7 @@ interface JobListing {
   status: string;
   featured?: boolean;
   anonymous?: boolean;
+  logo_url?: string;
   created_at: string;
   brand_profiles?: { company_name: string };
 }
@@ -154,6 +155,9 @@ export default function AdminJobListings() {
     if (!form.anonymous && !form.company_name.trim()) { toast.error("Company name is required"); return; }
     setSaving(true);
 
+    const seed = encodeURIComponent(`${form.title}-${form.category}-${editJob?.id || 'new'}`);
+    const logoUrl = `https://api.dicebear.com/7.x/identicon/svg?seed=${seed}`;
+
     const payload = {
       company_name: form.anonymous ? "Anonymous Employer" : form.company_name,
       title: form.title,
@@ -174,6 +178,7 @@ export default function AdminJobListings() {
       status: form.status,
       featured: form.featured,
       anonymous: form.anonymous,
+      logo_url: logoUrl,
       updated_at: new Date().toISOString(),
     };
 
@@ -273,8 +278,12 @@ export default function AdminJobListings() {
                 <TableRow key={job.id} className="border-border/50">
                   <TableCell className="max-w-[260px]">
                     <div className="flex items-start gap-2.5">
-                      <div className="h-8 w-8 rounded-lg bg-primary/10 flex items-center justify-center shrink-0 mt-0.5">
-                        <Briefcase className="h-4 w-4 text-primary" />
+                      <div className="h-8 w-8 rounded-lg bg-primary/10 border border-border/30 overflow-hidden flex items-center justify-center shrink-0 mt-0.5">
+                        {job.logo_url ? (
+                          <img src={job.logo_url} alt="" className="h-full w-full object-cover" />
+                        ) : (
+                          <Briefcase className="h-4 w-4 text-primary" />
+                        )}
                       </div>
                       <div>
                         <div className="font-medium text-sm truncate">{job.title}</div>

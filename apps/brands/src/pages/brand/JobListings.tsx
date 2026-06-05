@@ -37,6 +37,7 @@ interface JobListing {
   status: string;
   featured?: boolean;
   anonymous?: boolean;
+  logo_url?: string;
   created_at: string;
 }
 
@@ -138,6 +139,7 @@ export default function JobListings() {
   const [editJob, setEditJob] = useState<JobListing | null>(null);
   const [form, setForm] = useState(emptyForm);
   const [saving, setSaving] = useState(false);
+  const [brandLogo, setBrandLogo] = useState<string | null>(null);
 
   // Applications state
   const [applicationCounts, setApplicationCounts] = useState<Record<string, number>>({});
@@ -160,6 +162,22 @@ export default function JobListings() {
     setLoading(false);
   };
 
+  const fetchBrandLogo = async () => {
+    if (!user?.id) return;
+    try {
+      const { data } = await supabase
+        .from('brand_profiles')
+        .select('logo_url')
+        .eq('id', user.id)
+        .maybeSingle();
+      if (data && data.logo_url) {
+        setBrandLogo(data.logo_url);
+      }
+    } catch (err) {
+      console.error('Error fetching brand logo:', err);
+    }
+  };
+
   const fetchApplicationCounts = async (jobIds: string[]) => {
     if (!jobIds.length) return;
     const { data } = await supabase
@@ -175,7 +193,12 @@ export default function JobListings() {
     }
   };
 
-  useEffect(() => { if (user?.id) fetchJobs(); }, [user?.id]);
+  useEffect(() => {
+    if (user?.id) {
+      fetchJobs();
+      fetchBrandLogo();
+    }
+  }, [user?.id]);
 
   const openApplications = async (job: JobListing) => {
     setAppsJob(job);
@@ -230,6 +253,12 @@ export default function JobListings() {
     if (!form.anonymous && !form.company_name.trim()) { toast.error('Company name is required'); return; }
     setSaving(true);
 
+    const seed = encodeURIComponent(`${form.title}-${form.category}-${editJob?.id || 'new'}`);
+    const generatedAvatar = `https://api.dicebear.com/7.x/identicon/svg?seed=${seed}`;
+    const logoUrl = form.anonymous 
+      ? generatedAvatar 
+      : (brandLogo || generatedAvatar);
+
     const basePayload = {
       brand_id: user?.id,
       company_name: form.anonymous ? 'Anonymous Employer' : form.company_name,
@@ -250,6 +279,7 @@ export default function JobListings() {
       deadline: form.deadline || null,
       status: form.status,
       anonymous: form.anonymous,
+      logo_url: logoUrl,
     };
 
     try {
@@ -355,8 +385,12 @@ export default function JobListings() {
                 <CardContent className="p-5">
                   <div className="flex items-start justify-between gap-4">
                     <div className="flex items-start gap-3 flex-1 min-w-0">
-                      <div className="h-10 w-10 rounded-xl bg-primary/10 flex items-center justify-center shrink-0">
-                        <Briefcase className="h-5 w-5 text-primary" />
+                      <div className="h-10 w-10 rounded-xl bg-primary/10 border border-border/30 overflow-hidden flex items-center justify-center shrink-0">
+                        {job.logo_url ? (
+                          <img src={job.logo_url} alt="" className="h-full w-full object-cover" />
+                        ) : (
+                          <Briefcase className="h-5 w-5 text-primary" />
+                        )}
                       </div>
                       <div className="flex-1 min-w-0">
                         <div className="flex items-center gap-2 flex-wrap">

@@ -49,6 +49,7 @@ interface JobListing {
   deadline?: string;
   featured?: boolean;
   anonymous?: boolean;
+  logo_url?: string;
   created_at: string;
   brand_profiles?: BrandProfile;
 }
@@ -345,9 +346,11 @@ export default function JobDetailPage() {
   // Set company logo and details
   const isAnonymous = job.anonymous;
   const companyName = isAnonymous ? 'Anonymous Employer' : job.company_name;
-  const companyLogo = isAnonymous
-    ? `https://api.dicebear.com/7.x/identicon/svg?seed=${job.brand_id || 'anonymous'}`
-    : (job.brand_profiles?.logo_url || '');
+  const companyLogo = job.logo_url
+    ? job.logo_url
+    : (isAnonymous
+        ? `https://api.dicebear.com/7.x/identicon/svg?seed=${job.brand_id || 'anonymous'}`
+        : (job.brand_profiles?.logo_url || `https://api.dicebear.com/7.x/identicon/svg?seed=${job.id || 'anonymous'}`));
 
   return (
     <div className="max-w-4xl mx-auto px-4 py-8 space-y-6">

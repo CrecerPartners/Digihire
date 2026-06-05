@@ -440,10 +440,12 @@ function showDetailPage(job) {
   var companyName = isAnon ? 'Anonymous Employer' : job.company_name;
   
   // Set Dicebear avatar seed
-  var logoSeed = job.brand_id || 'anonymous';
-  var logoUrl = isAnon 
-    ? 'https://api.dicebear.com/7.x/identicon/svg?seed=' + logoSeed
-    : (job.brand_profiles && job.brand_profiles.logo_url ? job.brand_profiles.logo_url : '');
+  var logoSeed = job.id || job.brand_id || 'anonymous';
+  var logoUrl = job.logo_url 
+    ? job.logo_url 
+    : (isAnon 
+        ? 'https://api.dicebear.com/7.x/identicon/svg?seed=' + logoSeed
+        : (job.brand_profiles && job.brand_profiles.logo_url ? job.brand_profiles.logo_url : 'https://api.dicebear.com/7.x/identicon/svg?seed=' + logoSeed));
 
   // Active jobs count for the brand
   var activeJobs = allJobs.filter(function(j) { return j.brand_id === job.brand_id && j.status === 'published'; });
@@ -743,9 +745,20 @@ function renderJobs() {
     var sal = fmtSalary(j.salary_min, j.salary_max, j.pay_type);
     var modeTag = j.work_mode ? '<span class="badge badge-'+esc(j.work_mode)+'">'+esc(j.work_mode)+'</span>' : '';
     var skillsHtml = (j.skills && j.skills.length) ? '<div class="skills-row">'+j.skills.slice(0,4).map(function(s){return '<span class="skill-chip">'+esc(s)+'</span>';}).join('')+(j.skills.length>4?'<span class="skill-chip">+'+(j.skills.length-4)+' more</span>':'')+' </div>' : '';
+    var logoSeed = j.id || j.brand_id || 'anonymous';
+    var logoUrl = j.logo_url 
+      ? j.logo_url 
+      : (j.anonymous 
+         ? 'https://api.dicebear.com/7.x/identicon/svg?seed=' + logoSeed
+         : (j.brand_profiles && j.brand_profiles.logo_url ? j.brand_profiles.logo_url : 'https://api.dicebear.com/7.x/identicon/svg?seed=' + logoSeed));
+
+    var logoHtml = logoUrl 
+      ? '<img src="' + esc(safeUrl(logoUrl)) + '" style="width:100%;height:100%;object-fit:cover;" />' 
+      : '<svg width="20" height="20" fill="none" stroke="#00C2FF" stroke-width="2" viewBox="0 0 24 24"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/></svg>';
+
     return '<a class="job-card'+(j.featured?' featured':'')+'" href="'+esc(jobPath(j))+'">'
       + '<div class="job-card-top">'
-      + '<div class="job-icon"><svg width="20" height="20" fill="none" stroke="#00C2FF" stroke-width="2" viewBox="0 0 24 24"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/></svg></div>'
+      + '<div class="job-icon" style="overflow:hidden;display:flex;align-items:center;justify-content:center;border:1px solid var(--border);">' + logoHtml + '</div>'
       + '<div style="flex:1;min-width:0;">'
       + '<div style="display:flex;align-items:center;gap:6px;">'
       + '<div class="job-title">'+esc(j.title)+'</div>'
