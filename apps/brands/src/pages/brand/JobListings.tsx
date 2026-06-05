@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { supabase as _supabase, useAuth } from '@digihire/shared';
+import { supabase as _supabase, useAuth, uploadFileToR2 } from '@digihire/shared';
 import { Button } from '@digihire/shared';
 import { Badge } from '@digihire/shared';
 import { Input } from '@digihire/shared';
@@ -98,6 +98,7 @@ const emptyForm = {
   deadline: '',
   status: 'draft',
   anonymous: false,
+  logo_url: '',
 };
 
 function formatSalary(min?: number, max?: number, pay_type?: string) {
@@ -140,6 +141,7 @@ export default function JobListings() {
   const [form, setForm] = useState(emptyForm);
   const [saving, setSaving] = useState(false);
   const [brandLogo, setBrandLogo] = useState<string | null>(null);
+  const [uploadingLogo, setUploadingLogo] = useState(false);
 
   // Applications state
   const [applicationCounts, setApplicationCounts] = useState<Record<string, number>>({});
@@ -215,7 +217,11 @@ export default function JobListings() {
 
   const openCreate = () => {
     setEditJob(null);
-    setForm({ ...emptyForm, company_name: user?.user_metadata?.company_name || '' });
+    setForm({ 
+      ...emptyForm, 
+      company_name: user?.user_metadata?.company_name || '',
+      logo_url: brandLogo || ''
+    });
     setFormOpen(true);
   };
 
@@ -240,8 +246,27 @@ export default function JobListings() {
       deadline: job.deadline ? job.deadline.slice(0, 10) : '',
       status: job.status,
       anonymous: job.anonymous ?? false,
+      logo_url: job.logo_url || '',
     });
     setFormOpen(true);
+  };
+
+  const handleLogoUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    setUploadingLogo(true);
+    try {
+      const ext = file.name.split('.').pop();
+      const path = `job-logos/${user?.id || 'anon'}/${Date.now()}.${ext}`;
+      const url = await uploadFileToR2('brand-assets', path, file);
+      setForm(f => ({ ...f, logo_url: url }));
+      toast.success('Logo uploaded');
+    } catch (err) {
+      console.error(err);
+      toast.error('Upload failed');
+    } finally {
+      setUploadingLogo(false);
+    }
   };
 
   const set = (field: keyof typeof emptyForm) =>
@@ -253,11 +278,14 @@ export default function JobListings() {
     if (!form.anonymous && !form.company_name.trim()) { toast.error('Company name is required'); return; }
     setSaving(true);
 
-    const seed = encodeURIComponent(`${form.title}-${form.category}-${editJob?.id || 'new'}`);
-    const generatedAvatar = `https://api.dicebear.com/7.x/identicon/svg?seed=${seed}`;
-    const logoUrl = form.anonymous 
-      ? generatedAvatar 
-      : (brandLogo || generatedAvatar);
+    let logoUrl = form.logo_url;
+    if (!logoUrl) {
+      const seed = encodeURIComponent(`${form.title}-${form.category}-${editJob?.id || 'new'}`);
+      const generatedAvatar = `https://api.dicebear.com/7.x/identicon/svg?seed=${seed}`;
+      logoUrl = form.anonymous 
+        ? generatedAvatar 
+        : (brandLogo || generatedAvatar);
+    }
 
     const basePayload = {
       brand_id: user?.id,
@@ -651,6 +679,41 @@ export default function JobListings() {
             <div className="space-y-1.5">
               <Label>Skills Required (comma-separated)</Label>
               <Input value={form.skills} onChange={set('skills')} placeholder="e.g. Cold calling, CRM, B2B sales" />
+            </div>
+
+            {/* Custom Logo Upload / URL */}
+            <div className="flex items-center gap-4 border border-border/50 rounded-lg p-4 bg-secondary/10">
+              <div className="h-12 w-12 rounded-xl bg-primary/10 border border-border/30 overflow-hidden flex items-center justify-center shrink-0">
+                {form.logo_url ? (
+                  <img src={form.logo_url} alt="Logo preview" className="h-full w-full object-cover" />
+                ) : (
+                  <Briefcase className="h-6 w-6 text-primary" />
+                )}
+              </div>
+              <div className="flex-1 space-y-1">
+                <p className="text-xs font-semibold text-muted-foreground uppercase tracking-widest">Logo Preview</p>
+                <p className="text-[11px] text-muted-foreground">Will appear as the job post icon</p>
+              </div>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-3 space-y-1.5 md:space-y-0">
+              <div className="space-y-1.5">
+                <Label>Company Logo / Avatar URL</Label>
+                <Input value={form.logo_url} onChange={set('logo_url')} placeholder="e.g. https://example.com/logo.png" />
+              </div>
+              <div className="space-y-1.5">
+                <Label>Upload Custom Logo</Label>
+                <div className="flex items-center gap-2">
+                  <Input 
+                    type="file" 
+                    accept="image/*" 
+                    onChange={handleLogoUpload} 
+                    disabled={uploadingLogo} 
+                    className="cursor-pointer text-xs" 
+                  />
+                  {uploadingLogo && <Loader2 className="h-4 w-4 animate-spin text-primary shrink-0" />}
+                </div>
+              </div>
             </div>
 
             <div className="space-y-1.5">
