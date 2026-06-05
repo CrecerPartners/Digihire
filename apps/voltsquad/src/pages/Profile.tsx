@@ -280,6 +280,8 @@ const Profile = () => {
   }
 
   const initials = (profile?.name || "").split(" ").map(n => n[0]).join("").toUpperCase() || "?";
+  const dicebearSeed = encodeURIComponent(profile?.name || 'user');
+  const avatarSrc = profile?.avatar_url || `https://api.dicebear.com/7.x/lorelei/svg?seed=${dicebearSeed}`;
   const isVerified = profile?.verification_status === "verified";
   const isPendingVerification = profile?.verification_status === "pending";
   const needsIdUpload = ["student", "corporate", "nysc"].includes(profileForm.account_type);
@@ -324,7 +326,7 @@ const Profile = () => {
         <CardContent className="p-6 flex flex-col sm:flex-row items-center gap-4 text-center sm:text-left">
           <div className="relative group cursor-pointer" onClick={handleAvatarClick}>
             <Avatar className="h-16 w-16 text-2xl">
-              {profile?.avatar_url ? <AvatarImage src={profile.avatar_url} alt={profile.name} /> : null}
+              <AvatarImage src={avatarSrc} alt={profile?.name} />
               <AvatarFallback className="bg-primary/20 text-primary font-bold font-display text-2xl">{initials}</AvatarFallback>
             </Avatar>
             <div className="absolute inset-0 rounded-full bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">

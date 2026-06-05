@@ -145,7 +145,7 @@ function AccountTab() {
         <div className="flex items-center gap-5">
           <div className="relative group">
             <Avatar className="h-20 w-20">
-              <AvatarImage src={avatarUrl} alt="Profile photo" />
+              <AvatarImage src={avatarUrl || `https://api.dicebear.com/7.x/lorelei/svg?seed=${encodeURIComponent(name || user?.email || 'admin')}`} alt="Profile photo" />
               <AvatarFallback className="bg-primary/15 text-2xl font-bold text-primary">
                 {(name || user?.email || '?').charAt(0).toUpperCase()}
               </AvatarFallback>

@@ -17,6 +17,8 @@ export function AdminLayout() {
 
   const initials = (user?.user_metadata?.name || user?.email || "?").charAt(0).toUpperCase();
   const avatarUrl = user?.user_metadata?.avatar_url as string | undefined;
+  const dicebearSeed = encodeURIComponent(user?.user_metadata?.name || user?.email || 'admin');
+  const avatarSrc = avatarUrl || `https://api.dicebear.com/7.x/lorelei/svg?seed=${dicebearSeed}`;
 
   const handleSignOut = async () => {
     await signOut({ skipRedirect: true });
@@ -54,7 +56,7 @@ export function AdminLayout() {
               <DropdownMenuTrigger asChild>
                 <button className="rounded-full focus:outline-none focus:ring-2 focus:ring-primary/40 focus:ring-offset-2 focus:ring-offset-background">
                   <Avatar className="h-8 w-8 cursor-pointer">
-                    <AvatarImage src={avatarUrl} alt={user?.user_metadata?.name || "admin"} />
+                    <AvatarImage src={avatarSrc} alt={user?.user_metadata?.name || "admin"} />
                     <AvatarFallback className="bg-primary/20 text-sm font-semibold text-primary">
                       {initials}
                     </AvatarFallback>

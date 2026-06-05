@@ -23,6 +23,8 @@ export function DashboardLayout() {
   const location = useLocation();
 
   const initials = (profile?.name || "?").split(" ").map(n => n[0]).join("").toUpperCase();
+  const dicebearSeed = encodeURIComponent(profile?.name || 'user');
+  const avatarSrc = profile?.avatar_url || `https://api.dicebear.com/7.x/lorelei/svg?seed=${dicebearSeed}`;
 
   const handleLogout = async () => {
     await signOut({ skipRedirect: true });
@@ -71,7 +73,7 @@ export function DashboardLayout() {
                 <DropdownMenuTrigger asChild>
                   <button className="rounded-full focus:outline-none focus:ring-2 focus:ring-primary/40 focus:ring-offset-2 focus:ring-offset-background">
                     <Avatar className="h-8 w-8 cursor-pointer">
-                      <AvatarImage src={profile?.avatar_url} alt={profile?.name} />
+                      <AvatarImage src={avatarSrc} alt={profile?.name} />
                       <AvatarFallback className="bg-primary/20 text-sm font-semibold text-primary">
                         {initials}
                       </AvatarFallback>

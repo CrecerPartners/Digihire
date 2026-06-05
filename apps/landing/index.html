@@ -2114,10 +2114,10 @@
     var safeType = esc(j.job_type);
     var safeMode = esc(j.work_mode || '');
     var modeTag = (j.work_mode && j.work_mode !== 'onsite') ? '<span class="job-type-badge badge-' + safeMode + '" style="margin-left:4px;">' + safeMode + '</span>' : '';
+    var companySeed = encodeURIComponent(j.company_name || 'company');
     return '<div class="job-slide"><a class="job-card' + (j.featured ? ' featured' : '') + '" href="' + esc(jobPath(j)) + '">'
       + '<div style="display:flex;align-items:flex-start;gap:12px;">'
-      + '<div style="width:40px;height:40px;border-radius:10px;background:rgba(0,194,255,0.08);display:flex;align-items:center;justify-content:center;flex-shrink:0;">'
-      + '<svg width="18" height="18" fill="none" stroke="#00C2FF" stroke-width="2" viewBox="0 0 24 24"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/></svg></div>'
+      + '<img src="https://api.dicebear.com/7.x/shapes/svg?seed=' + companySeed + '" width="40" height="40" style="border-radius:10px;flex-shrink:0;object-fit:cover;" alt="" />'
       + '<div style="flex:1;min-width:0;">'
       + '<div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;"><span style="font-weight:700;font-size:15px;color:#06111F;">' + esc(j.title) + '</span>'
       + (j.featured ? '<svg width="13" height="13" fill="#f59e0b" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87L18.18 21 12 17.77 5.82 21 7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>' : '') + '</div>'
