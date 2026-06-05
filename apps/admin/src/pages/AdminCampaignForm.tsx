@@ -3,7 +3,7 @@ import { toast } from "sonner";
 import { Button } from "@digihire/shared";
 import { Input } from "@digihire/shared";
 import { Label } from "@digihire/shared";
-import { Textarea } from "@digihire/shared";
+import { Textarea, RichTextEditor } from "@digihire/shared";
 import {
   Select,
   SelectContent,
@@ -135,10 +135,11 @@ export default function AdminCampaignForm({
           </div>
           <div className="space-y-2">
             <Label>Description</Label>
-            <Textarea
-              value={form.description}
-              onChange={(e) => set("description", e.target.value)}
-              rows={3}
+            <RichTextEditor
+              value={form.description || ''}
+              onChange={html => set("description", html)}
+              placeholder="Describe this campaign..."
+              minHeight="110px"
             />
           </div>
           <div className="space-y-2">

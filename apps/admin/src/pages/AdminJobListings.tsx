@@ -4,7 +4,7 @@ import { Button } from "@digihire/shared";
 import { Badge } from "@digihire/shared";
 import { Input } from "@digihire/shared";
 import { Label } from "@digihire/shared";
-import { Textarea } from "@digihire/shared";
+import { RichTextEditor } from "@digihire/shared";
 import { Card, CardContent } from "@digihire/shared";
 import {
   Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter,
@@ -436,12 +436,12 @@ export default function AdminJobListings() {
 
             <div className="space-y-1.5">
               <Label>Job Description</Label>
-              <Textarea value={form.description} onChange={set("description")} rows={4} placeholder="What will this person do?" />
+              <RichTextEditor value={form.description || ''} onChange={html => setForm(f => ({ ...f, description: html }))} placeholder="What will this person do?" minHeight="140px" />
             </div>
 
             <div className="space-y-1.5">
               <Label>Requirements</Label>
-              <Textarea value={form.requirements} onChange={set("requirements")} rows={3} placeholder="Minimum qualifications, experience, etc." />
+              <RichTextEditor value={form.requirements || ''} onChange={html => setForm(f => ({ ...f, requirements: html }))} placeholder="Minimum qualifications, experience, etc." minHeight="110px" />
             </div>
 
             <div className="grid grid-cols-2 gap-3">

@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { supabase as _supabase } from "@digihire/shared";
 import { useQueryClient, useQuery, useMutation } from "@tanstack/react-query";
-import { Button, Input, Textarea, Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter, toast, Card, CardContent, CardHeader, CardTitle } from "@digihire/shared";
+import { Button, Input, Textarea, RichTextEditor, Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter, toast, Card, CardContent, CardHeader, CardTitle } from "@digihire/shared";
 import { Plus, Pencil, Trash2, Users, Calendar, Clock, Link2, Eye, EyeOff } from "lucide-react";
 import { motion, AnimatePresence } from "motion/react";
 
@@ -207,7 +207,7 @@ export default function AdminWebinars() {
           </DialogHeader>
           <div className="grid gap-4">
             <Input placeholder="Session Title" value={form.title} onChange={(e: any) => set("title", e.target.value)} />
-            <Textarea placeholder="Description" value={form.description} onChange={(e: any) => set("description", e.target.value)} rows={3} />
+            <RichTextEditor value={form.description || ''} onChange={html => set("description", html)} placeholder="Description" minHeight="110px" />
 
             <div className="grid grid-cols-2 gap-4">
               <div>

@@ -4,7 +4,7 @@ import { Button } from "@digihire/shared";
 import { Badge } from "@digihire/shared";
 import { Input } from "@digihire/shared";
 import { Label } from "@digihire/shared";
-import { Textarea } from "@digihire/shared";
+import { Textarea, RichTextEditor } from "@digihire/shared";
 import { Card, CardContent } from "@digihire/shared";
 import {
   Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter,
@@ -352,14 +352,12 @@ export default function AdminBlog() {
             </div>
             <div className="space-y-1.5">
               <Label>Content</Label>
-              <Textarea
-                value={form.content}
-                onChange={e => setForm(f => ({ ...f, content: e.target.value }))}
-                placeholder="Full article content (supports plain text or basic HTML like <h2>, <p>, <strong>, <ul>)..."
-                rows={14}
-                className="font-mono text-sm"
+              <RichTextEditor
+                value={form.content || ''}
+                onChange={html => setForm(f => ({ ...f, content: html }))}
+                placeholder="Write article content here..."
+                minHeight="280px"
               />
-              <p className="text-xs text-muted-foreground">Supports basic HTML: &lt;h2&gt;, &lt;p&gt;, &lt;strong&gt;, &lt;em&gt;, &lt;ul&gt;, &lt;li&gt;, &lt;blockquote&gt;</p>
             </div>
           </div>
           <DialogFooter>

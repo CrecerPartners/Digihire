@@ -4,7 +4,7 @@ import { Button } from "@digihire/shared";
 import { Badge } from "@digihire/shared";
 import { Input } from "@digihire/shared";
 import { Label } from "@digihire/shared";
-import { Textarea } from "@digihire/shared";
+import { Textarea, RichTextEditor } from "@digihire/shared";
 import { Card, CardContent, CardHeader, CardTitle } from "@digihire/shared";
 import {
   Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter,
@@ -289,7 +289,7 @@ export default function AdminEvents() {
             </div>
             <div className="space-y-1.5">
               <Label>Description</Label>
-              <Textarea value={form.description} onChange={e => setForm(f => ({ ...f, description: e.target.value }))} placeholder="What is this event about?" rows={3} />
+              <RichTextEditor value={form.description || ''} onChange={html => setForm(f => ({ ...f, description: html }))} placeholder="What is this event about?" minHeight="110px" />
             </div>
             <div className="grid grid-cols-2 gap-3">
               <div className="space-y-1.5">

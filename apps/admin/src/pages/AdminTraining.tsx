@@ -8,7 +8,7 @@ import {
 } from "@/hooks/useAdminData";
 import { Button } from "@digihire/shared";
 import { Input } from "@digihire/shared";
-import { Textarea } from "@digihire/shared";
+import { Textarea, RichTextEditor } from "@digihire/shared";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@digihire/shared";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@digihire/shared";
 import { toast } from "@digihire/shared";
@@ -168,7 +168,7 @@ export default function AdminTraining() {
           <DialogHeader><DialogTitle>{courseForm.id ? "Edit Course" : "New Course"}</DialogTitle></DialogHeader>
           <div className="grid gap-3">
             <Input placeholder="Title" value={courseForm.title} onChange={(e) => setC("title", e.target.value)} />
-            <Textarea placeholder="Description" value={courseForm.description} onChange={(e) => setC("description", e.target.value)} />
+            <RichTextEditor value={courseForm.description || ''} onChange={html => setC("description", html)} placeholder="Description" minHeight="100px" />
             <div className="grid grid-cols-2 gap-3">
               <Input placeholder="Category" value={courseForm.category} onChange={(e) => setC("category", e.target.value)} />
               <Input placeholder="Level" value={courseForm.level} onChange={(e) => setC("level", e.target.value)} />

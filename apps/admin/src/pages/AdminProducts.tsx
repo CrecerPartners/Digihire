@@ -8,7 +8,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "
 import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from "@digihire/shared";
 import { toast } from "@digihire/shared";
 import { Plus, Pencil, Trash2, Upload, X, Image as ImageIcon, Search } from "lucide-react";
-import { Textarea } from "@digihire/shared";
+import { Textarea, RichTextEditor } from "@digihire/shared";
 import { supabase, uploadFileToR2 } from "@digihire/shared";
 import { AdminTablePagination, paginateItems } from "@/components/AdminTablePagination";
 import { Label } from "@digihire/shared";
@@ -655,7 +655,7 @@ export default function AdminProducts() {
 
             <div className="space-y-1.5">
               <label className="text-sm font-medium">Description</label>
-              <Textarea placeholder="Describe the product..." value={form.description} onChange={(e) => set("description", e.target.value)} rows={3} />
+              <RichTextEditor value={form.description || ''} onChange={html => set("description", html)} placeholder="Describe the product..." minHeight="110px" />
             </div>
 
             {/* Seller + Delivery Display Data */}

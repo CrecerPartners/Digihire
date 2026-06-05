@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { RichTextEditor } from '@digihire/shared';
 import { supabase as _supabase } from '@digihire/shared';
 import { Building2, Search, Globe, Phone, Mail, Edit2, X, Save, Plus, PowerOff, Power } from 'lucide-react';
 import { toast } from 'sonner';
@@ -260,12 +261,7 @@ export default function AdminBrands() {
                       ))}
                       <div className="space-y-0.5">
                         <label className="text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">Description</label>
-                        <textarea
-                          value={editForm.description ?? ''}
-                          onChange={e => setEditForm(p => ({ ...p, description: e.target.value }))}
-                          rows={3}
-                          className="w-full rounded-lg border bg-background px-3 py-2 text-sm focus:outline-none focus:border-primary resize-none"
-                        />
+                        <RichTextEditor value={editForm.description ?? ''} onChange={html => setEditForm(p => ({ ...p, description: html }))} minHeight="100px" />
                       </div>
                       <div className="flex gap-2 pt-2">
                         <button
@@ -394,12 +390,7 @@ export default function AdminBrands() {
               ))}
               <div className="space-y-0.5">
                 <label className="text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">Description</label>
-                <textarea
-                  value={createForm.description ?? ''}
-                  onChange={e => setCreateForm(p => ({ ...p, description: e.target.value }))}
-                  rows={3}
-                  className="w-full rounded-lg border bg-background px-3 py-2 text-sm focus:outline-none focus:border-primary resize-none"
-                />
+                <RichTextEditor value={createForm.description ?? ''} onChange={html => setCreateForm(p => ({ ...p, description: html }))} minHeight="100px" />
               </div>
             </div>
             <div className="p-6 border-t border-border flex gap-3 justify-end">

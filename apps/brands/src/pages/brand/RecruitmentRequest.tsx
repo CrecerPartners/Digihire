@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { RichTextEditor } from '@digihire/shared';
 import { useRecruitmentRequests } from '../../hooks/useRecruitmentRequests';
 import { useBrandProfile } from '../../hooks/useBrandProfile';
 import { CheckCircle2, ArrowLeft, ArrowRight, ChevronLeft } from 'lucide-react';
@@ -240,10 +241,10 @@ export default function RecruitmentRequest() {
               )}
             </Field>
             <Field label="Key Responsibilities" className="md:col-span-2">
-              <textarea value={form.responsibilities ?? ''} onChange={set('responsibilities')} rows={3} placeholder="Describe the main responsibilities of this role..." className={inputCls + ' resize-none'} />
+              <RichTextEditor value={form.responsibilities ?? ''} onChange={html => setForm(p => ({ ...p, responsibilities: html }))} placeholder="Describe the main responsibilities of this role..." minHeight="110px" />
             </Field>
             <Field label="Additional Notes" className="md:col-span-2">
-              <textarea value={form.additional_notes ?? ''} onChange={set('additional_notes')} rows={3} placeholder="Any other context for our talent team..." className={inputCls + ' resize-none'} />
+              <RichTextEditor value={form.additional_notes ?? ''} onChange={html => setForm(p => ({ ...p, additional_notes: html }))} placeholder="Any other context for our talent team..." minHeight="110px" />
             </Field>
           </div>
           {error && <p className="rounded-xl bg-red-50 border border-red-100 px-4 py-3 text-sm text-red-600">{error}</p>}

@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { RichTextEditor } from '@digihire/shared';
 import { useActivationRequests } from '../../hooks/useActivationRequests';
 import { useBrandProfile } from '../../hooks/useBrandProfile';
 import { FileText, Calendar } from 'lucide-react';
@@ -164,7 +165,7 @@ export default function ActivationRequest() {
                   <input type="number" min={1} value={form.num_talents as string} onChange={set('num_talents')} placeholder="e.g. 10" className={inputCls} />
                 </Field>
                 <Field label="Goals" className="md:col-span-2">
-                  <textarea value={form.goals} onChange={set('goals')} rows={3} placeholder="What do you want to achieve?" className={inputCls + ' resize-none'} />
+                  <RichTextEditor value={form.goals || ''} onChange={html => setForm(p => ({ ...p, goals: html }))} placeholder="What do you want to achieve?" minHeight="110px" />
                 </Field>
                 <Field label="Type of Talents Required" className="md:col-span-2">
                   <div className="flex flex-wrap gap-2 pt-1">
@@ -190,13 +191,13 @@ export default function ActivationRequest() {
                   </div>
                 </Field>
                 <Field label="What Will the Talents Be Doing?" className="md:col-span-2">
-                  <textarea value={form.talent_duties} onChange={set('talent_duties')} rows={3} placeholder="Describe the specific duties and responsibilities..." className={inputCls + ' resize-none'} />
+                  <RichTextEditor value={form.talent_duties || ''} onChange={html => setForm(p => ({ ...p, talent_duties: html }))} placeholder="Describe the specific duties and responsibilities..." minHeight="110px" />
                 </Field>
                 <Field label="Payment / Budget Details" className="md:col-span-2">
-                  <textarea value={form.budget_details} onChange={set('budget_details')} rows={3} placeholder="Describe the payment structure, daily rate, or total budget..." className={inputCls + ' resize-none'} />
+                  <RichTextEditor value={form.budget_details || ''} onChange={html => setForm(p => ({ ...p, budget_details: html }))} placeholder="Describe the payment structure, daily rate, or total budget..." minHeight="110px" />
                 </Field>
                 <Field label="Additional Notes" className="md:col-span-2">
-                  <textarea value={form.notes} onChange={set('notes')} rows={3} placeholder="Anything else our team should know..." className={inputCls + ' resize-none'} />
+                  <RichTextEditor value={form.notes || ''} onChange={html => setForm(p => ({ ...p, notes: html }))} placeholder="Anything else our team should know..." minHeight="110px" />
                 </Field>
               </div>
             </>

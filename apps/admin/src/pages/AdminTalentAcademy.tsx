@@ -4,7 +4,7 @@ import {
   useUpsertTalentCourse,
   useDeleteTalentCourse,
 } from "@/hooks/useAdminData";
-import { Button, Input, Textarea, Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter, Collapsible, CollapsibleContent, CollapsibleTrigger, toast, Card, CardContent, CardHeader, CardTitle } from "@digihire/shared";
+import { Button, Input, Textarea, RichTextEditor, Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter, Collapsible, CollapsibleContent, CollapsibleTrigger, toast, Card, CardContent, CardHeader, CardTitle } from "@digihire/shared";
 import { Plus, Pencil, Trash2, ChevronDown, GraduationCap, Play } from "lucide-react";
 
 const emptyCourse = { title: "", description: "", category: "General", thumbnail_url: "", has_certificate: false, is_published: false, modules: [] };
@@ -185,7 +185,7 @@ export default function AdminTalentAcademy() {
           <DialogHeader><DialogTitle>{courseForm.id ? "Edit Talent Course" : "New Talent Course"}</DialogTitle></DialogHeader>
           <div className="grid gap-3">
             <Input placeholder="Title" value={courseForm.title} onChange={(e: any) => setC("title", e.target.value)} />
-            <Textarea placeholder="Description" value={courseForm.description} onChange={(e: any) => setC("description", e.target.value)} />
+            <RichTextEditor value={courseForm.description || ''} onChange={html => setC("description", html)} placeholder="Description" minHeight="100px" />
             <Input placeholder="Category" value={courseForm.category} onChange={(e: any) => setC("category", e.target.value)} />
             <Input placeholder="Thumbnail URL" value={courseForm.thumbnail_url} onChange={(e: any) => setC("thumbnail_url", e.target.value)} />
             <label className="flex items-center gap-2 text-sm mt-2">
@@ -206,7 +206,7 @@ export default function AdminTalentAcademy() {
           <DialogHeader><DialogTitle>{editModuleIndex !== -1 ? "Edit Module" : "New Module"}</DialogTitle></DialogHeader>
           <div className="grid gap-3">
             <Input placeholder="Module Title" value={moduleForm.title} onChange={(e: any) => setM("title", e.target.value)} />
-            <Textarea placeholder="Text Content (Optional)" value={moduleForm.content} onChange={(e: any) => setM("content", e.target.value)} rows={4} />
+            <RichTextEditor value={moduleForm.content || ''} onChange={html => setM("content", html)} placeholder="Text Content (Optional)" minHeight="130px" />
             <Input type="number" placeholder="Duration (minutes)" value={moduleForm.duration_minutes} onChange={(e: any) => setM("duration_minutes", +e.target.value)} />
             
             <div>

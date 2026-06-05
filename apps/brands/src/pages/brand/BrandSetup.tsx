@@ -1,4 +1,5 @@
 import React, { useState, useRef } from 'react';
+import { RichTextEditor } from '@digihire/shared';
 import { BrandProfile } from '../../types';
 import { useBrandProfile } from '../../hooks/useBrandProfile';
 import { useAuth, supabase as _supabase, uploadFileToR2 } from '@digihire/shared';
@@ -174,13 +175,11 @@ export default function BrandSetup() {
         {/* Description — full width */}
         <div className="space-y-1">
           <label className="block text-xs font-normal uppercase text-gray-500">Company Description</label>
-          <textarea
-            name="description"
+          <RichTextEditor
             value={formData.description || ''}
-            onChange={handleChange}
+            onChange={html => setFormData(prev => ({ ...prev, description: html }))}
             placeholder="Tell potential talent about your brand, culture, and what makes you a great place to work with..."
-            rows={4}
-            className="w-full rounded-xl border border-gray-200 bg-gray-50 px-4 py-3 text-sm focus:bg-white focus:outline-none transition-all resize-none"
+            minHeight="130px"
           />
           <p className="text-xs text-gray-400">Shown to candidates and sellers reviewing your brand profile.</p>
         </div>

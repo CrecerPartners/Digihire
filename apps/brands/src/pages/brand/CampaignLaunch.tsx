@@ -1,4 +1,5 @@
 import React, { useState, useRef } from 'react';
+import { RichTextEditor } from '@digihire/shared';
 import { useNavigate } from 'react-router-dom';
 import { useBrandCampaigns } from '../../hooks/useBrandCampaigns';
 import { useBrandProfile } from '../../hooks/useBrandProfile';
@@ -173,7 +174,7 @@ export default function CampaignLaunch() {
               </select>
             </Field>
             <Field label="Target Audience" className="md:col-span-2">
-              <textarea value={form.target_audience ?? ''} onChange={set('target_audience')} rows={3} placeholder="Describe who your ideal customer is..." className={inputCls + ' resize-none'} />
+              <RichTextEditor value={form.target_audience ?? ''} onChange={html => setForm(p => ({ ...p, target_audience: html }))} placeholder="Describe who your ideal customer is..." minHeight="110px" />
             </Field>
           </div>
         </section>
@@ -261,7 +262,7 @@ export default function CampaignLaunch() {
             )}
           </Field>
           <Field label="Notes / Instructions">
-            <textarea value={form.notes ?? ''} onChange={set('notes')} rows={4} placeholder="Any specific instructions, asset links, or context for our team..." className={inputCls + ' resize-none'} />
+            <RichTextEditor value={form.notes ?? ''} onChange={html => setForm(p => ({ ...p, notes: html }))} placeholder="Any specific instructions, asset links, or context for our team..." minHeight="130px" />
           </Field>
         </section>
 
