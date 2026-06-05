@@ -591,8 +591,8 @@ function showDetailPage(job) {
           var sjTypeTag = '<span class="badge badge-'+esc(sj.job_type)+'" style="font-size:10px;">'+esc(TYPE_LABELS[sj.job_type]||sj.job_type)+'</span>';
           return '<a href="' + esc(jobPath(sj)) + '" class="jdp-similar-card">'
             + '<div style="display:flex;align-items:start;justify-content:space-between;margin-bottom:12px;">'
-            + '<div class="jdp-about-logo" style="width:36px;height:36px;border-radius:8px;">'
-            + (sjLogo ? '<img src="' + esc(safeUrl(sjLogo)) + '" alt="" />' : '<svg width="16" height="16" fill="none" stroke="#7A9CC5" stroke-width="2" viewBox="0 0 24 24"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/></svg>')
+            + '<div class="jdp-about-logo" style="width:28px;height:28px;border-radius:6px;">'
+            + (sjLogo ? '<img src="' + esc(safeUrl(sjLogo)) + '" alt="" />' : '<svg width="12" height="12" fill="none" stroke="#7A9CC5" stroke-width="2" viewBox="0 0 24 24"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/></svg>')
             + '</div>'
             + sjTypeTag
             + '</div>'

@@ -658,11 +658,11 @@ export default function JobDetailPage() {
                   <CardContent className="p-4 space-y-3 flex-1 flex flex-col justify-between">
                     <div className="space-y-2">
                       <div className="flex items-start justify-between gap-2">
-                        <div className="h-8 w-8 rounded-lg bg-secondary/50 border border-border/30 overflow-hidden flex items-center justify-center shrink-0">
+                        <div className="h-7 w-7 rounded-md bg-secondary/50 border border-border/30 overflow-hidden flex items-center justify-center shrink-0">
                           {sjLogo ? (
                             <img src={sjLogo} alt={sj.company_name} className="h-full w-full object-cover" />
                           ) : (
-                            <Building2 className="h-4 w-4 text-muted-foreground" />
+                            <Building2 className="h-3.5 w-3.5 text-muted-foreground" />
                           )}
                         </div>
                         <Badge variant="outline" className={`text-[10px] py-0 ${JOB_TYPE_COLORS[sj.job_type] || ''}`}>
