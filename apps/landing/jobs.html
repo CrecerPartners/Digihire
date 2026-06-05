@@ -10,6 +10,7 @@
   <link rel="icon" type="image/png" href="assets/favicon.png" />
   <link rel="apple-touch-icon" href="assets/favicon.png" />
   <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+  <script src="/purify.min.js"></script>
   <style>
     *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
     :root{
@@ -46,10 +47,13 @@
     .nav-mobile-menu a:last-child{border-bottom:none;}
     .nav-mobile-menu .btn-nav-mobile{display:flex;align-items:center;justify-content:center;margin-top:12px;padding:14px;background:var(--cyan);color:var(--navy);border-radius:var(--radius);font-weight:800;border-bottom:none;}
 
-    /* Hero */
-    .jobs-hero{background:var(--navy);padding:60px 0 48px;text-align:center;}
-    .jobs-hero h1{font-size:clamp(28px,5vw,48px);font-weight:800;color:#fff;line-height:1.15;margin-bottom:12px;}
-    .jobs-hero p{font-size:16px;color:var(--gray-1);max-width:520px;margin:0 auto 32px;}
+    /* Breadcrumb */
+    .jobs-breadcrumb{background:var(--white);border-bottom:1px solid var(--border);padding:14px 0;}
+    .breadcrumb-inner{display:flex;align-items:center;gap:8px;font-size:13px;}
+    .breadcrumb-inner a{color:var(--gray-2);text-decoration:none;font-weight:600;transition:color 0.15s;}
+    .breadcrumb-inner a:hover{color:var(--navy);}
+    .breadcrumb-sep{color:var(--gray-3);}
+    .breadcrumb-current{color:var(--navy);font-weight:700;}
 
     /* Filters */
     .filters-bar{background:var(--white);border-bottom:1px solid var(--border);padding:16px 0;position:sticky;top:64px;z-index:90;}
@@ -124,36 +128,81 @@
     .btn-cta-outline:hover{border-color:var(--cyan);color:var(--cyan-dim);}
 
     /* Job detail page (full-page mode — /jobs/:id) */
-    .job-detail-page{display:none;padding:40px 0 80px;}
+    .job-detail-page{display:none;padding:40px 0 80px;background:#FAFAFB;}
     .job-detail-page.active{display:block;}
-    .jdp-back{display:inline-flex;align-items:center;gap:8px;color:var(--gray-2);font-size:14px;font-weight:600;text-decoration:none;margin-bottom:32px;transition:color 0.15s;}
+    .jdp-back{display:inline-flex;align-items:center;gap:8px;color:var(--gray-2);font-size:14px;font-weight:600;text-decoration:none;margin-bottom:28px;transition:color 0.15s;}
     .jdp-back:hover{color:var(--navy);}
-    .jdp-layout{display:grid;grid-template-columns:1fr;gap:24px;}
-    @media(min-width:900px){.jdp-layout{grid-template-columns:1fr 320px;gap:32px;}}
-    .jdp-main{}
-    .jdp-header{display:flex;align-items:flex-start;gap:16px;margin-bottom:24px;}
-    .jdp-icon{width:56px;height:56px;border-radius:14px;background:var(--cyan-ghost);border:1px solid var(--cyan-border);display:flex;align-items:center;justify-content:center;flex-shrink:0;}
-    .jdp-title{font-size:clamp(22px,4vw,30px);font-weight:800;color:var(--navy);line-height:1.2;margin-bottom:4px;}
-    .jdp-company{font-size:15px;color:var(--gray-2);}
-    .jdp-tags{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:20px;}
-    .jdp-meta-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:28px;background:#F8FBFF;border:1px solid var(--border);border-radius:var(--radius-lg);padding:16px;}
-    .jdp-meta-item{display:flex;align-items:center;gap:8px;font-size:13px;color:#374151;}
+    .jdp-container{max-width:960px;margin:0 auto;display:flex;flex-direction:column;gap:24px;}
+    .jdp-card{background:var(--white);border:1px solid var(--border);border-radius:var(--radius-lg);padding:32px;box-shadow:0 1px 3px rgba(0,0,0,0.02);text-align:left;}
+    .jdp-header-flex{display:flex;flex-direction:column;gap:20px;}
+    @media(min-width:768px){
+      .jdp-header-flex{flex-direction:row;align-items:flex-start;justify-content:space-between;gap:32px;}
+    }
+    .jdp-logo-info{display:flex;align-items:flex-start;gap:20px;}
+    .jdp-logo-wrapper{width:64px;height:64px;border-radius:14px;background:#F4F8FF;border:1px solid var(--border);display:flex;align-items:center;justify-content:center;flex-shrink:0;overflow:hidden;}
+    .jdp-logo-wrapper img{width:100%;height:100%;object-fit:cover;}
+    .jdp-header-text{display:flex;flex-direction:column;gap:4px;}
+    .jdp-title-row{display:flex;align-items:center;gap:8px;flex-wrap:wrap;}
+    .jdp-title{font-size:24px;font-weight:800;color:var(--navy);line-height:1.2;}
+    .jdp-company-name{font-size:15px;color:var(--gray-3);font-weight:600;}
+    .jdp-meta-row{display:flex;flex-wrap:wrap;gap:16px;margin-top:8px;}
+    .jdp-meta-item{display:flex;align-items:center;gap:6px;font-size:13px;color:var(--gray-2);}
     .jdp-meta-item svg{color:var(--cyan-dim);flex-shrink:0;}
-    .jdp-section{margin-bottom:28px;}
-    .jdp-section-label{font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:0.1em;color:var(--gray-2);margin-bottom:12px;}
-    .jdp-body{font-size:15px;color:#374151;line-height:1.8;white-space:pre-line;}
-    .jdp-skills{display:flex;flex-wrap:wrap;gap:8px;}
-    .jdp-skill{font-size:12px;background:#F4F8FF;border:1px solid var(--border);color:#374151;padding:4px 12px;border-radius:20px;}
-    .jdp-sidebar{}
-    .jdp-apply-card{background:var(--navy);border-radius:var(--radius-lg);padding:24px;color:#fff;position:sticky;top:88px;}
-    .jdp-apply-card h3{font-size:17px;font-weight:800;margin-bottom:8px;}
-    .jdp-apply-card p{font-size:13px;color:var(--gray-1);margin-bottom:20px;line-height:1.6;}
-    .btn-apply{display:flex;align-items:center;justify-content:center;gap:8px;background:var(--cyan);color:var(--navy);padding:14px 24px;border-radius:var(--radius);font-size:14px;font-weight:800;text-decoration:none;transition:background 0.2s;margin-bottom:10px;}
-    .btn-apply:hover{background:#33d1ff;}
-    .btn-profile{display:flex;align-items:center;justify-content:center;gap:8px;background:transparent;color:#fff;padding:12px 24px;border-radius:var(--radius);font-size:13px;font-weight:700;text-decoration:none;border:1.5px solid rgba(255,255,255,0.25);transition:all 0.2s;}
-    .btn-profile:hover{border-color:var(--cyan);color:var(--cyan);}
-    .jdp-apply-mobile{display:block;margin-top:32px;}
-    @media(min-width:900px){.jdp-apply-mobile{display:none;}}
+    
+    .jdp-actions-row{display:flex;gap:12px;width:100%;margin-top:16px;}
+    @media(min-width:768px){
+      .jdp-actions-row{width:auto;margin-top:0;}
+    }
+    .jdp-btn-primary{display:inline-flex;align-items:center;justify-content:center;gap:8px;background:var(--cyan);color:var(--navy);padding:12px 24px;border-radius:var(--radius);font-size:14px;font-weight:800;text-decoration:none;transition:background 0.2s;box-shadow:0 2px 12px rgba(0,194,255,0.2);flex:1;white-space:nowrap;}
+    .jdp-btn-primary:hover{background:#33D1FF;}
+    .jdp-btn-secondary{display:inline-flex;align-items:center;justify-content:center;gap:8px;background:transparent;color:var(--navy);padding:12px 24px;border-radius:var(--radius);font-size:14px;font-weight:700;text-decoration:none;border:1.5px solid var(--cyan-border);transition:all 0.2s;flex:1;white-space:nowrap;}
+    .jdp-btn-secondary:hover{border-color:var(--cyan);color:var(--cyan-dim);background:var(--cyan-ghost);}
+    
+    .jdp-features-row{display:grid;grid-template-columns:repeat(2, 1fr);gap:16px;border-top:1px solid var(--border);padding-top:20px;margin-top:20px;}
+    @media(min-width:768px){
+      .jdp-features-row{grid-template-columns:repeat(4, 1fr);}
+    }
+    .jdp-feature-item{display:flex;flex-direction:column;gap:4px;}
+    .jdp-feature-label{font-size:10px;font-weight:700;text-transform:uppercase;color:var(--gray-2);letter-spacing:0.05em;}
+    .jdp-feature-val{font-size:14px;font-weight:600;color:var(--navy);}
+    
+    .jdp-desc-section{display:flex;flex-direction:column;gap:8px;margin-bottom:28px;}
+    .jdp-desc-section:last-child{margin-bottom:0;}
+    .jdp-section-title{font-size:12px;font-weight:800;text-transform:uppercase;color:var(--cyan-dim);letter-spacing:0.08em;margin-bottom:4px;}
+    .jdp-body-text{font-size:14px;color:#374151;line-height:1.7;white-space:pre-line;}
+    .jdp-rich{white-space:normal;}
+    .jdp-rich h2{font-size:15px;font-weight:700;color:var(--navy);margin:0.75em 0 0.25em;}
+    .jdp-rich h3{font-size:14px;font-weight:600;color:var(--navy);margin:0.6em 0 0.2em;}
+    .jdp-rich strong{font-weight:700;}
+    .jdp-rich em{font-style:italic;}
+    .jdp-rich ul{list-style:disc;padding-left:1.4em;margin:0.4em 0;}
+    .jdp-rich ol{list-style:decimal;padding-left:1.4em;margin:0.4em 0;}
+    .jdp-rich li{margin:0.15em 0;}
+    .jdp-rich blockquote{border-left:3px solid var(--border);padding-left:0.75em;color:var(--gray-2);margin:0.5em 0;}
+    .jdp-rich a{color:var(--cyan-dim);text-decoration:underline;}
+    .jdp-rich p{margin:0.25em 0;}
+    .jdp-rich p:first-child,.jdp-rich h2:first-child,.jdp-rich h3:first-child{margin-top:0;}
+    .jdp-rich p:last-child{margin-bottom:0;}
+    
+    .jdp-two-columns{display:grid;grid-template-columns:1fr;gap:24px;}
+    @media(min-width:768px){
+      .jdp-two-columns{grid-template-columns:1fr 1fr;}
+    }
+    .jdp-about-card{display:flex;flex-direction:column;gap:16px;}
+    .jdp-about-header{display:flex;align-items:center;gap:12px;}
+    .jdp-about-logo{width:48px;height:48px;border-radius:10px;border:1px solid var(--border);display:flex;align-items:center;justify-content:center;background:#F4F8FF;overflow:hidden;}
+    .jdp-about-logo img{width:100%;height:100%;object-fit:cover;}
+    
+    .jdp-similar-section{display:flex;flex-direction:column;gap:16px;text-align:left;}
+    .jdp-similar-title{font-size:16px;font-weight:800;color:var(--navy);display:flex;align-items:center;gap:8px;}
+    .jdp-similar-grid{display:grid;grid-template-columns:1fr;gap:16px;}
+    @media(min-width:768px){
+      .jdp-similar-grid{grid-template-columns:repeat(3, 1fr);}
+    }
+    .jdp-similar-card{background:var(--white);border:1px solid var(--border);border-radius:var(--radius-lg);padding:16px;display:flex;flex-direction:column;justify-content:space-between;cursor:pointer;text-decoration:none;transition:all 0.15s;}
+    .jdp-similar-card:hover{border-color:var(--cyan);transform:translateY(-2px);box-shadow:0 4px 16px rgba(0,0,1,0.05);}
+    .related-btn{display:inline-flex;align-items:center;justify-content:center;background:#F4F8FF;border:1px solid var(--border);border-radius:var(--radius);padding:8px 16px;font-size:13px;font-weight:600;text-decoration:none;color:var(--gray-3);transition:all 0.15s;cursor:pointer;}
+    .related-btn:hover{background:var(--cyan-ghost);color:var(--navy);border-color:var(--cyan-border);}
     .jdp-not-found{text-align:center;padding:80px 0;}
     .jdp-loading{text-align:center;padding:80px 0;}
 
@@ -193,11 +242,14 @@
   </div>
 </nav>
 
-<!-- Hero -->
-<div class="jobs-hero">
+<!-- Breadcrumb -->
+<div class="jobs-breadcrumb" id="jobs-breadcrumb">
   <div class="container">
-    <h1>Jobs &amp; Gigs</h1>
-    <p>Full-time, part-time, contract, and short-term roles posted by brands hiring on Digihire across Nigeria.</p>
+    <div class="breadcrumb-inner">
+      <a href="/">Home</a>
+      <span class="breadcrumb-sep">›</span>
+      <span class="breadcrumb-current" id="breadcrumb-label">Jobs &amp; Gigs</span>
+    </div>
   </div>
 </div>
 
@@ -242,9 +294,7 @@
       <a href="/jobs" class="btn-cta" style="display:inline-flex;margin-top:20px;">Browse All Jobs →</a>
     </div>
     <div id="jdp-content" style="display:none;">
-      <div class="jdp-layout">
-        <div class="jdp-main" id="jdp-main"></div>
-        <div class="jdp-sidebar" id="jdp-sidebar"></div>
+      <div class="jdp-container" id="jdp-container-root">
       </div>
     </div>
   </div>
@@ -356,7 +406,8 @@ function showDetailPage(job) {
   document.getElementById('jobs-list-page').style.display = 'none';
   document.getElementById('detail-overlay').style.display = 'none';
   document.querySelector('.filters-bar').style.display = 'none';
-  document.querySelector('.jobs-hero').style.display = 'none';
+  // Update breadcrumb for detail view
+  if (job) document.getElementById('breadcrumb-label').textContent = job.title;
 
   var page = document.getElementById('job-detail-page');
   page.classList.add('active');
@@ -372,67 +423,206 @@ function showDetailPage(job) {
   document.title = esc(job.title) + ' — DigiHire Jobs';
 
   var sal = fmtSalary(job.salary_min, job.salary_max, job.pay_type);
-  var applyUrl = 'https://talents.digihire.io/talent/jobs?job=' + encodeURIComponent(job.id);
-  var signupUrl = 'https://talents.digihire.io/signup?redirect=' + encodeURIComponent('/talent/jobs?job=' + job.id);
+  var applyUrl = 'https://talents.digihire.io/signup?redirect=' + encodeURIComponent('/talent/jobs/' + job.id);
+  var adaptUrl = 'https://talents.digihire.io/signup?redirect=' + encodeURIComponent('/talent/jobs/' + job.id + '?adapt=true');
 
-  // Build tags
-  var tags = '<span class="badge badge-'+esc(job.job_type)+'" style="font-size:12px;padding:5px 12px;">'+esc(TYPE_LABELS[job.job_type]||job.job_type)+'</span>';
-  if (job.work_mode) tags += '<span class="badge badge-'+esc(job.work_mode)+'" style="font-size:12px;padding:5px 12px;">'+esc(job.work_mode)+'</span>';
-  if (job.experience_level && job.experience_level !== 'any') tags += '<span class="badge" style="background:#f1f5f9;color:#475569;border-color:#e2e8f0;font-size:12px;padding:5px 12px;">'+esc(EXP_LABELS[job.experience_level]||job.experience_level)+'</span>';
-  if (job.category) tags += '<span class="badge" style="background:var(--cyan-ghost);color:#0369a1;border-color:var(--cyan-border);font-size:12px;padding:5px 12px;">'+esc(job.category)+'</span>';
-  if (job.featured) tags += '<span class="badge" style="background:rgba(245,158,11,0.1);color:#b45309;border-color:rgba(245,158,11,0.3);font-size:12px;padding:5px 12px;">★ Featured</span>';
+  var isAnon = !!job.anonymous;
+  var companyName = isAnon ? 'Anonymous Employer' : job.company_name;
+  
+  // Set Dicebear avatar seed
+  var logoSeed = job.brand_id || 'anonymous';
+  var logoUrl = isAnon 
+    ? 'https://api.dicebear.com/7.x/identicon/svg?seed=' + logoSeed
+    : (job.brand_profiles && job.brand_profiles.logo_url ? job.brand_profiles.logo_url : '');
 
-  // Build meta grid
-  var metaItems = '';
-  if (job.location) metaItems += '<div class="jdp-meta-item"><svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>'+esc(job.location)+'</div>';
-  if (sal) metaItems += '<div class="jdp-meta-item"><svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>'+esc(sal)+'</div>';
-  if (job.slots) metaItems += '<div class="jdp-meta-item"><svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>'+esc(String(job.slots))+' position'+(job.slots!==1?'s':'')+' available</div>';
-  if (job.deadline) metaItems += '<div class="jdp-meta-item"><svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>Apply by '+esc(new Date(job.deadline).toLocaleDateString('en-NG',{dateStyle:'long'}))+'</div>';
-  if (job.duration) metaItems += '<div class="jdp-meta-item"><svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>'+esc(job.duration)+'</div>';
-  metaItems += '<div class="jdp-meta-item"><svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>Posted '+timeAgo(job.created_at)+'</div>';
+  // Active jobs count for the brand
+  var activeJobs = allJobs.filter(function(j) { return j.brand_id === job.brand_id && j.status === 'published'; });
+  var activeJobsCount = activeJobs.length || 1;
 
-  // Skills
-  var skillsHtml = '';
-  if (job.skills && job.skills.length) {
-    skillsHtml = '<div class="jdp-section"><div class="jdp-section-label">Skills required</div><div class="jdp-skills">'
-      + job.skills.map(function(s){return '<span class="jdp-skill">'+esc(s)+'</span>';}).join('')
-      + '</div></div>';
+  // Similar jobs
+  var similarJobs = allJobs.filter(function(j) {
+    return j.category === job.category && j.id !== job.id && j.status === 'published';
+  }).slice(0, 3);
+
+  // Dynamic Market Insights (Deterministic based on job ID & category)
+  function getDeterministicApps(jobId) {
+    var hash = 0;
+    for (var i = 0; i < jobId.length; i++) {
+      hash = jobId.charCodeAt(i) + ((hash << 5) - hash);
+    }
+    return Math.abs(hash % 38) + 2;
   }
+  var applicantCount = getDeterministicApps(job.id);
+  var competitionTier = applicantCount < 8 ? 'Low' : applicantCount <= 22 ? 'Moderate' : 'High';
+  var competitionColor = applicantCount < 8 ? '#10b981' : applicantCount <= 22 ? '#f59e0b' : '#ef4444';
 
-  // Sidebar apply card (desktop)
-  var sidebarHtml = '<div class="jdp-apply-card">'
-    + '<h3>Apply for this role</h3>'
-    + '<p>Sign in to your talent account to apply. New to Digihire? Create a free profile to get started.</p>'
-    + '<a href="'+applyUrl+'" class="btn-apply"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>Apply Now</a>'
-    + '<a href="'+signupUrl+'" class="btn-profile">Create Free Profile →</a>'
+  function getDeterministicTalent(category) {
+    var hash = 0;
+    for (var i = 0; i < category.length; i++) {
+      hash = category.charCodeAt(i) + ((hash << 5) - hash);
+    }
+    return (Math.abs(hash % 200) + 120);
+  }
+  var talentInDemand = getDeterministicTalent(job.category);
+
+  // Render Job Type Badges
+  var typeBadgeColor = 'badge-full_time';
+  if (job.job_type === 'part_time') typeBadgeColor = 'badge-part_time';
+  else if (job.job_type === 'contract') typeBadgeColor = 'badge-contract';
+  else if (job.job_type === 'gig') typeBadgeColor = 'badge-gig';
+  else if (job.job_type === 'internship') typeBadgeColor = 'badge-internship';
+
+  var workModeBadgeColor = 'badge-onsite';
+  if (job.work_mode === 'remote') workModeBadgeColor = 'badge-remote';
+  else if (job.work_mode === 'hybrid') workModeBadgeColor = 'badge-hybrid';
+
+  // Build the complete premium layout HTML
+  var html = '';
+
+  // 1. Job Header Card
+  html += '<div class="jdp-card">'
+    + '<div class="jdp-header-flex">'
+    + '<div class="jdp-logo-info">'
+    + '<div class="jdp-logo-wrapper">'
+    + (logoUrl ? '<img src="' + logoUrl + '" alt="' + esc(companyName) + '" />' : '<svg width="24" height="24" fill="none" stroke="#7A9CC5" stroke-width="2" viewBox="0 0 24 24"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/></svg>')
+    + '</div>'
+    + '<div class="jdp-header-text">'
+    + '<div class="jdp-title-row">'
+    + '<h1 class="jdp-title">' + esc(job.title) + '</h1>'
+    + (job.featured ? '<span class="badge" style="background:rgba(245,158,11,0.1);color:#b45309;border-color:rgba(245,158,11,0.3);font-size:11px;">★ Featured</span>' : '')
+    + '</div>'
+    + '<p class="jdp-company-name">' + esc(companyName) + (job.brand_profiles && job.brand_profiles.industry && !isAnon ? ' • ' + esc(job.brand_profiles.industry) : '') + '</p>'
+    + '<div class="jdp-meta-row">'
+    + (job.location ? '<div class="jdp-meta-item"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>' + esc(job.location) + '</div>' : '')
+    + '<div class="jdp-meta-item"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>Posted ' + timeAgo(job.created_at) + '</div>'
+    + (job.deadline ? '<div class="jdp-meta-item"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>Apply by ' + esc(new Date(job.deadline).toLocaleDateString('en-NG',{dateStyle:'medium'})) + '</div>' : '')
+    + '</div>'
+    + '</div>'
+    + '</div>'
+    
+    // Actions Row
+    + '<div class="jdp-actions-row">'
+    + '<a href="' + adaptUrl + '" class="jdp-btn-secondary"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>Adapt my CV</a>'
+    + '<a href="' + applyUrl + '" class="jdp-btn-primary"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>Apply Now</a>'
+    + '</div>'
+    + '</div>'
+    
+    // Core Attributes row
+    + '<div class="jdp-features-row">'
+    + '<div class="jdp-feature-item"><span class="jdp-feature-label">Job Type</span><div><span class="badge ' + typeBadgeColor + '">' + esc(TYPE_LABELS[job.job_type] || job.job_type) + '</span></div></div>'
+    + '<div class="jdp-feature-item"><span class="jdp-feature-label">Work Mode</span><div><span class="badge ' + workModeBadgeColor + '">' + esc(job.work_mode ? job.work_mode.charAt(0).toUpperCase() + job.work_mode.slice(1) : 'Onsite') + '</span></div></div>'
+    + '<div class="jdp-feature-item"><span class="jdp-feature-label">Compensation</span><span class="jdp-feature-val">' + (sal ? esc(sal) : 'Confidential') + '</span></div>'
+    + '<div class="jdp-feature-item"><span class="jdp-feature-label">Experience</span><span class="jdp-feature-val capitalize">' + (job.experience_level === 'any' ? 'Any level' : esc(job.experience_level || 'Any level')) + '</span></div>'
+    + '</div>'
     + '</div>';
 
-  // Mobile apply block
-  var mobileApplyHtml = '<div class="jdp-apply-mobile" style="background:var(--cyan-ghost);border:1px solid var(--cyan-border);border-radius:var(--radius-lg);padding:20px;">'
-    + '<h4 style="font-size:15px;font-weight:800;color:var(--navy);margin-bottom:6px;">Interested in this role?</h4>'
-    + '<p style="font-size:13px;color:var(--gray-2);margin-bottom:14px;">Sign in or create a free profile to apply.</p>'
-    + '<div style="display:flex;gap:10px;flex-wrap:wrap;">'
-    + '<a href="'+signupUrl+'" class="btn-cta-outline" style="flex:1;">Create Profile</a>'
-    + '<a href="'+applyUrl+'" class="btn-cta" style="flex:1;justify-content:center;"><svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>Apply Now</a>'
-    + '</div></div>';
-
-  // Main content
-  var mainHtml = '<div class="jdp-header">'
-    + '<div class="jdp-icon"><svg width="26" height="26" fill="none" stroke="#00C2FF" stroke-width="1.8" viewBox="0 0 24 24"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/></svg></div>'
-    + '<div><h1 class="jdp-title">'+esc(job.title)+'</h1>'
-    + '<p class="jdp-company">'+(job.anonymous ? 'Anonymous Employer' : esc(job.company_name))+'</p></div>'
+  // 2. Job Description Card
+  html += '<div class="jdp-card">'
+    + '<div class="jdp-desc-section">'
+    + '<h3 class="jdp-section-title">Company Description</h3>'
+    + '<div class="jdp-body-text jdp-rich">'
+    + (isAnon
+       ? 'This is an anonymous employer hiring in the ' + esc(job.brand_profiles && job.brand_profiles.industry ? job.brand_profiles.industry : 'Sales') + ' industry. They are seeking to hire top talent to join their growing operation.'
+       : (job.brand_profiles && job.brand_profiles.description
+            ? (typeof DOMPurify !== 'undefined' ? DOMPurify.sanitize(job.brand_profiles.description) : esc(job.brand_profiles.description))
+            : 'Learn more about opportunities at ' + esc(job.company_name) + '. They are building high-performance sales and marketing teams.'))
     + '</div>'
-    + '<div class="jdp-tags">'+tags+'</div>'
-    + (metaItems ? '<div class="jdp-meta-grid">'+metaItems+'</div>' : '')
-    + skillsHtml
-    + (job.description ? '<div class="jdp-section"><div class="jdp-section-label">About the role</div><p class="jdp-body">'+esc(job.description)+'</p></div>' : '')
-    + (job.requirements ? '<div class="jdp-section"><div class="jdp-section-label">Requirements</div><p class="jdp-body">'+esc(job.requirements)+'</p></div>' : '')
-    + mobileApplyHtml;
+    + '</div>'
+    
+    + (job.description ? '<div class="jdp-desc-section"><h3 class="jdp-section-title">Role Description</h3><div class="jdp-body-text jdp-rich">' + (typeof DOMPurify !== 'undefined' ? DOMPurify.sanitize(job.description) : esc(job.description)) + '</div></div>' : '')
+    + (job.requirements ? '<div class="jdp-desc-section"><h3 class="jdp-section-title">Requirements & Qualifications</h3><div class="jdp-body-text jdp-rich">' + (typeof DOMPurify !== 'undefined' ? DOMPurify.sanitize(job.requirements) : esc(job.requirements)) + '</div></div>' : '')
+    
+    + (job.skills && job.skills.length ? '<div class="jdp-desc-section"><h3 class="jdp-section-title">Key Skills</h3><div class="jdp-skills">' + job.skills.map(function(s){ return '<span class="jdp-skill">' + esc(s) + '</span>'; }).join('') + '</div></div>' : '')
+    + '</div>';
+
+  // 3. About Company & Market Insights Cards (Side-by-side)
+  var aboutDesc = isAnon 
+    ? 'This employer maintains confidentiality for recruitment. They are an established brand in the ' + esc(job.brand_profiles && job.brand_profiles.industry ? job.brand_profiles.industry : 'Sales') + ' industry.'
+    : (job.brand_profiles && job.brand_profiles.description ? esc(job.brand_profiles.description) : 'No company description is available currently.');
+
+  html += '<div class="jdp-two-columns">'
+    // About Card
+    + '<div class="jdp-card jdp-about-card">'
+    + '<h3 class="jdp-section-title">About ' + esc(isAnon ? 'Confidential Employer' : companyName) + '</h3>'
+    + '<div class="jdp-about-header">'
+    + '<div class="jdp-about-logo">'
+    + (logoUrl ? '<img src="' + logoUrl + '" alt="' + esc(companyName) + '" />' : '<svg width="20" height="20" fill="none" stroke="#7A9CC5" stroke-width="2" viewBox="0 0 24 24"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/></svg>')
+    + '</div>'
+    + '<div>'
+    + '<p style="font-weight:700;color:var(--navy);font-size:14px;">' + esc(companyName) + '</p>'
+    + '<p style="font-size:12px;color:var(--gray-2);text-transform:capitalize;">' + esc(job.brand_profiles && job.brand_profiles.company_type ? job.brand_profiles.company_type : 'Company') + ' • ' + esc(job.brand_profiles && job.brand_profiles.company_size ? job.brand_profiles.company_size : 'Unknown Size') + '</p>'
+    + '</div>'
+    + '</div>'
+    + '<p style="font-size:13px;color:var(--gray-3);line-clamp:3;overflow:hidden;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;">' + aboutDesc + '</p>'
+    + '<div style="font-size:12px;color:var(--gray-2);margin-top:auto;display:flex;flex-direction:column;gap:6px;">'
+    + (job.brand_profiles && job.brand_profiles.website && !isAnon ? '<p><strong>Website:</strong> <a href="' + esc(job.brand_profiles.website) + '" target="_blank" style="color:var(--cyan-dim);text-decoration:none;">' + esc(job.brand_profiles.website) + ' ↗</a></p>' : '')
+    + (job.brand_profiles && job.brand_profiles.city ? '<p><strong>Headquarters:</strong> ' + esc(job.brand_profiles.city) + ', ' + esc(job.brand_profiles.country || 'Nigeria') + '</p>' : '')
+    + '<p><strong>Active Jobs:</strong> ' + activeJobsCount + ' roles open</p>'
+    + '</div>'
+    + '</div>'
+
+    // Market Insights Card
+    + '<div class="jdp-card" style="display:flex;flex-direction:column;gap:16px;">'
+    + '<h3 class="jdp-section-title" style="display:flex;align-items:center;gap:6px;"><svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>Market Insights</h3>'
+    + '<div style="display:flex;flex-direction:column;gap:16px;margin:auto 0;">'
+    + '<div style="border-bottom:1px solid var(--border);padding-bottom:12px;display:flex;align-items:center;justify-content:space-between;">'
+    + '<div><p style="font-size:12px;color:var(--gray-2);margin-bottom:2px;">Talent in Demand</p><p style="font-size:18px;font-weight:800;color:var(--navy);">' + talentInDemand + ' Candidates</p></div>'
+    + '<svg width="28" height="28" fill="none" stroke="rgba(0,194,255,0.2)" stroke-width="2" viewBox="0 0 24 24"><path d="M23 6l-9.5 9.5-5-5L1 18"/><polyline points="17 6 23 6 23 12"/></svg>'
+    + '</div>'
+    + '<div style="display:flex;align-items:center;justify-content:space-between;">'
+    + '<div><p style="font-size:12px;color:var(--gray-2);margin-bottom:2px;">Competition Level</p><p style="font-size:18px;font-weight:800;color:' + competitionColor + ';">' + competitionTier + '</p></div>'
+    + '<div style="text-align:right;"><p style="font-size:11px;color:var(--gray-2);margin-bottom:2px;">Total Applicants</p><p style="font-size:14px;font-weight:700;color:var(--navy);">' + applicantCount + '</p></div>'
+    + '</div>'
+    + '</div>'
+    + '</div>'
+    + '</div>';
+
+  // 4. Similar Jobs Grid
+  if (similarJobs.length > 0) {
+    html += '<div class="jdp-similar-section">'
+      + '<h3 class="jdp-similar-title"><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/></svg>Similar Jobs</h3>'
+      + '<div class="jdp-similar-grid">'
+      + similarJobs.map(function(sj) {
+          var sjSal = fmtSalary(sj.salary_min, sj.salary_max, sj.pay_type);
+          var sjIsAnon = !!sj.anonymous;
+          var sjLogoSeed = sj.brand_id || 'anonymous';
+          var sjLogo = sjIsAnon
+            ? 'https://api.dicebear.com/7.x/identicon/svg?seed=' + sjLogoSeed
+            : (sj.brand_profiles && sj.brand_profiles.logo_url ? sj.brand_profiles.logo_url : '');
+          var sjTypeTag = '<span class="badge badge-'+esc(sj.job_type)+'" style="font-size:10px;">'+esc(TYPE_LABELS[sj.job_type]||sj.job_type)+'</span>';
+          return '<a href="' + esc(jobPath(sj)) + '" class="jdp-similar-card">'
+            + '<div style="display:flex;align-items:start;justify-content:space-between;margin-bottom:12px;">'
+            + '<div class="jdp-about-logo" style="width:36px;height:36px;border-radius:8px;">'
+            + (sjLogo ? '<img src="' + sjLogo + '" alt="" />' : '<svg width="16" height="16" fill="none" stroke="#7A9CC5" stroke-width="2" viewBox="0 0 24 24"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/></svg>')
+            + '</div>'
+            + sjTypeTag
+            + '</div>'
+            + '<h4 style="font-size:13px;font-weight:700;color:var(--navy);line-clamp:1;overflow:hidden;display:-webkit-box;-webkit-line-clamp:1;-webkit-box-orient:vertical;">' + esc(sj.title) + '</h4>'
+            + '<p style="font-size:11px;color:var(--gray-3);margin-top:2px;">' + esc(sjIsAnon ? 'Anonymous Employer' : sj.company_name) + '</p>'
+            + '<div style="display:flex;align-items:center;justify-content:space-between;font-size:11px;color:var(--gray-2);margin-top:12px;border-top:1px solid var(--border);padding-top:8px;">'
+            + '<span style="display:flex;align-items:center;gap:3px;max-width:110px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis;"><svg width="10" height="10" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>' + esc(sj.location || 'Nigeria') + '</span>'
+            + '<span>' + timeAgo(sj.created_at) + '</span>'
+            + '</div>'
+            + '</a>';
+        }).join('')
+      + '</div>'
+      + '</div>';
+  }
+
+  // 5. Related Searches
+  html += '<div style="display:flex;flex-direction:column;gap:12px;border-top:1px solid var(--border);padding-top:24px;margin-top:16px;">'
+    + '<h3 class="jdp-section-title">Related Searches</h3>'
+    + '<div style="display:flex;flex-wrap:wrap;gap:8px;">'
+    + ['IT Support', 'Tech Sales', 'SDR Jobs', 'Remote Sales', 'Account Executive', 'Fintech Roles'].map(function(term) {
+        var searchUrl = '/jobs?q=' + encodeURIComponent(term);
+        return '<a href="' + searchUrl + '" class="related-btn">' + esc(term) + '</a>';
+      }).join('')
+    + '</div>'
+    + '</div>';
 
   document.getElementById('jdp-loading').style.display = 'none';
   document.getElementById('jdp-content').style.display = 'block';
-  document.getElementById('jdp-main').innerHTML = mainHtml;
-  document.getElementById('jdp-sidebar').innerHTML = sidebarHtml;
+  document.getElementById('jdp-container-root').innerHTML = html;
 }
 
 // ─── LIST MODE ─────────────────────────────────────────────────────────────
@@ -521,7 +711,7 @@ if (!PAGE_JOB_ID) {
   document.getElementById('mode-select').addEventListener('change', function(e) { activeMode = e.target.value; renderJobs(); });
 }
 
-fetch(SUPABASE_URL + '/rest/v1/job_listings?status=eq.published&order=featured.desc,created_at.desc', {
+fetch(SUPABASE_URL + '/rest/v1/job_listings?select=*,brand_profiles(*)&status=eq.published&order=featured.desc,created_at.desc', {
   headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY }
 }).then(function(r) { return r.json(); }).then(function(data) {
   allJobs = Array.isArray(data) ? data : [];

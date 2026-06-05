@@ -20,9 +20,9 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
   const navigate = useNavigate();
 
   const initials = (user?.user_metadata?.name || user?.email || "?").charAt(0).toUpperCase();
-  const avatarUrl = user?.user_metadata?.avatar_url as string | undefined;
+  const avatarUrl = (user?.user_metadata?.avatar_url as string | undefined) || '';
   const dicebearSeed = encodeURIComponent(user?.user_metadata?.name || user?.email || 'user');
-  const avatarSrc = avatarUrl || `https://api.dicebear.com/7.x/lorelei/svg?seed=${dicebearSeed}`;
+  const dicebearSrc = `https://api.dicebear.com/7.x/lorelei/svg?seed=${dicebearSeed}`;
 
   const handleSignOut = async () => {
     await signOut({ skipRedirect: true });
@@ -60,8 +60,9 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
               <DropdownMenuTrigger asChild>
                 <button className="rounded-full focus:outline-none focus:ring-2 focus:ring-primary/40 focus:ring-offset-2 focus:ring-offset-background">
                   <Avatar className="h-8 w-8 cursor-pointer">
-                    <AvatarImage src={avatarSrc} alt={user?.user_metadata?.name || "avatar"} />
-                    <AvatarFallback className="bg-primary/20 text-sm font-normal text-primary">
+                    {avatarUrl && <AvatarImage src={avatarUrl} alt={user?.user_metadata?.name || "avatar"} />}
+                    <AvatarFallback className="bg-transparent p-0 overflow-hidden">
+                      <img src={dicebearSrc} alt={user?.user_metadata?.name || "avatar"} className="h-full w-full rounded-full" />
                       {initials}
                     </AvatarFallback>
                   </Avatar>

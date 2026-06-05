@@ -24,9 +24,9 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
   const navigate = useNavigate();
   const displayName = user?.user_metadata?.first_name || user?.user_metadata?.full_name || user?.user_metadata?.name || user?.email || '';
   const initials = displayName.charAt(0).toUpperCase();
-  const avatarUrl = user?.user_metadata?.avatar_url as string | undefined;
+  const avatarUrl = (user?.user_metadata?.avatar_url as string | undefined) || '';
   const dicebearSeed = encodeURIComponent(displayName || 'user');
-  const avatarSrc = avatarUrl || `https://api.dicebear.com/7.x/lorelei/svg?seed=${dicebearSeed}`;
+  const dicebearSrc = `https://api.dicebear.com/7.x/lorelei/svg?seed=${dicebearSeed}`;
   const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   useEffect(() => {
@@ -78,9 +78,9 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
               <DropdownMenuTrigger asChild>
                 <button className="rounded-full focus:outline-none focus:ring-2 focus:ring-primary/40 focus:ring-offset-2 focus:ring-offset-background">
                   <Avatar className="h-8 w-8 cursor-pointer">
-                    <AvatarImage src={avatarSrc} alt={displayName} />
-                    <AvatarFallback className="bg-primary/20 text-sm font-semibold text-primary">
-                      {initials}
+                    {avatarUrl && <AvatarImage src={avatarUrl} alt={displayName} />}
+                    <AvatarFallback className="bg-transparent p-0 overflow-hidden">
+                      <img src={dicebearSrc} alt={displayName} className="h-full w-full rounded-full" />
                     </AvatarFallback>
                   </Avatar>
                 </button>
