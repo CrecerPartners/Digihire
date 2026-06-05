@@ -230,7 +230,7 @@ export default function JobListings() {
     if (!form.anonymous && !form.company_name.trim()) { toast.error('Company name is required'); return; }
     setSaving(true);
 
-    const payload = {
+    const basePayload = {
       brand_id: user?.id,
       company_name: form.anonymous ? 'Anonymous Employer' : form.company_name,
       title: form.title,
@@ -250,23 +250,23 @@ export default function JobListings() {
       deadline: form.deadline || null,
       status: form.status,
       anonymous: form.anonymous,
-      updated_at: new Date().toISOString(),
     };
 
     try {
       if (editJob) {
-        const { error } = await supabase.from('job_listings').update(payload).eq('id', editJob.id);
+        const { error } = await supabase.from('job_listings').update(basePayload).eq('id', editJob.id);
         if (error) throw error;
         toast.success('Job updated');
       } else {
-        const { error } = await supabase.from('job_listings').insert(payload);
+        const { error } = await supabase.from('job_listings').insert(basePayload);
         if (error) throw error;
         toast.success('Job posted');
       }
       setFormOpen(false);
       fetchJobs();
     } catch (err: unknown) {
-      toast.error(err instanceof Error ? err.message : 'Save failed');
+      const msg = (err as { message?: string })?.message || 'Save failed';
+      toast.error(msg);
     } finally {
       setSaving(false);
     }
