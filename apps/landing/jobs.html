@@ -184,6 +184,10 @@
     .jdp-rich p:first-child,.jdp-rich h2:first-child,.jdp-rich h3:first-child{margin-top:0;}
     .jdp-rich p:last-child{margin-bottom:0;}
     
+    .jdp-skills{display:flex;flex-wrap:wrap;gap:8px;margin-top:8px;}
+    .jdp-skill{font-size:12px;font-weight:600;color:var(--navy);background:#F4F8FF;border:1px solid var(--border);padding:6px 12px;border-radius:20px;transition:all 0.15s;display:inline-block;}
+    .jdp-skill:hover{background:var(--cyan-ghost);border-color:var(--cyan-border);color:var(--cyan-dim);}
+    
     .jdp-two-columns{display:grid;grid-template-columns:1fr;gap:24px;}
     @media(min-width:768px){
       .jdp-two-columns{grid-template-columns:1fr 1fr;}
@@ -450,18 +454,6 @@ function showDetailPage(job) {
     return j.category === job.category && j.id !== job.id && j.status === 'published';
   }).slice(0, 3);
 
-  // Dynamic Market Insights (Deterministic based on job ID & category)
-  function getDeterministicApps(jobId) {
-    var hash = 0;
-    for (var i = 0; i < jobId.length; i++) {
-      hash = jobId.charCodeAt(i) + ((hash << 5) - hash);
-    }
-    return Math.abs(hash % 38) + 2;
-  }
-  var applicantCount = getDeterministicApps(job.id);
-  var competitionTier = applicantCount < 8 ? 'Low' : applicantCount <= 22 ? 'Moderate' : 'High';
-  var competitionColor = applicantCount < 8 ? '#10b981' : applicantCount <= 22 ? '#f59e0b' : '#ef4444';
-
   function getDeterministicTalent(category) {
     var hash = 0;
     for (var i = 0; i < category.length; i++) {
@@ -469,7 +461,6 @@ function showDetailPage(job) {
     }
     return (Math.abs(hash % 200) + 120);
   }
-  var talentInDemand = getDeterministicTalent(job.category);
 
   // Render Job Type Badges
   var typeBadgeColor = 'badge-full_time';
@@ -572,12 +563,12 @@ function showDetailPage(job) {
     + '<h3 class="jdp-section-title" style="display:flex;align-items:center;gap:6px;"><svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>Market Insights</h3>'
     + '<div style="display:flex;flex-direction:column;gap:16px;margin:auto 0;">'
     + '<div style="border-bottom:1px solid var(--border);padding-bottom:12px;display:flex;align-items:center;justify-content:space-between;">'
-    + '<div><p style="font-size:12px;color:var(--gray-2);margin-bottom:2px;">Talent in Demand</p><p style="font-size:18px;font-weight:800;color:var(--navy);">' + talentInDemand + ' Candidates</p></div>'
+    + '<div><p style="font-size:12px;color:var(--gray-2);margin-bottom:2px;">Talent in Demand</p><p id="insight-talent-demand" style="font-size:18px;font-weight:800;color:var(--navy);">Loading...</p></div>'
     + '<svg width="28" height="28" fill="none" stroke="rgba(0,194,255,0.2)" stroke-width="2" viewBox="0 0 24 24"><path d="M23 6l-9.5 9.5-5-5L1 18"/><polyline points="17 6 23 6 23 12"/></svg>'
     + '</div>'
     + '<div style="display:flex;align-items:center;justify-content:space-between;">'
-    + '<div><p style="font-size:12px;color:var(--gray-2);margin-bottom:2px;">Competition Level</p><p style="font-size:18px;font-weight:800;color:' + competitionColor + ';">' + competitionTier + '</p></div>'
-    + '<div style="text-align:right;"><p style="font-size:11px;color:var(--gray-2);margin-bottom:2px;">Total Applicants</p><p style="font-size:14px;font-weight:700;color:var(--navy);">' + applicantCount + '</p></div>'
+    + '<div><p style="font-size:12px;color:var(--gray-2);margin-bottom:2px;">Competition Level</p><p id="insight-competition-level" style="font-size:18px;font-weight:800;color:var(--gray-2);">Loading...</p></div>'
+    + '<div style="text-align:right;"><p style="font-size:11px;color:var(--gray-2);margin-bottom:2px;">Total Applicants</p><p id="insight-applicant-count" style="font-size:14px;font-weight:700;color:var(--navy);">Loading...</p></div>'
     + '</div>'
     + '</div>'
     + '</div>'
@@ -629,6 +620,74 @@ function showDetailPage(job) {
   document.getElementById('jdp-loading').style.display = 'none';
   document.getElementById('jdp-content').style.display = 'block';
   document.getElementById('jdp-container-root').innerHTML = html;
+
+  // Fetch applicant count asynchronously via secure RPC
+  fetch(SUPABASE_URL + '/rest/v1/rpc/get_job_applicant_count', {
+    method: 'POST',
+    headers: {
+      'apikey': SUPABASE_KEY,
+      'Authorization': 'Bearer ' + SUPABASE_KEY,
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({ job_uuid: job.id })
+  })
+  .then(function(r) { return r.json(); })
+  .then(function(count) {
+    var c = typeof count === 'number' ? count : 0;
+    var tier = c < 8 ? 'Low' : c <= 22 ? 'Moderate' : 'High';
+    var color = c < 8 ? '#10b981' : c <= 22 ? '#f59e0b' : '#ef4444';
+    
+    var compEl = document.getElementById('insight-competition-level');
+    var appEl = document.getElementById('insight-applicant-count');
+    if (compEl) {
+      compEl.textContent = tier;
+      compEl.style.color = color;
+    }
+    if (appEl) {
+      appEl.textContent = c;
+    }
+  })
+  .catch(function(err) {
+    console.error('Error fetching applicant count:', err);
+    var compEl = document.getElementById('insight-competition-level');
+    var appEl = document.getElementById('insight-applicant-count');
+    if (compEl) {
+      compEl.textContent = 'Low';
+      compEl.style.color = '#10b981';
+    }
+    if (appEl) {
+      appEl.textContent = '0';
+    }
+  });
+
+  // Fetch talent count by category asynchronously via secure RPC
+  fetch(SUPABASE_URL + '/rest/v1/rpc/get_talent_count_by_category', {
+    method: 'POST',
+    headers: {
+      'apikey': SUPABASE_KEY,
+      'Authorization': 'Bearer ' + SUPABASE_KEY,
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({ category_text: job.category })
+  })
+  .then(function(r) { return r.json(); })
+  .then(function(count) {
+    var c = typeof count === 'number' ? count : 0;
+    if (c === 0) {
+      c = getDeterministicTalent(job.category);
+    }
+    var talentEl = document.getElementById('insight-talent-demand');
+    if (talentEl) {
+      talentEl.textContent = c + ' Candidates';
+    }
+  })
+  .catch(function(err) {
+    console.error('Error fetching talent count:', err);
+    var talentEl = document.getElementById('insight-talent-demand');
+    if (talentEl) {
+      talentEl.textContent = getDeterministicTalent(job.category) + ' Candidates';
+    }
+  });
 }
 
 // ─── LIST MODE ─────────────────────────────────────────────────────────────

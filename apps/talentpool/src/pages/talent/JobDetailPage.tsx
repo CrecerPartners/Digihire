@@ -160,12 +160,14 @@ export default function JobDetailPage() {
           setApplied(!!appData);
         }
 
-        // Fetch application count to calculate competition
-        const { count: appsCount } = await supabase
-          .from('job_applications')
-          .select('*', { count: 'exact', head: true })
-          .eq('job_id', jobListing.id);
-        setApplicantCount(appsCount || 0);
+        // Fetch application count to calculate competition via secure RPC
+        const { data: appsCount, error: appsErr } = await supabase
+          .rpc('get_job_applicant_count', { job_uuid: jobListing.id });
+        if (!appsErr && typeof appsCount === 'number') {
+          setApplicantCount(appsCount);
+        } else {
+          setApplicantCount(0);
+        }
 
         // Fetch active jobs count for this brand
         if (jobListing.brand_id) {
@@ -187,13 +189,11 @@ export default function JobDetailPage() {
           .limit(3);
         setSimilarJobs(similarData || []);
 
-        // Fetch matching talent count for Category
-        const { count: matchingTalents } = await supabase
-          .from('talent_profiles')
-          .select('*', { count: 'exact', head: true })
-          .contains('role_interests', [jobListing.category]);
+        // Fetch matching talent count for Category via secure RPC
+        const { data: matchingTalents, error: talentErr } = await supabase
+          .rpc('get_talent_count_by_category', { category_text: jobListing.category });
 
-        if (matchingTalents && matchingTalents > 0) {
+        if (!talentErr && typeof matchingTalents === 'number' && matchingTalents > 0) {
           setTalentInDemandCount(matchingTalents);
         } else {
           // Fallback realistic count based on total talent profiles
