@@ -1,7 +1,8 @@
-import { useState, useEffect } from 'react';
-import { supabase as _supabase, useAuth } from '@digihire/shared';
+import { useState, useEffect, useRef } from 'react';
+import { supabase as _supabase, useAuth, uploadFileToR2 } from '@digihire/shared';
+import { Avatar, AvatarFallback, AvatarImage } from '@digihire/shared';
 import { toast } from 'sonner';
-import { User, Bell } from 'lucide-react';
+import { User, Bell, Camera, Loader2 } from 'lucide-react';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const supabase = _supabase as any;
@@ -48,6 +49,29 @@ function AccountTab() {
   const [confirmPw, setConfirmPw] = useState('');
   const [pwError, setPwError] = useState('');
   const [savingPw, setSavingPw] = useState(false);
+  const [avatarUrl, setAvatarUrl] = useState<string | undefined>(
+    user?.user_metadata?.avatar_url as string | undefined
+  );
+  const [uploadingAvatar, setUploadingAvatar] = useState(false);
+  const avatarInputRef = useRef<HTMLInputElement>(null);
+
+  const handleAvatarChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file || !user) return;
+    const ext = file.name.split('.').pop();
+    setUploadingAvatar(true);
+    try {
+      const url = await uploadFileToR2('avatars', `${user.id}/avatar.${ext}`, file, { contentType: file.type });
+      await supabase.auth.updateUser({ data: { avatar_url: url } });
+      setAvatarUrl(url);
+      toast.success('Profile photo updated');
+    } catch (err: unknown) {
+      toast.error((err as { message?: string })?.message || 'Upload failed');
+    } finally {
+      setUploadingAvatar(false);
+      e.target.value = '';
+    }
+  };
 
   const handleSaveName = async () => {
     setSavingName(true);
@@ -74,6 +98,45 @@ function AccountTab() {
 
   return (
     <div className="space-y-4">
+      <SectionCard title="Profile Photo" description="This photo appears as your avatar across the portal.">
+        <div className="flex items-center gap-5">
+          <div className="relative group">
+            <Avatar className="h-20 w-20">
+              <AvatarImage src={avatarUrl} alt="Profile photo" />
+              <AvatarFallback className="bg-primary/20 text-2xl font-medium text-primary">
+                {(user?.user_metadata?.name || user?.email || '?').charAt(0).toUpperCase()}
+              </AvatarFallback>
+            </Avatar>
+            <button
+              onClick={() => avatarInputRef.current?.click()}
+              disabled={uploadingAvatar}
+              className="absolute inset-0 flex items-center justify-center rounded-full bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity"
+            >
+              {uploadingAvatar
+                ? <Loader2 className="h-5 w-5 text-white animate-spin" />
+                : <Camera className="h-5 w-5 text-white" />}
+            </button>
+          </div>
+          <div className="space-y-1">
+            <button
+              onClick={() => avatarInputRef.current?.click()}
+              disabled={uploadingAvatar}
+              className="px-4 py-2 rounded-md border border-border bg-background text-sm font-medium hover:bg-muted transition-colors disabled:opacity-50"
+            >
+              {uploadingAvatar ? 'Uploading…' : 'Change Photo'}
+            </button>
+            <p className="text-xs text-muted-foreground">JPG, PNG or WebP · max 5 MB</p>
+          </div>
+        </div>
+        <input
+          ref={avatarInputRef}
+          type="file"
+          accept="image/jpeg,image/png,image/webp"
+          className="hidden"
+          onChange={handleAvatarChange}
+        />
+      </SectionCard>
+
       <SectionCard title="Profile" description="Your contact details for this brand account.">
         <FieldRow label="Contact Name">
           <input
