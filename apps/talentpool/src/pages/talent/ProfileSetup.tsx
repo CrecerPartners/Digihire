@@ -164,6 +164,18 @@ export default function ProfileSetup({ profile, onUpdate }: Props) {
       setSaveSuccess(true);
       setTimeout(() => setSaveSuccess(false), 3000);
 
+      // Fire-and-forget profile complete email — only on the first time reaching 100%
+      const wasAlreadyComplete = (profile?.profile_completion ?? 0) >= 100;
+      if (progress === 100 && !wasAlreadyComplete && user?.email) {
+        supabase.functions.invoke('send-transactional-email', {
+          body: {
+            type: 'profile_complete',
+            to: user.email,
+            data: { name: formData.full_name || (user.user_metadata?.full_name as string) || '' },
+          },
+        }).catch(() => {})
+      }
+
       if (isFinishLater) {
         navigate('/talent');
         return;

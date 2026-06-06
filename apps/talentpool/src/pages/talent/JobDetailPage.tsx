@@ -257,6 +257,22 @@ export default function JobDetailPage() {
       setApplied(true);
       setSubmitSuccess(true);
       setApplicantCount(prev => prev + 1);
+
+      // Fire-and-forget application confirmation email
+      if (user.email) {
+        supabase.functions.invoke('send-transactional-email', {
+          body: {
+            type: 'job_application',
+            to: user.email,
+            data: {
+              name: profile?.full_name || (user.user_metadata?.full_name as string) || '',
+              jobTitle: job.title,
+              company: job.company_name,
+              appliedAt: new Date().toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' }),
+            },
+          },
+        }).catch(() => {})
+      }
     } catch (err) {
       setSubmitError(
         err instanceof Error
