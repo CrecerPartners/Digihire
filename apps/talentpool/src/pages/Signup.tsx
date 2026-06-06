@@ -400,18 +400,6 @@ export default function Signup() {
       const redirectParam = searchParams.get('redirect');
       if (redirectParam) sessionStorage.setItem('pending_redirect', redirectParam);
 
-      // Fire-and-forget welcome email — don't block navigation
-      supabase.functions.invoke('send-transactional-email', {
-        body: {
-          type: 'talent_welcome',
-          to: formData.email,
-          data: {
-            name: `${formData.firstName} ${formData.lastName}`.trim(),
-            module,
-          },
-        },
-      }).catch(() => {})
-
       navigate('/verify-email');
     } catch (err: unknown) {
       setError(err instanceof Error ? err.message : 'Failed to create account');

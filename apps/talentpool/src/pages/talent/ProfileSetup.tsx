@@ -165,14 +165,11 @@ export default function ProfileSetup({ profile, onUpdate }: Props) {
       setTimeout(() => setSaveSuccess(false), 3000);
 
       // Fire-and-forget profile complete email — only on the first time reaching 100%
+      // to is derived server-side from the authenticated user's JWT
       const wasAlreadyComplete = (profile?.profile_completion ?? 0) >= 100;
-      if (progress === 100 && !wasAlreadyComplete && user?.email) {
+      if (progress === 100 && !wasAlreadyComplete) {
         supabase.functions.invoke('send-transactional-email', {
-          body: {
-            type: 'profile_complete',
-            to: user.email,
-            data: { name: formData.full_name || (user.user_metadata?.full_name as string) || '' },
-          },
+          body: { type: 'profile_complete', data: {} },
         }).catch(() => {})
       }
 

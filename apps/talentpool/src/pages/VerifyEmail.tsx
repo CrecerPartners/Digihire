@@ -1,6 +1,9 @@
 import { useState, useRef, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useAuth, supabase } from '@digihire/shared';
+import { useAuth, supabase as _supabase } from '@digihire/shared';
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const supabase = _supabase as any;
 import { motion } from 'motion/react';
 import { Mail, RefreshCw, LogOut, ArrowRight } from 'lucide-react';
 
@@ -71,9 +74,16 @@ export default function VerifyEmail() {
       inputRefs.current[0]?.focus();
     } else {
       const pendingRedirect = sessionStorage.getItem('pending_redirect');
+      // Read module before clearing — needed for welcome email
+      const pendingModule = sessionStorage.getItem('pending_module') ?? 'talent_pool';
       sessionStorage.removeItem('pending_verify_email');
       sessionStorage.removeItem('pending_module');
       sessionStorage.removeItem('pending_redirect');
+
+      // Send welcome email now that the user is authenticated (has a verified session)
+      supabase.functions.invoke('send-transactional-email', {
+        body: { type: 'talent_welcome', data: { module: pendingModule } },
+      }).catch(() => {})
       setSuccess('Email verified! Redirecting...');
       const destination = (() => {
         if (!pendingRedirect) return '/talent';

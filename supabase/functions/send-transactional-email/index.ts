@@ -1,4 +1,5 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts"
+import { createClient } from "https://esm.sh/@supabase/supabase-js@2.39.3"
 import * as React from 'npm:react@18.3.1'
 import { renderAsync } from 'npm:@react-email/components@0.0.22'
 import { JobApplicationEmail } from '../_shared/email-templates/job-application.tsx'
@@ -9,6 +10,8 @@ const RESEND_API_KEY = Deno.env.get('RESEND_API_KEY')
 const SITE_NAME = "Digihire"
 const SITE_URL = "https://digihire.io"
 const SENDER_EMAIL = "Digihire <hello@digihire.io>"
+
+const ALLOWED_MODULES = new Set(['talent_pool', 'voltsquad', 'gigs', 'events'])
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
@@ -38,10 +41,40 @@ serve(async (req) => {
   }
 
   try {
-    const { type, to, data } = await req.json()
+    // Require authenticated user — reject anonymous calls
+    const supabaseClient = createClient(
+      Deno.env.get('SUPABASE_URL') ?? '',
+      Deno.env.get('SUPABASE_ANON_KEY') ?? '',
+      { global: { headers: { Authorization: req.headers.get('Authorization')! } } }
+    )
+    const { data: { user } } = await supabaseClient.auth.getUser()
+    if (!user) {
+      return new Response(JSON.stringify({ error: 'Unauthorized' }), {
+        status: 401,
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+      })
+    }
 
-    if (!type || !to) {
-      return new Response(JSON.stringify({ error: 'type and to are required' }), {
+    // Derive recipient from the authenticated user — never trust client-supplied `to`
+    const to = user.email
+    if (!to) {
+      return new Response(JSON.stringify({ error: 'Authenticated user has no email' }), {
+        status: 400,
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+      })
+    }
+
+    // Derive display name from verified user metadata — not from request body
+    const name: string =
+      (user.user_metadata?.full_name as string | undefined) ||
+      (user.user_metadata?.name as string | undefined) ||
+      ''
+
+    const body = await req.json()
+    const { type, data } = body
+
+    if (!type) {
+      return new Response(JSON.stringify({ error: 'type is required' }), {
         headers: { ...corsHeaders, 'Content-Type': 'application/json' },
         status: 400,
       })
@@ -53,6 +86,22 @@ serve(async (req) => {
         headers: { ...corsHeaders, 'Content-Type': 'application/json' },
         status: 400,
       })
+    }
+
+    // Build template props — whitelist permitted data fields per email type
+    let templateData: Record<string, unknown> = { name }
+    if (type === 'talent_welcome') {
+      const module = typeof data?.module === 'string' && ALLOWED_MODULES.has(data.module)
+        ? data.module
+        : 'talent_pool'
+      templateData = { name, module }
+    } else if (type === 'job_application') {
+      templateData = {
+        name,
+        jobTitle: typeof data?.jobTitle === 'string' ? data.jobTitle.slice(0, 200) : '',
+        company: typeof data?.company === 'string' ? data.company.slice(0, 200) : '',
+        appliedAt: typeof data?.appliedAt === 'string' ? data.appliedAt.slice(0, 50) : undefined,
+      }
     }
 
     if (!RESEND_API_KEY) {
@@ -68,7 +117,7 @@ serve(async (req) => {
         siteName: SITE_NAME,
         siteUrl: SITE_URL,
         recipient: to,
-        ...(data || {}),
+        ...templateData,
       })
     )
 
@@ -82,7 +131,6 @@ serve(async (req) => {
     })
 
     const resData = await res.json()
-
     if (!res.ok) {
       throw new Error(`Resend API error: ${JSON.stringify(resData)}`)
     }
