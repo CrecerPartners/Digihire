@@ -1650,6 +1650,45 @@
   <meta name="twitter:title" content="DigiHire — Advance Your Career with Professional Growth Tools" />
   <meta name="twitter:description" content="DigiHire helps sales professionals advance their careers through job listings, training, and the VoltSquad campaign marketplace." />
   <meta name="twitter:image" content="https://digihire.io/images/og-default.png" />
+  <!-- Organization Schema -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    "name": "DigiHire",
+    "url": "https://digihire.io",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://digihire.io/assets/favicon.png"
+    },
+    "sameAs": [
+      "https://www.linkedin.com/company/digihire",
+      "https://twitter.com/digihireio"
+    ],
+    "contactPoint": {
+      "@type": "ContactPoint",
+      "contactType": "customer support",
+      "url": "https://digihire.io/contact"
+    }
+  }
+  </script>
+  <!-- WebSite Schema -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    "name": "DigiHire",
+    "url": "https://digihire.io",
+    "potentialAction": {
+      "@type": "SearchAction",
+      "target": {
+        "@type": "EntryPoint",
+        "urlTemplate": "https://digihire.io/jobs?q={search_term_string}"
+      },
+      "query-input": "required name=search_term_string"
+    }
+  }
+  </script>
 </head>
 <body>
 
