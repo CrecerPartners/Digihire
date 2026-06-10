@@ -11,6 +11,7 @@ import {
   SidebarMenu, SidebarMenuButton, SidebarMenuItem, SidebarHeader, SidebarFooter,
   useSidebar,
 } from "@digihire/shared";
+import { useTalentProfile } from "../hooks/useTalentProfile";
 
 type ModuleKey = 'talent_pool' | 'voltsquad' | 'gigs' | 'events';
 
@@ -60,9 +61,15 @@ export function TalentSidebar() {
   const location = useLocation();
   const navigate = useNavigate();
   const { signOut, user } = useAuth();
+  const { profile } = useTalentProfile();
 
   const activeModules: string[] = (user?.user_metadata?.active_modules as string[] | undefined) ?? [];
-  const isModuleActive = (mod: ModuleKey) => activeModules.includes(mod);
+  const isModuleActive = (mod: ModuleKey) => {
+    if (mod === 'talent_pool') {
+      return activeModules.includes('talent_pool') && !!profile?.cv_url;
+    }
+    return activeModules.includes(mod);
+  };
 
   const isActive = (path: string, exact: boolean) =>
     exact ? location.pathname === path : location.pathname.startsWith(path);

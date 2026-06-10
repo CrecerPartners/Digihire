@@ -1,6 +1,6 @@
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useAuth } from '@digihire/shared';
+import { useAuth, uploadFileToR2 } from '@digihire/shared';
 import { SEOMeta } from '../../components/seo/SEOMeta';
 import { supabase as _supabase } from '@digihire/shared';
 import {
@@ -10,8 +10,11 @@ import {
   UserCircle, Zap, Briefcase, CalendarDays,
   Lock, ArrowRight, BookOpen, GraduationCap,
   Users, Wallet, ShoppingBag, Calculator, FileText,
-  CheckCircle2, Loader2,
+  CheckCircle2, Loader2, Upload, X,
 } from 'lucide-react';
+import { useTalentProfile } from '../../hooks/useTalentProfile';
+import { parseCvWithOpenAI, readFileAsBase64 } from '../../lib/cv-parser';
+import type { TalentProfile } from '../../types';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const supabase = _supabase as any;
@@ -101,12 +104,18 @@ const GIGS_TYPES = ['Field Sales & Canvassing', 'Brand Activations', 'Merchandis
 export default function TalentHome() {
   const { user } = useAuth();
   const navigate = useNavigate();
+  const { profile, setProfile } = useTalentProfile();
   const [activating, setActivating] = useState<ModuleKey | null>(null);
-  const [openModal, setOpenModal] = useState<'voltsquad' | 'gigs' | null>(null);
+  const [openModal, setOpenModal] = useState<'voltsquad' | 'gigs' | 'talent_pool' | null>(null);
   const [successMod, setSuccessMod] = useState<ModuleKey | null>(null);
 
   const activeModules: string[] = (user?.user_metadata?.active_modules as string[] | undefined) ?? [];
-  const isActive = (mod: ModuleKey) => activeModules.includes(mod);
+  const isActive = (mod: ModuleKey) => {
+    if (mod === 'talent_pool') {
+      return activeModules.includes('talent_pool') && !!profile?.cv_url;
+    }
+    return activeModules.includes(mod);
+  };
 
   const saveActivation = async (mod: ModuleKey, registrationData: Record<string, unknown> = {}) => {
     const uid = user?.id;
@@ -127,6 +136,12 @@ export default function TalentHome() {
   const handleActivateClick = (mod: ModuleKey) => {
     if (mod === 'voltsquad') { setOpenModal('voltsquad'); return; }
     if (mod === 'gigs')      { setOpenModal('gigs');      return; }
+    if (mod === 'talent_pool') {
+      if (!profile?.cv_url) {
+        setOpenModal('talent_pool');
+        return;
+      }
+    }
     // Simple direct activation for talent_pool and events
     setActivating(mod);
     saveActivation(mod).finally(() => setActivating(null));
@@ -157,6 +172,74 @@ export default function TalentHome() {
     setSuccessMod('gigs');
   };
 
+  const handleTalentPoolSubmit = async (file: File) => {
+    setActivating('talent_pool');
+    try {
+      const fileExt = file.name.split('.').pop() || 'pdf';
+      const fileName = `${user?.id}/cv_url-${Math.random().toString(36).substring(2)}.${fileExt}`;
+      const publicUrl = await uploadFileToR2('talent-assets', fileName, file);
+
+      // Parse CV via base64 for profile fields prefill
+      let parsedUpdates = {};
+      try {
+        const base64 = await readFileAsBase64(file);
+        const parsed = await parseCvWithOpenAI(base64);
+        parsedUpdates = parsed;
+      } catch (parseErr) {
+        console.error('Failed to parse CV with OpenAI:', parseErr);
+      }
+
+      // Calculate new profile completion progress
+      const mergedProfile: Partial<TalentProfile> = {
+        ...profile,
+        cv_url: publicUrl,
+        ...parsedUpdates,
+      };
+      
+      const fields: (keyof TalentProfile)[] = [
+        'full_name', 'phone', 'gender', 'bio', 'city', 'state', 'country',
+        'work_preference', 'experience_years', 'salary_min', 'job_type_preference',
+        'role_interests', 'skills', 'linkedin_url', 'cv_url', 'profile_photo_url', 'industry_experience'
+      ];
+      const filledFields = fields.filter(field => {
+        const val = mergedProfile[field];
+        if (Array.isArray(val)) return val.length > 0;
+        if (typeof val === 'number') return val > 0;
+        return !!val;
+      });
+      const progress = Math.round((filledFields.length / fields.length) * 100);
+
+      // Save to Supabase
+      const { error: profileErr } = await supabase.from('talent_profiles').update({
+        cv_url: publicUrl,
+        ...parsedUpdates,
+        profile_completion: progress,
+        status: progress === 100 ? 'complete' : 'incomplete',
+        updated_at: new Date().toISOString()
+      }).eq('id', user?.id);
+
+      if (profileErr) throw profileErr;
+
+      // Update local profile state
+      if (setProfile) {
+        const { data: updatedProfile } = await supabase
+          .from('talent_profiles')
+          .select('*')
+          .eq('id', user?.id)
+          .maybeSingle();
+        if (updatedProfile) setProfile(updatedProfile);
+      }
+
+      await saveActivation('talent_pool');
+      setOpenModal(null);
+      setSuccessMod('talent_pool');
+    } catch (err) {
+      console.error('Failed to activate Talent Hub:', err);
+    } finally {
+      setActivating(null);
+    }
+  };
+
   const firstName = (user?.user_metadata?.first_name as string | undefined) ||
     (user?.user_metadata?.full_name as string | undefined)?.split(' ')[0] || 'there';
 
@@ -180,6 +263,9 @@ export default function TalentHome() {
           const cfg = MODULE_CONFIG[mod];
           const active = isActive(mod);
           const justActivated = successMod === mod;
+          const customLabel = mod === 'talent_pool' && activeModules.includes('talent_pool') && !profile?.cv_url
+            ? 'Upload CV to Activate'
+            : cfg.activateLabel;
           return active || justActivated
             ? <ActiveModuleCard key={mod} mod={mod} cfg={cfg} onNavigate={navigate} />
             : (
@@ -189,6 +275,7 @@ export default function TalentHome() {
                 cfg={cfg}
                 activating={activating}
                 onActivate={handleActivateClick}
+                activateLabel={customLabel}
               />
             );
         })}
@@ -236,6 +323,24 @@ export default function TalentHome() {
             </div>
           </DialogHeader>
           <GigsRegistrationForm onSubmit={handleGigsSubmit} submitting={activating === 'gigs'} />
+        </DialogContent>
+      </Dialog>
+
+      {/* Talent Pool registration modal */}
+      <Dialog open={openModal === 'talent_pool'} onOpenChange={open => { if (!open) setOpenModal(null); }}>
+        <DialogContent className="max-w-lg max-h-[90vh] overflow-y-auto">
+          <DialogHeader>
+            <div className="flex items-center gap-3 mb-1">
+              <div className="h-10 w-10 rounded-xl bg-blue-500/10 flex items-center justify-center text-blue-500">
+                <UserCircle size={20} />
+              </div>
+              <div>
+                <DialogTitle>Join the Talent Pool</DialogTitle>
+                <p className="text-xs text-muted-foreground mt-0.5">Please upload your CV / Resume to join the Talent Pool</p>
+              </div>
+            </div>
+          </DialogHeader>
+          <TalentPoolRegistrationForm onSubmit={handleTalentPoolSubmit} submitting={activating === 'talent_pool'} />
         </DialogContent>
       </Dialog>
     </div>
@@ -432,6 +537,72 @@ function GigsRegistrationForm({ onSubmit, submitting }: { onSubmit: (d: GigsReg)
   );
 }
 
+// ── Talent Pool Registration Form ────────────────────────────
+function TalentPoolRegistrationForm({ onSubmit, submitting }: { onSubmit: (file: File) => void; submitting: boolean }) {
+  const [cvFile, setCvFile] = useState<File | null>(null);
+  const [error, setError] = useState('');
+  const cvInputRef = useRef<HTMLInputElement>(null);
+
+  const handleCvSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    if (file.size > 5 * 1024 * 1024) {
+      setError('CV must be less than 5MB');
+      return;
+    }
+    setError('');
+    setCvFile(file);
+  };
+
+  return (
+    <div className="space-y-6 pt-2">
+      <div className="space-y-2">
+        <p className="text-sm font-semibold text-foreground">Upload your CV / Resume</p>
+        <p className="text-xs text-muted-foreground">A CV is required to join the Talent Pool. This will also help auto-fill your profile to match you with the best sales jobs.</p>
+        
+        <input ref={cvInputRef} type="file" accept=".pdf" className="hidden" onChange={handleCvSelect} />
+        
+        {cvFile ? (
+          <div className="flex items-center gap-2 rounded-lg border border-primary/30 bg-primary/5 px-3 py-2.5">
+            <FileText size={16} className="text-primary shrink-0" />
+            <span className="text-xs font-medium text-primary truncate flex-1">{cvFile.name}</span>
+            <button
+              type="button"
+              onClick={() => { setCvFile(null); if (cvInputRef.current) cvInputRef.current.value = ''; }}
+              className="text-muted-foreground hover:text-destructive transition-colors"
+            >
+              <X size={14} />
+            </button>
+          </div>
+        ) : (
+          <div
+            onClick={() => cvInputRef.current?.click()}
+            className="w-full flex flex-col items-center justify-center gap-2 rounded-xl border-2 border-dashed border-border p-8 text-muted-foreground hover:border-primary/40 hover:bg-primary/5 transition-all cursor-pointer"
+          >
+            <Upload size={24} className="text-muted-foreground/60" />
+            <span className="text-xs font-semibold">Upload PDF CV</span>
+            <span className="text-[10px] text-muted-foreground/60 uppercase tracking-wider">Max 5MB • PDF format preferred</span>
+          </div>
+        )}
+        
+        {error && (
+          <p className="text-xs text-destructive font-medium mt-1">{error}</p>
+        )}
+      </div>
+
+      <button
+        type="button"
+        onClick={() => cvFile && onSubmit(cvFile)}
+        disabled={!cvFile || submitting}
+        className="w-full flex items-center justify-center gap-2 rounded-xl bg-blue-600 text-white px-6 py-3 text-sm font-bold hover:bg-blue-500 transition-colors disabled:opacity-50 disabled:cursor-not-allowed shadow-lg shadow-blue-500/10"
+      >
+        {submitting ? <Loader2 size={16} className="animate-spin" /> : <UserCircle size={16} />}
+        {submitting ? 'Activating & Parsing…' : 'Upload & Join Talent Pool'}
+      </button>
+    </div>
+  );
+}
+
 // ── Shared sub-components ──────────────────────────────────
 function RadioOption({ value, label, selected, onSelect }: { value: string; label: string; selected: boolean; onSelect: (v: string) => void }) {
   return (
@@ -477,11 +648,12 @@ function ActiveModuleCard({ mod, cfg, onNavigate }: {
   );
 }
 
-function LockedModuleCard({ mod, cfg, activating, onActivate }: {
+function LockedModuleCard({ mod, cfg, activating, onActivate, activateLabel }: {
   mod: ModuleKey;
   cfg: typeof MODULE_CONFIG[ModuleKey];
   activating: ModuleKey | null;
   onActivate: (mod: ModuleKey) => void;
+  activateLabel?: string;
 }) {
   const isActivating = activating === mod;
   return (
@@ -500,7 +672,7 @@ function LockedModuleCard({ mod, cfg, activating, onActivate }: {
         disabled={isActivating}
         className="w-full flex items-center justify-center gap-2 rounded-lg bg-primary/10 border border-primary/20 text-primary px-4 py-2.5 text-xs font-semibold hover:bg-primary/20 transition-all disabled:opacity-60"
       >
-        {isActivating ? <><Loader2 size={13} className="animate-spin" /> Activating…</> : <>{cfg.activateLabel} <ArrowRight size={13} /></>}
+        {isActivating ? <><Loader2 size={13} className="animate-spin" /> Activating…</> : <>{activateLabel || cfg.activateLabel} <ArrowRight size={13} /></>}
       </button>
     </div>
   );
