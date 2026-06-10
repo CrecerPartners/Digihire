@@ -1,5 +1,6 @@
 import { useRef, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import { SEOMeta } from "../components/seo/SEOMeta";
 import {
   ArrowRight,
   Zap,
@@ -285,6 +286,11 @@ export default function LandingPage() {
 
   return (
     <div className="brands-landing" style={{ fontFamily: "Instrument Sans, sans-serif", background: "#fff", color: V.navy, overflowX: "hidden" }}>
+      <SEOMeta
+        title="DigiHire Brands — Hire Sales Talent & Run Sales Activations"
+        description="Connect with vetted sales professionals, field agents, and brand activators. Post jobs, run campaigns, and scale your revenue team with DigiHire Brands."
+        canonical="https://brands.digihire.io"
+      />
       <div id="nav-root" />
 
       {/* ══ HERO ══════════════════════════════════════════ */}

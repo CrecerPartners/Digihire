@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useNavigate, Link, useSearchParams } from 'react-router-dom';
+import { SEOMeta } from '../components/seo/SEOMeta';
 import { supabase as _supabase } from '@digihire/shared';
 import { motion } from 'motion/react';
 import {
@@ -399,6 +400,8 @@ export default function Signup() {
     setFormData(prev => ({ ...prev, [e.target.name]: e.target.value }));
 
   return (
+    <>
+      <SEOMeta title="Get Started — DigiHire Brands" description="Create your DigiHire Brands account to run sales campaigns and activations." canonical="https://brands.digihire.io/signup" noIndex={true} />
     <div className="min-h-screen lg:h-screen flex flex-col bg-background">
       <header className="h-14 shrink-0 border-b border-border/50 px-6 flex items-center justify-between">
         <img src="/assets/logo-color.png" alt="DigiHire" className="h-7 w-auto object-contain" />
@@ -473,6 +476,7 @@ export default function Signup() {
         </div>
       </div>
     </div>
+    </>
   );
 }
 

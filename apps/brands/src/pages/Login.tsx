@@ -4,6 +4,7 @@ import { useAuth } from '@digihire/shared';
 import { motion } from 'motion/react';
 import { Button, Input, Card, CardContent, CardHeader, CardTitle, CardDescription } from '@digihire/shared';
 import { Eye, EyeOff } from 'lucide-react';
+import { SEOMeta } from '../components/seo/SEOMeta';
 
 export default function Login() {
   const [email, setEmail] = useState('');
@@ -34,6 +35,8 @@ export default function Login() {
   };
 
   return (
+    <>
+      <SEOMeta title="Login — DigiHire Brands" description="Sign in to DigiHire Brands to manage campaigns, jobs, and sales activations." canonical="https://brands.digihire.io/login" noIndex={true} />
     <div className="min-h-screen flex items-center justify-center p-4 relative overflow-hidden bg-background">
       <div className="absolute inset-0 overflow-hidden">
         <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-[600px] h-[600px] rounded-full bg-primary/5 blur-3xl" />
@@ -80,5 +83,6 @@ export default function Login() {
         </Card>
       </motion.div>
     </div>
+    </>
   );
 }

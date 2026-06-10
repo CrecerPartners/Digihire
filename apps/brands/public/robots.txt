@@ -1,0 +1,11 @@
+User-agent: *
+Disallow: /login
+Disallow: /signup
+Disallow: /dashboard
+Disallow: /campaigns
+Disallow: /jobs
+Disallow: /settings
+Disallow: /analytics
+Disallow: /api/
+
+Sitemap: https://brands.digihire.io/sitemap.xml
