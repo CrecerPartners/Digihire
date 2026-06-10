@@ -5,7 +5,7 @@ import { Badge } from "@digihire/shared";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@digihire/shared";
 import { supabase } from "@digihire/shared";
 import { useAuth } from "@digihire/shared";
-import { CalendarDays, MapPin, Users, Clock, Loader2, CheckCircle, CalendarX } from "lucide-react";
+import { CalendarDays, MapPin, Users, Clock, Loader2, CheckCircle, CalendarX, Link2 } from "lucide-react";
 import { toast } from "sonner";
 
 interface Event {
@@ -14,11 +14,14 @@ interface Event {
   description?: string;
   event_type?: string;
   location?: string;
+  meeting_url?: string;
   event_date?: string;
   end_date?: string;
   capacity?: number;
   registration_deadline?: string;
   status: string;
+  banner_url?: string;
+  gallery?: string[];
 }
 
 interface Registration {
@@ -166,7 +169,17 @@ const EventsPage = () => {
               const isRegistered = registeredEventIds.has(event.id);
               const isRegistering = registering === event.id;
               return (
-                <Card key={event.id} className="border-border/50 hover:border-primary/20 transition-colors">
+                <Card key={event.id} className="border-border/50 hover:border-primary/20 transition-colors overflow-hidden">
+                  {event.banner_url && (
+                    <div className="w-full h-44 overflow-hidden">
+                      <img
+                        src={event.banner_url}
+                        alt={event.title}
+                        className="w-full h-full object-cover"
+                        loading="lazy"
+                      />
+                    </div>
+                  )}
                   <CardContent className="p-5">
                     <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-4">
                       <div className="space-y-2 flex-1">
@@ -180,7 +193,9 @@ const EventsPage = () => {
                         </div>
                         <h3 className="font-semibold text-base">{event.title}</h3>
                         {event.description && (
-                          <p className="text-sm text-muted-foreground line-clamp-2">{event.description}</p>
+                          <p className="text-sm text-muted-foreground line-clamp-2">
+                            {event.description.replace(/<[^>]*>/g, '')}
+                          </p>
                         )}
                         <div className="flex flex-wrap gap-x-4 gap-y-1 text-xs text-muted-foreground pt-1">
                           {event.event_date && (
@@ -207,7 +222,30 @@ const EventsPage = () => {
                               {event.capacity} capacity
                             </span>
                           )}
+                          {event.meeting_url && (
+                            <a
+                              href={event.meeting_url}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="flex items-center gap-1 text-primary hover:underline"
+                            >
+                              <Link2 className="h-3 w-3" /> Join Online
+                            </a>
+                          )}
                         </div>
+                        {(event.gallery ?? []).length > 0 && (
+                          <div className="grid grid-cols-4 gap-1.5 pt-2">
+                            {(event.gallery ?? []).slice(0, 4).map((url, i) => (
+                              <img
+                                key={i}
+                                src={url}
+                                alt={`${event.title} photo ${i + 1}`}
+                                className="rounded-md object-cover w-full h-16"
+                                loading="lazy"
+                              />
+                            ))}
+                          </div>
+                        )}
                       </div>
                       <div className="shrink-0">
                         {isRegistered ? (

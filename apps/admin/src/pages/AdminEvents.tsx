@@ -12,7 +12,7 @@ import {
 import {
   Table, TableBody, TableCell, TableHead, TableHeader, TableRow,
 } from "@digihire/shared";
-import { Plus, Pencil, Users, Loader2, CalendarDays, Trash2, Download, MessageSquare } from "lucide-react";
+import { Plus, Pencil, Users, Loader2, CalendarDays, Trash2, Download, MessageSquare, Image, Link2, X } from "lucide-react";
 import { toast } from "sonner";
 
 interface Event {
@@ -21,11 +21,14 @@ interface Event {
   description?: string;
   event_type?: string;
   location?: string;
+  meeting_url?: string;
   event_date?: string;
   end_date?: string;
   capacity?: number;
   registration_deadline?: string;
   status: string;
+  banner_url?: string;
+  gallery?: string[];
   created_at: string;
 }
 
@@ -44,11 +47,14 @@ const emptyForm: Omit<Event, "id" | "created_at"> = {
   description: "",
   event_type: "",
   location: "",
+  meeting_url: "",
   event_date: "",
   end_date: "",
   capacity: undefined,
   registration_deadline: "",
   status: "upcoming",
+  banner_url: "",
+  gallery: [],
 };
 
 const statusColors: Record<string, string> = {
@@ -64,6 +70,7 @@ export default function AdminEvents() {
   const [editEvent, setEditEvent] = useState<Event | null>(null);
   const [form, setForm] = useState(emptyForm);
   const [saving, setSaving] = useState(false);
+  const [galleryInput, setGalleryInput] = useState("");
   const [regsEvent, setRegsEvent] = useState<Event | null>(null);
   const [registrations, setRegistrations] = useState<Registration[]>([]);
   const [regsLoading, setRegsLoading] = useState(false);
@@ -86,6 +93,7 @@ export default function AdminEvents() {
   const openCreate = () => {
     setEditEvent(null);
     setForm(emptyForm);
+    setGalleryInput("");
     setFormOpen(true);
   };
 
@@ -96,12 +104,16 @@ export default function AdminEvents() {
       description: event.description || "",
       event_type: event.event_type || "",
       location: event.location || "",
+      meeting_url: event.meeting_url || "",
       event_date: event.event_date ? event.event_date.slice(0, 16) : "",
       end_date: event.end_date ? event.end_date.slice(0, 16) : "",
       capacity: event.capacity,
       registration_deadline: event.registration_deadline ? event.registration_deadline.slice(0, 16) : "",
       status: event.status,
+      banner_url: event.banner_url || "",
+      gallery: event.gallery || [],
     });
+    setGalleryInput("");
     setFormOpen(true);
   };
 
@@ -114,6 +126,9 @@ export default function AdminEvents() {
       end_date: form.end_date || null,
       registration_deadline: form.registration_deadline || null,
       capacity: form.capacity || null,
+      banner_url: form.banner_url || null,
+      meeting_url: form.meeting_url || null,
+      gallery: form.gallery ?? [],
     };
 
     try {
@@ -312,6 +327,66 @@ export default function AdminEvents() {
             <div className="space-y-1.5">
               <Label>Location</Label>
               <Input value={form.location} onChange={e => setForm(f => ({ ...f, location: e.target.value }))} placeholder="Venue or Online" />
+            </div>
+            <div className="space-y-1.5">
+              <Label className="flex items-center gap-1.5"><Link2 className="h-3.5 w-3.5" /> Meeting / Stream URL</Label>
+              <Input value={form.meeting_url} onChange={e => setForm(f => ({ ...f, meeting_url: e.target.value }))} placeholder="https://meet.google.com/..." />
+            </div>
+            <div className="space-y-1.5">
+              <Label className="flex items-center gap-1.5"><Image className="h-3.5 w-3.5" /> Banner Image URL</Label>
+              <Input value={form.banner_url} onChange={e => setForm(f => ({ ...f, banner_url: e.target.value }))} placeholder="https://..." />
+              {form.banner_url && (
+                <img src={form.banner_url} alt="Banner preview" className="mt-2 rounded-lg object-cover w-full h-32 border border-border/50" onError={e => (e.currentTarget.style.display = 'none')} />
+              )}
+            </div>
+            <div className="space-y-1.5">
+              <Label className="flex items-center gap-1.5"><Image className="h-3.5 w-3.5" /> Gallery Images</Label>
+              <div className="flex gap-2">
+                <Input
+                  value={galleryInput}
+                  onChange={e => setGalleryInput(e.target.value)}
+                  placeholder="Paste image URL and press Add"
+                  onKeyDown={e => {
+                    if (e.key === 'Enter') {
+                      e.preventDefault();
+                      const url = galleryInput.trim();
+                      if (url) {
+                        setForm(f => ({ ...f, gallery: [...(f.gallery ?? []), url] }));
+                        setGalleryInput("");
+                      }
+                    }
+                  }}
+                />
+                <Button
+                  type="button"
+                  variant="outline"
+                  size="sm"
+                  className="shrink-0"
+                  onClick={() => {
+                    const url = galleryInput.trim();
+                    if (url) {
+                      setForm(f => ({ ...f, gallery: [...(f.gallery ?? []), url] }));
+                      setGalleryInput("");
+                    }
+                  }}
+                >Add</Button>
+              </div>
+              {(form.gallery ?? []).length > 0 && (
+                <div className="grid grid-cols-3 gap-2 mt-2">
+                  {(form.gallery ?? []).map((url, i) => (
+                    <div key={i} className="relative group">
+                      <img src={url} alt={`Gallery ${i + 1}`} className="rounded-md object-cover w-full h-20 border border-border/50" onError={e => (e.currentTarget.style.display = 'none')} />
+                      <button
+                        type="button"
+                        className="absolute top-1 right-1 bg-destructive text-destructive-foreground rounded-full p-0.5 opacity-0 group-hover:opacity-100 transition-opacity"
+                        onClick={() => setForm(f => ({ ...f, gallery: (f.gallery ?? []).filter((_, idx) => idx !== i) }))}
+                      >
+                        <X className="h-3 w-3" />
+                      </button>
+                    </div>
+                  ))}
+                </div>
+              )}
             </div>
             <div className="grid grid-cols-2 gap-3">
               <div className="space-y-1.5">
