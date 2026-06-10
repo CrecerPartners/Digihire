@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { useParams, useSearchParams, Link } from "react-router-dom";
+import { SEOMeta } from "@/components/seo/SEOMeta";
 import { useProduct } from "@digihire/shared";
 import { useCart } from "@digihire/shared";
 import { useProducts } from "@digihire/shared";
@@ -219,6 +220,13 @@ const ProductPage = () => {
 
   return (
     <div className="max-w-6xl mx-auto space-y-8 pb-12">
+      <SEOMeta
+        title={`${product.name} — VoltSquad`}
+        description={product.description || `Buy ${product.name} on VoltSquad and earn commissions by sharing.`}
+        canonical={`https://voltsquad.digihire.io/product/${slug}`}
+        ogImage={product.assets?.images?.[0] || product.image || undefined}
+        ogType="product"
+      />
       {/* Breadcrumb — context-aware */}
       <div className="flex items-center gap-2 text-sm text-muted-foreground">
         {isSeller ? (

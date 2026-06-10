@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import { LandingNavbar } from "@/components/LandingNavbar";
+import { SEOMeta } from "@/components/seo/SEOMeta";
 import { Button } from "@digihire/shared";
 import { Card, CardContent } from "@digihire/shared";
 import {
@@ -38,6 +39,11 @@ const benefits = [
 export default function AboutStudents() {
   return (
     <div className="min-h-screen bg-background">
+      <SEOMeta
+        title="For Students & Talents — VoltSquad"
+        description="Join VoltSquad to sell top-brand products, earn commissions, and build your sales career. Free to join, flexible hours."
+        canonical="https://voltsquad.digihire.io/about/students"
+      />
       <LandingNavbar />
 
       {/* Hero */}

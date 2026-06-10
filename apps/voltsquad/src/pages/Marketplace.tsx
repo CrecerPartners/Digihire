@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
+import { SEOMeta } from "@/components/seo/SEOMeta";
 import { Card, CardContent } from "@digihire/shared";
 import { Button } from "@digihire/shared";
 import { Badge } from "@digihire/shared";
@@ -92,6 +93,12 @@ const Marketplace = () => {
 
   return (
     <div className="space-y-5 max-w-7xl">
+      <SEOMeta
+        title="Marketplace — VoltSquad"
+        description="Browse products from top brands and start earning commissions. Sell gadgets, fintech, FMCG, and more with VoltSquad."
+        canonical="https://voltsquad.digihire.io/marketplace"
+        noIndex={true}
+      />
       {/* Banner */}
       <div className="volt-gradient rounded-2xl p-6 md:p-8 relative overflow-hidden">
         <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGNpcmNsZSBjeD0iMjAiIGN5PSIyMCIgcj0iMSIgZmlsbD0icmdiYSgyNTUsMjU1LDI1NSwwLjA4KSIvPjwvc3ZnPg==')] opacity-50" />

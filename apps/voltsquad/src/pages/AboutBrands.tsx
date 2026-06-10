@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import { SEOMeta } from "@/components/seo/SEOMeta";
 import { LandingNavbar } from "@/components/LandingNavbar";
 import { Button } from "@digihire/shared";
 import { Card, CardContent } from "@digihire/shared";
@@ -29,6 +30,11 @@ const benefits = [
 export default function AboutBrands() {
   return (
     <div className="min-h-screen bg-background">
+      <SEOMeta
+        title="For Brands — Launch Campaigns on VoltSquad"
+        description="Launch targeted sales campaigns on VoltSquad. Pay only for real results."
+        canonical="https://voltsquad.digihire.io/about/brands"
+      />
       <LandingNavbar />
 
       {/* Hero */}

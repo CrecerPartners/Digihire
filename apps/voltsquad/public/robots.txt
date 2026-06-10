@@ -1,0 +1,15 @@
+User-agent: *
+Allow: /
+Allow: /product/
+Allow: /s/
+Allow: /about/
+Disallow: /dashboard
+Disallow: /marketplace
+Disallow: /campaigns
+Disallow: /wallet
+Disallow: /orders
+Disallow: /settings
+Disallow: /profile
+Disallow: /api/
+
+Sitemap: https://voltsquad.digihire.io/sitemap.xml

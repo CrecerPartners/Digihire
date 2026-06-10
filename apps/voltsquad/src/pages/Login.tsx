@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from "react";
+import { SEOMeta } from "@/components/seo/SEOMeta";
 import { useNavigate, useLocation, Link } from "react-router-dom";
 import { Button } from "@digihire/shared";
 import { Input } from "@digihire/shared";
@@ -150,6 +151,12 @@ const Login = () => {
 
   return (
     <div className="min-h-screen flex items-center justify-center p-4 relative overflow-hidden">
+      <SEOMeta
+        title="Login — VoltSquad"
+        description="Sign in to VoltSquad to manage campaigns and access the marketplace."
+        canonical="https://voltsquad.digihire.io/login"
+        noIndex={true}
+      />
       <div className="absolute top-4 left-4 z-20">
         <Button variant="ghost" size="sm" onClick={() => (step === "otp" || step === "mfa") ? setStep("form") : navigate("/")} className="gap-1 text-muted-foreground hover:text-foreground">
           <ArrowLeft className="h-4 w-4" /> Back

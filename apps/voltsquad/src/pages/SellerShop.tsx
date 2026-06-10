@@ -1,5 +1,6 @@
 import { useParams, Link } from "react-router-dom";
 import { usePublicSellerShop } from "@/hooks/useSellerShop";
+import { SEOMeta } from "@/components/seo/SEOMeta";
 import { useCart } from "@digihire/shared";
 import { formatNaira } from "@digihire/shared";
 import { Avatar, AvatarImage, AvatarFallback } from "@digihire/shared";
@@ -42,6 +43,12 @@ const SellerShop = () => {
 
   return (
     <div className="max-w-5xl mx-auto space-y-8 pb-12">
+      <SEOMeta
+        title={`${displayName}'s Shop — VoltSquad`}
+        description={`Browse products from ${displayName} on VoltSquad. Shop and earn commissions on every referral.`}
+        canonical={`https://voltsquad.digihire.io/s/${shopSlug}`}
+        ogImage={seller.shop_logo_url || undefined}
+      />
       {/* Seller Header */}
       <div className="flex flex-col items-center text-center space-y-3 pt-4">
         {seller.shop_logo_url ? (
