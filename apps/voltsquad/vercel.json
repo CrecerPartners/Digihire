@@ -3,6 +3,7 @@
   "buildCommand": "cd ../.. && npm run build:voltsquad",
   "outputDirectory": "dist",
   "rewrites": [
+    { "source": "/sitemap.xml", "destination": "/api/sitemap" },
     { "source": "/", "destination": "/index.html" },
     { "source": "/:path*", "destination": "/app.html" }
   ]
