@@ -1,5 +1,6 @@
 import { useState, useRef, useCallback } from 'react';
 import { useNavigate, useSearchParams, Link } from 'react-router-dom';
+import { SEOMeta } from '../components/seo/SEOMeta';
 import { supabase as _supabase } from '@digihire/shared';
 import { motion } from 'motion/react';
 import {
@@ -421,6 +422,12 @@ export default function Signup() {
 
   return (
     <div className="min-h-screen lg:h-screen flex flex-col bg-background">
+      <SEOMeta
+        title="Join DigiHire Talent — Create Your Account"
+        description="Sign up to DigiHire Talent to access sales jobs, gigs, events, and the VoltSquad marketplace."
+        canonical="https://talents.digihire.io/signup"
+        noIndex={true}
+      />
       <header className="h-14 shrink-0 border-b border-border/50 px-6 flex items-center justify-between">
         <img src="/assets/logo-color.png" alt="DigiHire" className="h-7 w-auto object-contain" />
         <p className="text-sm text-muted-foreground">

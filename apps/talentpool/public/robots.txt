@@ -1,0 +1,11 @@
+User-agent: *
+Disallow: /talent/
+Allow: /
+Allow: /login
+Allow: /signup
+Allow: /academy
+Allow: /academy/
+Allow: /product/
+Allow: /s/
+
+Sitemap: https://talents.digihire.io/sitemap.xml

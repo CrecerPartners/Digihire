@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useNavigate, useSearchParams, Link } from 'react-router-dom';
 import { useAuth } from '@digihire/shared';
+import { SEOMeta } from '../components/seo/SEOMeta';
 import { motion } from 'motion/react';
 import { Button, Input, Card, CardContent, CardHeader, CardTitle, CardDescription } from '@digihire/shared';
 import { Eye, EyeOff } from 'lucide-react';
@@ -48,6 +49,12 @@ export default function Login() {
 
   return (
     <div className="min-h-screen flex items-center justify-center p-4 relative overflow-hidden bg-background">
+      <SEOMeta
+        title="Login — DigiHire Talent"
+        description="Sign in to your DigiHire Talent account to manage your profile, applications, and learning."
+        canonical="https://talents.digihire.io/login"
+        noIndex={true}
+      />
       <div className="absolute inset-0 overflow-hidden">
         <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-[600px] h-[600px] rounded-full bg-primary/5 blur-3xl" />
       </div>

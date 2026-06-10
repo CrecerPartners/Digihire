@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '@digihire/shared';
+import { SEOMeta } from '../../components/seo/SEOMeta';
 import { supabase as _supabase } from '@digihire/shared';
 import {
   Dialog, DialogContent, DialogHeader, DialogTitle,
@@ -161,6 +162,12 @@ export default function TalentHome() {
 
   return (
     <div className="space-y-8 max-w-5xl mx-auto">
+      <SEOMeta
+        title="DigiHire Talent — Your Sales Career Hub"
+        description="Access sales jobs, gig opportunities, events, and the VoltSquad marketplace all in one place."
+        canonical="https://talents.digihire.io/talent"
+        noIndex={true}
+      />
       {/* Welcome */}
       <div>
         <h1 className="text-2xl font-semibold text-foreground">Welcome back, {firstName} 👋</h1>
