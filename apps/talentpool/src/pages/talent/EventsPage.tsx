@@ -222,16 +222,22 @@ const EventsPage = () => {
                               {event.capacity} capacity
                             </span>
                           )}
-                          {event.meeting_url && (
-                            <a
-                              href={event.meeting_url}
-                              target="_blank"
-                              rel="noopener noreferrer"
-                              className="flex items-center gap-1 text-primary hover:underline"
-                            >
-                              <Link2 className="h-3 w-3" /> Join Online
-                            </a>
-                          )}
+                          {(() => {
+                            try {
+                              const u = new URL(event.meeting_url ?? '');
+                              if (u.protocol !== 'https:' && u.protocol !== 'http:') return null;
+                              return (
+                                <a
+                                  href={u.toString()}
+                                  target="_blank"
+                                  rel="noopener noreferrer"
+                                  className="flex items-center gap-1 text-primary hover:underline"
+                                >
+                                  <Link2 className="h-3 w-3" /> Join Online
+                                </a>
+                              );
+                            } catch { return null; }
+                          })()}
                         </div>
                         {(event.gallery ?? []).length > 0 && (
                           <div className="grid grid-cols-4 gap-1.5 pt-2">

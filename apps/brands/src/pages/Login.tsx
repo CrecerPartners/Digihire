@@ -16,9 +16,14 @@ export default function Login() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (!authLoading && user) {
-      navigate('/brand');
-    }
+    if (authLoading || !user) return;
+    const meta = (user as { app_metadata?: { account_types?: string[]; account_type?: string } }).app_metadata ?? {};
+    const roles: string[] = Array.isArray(meta.account_types)
+      ? meta.account_types
+      : meta.account_type
+        ? [meta.account_type]
+        : [];
+    if (roles.includes('brand')) navigate('/brand');
   }, [user, authLoading, navigate]);
 
   const handleLogin = async (e: React.FormEvent) => {
@@ -26,9 +31,19 @@ export default function Login() {
     setLoading(true);
     setError('');
     try {
-      const { error: err } = await signIn(email, password);
+      const { error: err, data } = await signIn(email, password);
       if (err) { setError(err.message || 'Failed to login'); return; }
-      navigate('/brand');
+      const appMeta = (data?.user as { app_metadata?: { account_types?: string[]; account_type?: string } } | undefined)?.app_metadata ?? {};
+      const roles: string[] = Array.isArray(appMeta.account_types)
+        ? appMeta.account_types
+        : appMeta.account_type
+          ? [appMeta.account_type]
+          : [];
+      if (roles.includes('brand')) {
+        navigate('/brand');
+      } else {
+        setError('This account does not have access to the Brand Portal.');
+      }
     } finally {
       setLoading(false);
     }
