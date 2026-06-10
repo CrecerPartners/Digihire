@@ -74,8 +74,26 @@ export default function ProfileSetup({ profile, onUpdate }: Props) {
       setCvParsing(true);
       setCvError(null);
       parseCvWithOpenAI(cvBase64)
-        .then(parsed => {
+        .then(async parsed => {
           applyParsedCv(parsed);
+          
+          // Auto-upload the parsed CV to Cloudflare R2
+          try {
+            const binaryString = atob(cvBase64);
+            const bytes = new Uint8Array(binaryString.length);
+            for (let i = 0; i < binaryString.length; i++) {
+              bytes[i] = binaryString.charCodeAt(i);
+            }
+            const file = new File([bytes], cvName, { type: 'application/pdf' });
+            const fileExt = cvName.split('.').pop() || 'pdf';
+            const fileName = `${user?.id || profile?.id || 'new'}/cv_url-${Math.random().toString(36).substring(2)}.${fileExt}`;
+            const publicUrl = await uploadFileToR2('talent-assets', fileName, file);
+            
+            setFormData(prev => ({ ...prev, cv_url: publicUrl }));
+          } catch (uploadErr) {
+            console.error('Failed to auto-upload CV from signup:', uploadErr);
+          }
+
           sessionStorage.removeItem(CV_SESSION_KEY);
           sessionStorage.removeItem(CV_NAME_SESSION_KEY);
           setPendingCvName(null);
@@ -119,6 +137,12 @@ export default function ProfileSetup({ profile, onUpdate }: Props) {
   const handleSubmit = async (e: React.FormEvent, isFinishLater = false) => {
     e.preventDefault();
     if (!profile?.id) return;
+
+    if (!isFinishLater && activeTab === 'links' && !formData.cv_url) {
+      setError('Please upload your CV / Resume to complete your profile.');
+      return;
+    }
+
     setSaving(true);
     setSaveSuccess(false);
     setError(null);
@@ -500,7 +524,7 @@ export default function ProfileSetup({ profile, onUpdate }: Props) {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8 pt-4">
               {/* CV Upload */}
               <div className="space-y-1.5">
-                <label className="block text-[10px] font-bold uppercase tracking-widest text-slate-400 ml-1">CV / Resume (PDF Preferred)</label>
+                <label className="block text-[10px] font-bold uppercase tracking-widest text-slate-400 ml-1">CV / Resume (Required — PDF Preferred)</label>
                 <div
                   onClick={() => cvInputRef.current?.click()}
                   className={`border-2 border-dashed rounded-xl p-6 flex flex-col items-center justify-center transition-all cursor-pointer ${formData.cv_url ? 'bg-sky-50 border-sky-200 text-sky-700' : 'border-gray-200 hover:border-sky-300 hover:bg-gray-50'}`}

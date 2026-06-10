@@ -357,6 +357,10 @@ export default function Signup() {
   const handleSignup = async (e: React.FormEvent) => {
     e.preventDefault();
     if (formData.password !== formData.confirmPassword) return setError('Passwords do not match');
+    if (module === 'talent_pool' && !cvFile) {
+      setError('Please upload your CV / Resume to join the Talent Pool');
+      return;
+    }
     setLoading(true);
     setError('');
     setAccountExists(false);
@@ -482,7 +486,12 @@ export default function Signup() {
                 {config.showCv && (
                   <div className="space-y-1.5">
                     <label className="text-xs font-medium text-muted-foreground">
-                      CV / Resume <span className="text-muted-foreground/60">(Optional — auto-fills your profile)</span>
+                      CV / Resume{' '}
+                      {module === 'talent_pool' ? (
+                        <span className="text-destructive font-semibold">(Required — auto-fills your profile)</span>
+                      ) : (
+                        <span className="text-muted-foreground/60">(Optional — auto-fills your profile)</span>
+                      )}
                     </label>
                     <input ref={cvInputRef} type="file" accept=".pdf" className="hidden" onChange={handleCvSelect} />
                     {cvFile ? (
