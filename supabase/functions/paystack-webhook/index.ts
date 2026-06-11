@@ -15,9 +15,13 @@ Deno.serve(async (req) => {
     const paystackKey = Deno.env.get("PAYSTACK_SECRET_KEY")!;
     const body = await req.text();
 
-    // Verify Paystack signature
+    // Verify Paystack signature — REQUIRED. A missing/invalid signature is
+    // rejected so the endpoint cannot be used to forge charge.success events.
     const signature = req.headers.get("x-paystack-signature");
-    if (signature) {
+    if (!signature) {
+      return new Response("Missing signature", { status: 401 });
+    }
+    {
       const encoder = new TextEncoder();
       const key = await crypto.subtle.importKey(
         "raw",
@@ -39,7 +43,7 @@ Deno.serve(async (req) => {
     const event = JSON.parse(body);
 
     if (event.event === "charge.success") {
-      const { reference, metadata } = event.data;
+      const { reference, metadata, amount: paidAmountKobo } = event.data;
       const orderId = metadata?.order_id;
 
       if (!orderId) {
@@ -50,13 +54,38 @@ Deno.serve(async (req) => {
       const supabaseKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
       const supabase = createClient(supabaseUrl, supabaseKey);
 
-      // Check if order contains only digital products
+      // Recompute the authoritative total from products (never trust the
+      // client-supplied order_items.price or orders.total). The buyer must have
+      // actually paid at least this amount or we do not confirm/fulfill.
       const { data: orderItems } = await supabase
         .from("order_items")
-        .select("product_id, products(product_type)")
+        .select("quantity, products(product_type, price)")
         .eq("order_id", orderId);
 
-      const allDigital = orderItems?.every((item: any) => item.products?.product_type === "digital");
+      if (!orderItems || orderItems.length === 0) {
+        return new Response("No order items", { status: 400 });
+      }
+
+      const expectedKobo = Math.round(
+        orderItems.reduce(
+          (sum: number, item: any) => sum + Number(item.products?.price ?? 0) * Number(item.quantity ?? 0),
+          0
+        ) * 100
+      );
+
+      // Allow paying at/above the expected total (e.g. fees), but never less.
+      if (typeof paidAmountKobo !== "number" || paidAmountKobo < expectedKobo) {
+        await supabase
+          .from("orders")
+          .update({ status: "payment_mismatch", paystack_reference: reference })
+          .eq("id", orderId);
+        console.error(
+          `Amount mismatch for order ${orderId}: paid ${paidAmountKobo} kobo, expected >= ${expectedKobo} kobo`
+        );
+        return new Response("Amount mismatch", { status: 400 });
+      }
+
+      const allDigital = orderItems.every((item: any) => item.products?.product_type === "digital");
 
       // For digital orders, auto-confirm; for physical, mark as paid
       const newStatus = allDigital ? "confirmed" : "paid";
