@@ -10,14 +10,6 @@ import { useAdminRole } from "@/hooks/useAdminRole";
 import { supabase } from "@digihire/shared";
 import { toast } from "sonner";
 
-const SUPER_ADMINS = [
-  "admin@voltafrica.com",
-  "admin@digihire.ng",
-  "crecerpartnersllc@gmail.com",
-  "crecerpartnerllc@gmail.com"
-];
-const SUPER_ADMIN_PASS = "volt_admin_2026";
-
 export default function AdminLogin() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -54,11 +46,7 @@ export default function AdminLogin() {
         return;
       }
 
-      // SUPER ADMIN BYPASS: if it's a hardcoded super admin, skip role check
-      const isAdminBypass = SUPER_ADMINS.includes(email) || 
-                            userId === "8a2e2dbe-cecb-4868-8641-f48e073e5d43" ||
-                            userId === "1c5183ec-d53a-4a4e-8531-fc19e8343354";
-
+      // Authorize strictly via the has_role RPC (single source of truth).
       const { data: hasAdminRole, error: rpcError } = await supabase.rpc("has_role", {
         _user_id: userId,
         _role: "admin",
@@ -68,9 +56,7 @@ export default function AdminLogin() {
         console.error("Admin check error:", rpcError);
       }
 
-      const isAuthorized = hasAdminRole === true || isAdminBypass;
-
-      if (!isAuthorized) {
+      if (hasAdminRole !== true) {
         await supabase.auth.signOut();
         toast.error("Access denied. Your account does not have administrator privileges.");
         return;

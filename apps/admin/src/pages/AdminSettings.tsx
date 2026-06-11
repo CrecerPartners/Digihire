@@ -279,14 +279,16 @@ function TeamTab() {
       .single();
     if (pErr || !profile) { toast.error('No user found with that email'); setGranting(false); return; }
     if (admins.some(a => a.user_id === profile.id)) { toast.error('User is already an admin'); setGranting(false); return; }
-    const { error } = await supabase.from('user_roles').insert({ user_id: profile.id, role: 'admin' });
+    // Role writes go through an admin-only SECURITY DEFINER RPC (user_roles is
+    // not directly writable by clients).
+    const { error } = await supabase.rpc('grant_admin', { _target_user_id: profile.id });
     if (error) { toast.error(error.message); } else { toast.success('Admin access granted'); setEmail(''); fetchAdmins(); }
     setGranting(false);
   };
 
   const revokeAdmin = async (userId: string) => {
     setRevoking(userId);
-    const { error } = await supabase.from('user_roles').delete().eq('user_id', userId).eq('role', 'admin');
+    const { error } = await supabase.rpc('revoke_admin', { _target_user_id: userId });
     if (error) { toast.error(error.message); } else { toast.success('Admin access revoked'); fetchAdmins(); }
     setRevoking(null);
   };
