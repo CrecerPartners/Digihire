@@ -923,7 +923,8 @@
   }, { threshold: 0.12 });
   document.querySelectorAll('.reveal, .stagger-grid').forEach(el => revealObs.observe(el));
 
-  lucide.createIcons();
+  /* Lucide is deferred — run after it has loaded (deferred scripts execute before DOMContentLoaded) */
+  document.addEventListener('DOMContentLoaded', function () { if (window.lucide) lucide.createIcons(); });
 
   /* Mobile menu */
   (function () {

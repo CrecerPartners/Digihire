@@ -381,7 +381,8 @@
 </div>
 
 <script>
-  lucide.createIcons();
+  /* Lucide is deferred — run after it has loaded (deferred scripts execute before DOMContentLoaded) */
+  document.addEventListener('DOMContentLoaded', function () { if (window.lucide) lucide.createIcons(); });
   const nav = document.getElementById('navbar');
   window.addEventListener('scroll', () => { nav.classList.toggle('scrolled', window.scrollY > 60); }, { passive: true });
   const revealObs = new IntersectionObserver((entries) => { entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); revealObs.unobserve(e.target); } }); }, { threshold: 0.12 });

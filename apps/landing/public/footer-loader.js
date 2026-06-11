@@ -8,7 +8,6 @@
     var mappings = [
       { prod: 'https://brands.digihire.io', local: 'http://localhost:8084' },
       { prod: 'https://talents.digihire.io', local: 'http://localhost:8081' },
-      { prod: 'https://talents.digihire.io', local: 'http://localhost:8083' },
       { prod: 'https://digihire.io', local: 'http://localhost:8080' }
     ];
 
@@ -30,7 +29,10 @@
     var footerUrl = base.replace(/\/$/, '') + '/footer-partial.html';
 
     fetch(footerUrl)
-      .then(function (r) { return r.text(); })
+      .then(function (r) {
+        if (!r.ok) throw new Error('footer-partial fetch failed: HTTP ' + r.status);
+        return r.text();
+      })
       .then(function (html) {
         root.innerHTML = html;
         var styleBlock = root.querySelector('style');

@@ -10,6 +10,7 @@
   <link rel="icon" type="image/png" href="assets/favicon.png" />
   <link rel="apple-touch-icon" href="assets/favicon.png" />
   <script src="https://unpkg.com/lucide@0.474.0/dist/umd/lucide.min.js" integrity="sha384-wkxmY9HYHJVzx0oZ7k8stpLQ7g7ogSqBha75ozCZmxFadwtaIw5dzXKVWWfi9I36" crossorigin="anonymous" defer></script>
+  <script src="/purify.min.js"></script>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -2001,6 +2002,17 @@
     return d.toLocaleDateString('en-NG', { year: 'numeric', month: 'short', day: 'numeric' });
   }
 
+  function esc(s) {
+    return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');
+  }
+
+  // Only allow http/https or relative asset paths — rejects javascript:, data:, etc.
+  function safeUrl(url) {
+    if (!url) return '';
+    if (/^(assets\/|\/)/.test(url) && url.indexOf('//') !== 0) return url;
+    try { var u = new URL(url); return (u.protocol === 'http:' || u.protocol === 'https:') ? u.href : ''; } catch (e) { return ''; }
+  }
+
   function postUrl(post) {
     // Legacy static pages kept for the original 7 slugs
     var legacyMap = {
@@ -2018,13 +2030,13 @@
   function renderFeatured(post) {
     var wrap = document.getElementById('blog-featured-wrap');
     if (!wrap) return;
-    var img = post.cover_image || 'assets/blog_featured.png';
-    wrap.innerHTML = '<a href="' + postUrl(post) + '" class="blog-featured-card">' +
-      '<div class="bfc-img-wrap"><img src="' + img + '" alt="' + (post.category || 'Featured') + '" class="bfc-img" onerror="this.src=\'https://plus.unsplash.com/premium_photo-1674586421844-99330bd20c65?w=800&h=600&fit=crop&q=80\'" /></div>' +
+    var img = safeUrl(post.cover_image) || 'assets/blog_featured.png';
+    wrap.innerHTML = '<a href="' + esc(postUrl(post)) + '" class="blog-featured-card">' +
+      '<div class="bfc-img-wrap"><img src="' + esc(img) + '" alt="' + esc(post.category || 'Featured') + '" class="bfc-img" onerror="this.src=\'https://plus.unsplash.com/premium_photo-1674586421844-99330bd20c65?w=800&h=600&fit=crop&q=80\'" /></div>' +
       '<div class="bfc-content">' +
-        '<span class="blog-cat-pill">' + (post.category || '') + '</span>' +
-        '<h2 class="bfc-title">' + post.title + '</h2>' +
-        '<p class="bfc-excerpt">' + (post.excerpt || '') + '</p>' +
+        '<span class="blog-cat-pill">' + esc(post.category || '') + '</span>' +
+        '<h2 class="bfc-title">' + esc(post.title) + '</h2>' +
+        '<p class="bfc-excerpt">' + esc(post.excerpt || '') + '</p>' +
         '<span class="bfc-cta">Read Article <svg viewBox="0 0 16 16" fill="none" width="14" height="14"><path d="M4 8h8M8 4l4 4-4 4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span>' +
       '</div>' +
     '</a>';
@@ -2038,16 +2050,16 @@
       return;
     }
     grid.innerHTML = posts.map(function (post) {
-      var img = post.cover_image || 'https://images.unsplash.com/photo-1611432579402-7037e3e2c1e4?w=600&h=400&fit=crop&q=80';
-      return '<a href="' + postUrl(post) + '" class="blog-card">' +
-        '<div class="bc-img-wrap"><img src="' + img + '" alt="' + (post.category || '') + '" class="bc-img" /></div>' +
+      var img = safeUrl(post.cover_image) || 'https://images.unsplash.com/photo-1611432579402-7037e3e2c1e4?w=600&h=400&fit=crop&q=80';
+      return '<a href="' + esc(postUrl(post)) + '" class="blog-card">' +
+        '<div class="bc-img-wrap"><img src="' + esc(img) + '" alt="' + esc(post.category || '') + '" class="bc-img" /></div>' +
         '<div class="bc-content">' +
           '<div class="bc-meta">' +
-            '<span class="blog-cat-pill" style="margin-bottom:0;">' + (post.category || '') + '</span>' +
+            '<span class="blog-cat-pill" style="margin-bottom:0;">' + esc(post.category || '') + '</span>' +
             '<span class="bc-date">' + formatDate(post.published_at) + '</span>' +
           '</div>' +
-          '<h3 class="bc-title">' + post.title + '</h3>' +
-          '<p class="bc-excerpt">' + (post.excerpt || '') + '</p>' +
+          '<h3 class="bc-title">' + esc(post.title) + '</h3>' +
+          '<p class="bc-excerpt">' + esc(post.excerpt || '') + '</p>' +
           '<span class="bc-cta">Read More →</span>' +
         '</div>' +
       '</a>';
@@ -2240,7 +2252,7 @@
 
     /* Switch page-wide content mode */
     document.body.dataset.mode = (key === 'employer') ? 'brand' : 'talent';
-    setTimeout(() => lucide.createIcons(), 50);
+    setTimeout(() => { if (window.lucide) lucide.createIcons(); }, 50);
   }
 
   /* Set default mode on load */
@@ -2323,7 +2335,8 @@
   })();
 
   /* ── Lucide icons ────────────────────────────── */
-  lucide.createIcons();
+  /* Lucide is deferred — run after it has loaded (deferred scripts execute before DOMContentLoaded) */
+  document.addEventListener('DOMContentLoaded', function () { if (window.lucide) lucide.createIcons(); });
 
   /* ── Navbar: float + shrink + blur on scroll ─── */
   const nav = document.getElementById('navbar');

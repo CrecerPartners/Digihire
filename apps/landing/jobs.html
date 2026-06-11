@@ -108,16 +108,6 @@
     .skills-row{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px;}
     .skill-chip{font-size:11px;background:#F4F8FF;border:1px solid var(--border);color:#374151;padding:2px 9px;border-radius:20px;}
 
-    /* Detail panel (overlay mode — used when clicking a card on /jobs list) */
-    .detail-overlay{display:none;position:fixed;inset:0;background:rgba(6,17,31,0.5);z-index:200;backdrop-filter:blur(4px);}
-    .detail-overlay.open{display:flex;align-items:flex-end;justify-content:flex-end;}
-    @media(min-width:640px){.detail-overlay.open{align-items:center;justify-content:center;}}
-    .detail-panel{background:var(--white);width:100%;max-width:640px;max-height:92vh;overflow-y:auto;border-radius:20px 20px 0 0;padding:28px 24px;position:relative;}
-    @media(min-width:640px){.detail-panel{border-radius:20px;}}
-    .detail-close{position:absolute;top:16px;right:16px;width:32px;height:32px;border-radius:50%;border:1px solid var(--border);background:var(--white);cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--gray-2);}
-    .detail-close:hover{background:#f3f4f6;}
-    .detail-section-title{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:var(--gray-2);margin-bottom:8px;}
-    .detail-body{font-size:14px;color:#374151;line-height:1.7;white-space:pre-line;}
     .cta-box{background:var(--cyan-ghost);border:1px solid var(--cyan-border);border-radius:var(--radius-lg);padding:20px;margin-top:24px;}
     .cta-box h4{font-size:15px;font-weight:700;color:var(--navy);margin-bottom:6px;}
     .cta-box p{font-size:13px;color:var(--gray-2);margin-bottom:14px;}
@@ -357,16 +347,6 @@
   </div>
 </div>
 
-<!-- Detail panel -->
-<div class="detail-overlay" id="detail-overlay" onclick="closeDetail(event)">
-  <div class="detail-panel" id="detail-panel">
-    <button class="detail-close" onclick="closeDetail()">
-      <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M18 6 6 18M6 6l12 12"/></svg>
-    </button>
-    <div id="detail-content"></div>
-  </div>
-</div>
-
 <footer>
   <div class="container">
     <p>© 2025 DigiHire · <a href="/">Home</a> · <a href="/blog">Blog</a> · <a href="https://brands.digihire.io">For Brands</a> · <a href="https://talents.digihire.io">For Talent</a></p>
@@ -386,11 +366,12 @@ var searchVal = '';
 var TYPE_LABELS = { full_time:'Full-Time', part_time:'Part-Time', contract:'Contract', gig:'Gig', internship:'Internship' };
 var EXP_LABELS = { any:'Any level', entry:'Entry level', mid:'Mid level', senior:'Senior level' };
 
-// Detect mode from URL: /jobs/:id → detail page; /jobs → list
+// Detect mode from URL: /jobs/:id → detail page; /jobs (or /jobs.html) → list
 // Extract job ID from path — supports both /jobs/UUID and /jobs/title-slug-UUID
+var _isDetailPath = /^\/jobs\/.+/.test(window.location.pathname);
 var _pathSegment = window.location.pathname.replace(/^\/jobs\/?/, '');
 var _uuidMatch = _pathSegment.match(/([0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12})/i);
-var PAGE_JOB_ID = _uuidMatch ? _uuidMatch[1] : (_pathSegment || null);
+var PAGE_JOB_ID = _uuidMatch ? _uuidMatch[1] : (_isDetailPath ? _pathSegment : null);
 
 function slugify(s) {
   return String(s).toLowerCase().replace(/[^a-z0-9\s-]/g,'').trim().replace(/\s+/g,'-').replace(/-+/g,'-');
@@ -402,6 +383,22 @@ function jobPath(j) {
 
 function esc(s) {
   return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');
+}
+
+// The job_listings_public view returns brand fields flattened (brand_*);
+// rebuild the nested brand_profiles object the templates expect.
+function normalizeJob(j) {
+  j.brand_profiles = {
+    industry:     j.brand_industry,
+    company_type: j.brand_company_type,
+    company_size: j.brand_company_size,
+    city:         j.brand_city,
+    country:      j.brand_country,
+    description:  j.brand_description,
+    logo_url:     j.brand_logo_url,
+    website:      j.brand_website
+  };
+  return j;
 }
 
 // Only allow http/https — rejects javascript:, data:, etc.
@@ -421,7 +418,7 @@ function fmtSalary(min, max, pt) {
 function timeAgo(d) {
   var diff = Date.now() - new Date(d).getTime();
   var days = Math.floor(diff / 86400000);
-  if (days === 0) return 'Today';
+  if (days <= 0) return 'Today';
   if (days === 1) return 'Yesterday';
   if (days < 7) return days + 'd ago';
   if (days < 30) return Math.floor(days/7) + 'w ago';
@@ -431,7 +428,6 @@ function timeAgo(d) {
 // ─── DETAIL PAGE MODE ──────────────────────────────────────────────────────
 function showDetailPage(job) {
   document.getElementById('jobs-list-page').style.display = 'none';
-  document.getElementById('detail-overlay').style.display = 'none';
   document.querySelector('.filters-bar').style.display = 'none';
   // Update breadcrumb for detail view
   if (job) document.getElementById('breadcrumb-label').textContent = job.title;
@@ -446,8 +442,8 @@ function showDetailPage(job) {
     return;
   }
 
-  // Update page title + meta for SEO
-  document.title = esc(job.title) + ' — DigiHire Jobs';
+  // Update page title + meta for SEO (document.title is a text sink — no escaping)
+  document.title = job.title + ' — DigiHire Jobs';
 
   var sal = fmtSalary(job.salary_min, job.salary_max, job.pay_type);
   var applyUrl = 'https://talents.digihire.io/signup?redirect=' + encodeURIComponent('/talent/jobs/' + job.id);
@@ -464,22 +460,16 @@ function showDetailPage(job) {
         ? 'https://api.dicebear.com/7.x/identicon/svg?seed=' + logoSeed
         : (job.brand_profiles && job.brand_profiles.logo_url ? job.brand_profiles.logo_url : 'https://api.dicebear.com/7.x/identicon/svg?seed=' + logoSeed));
 
-  // Active jobs count for the brand
-  var activeJobs = allJobs.filter(function(j) { return j.brand_id === job.brand_id && j.status === 'published'; });
+  // Active jobs count for the brand (brand_id is null for anonymous listings)
+  var activeJobs = job.brand_id
+    ? allJobs.filter(function(j) { return j.brand_id === job.brand_id && j.status === 'published'; })
+    : [];
   var activeJobsCount = activeJobs.length || 1;
 
   // Similar jobs
   var similarJobs = allJobs.filter(function(j) {
     return j.category === job.category && j.id !== job.id && j.status === 'published';
   }).slice(0, 3);
-
-  function getDeterministicTalent(category) {
-    var hash = 0;
-    for (var i = 0; i < category.length; i++) {
-      hash = category.charCodeAt(i) + ((hash << 5) - hash);
-    }
-    return (Math.abs(hash % 200) + 120);
-  }
 
   // Render Job Type Badges
   var typeBadgeColor = 'badge-full_time';
@@ -666,17 +656,11 @@ function showDetailPage(job) {
       appEl.textContent = c;
     }
   })
-  .catch(function(err) {
-    console.error('Error fetching applicant count:', err);
+  .catch(function() {
     var compEl = document.getElementById('insight-competition-level');
     var appEl = document.getElementById('insight-applicant-count');
-    if (compEl) {
-      compEl.textContent = 'Low';
-      compEl.style.color = '#10b981';
-    }
-    if (appEl) {
-      appEl.textContent = '0';
-    }
+    if (compEl) compEl.textContent = '—';
+    if (appEl) appEl.textContent = '—';
   });
 
   // Fetch talent count by category asynchronously via secure RPC
@@ -692,20 +676,14 @@ function showDetailPage(job) {
   .then(function(r) { return r.json(); })
   .then(function(count) {
     var c = typeof count === 'number' ? count : 0;
-    if (c === 0) {
-      c = getDeterministicTalent(job.category);
-    }
     var talentEl = document.getElementById('insight-talent-demand');
     if (talentEl) {
-      talentEl.textContent = c + ' Candidates';
+      talentEl.textContent = c > 0 ? c + ' Candidates' : 'Growing';
     }
   })
-  .catch(function(err) {
-    console.error('Error fetching talent count:', err);
+  .catch(function() {
     var talentEl = document.getElementById('insight-talent-demand');
-    if (talentEl) {
-      talentEl.textContent = getDeterministicTalent(job.category) + ' Candidates';
-    }
+    if (talentEl) talentEl.textContent = '—';
   });
 }
 
@@ -725,10 +703,12 @@ function renderCategories() {
   var counts = {};
   allJobs.forEach(function(j) { counts[j.category] = (counts[j.category]||0)+1; });
   var cats = Object.keys(counts).sort();
-  var html = '<div class="category-item'+(activeCategory==='all'?' active':'')+'" onclick="setCategory(\'all\')">'
+  // Categories are brand-supplied — escape for HTML and store the raw value
+  // in data-category (read back via dataset, never re-injected as markup).
+  var html = '<div class="category-item'+(activeCategory==='all'?' active':'')+'" data-category="all">'
     + '<span>All Categories</span><span class="category-count">'+allJobs.length+'</span></div>';
   cats.forEach(function(c) {
-    html += '<div class="category-item'+(activeCategory===c?' active':'')+'" onclick="setCategory(\''+c+'\')"><span>'+c+'</span><span class="category-count">'+counts[c]+'</span></div>';
+    html += '<div class="category-item'+(activeCategory===c?' active':'')+'" data-category="'+esc(c)+'"><span>'+esc(c)+'</span><span class="category-count">'+counts[c]+'</span></div>';
   });
   document.getElementById('categories-list').innerHTML = html;
 }
@@ -738,6 +718,11 @@ function setCategory(cat) {
   renderCategories();
   renderJobs();
 }
+
+document.getElementById('categories-list').addEventListener('click', function(e) {
+  var item = e.target.closest('.category-item');
+  if (item && item.dataset.category) setCategory(item.dataset.category);
+});
 
 function renderJobs() {
   var filtered = getFiltered();
@@ -801,15 +786,23 @@ function renderJobs() {
 
 // ─── INIT ──────────────────────────────────────────────────────────────────
 if (!PAGE_JOB_ID) {
+  /* Pre-fill search from ?q= (used by "Related Searches" links) */
+  var initialQ = new URLSearchParams(window.location.search).get('q');
+  if (initialQ) {
+    searchVal = initialQ;
+    document.getElementById('search-input').value = initialQ;
+  }
   document.getElementById('search-input').addEventListener('input', function(e) { searchVal = e.target.value; renderJobs(); });
   document.getElementById('type-select').addEventListener('change', function(e) { activeType = e.target.value; renderJobs(); });
   document.getElementById('mode-select').addEventListener('change', function(e) { activeMode = e.target.value; renderJobs(); });
 }
 
-fetch(SUPABASE_URL + '/rest/v1/job_listings?select=*,brand_profiles(*)&status=eq.published&order=featured.desc,created_at.desc', {
+// job_listings_public is a safe view: published rows only, identity stripped
+// for anonymous listings, and no brand contact PII.
+fetch(SUPABASE_URL + '/rest/v1/job_listings_public?select=*&order=featured.desc,created_at.desc&limit=200', {
   headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY }
 }).then(function(r) { return r.json(); }).then(function(data) {
-  allJobs = Array.isArray(data) ? data : [];
+  allJobs = (Array.isArray(data) ? data : []).map(normalizeJob);
   if (PAGE_JOB_ID) {
     var job = allJobs.find(function(j){return j.id === PAGE_JOB_ID;});
     showDetailPage(job || null);

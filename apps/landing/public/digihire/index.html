@@ -2659,6 +2659,8 @@
     function esc(s) {
       return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');
     }
+    function slugify(s) { return String(s).toLowerCase().replace(/[^a-z0-9\s-]/g,'').trim().replace(/\s+/g,'-').replace(/-+/g,'-'); }
+    function jobPath(j) { return '/jobs/' + slugify(j.title) + '-' + j.id; }
     function badge(label, colorStr) {
       return '<span style="display:inline-flex;align-items:center;font-size:11px;font-weight:600;padding:3px 9px;border-radius:20px;border:1px solid currentColor;color:' + colorStr + ';">' + esc(label) + '</span>';
     }
@@ -2671,7 +2673,7 @@
       return Math.floor(days/30) + 'mo ago';
     }
 
-    fetch(SB_URL + '/rest/v1/job_listings?status=eq.published&order=featured.desc,created_at.desc&limit=6', {
+    fetch(SB_URL + '/rest/v1/job_listings_public?select=*&order=featured.desc,created_at.desc&limit=6', {
       headers: { 'apikey': SB_KEY, 'Authorization': 'Bearer ' + SB_KEY }
     }).then(function(r) { return r.json(); }).then(function(jobs) {
       var el = document.getElementById('landing-jobs-list');
@@ -2683,7 +2685,7 @@
       el.innerHTML = jobs.map(function(j) {
         var tc = TYPE_COLORS[j.job_type] || '#374151;background:#f1f5f9';
         var mc = j.work_mode ? MODE_COLORS[j.work_mode] || '#475569;background:#f1f5f9' : null;
-        return '<a href="/jobs?id=' + j.id + '" style="display:block;background:#fff;border:1px solid rgba(0,194,255,0.14);border-radius:14px;padding:18px 20px;text-decoration:none;transition:border-color 0.2s,box-shadow 0.2s,transform 0.15s;" onmouseover="this.style.borderColor=\'rgba(0,194,255,0.4)\';this.style.boxShadow=\'0 4px 20px rgba(0,194,255,0.1)\';this.style.transform=\'translateY(-2px)\'" onmouseout="this.style.borderColor=\'rgba(0,194,255,0.14)\';this.style.boxShadow=\'none\';this.style.transform=\'none\'">'
+        return '<a href="' + esc(jobPath(j)) + '" style="display:block;background:#fff;border:1px solid rgba(0,194,255,0.14);border-radius:14px;padding:18px 20px;text-decoration:none;transition:border-color 0.2s,box-shadow 0.2s,transform 0.15s;" onmouseover="this.style.borderColor=\'rgba(0,194,255,0.4)\';this.style.boxShadow=\'0 4px 20px rgba(0,194,255,0.1)\';this.style.transform=\'translateY(-2px)\'" onmouseout="this.style.borderColor=\'rgba(0,194,255,0.14)\';this.style.boxShadow=\'none\';this.style.transform=\'none\'">'
           + '<div style="display:flex;align-items:flex-start;justify-content:space-between;gap:12px;">'
           + '<div style="display:flex;align-items:flex-start;gap:12px;flex:1;min-width:0;">'
           + '<div style="width:40px;height:40px;border-radius:10px;background:rgba(0,194,255,0.08);display:flex;align-items:center;justify-content:center;flex-shrink:0;">'

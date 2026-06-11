@@ -10,6 +10,7 @@
   <link rel="icon" type="image/png" href="assets/favicon.png" />
   <link rel="apple-touch-icon" href="assets/favicon.png" />
   <script src="https://unpkg.com/lucide@0.474.0/dist/umd/lucide.min.js" integrity="sha384-wkxmY9HYHJVzx0oZ7k8stpLQ7g7ogSqBha75ozCZmxFadwtaIw5dzXKVWWfi9I36" crossorigin="anonymous" defer></script>
+  <script src="/purify.min.js"></script>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     :root {
@@ -378,6 +379,28 @@
     return new Date(iso).toLocaleDateString('en-NG', { year: 'numeric', month: 'long', day: 'numeric' });
   }
 
+  function esc(s) {
+    return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');
+  }
+
+  // Only allow http/https or relative asset paths — rejects javascript:, data:, etc.
+  function safeUrl(url) {
+    if (!url) return '';
+    if (/^(assets\/|\/)/.test(url) && url.indexOf('//') !== 0) return url;
+    try { var u = new URL(url); return (u.protocol === 'http:' || u.protocol === 'https:') ? u.href : ''; } catch (e) { return ''; }
+  }
+
+  // For use inside CSS url('...') — strip characters that could break out
+  function cssUrl(url) {
+    return safeUrl(url).replace(/['"()\\]/g, '');
+  }
+
+  // Rich post content comes from the database — sanitize before injecting.
+  function sanitizeHtml(html) {
+    if (typeof DOMPurify !== 'undefined') return DOMPurify.sanitize(html);
+    return esc(html); /* fallback: render as text if the sanitizer failed to load */
+  }
+
   function renderPost(post, related) {
     var root = document.getElementById('post-root');
     if (!root) return;
@@ -385,24 +408,24 @@
     // Update page title and meta
     document.getElementById('page-title').textContent = post.title + ' — Digihire Blog';
 
-    var heroImg = post.cover_image || 'https://images.unsplash.com/photo-1611432579402-7037e3e2c1e4?w=1400&h=700&fit=crop&q=85';
+    var heroImg = cssUrl(post.cover_image) || 'https://images.unsplash.com/photo-1611432579402-7037e3e2c1e4?w=1400&h=700&fit=crop&q=85';
     var authorImg = 'https://plus.unsplash.com/premium_photo-1677553953699-e62954777d8f?w=80&h=80&fit=crop&crop=face&q=80';
     var contentHtml = post.content
-      ? post.content
-      : '<p>' + (post.excerpt || 'Full article content coming soon.') + '</p>';
+      ? sanitizeHtml(post.content)
+      : '<p>' + esc(post.excerpt || 'Full article content coming soon.') + '</p>';
 
     var relatedHtml = '';
     if (related && related.length > 0) {
       relatedHtml = '<section class="art-related"><div class="container"><h2 class="art-related-title">Related Articles</h2><div class="blog-grid stagger-grid">' +
         related.map(function (r) {
-          var rImg = r.cover_image || 'https://images.unsplash.com/photo-1610251064409-8d94b0939629?w=600&h=400&fit=crop&q=80';
+          var rImg = safeUrl(r.cover_image) || 'https://images.unsplash.com/photo-1610251064409-8d94b0939629?w=600&h=400&fit=crop&q=80';
           var rUrl = 'blog-post.html?slug=' + encodeURIComponent(r.slug);
-          return '<a href="' + rUrl + '" class="blog-card">' +
-            '<div class="bc-img-wrap"><img src="' + rImg + '" alt="' + (r.category || '') + '" class="bc-img" /></div>' +
+          return '<a href="' + esc(rUrl) + '" class="blog-card">' +
+            '<div class="bc-img-wrap"><img src="' + esc(rImg) + '" alt="' + esc(r.category || '') + '" class="bc-img" /></div>' +
             '<div class="bc-content">' +
-              '<div class="bc-meta"><span class="blog-cat-pill" style="margin-bottom:0;">' + (r.category || '') + '</span><span class="bc-date">' + formatDate(r.published_at) + '</span></div>' +
-              '<h3 class="bc-title">' + r.title + '</h3>' +
-              '<p class="bc-excerpt">' + (r.excerpt || '') + '</p>' +
+              '<div class="bc-meta"><span class="blog-cat-pill" style="margin-bottom:0;">' + esc(r.category || '') + '</span><span class="bc-date">' + formatDate(r.published_at) + '</span></div>' +
+              '<h3 class="bc-title">' + esc(r.title) + '</h3>' +
+              '<p class="bc-excerpt">' + esc(r.excerpt || '') + '</p>' +
               '<span class="bc-cta">Read More →</span>' +
             '</div></a>';
         }).join('') +
@@ -415,13 +438,13 @@
         '<div class="art-hero-overlay"></div>' +
         '<div class="art-hero-content container">' +
           '<a href="blog.html" class="art-back"><i data-lucide="arrow-left" class="lucide ic-sm"></i> Back to Blog</a>' +
-          '<span class="blog-cat-pill">' + (post.category || 'Article') + '</span>' +
-          '<h1 class="art-title">' + post.title + '</h1>' +
+          '<span class="blog-cat-pill">' + esc(post.category || 'Article') + '</span>' +
+          '<h1 class="art-title">' + esc(post.title) + '</h1>' +
           '<div class="art-meta">' +
             '<img class="art-author-av" src="' + authorImg + '" alt="Author" />' +
             '<div>' +
               '<div class="art-author-name">Digihire Editorial</div>' +
-              '<div class="art-meta-row"><span>' + formatDate(post.published_at) + '</span><span class="art-dot">·</span><span>' + (post.reading_time || 5) + ' min read</span></div>' +
+              '<div class="art-meta-row"><span>' + formatDate(post.published_at) + '</span><span class="art-dot">·</span><span>' + esc(post.reading_time || 5) + ' min read</span></div>' +
             '</div>' +
           '</div>' +
         '</div>' +
@@ -506,7 +529,8 @@
   .catch(function () { renderNotFound(); });
 
   // Navbar scroll behaviour
-  lucide.createIcons();
+  /* Lucide is deferred — run after it has loaded (deferred scripts execute before DOMContentLoaded) */
+  document.addEventListener('DOMContentLoaded', function () { if (window.lucide) lucide.createIcons(); });
   var nav = document.getElementById('navbar');
   window.addEventListener('scroll', function () { nav.classList.toggle('scrolled', window.scrollY > 60); }, { passive: true });
 

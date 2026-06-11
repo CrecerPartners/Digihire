@@ -999,7 +999,8 @@
     });
   }
 
-  lucide.createIcons();
+  /* Lucide is deferred — run after it has loaded (deferred scripts execute before DOMContentLoaded) */
+  document.addEventListener('DOMContentLoaded', function () { if (window.lucide) lucide.createIcons(); });
 
   /* Mobile menu */
   (function () {
@@ -1117,7 +1118,7 @@
 
       overlay.classList.add('open');
       document.body.style.overflow = 'hidden';
-      lucide.createIcons();
+      if (window.lucide) lucide.createIcons();
 
       /* Focus first input after transition */
       setTimeout(function() {
@@ -1171,7 +1172,7 @@
       /* Show success state immediately */
       body.classList.add('hide');
       success.classList.add('show');
-      lucide.createIcons();
+      if (window.lucide) lucide.createIcons();
 
       /* After a moment, redirect to signup with pre-filled data */
       var url = 'https://talents.digihire.io/signup?module=events'

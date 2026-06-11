@@ -34,7 +34,6 @@
     var mappings = [
       { prod: 'https://brands.digihire.io', local: 'http://localhost:8084' },
       { prod: 'https://talents.digihire.io', local: 'http://localhost:8081' },
-      { prod: 'https://talents.digihire.io', local: 'http://localhost:8083' },
       { prod: 'https://digihire.io', local: 'http://localhost:8080' }
     ];
 
@@ -164,7 +163,10 @@
     var base = (scriptEl && scriptEl.getAttribute('data-base')) || '/';
     var navUrl = base.replace(/\/$/, '') + '/nav-partial.html';
     fetch(navUrl)
-      .then(function (r) { return r.text(); })
+      .then(function (r) {
+        if (!r.ok) throw new Error('nav-partial fetch failed: HTTP ' + r.status);
+        return r.text();
+      })
       .then(function (html) {
         root.innerHTML = html;
 

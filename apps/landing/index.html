@@ -2176,11 +2176,11 @@
     var modeTag = (j.work_mode && j.work_mode !== 'onsite') ? '<span class="job-type-badge badge-' + safeMode + '" style="margin-left:4px;">' + safeMode + '</span>' : '';
     
     var logoSeed = j.id || j.brand_id || 'anonymous';
-    var logoUrl = j.logo_url 
-      ? j.logo_url 
-      : (j.anonymous 
+    var logoUrl = j.logo_url
+      ? j.logo_url
+      : (j.anonymous
          ? 'https://api.dicebear.com/7.x/identicon/svg?seed=' + logoSeed
-         : (j.brand_profiles && j.brand_profiles.logo_url ? j.brand_profiles.logo_url : 'https://api.dicebear.com/7.x/identicon/svg?seed=' + logoSeed));
+         : (j.brand_logo_url || 'https://api.dicebear.com/7.x/identicon/svg?seed=' + logoSeed));
 
     return '<div class="job-slide"><a class="job-card' + (j.featured ? ' featured' : '') + '" href="' + esc(jobPath(j)) + '">'
       + '<div style="display:flex;align-items:flex-start;gap:12px;">'
@@ -2274,8 +2274,9 @@
     }, { passive: true });
   })();
 
-  /* Fetch jobs */
-  fetch(SUPABASE_URL + '/rest/v1/job_listings?select=*,brand_profiles(*)&status=eq.published&order=featured.desc,created_at.desc&limit=10', {
+  /* Fetch jobs — job_listings_public is a safe view (published only, no PII,
+     anonymous listings stripped of identity) */
+  fetch(SUPABASE_URL + '/rest/v1/job_listings_public?select=*&order=featured.desc,created_at.desc&limit=10', {
     headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY }
   }).then(function(r) { return r.json(); }).then(function(data) {
     document.getElementById('jobs-loading').style.display = 'none';
@@ -3072,7 +3073,7 @@
     document.body.dataset.mode = newMode;
     setTimeout(() => {
       modeEls.forEach(el => el.classList.remove('mode-switching'));
-      lucide.createIcons();
+      if (window.lucide) lucide.createIcons();
     }, 350);
   }
 
@@ -3158,7 +3159,11 @@
   })();
 
   /* ── Lucide icons ────────────────────────────── */
-  lucide.createIcons();
+  /* The CDN script is deferred, so it has not executed yet when this inline
+     block runs — wait for DOMContentLoaded (deferred scripts run before it). */
+  document.addEventListener('DOMContentLoaded', function () {
+    if (window.lucide) lucide.createIcons();
+  });
 
   /* ── Navbar: float + shrink + blur on scroll ─── */
   const nav = document.getElementById('navbar');
