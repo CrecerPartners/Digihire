@@ -278,13 +278,15 @@ export default function JobListings() {
     if (!form.anonymous && !form.company_name.trim()) { toast.error('Company name is required'); return; }
     setSaving(true);
 
-    let logoUrl = form.logo_url;
-    if (!logoUrl) {
-      const seed = encodeURIComponent(`${form.title}-${form.category}-${editJob?.id || 'new'}`);
-      const generatedAvatar = `https://api.dicebear.com/7.x/identicon/svg?seed=${seed}`;
-      logoUrl = form.anonymous 
-        ? generatedAvatar 
-        : (brandLogo || generatedAvatar);
+    const seed = encodeURIComponent(`${form.title}-${form.category}-${editJob?.id || 'new'}`);
+    const generatedAvatar = `https://api.dicebear.com/7.x/identicon/svg?seed=${seed}`;
+    // For anonymous posts, never persist a real/uploaded logo — use a generated
+    // avatar so the brand identity cannot leak even to anyone with row access.
+    let logoUrl: string;
+    if (form.anonymous) {
+      logoUrl = generatedAvatar;
+    } else {
+      logoUrl = form.logo_url || brandLogo || generatedAvatar;
     }
 
     const basePayload = {
