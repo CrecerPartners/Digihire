@@ -151,6 +151,9 @@ export default function JobDetailPage() {
   const [tailorSuggestions, setTailorSuggestions] = useState<string[]>([]);
   const [tailorCoverNote, setTailorCoverNote] = useState('');
   const [tailorError, setTailorError] = useState<string | null>(null);
+  const [tailorMatchScore, setTailorMatchScore] = useState<number | null>(null);
+  const [tailorMatchingSkills, setTailorMatchingSkills] = useState<string[]>([]);
+  const [tailorMissingSkills, setTailorMissingSkills] = useState<string[]>([]);
 
   useEffect(() => {
     if (!id) return;
@@ -317,6 +320,8 @@ export default function JobDetailPage() {
             skills: job.skills,
             work_mode: job.work_mode,
           },
+          // Fallback only — the edge function fetches the authoritative
+          // profile server-side from talent_profiles.
           profile: {
             full_name: profile?.full_name,
             bio: profile?.bio,
@@ -330,9 +335,21 @@ export default function JobDetailPage() {
 
       setTailorCoverNote(data.cover_note || '');
       setTailorSuggestions(data.suggestions || []);
+      setTailorMatchScore(typeof data.match_score === 'number' ? data.match_score : null);
+      setTailorMatchingSkills(Array.isArray(data.matching_skills) ? data.matching_skills : []);
+      setTailorMissingSkills(Array.isArray(data.missing_skills) ? data.missing_skills : []);
     } catch (err) {
-      console.error(err);
-      setTailorError('Failed to tailor CV using AI. Please try again.');
+      console.error('tailor-cv failed', err);
+      // FunctionsHttpError carries the function's JSON body on `context` —
+      // surface the real reason instead of a blind generic message.
+      let message = 'Failed to tailor CV using AI. Please try again.';
+      if (err && typeof err === 'object' && 'context' in err) {
+        try {
+          const body = await (err as { context: Response }).context.json();
+          if (body && typeof body.error === 'string') message = body.error;
+        } catch { /* response body not JSON — keep generic message */ }
+      }
+      setTailorError(message);
     } finally {
       setTailoring(false);
     }
@@ -954,7 +971,43 @@ export default function JobDetailPage() {
             </div>
           ) : (
             <div className="space-y-5 py-2 text-left">
-              
+
+              {/* Match Overview */}
+              {tailorMatchScore !== null && (
+                <div className="space-y-2.5">
+                  <div className="flex items-center justify-between">
+                    <h4 className="text-xs font-bold text-foreground uppercase tracking-wider">Job Match</h4>
+                    <span className={`text-sm font-bold ${tailorMatchScore >= 70 ? 'text-green-600' : tailorMatchScore >= 40 ? 'text-amber-600' : 'text-destructive'}`}>
+                      {tailorMatchScore}%
+                    </span>
+                  </div>
+                  <div className="h-1.5 w-full rounded-full bg-secondary/60 overflow-hidden">
+                    <div
+                      className={`h-full rounded-full transition-all ${tailorMatchScore >= 70 ? 'bg-green-500' : tailorMatchScore >= 40 ? 'bg-amber-500' : 'bg-destructive'}`}
+                      style={{ width: `${tailorMatchScore}%` }}
+                    />
+                  </div>
+                  {tailorMatchingSkills.length > 0 && (
+                    <div className="flex flex-wrap gap-1.5">
+                      {tailorMatchingSkills.map(skill => (
+                        <span key={skill} className="text-[10px] font-medium px-2 py-0.5 rounded-full bg-green-500/10 text-green-700 dark:text-green-400 border border-green-500/20">
+                          ✓ {skill}
+                        </span>
+                      ))}
+                    </div>
+                  )}
+                  {tailorMissingSkills.length > 0 && (
+                    <div className="flex flex-wrap gap-1.5">
+                      {tailorMissingSkills.map(skill => (
+                        <span key={skill} className="text-[10px] font-medium px-2 py-0.5 rounded-full bg-amber-500/10 text-amber-700 dark:text-amber-400 border border-amber-500/20">
+                          {skill}
+                        </span>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              )}
+
               {/* Recommendations */}
               <div className="space-y-2.5">
                 <h4 className="text-xs font-bold text-foreground uppercase tracking-wider">Tailoring Recommendations</h4>

@@ -11,6 +11,8 @@ project_id = "yaojxewpkrjonrvqpsxi"
     verify_jwt = true
   [functions.parse-cv]
     verify_jwt = true
+  [functions.tailor-cv]
+    verify_jwt = true
   [functions.set-transaction-pin]
     verify_jwt = true
 
