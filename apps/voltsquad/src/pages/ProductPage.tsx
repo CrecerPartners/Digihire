@@ -88,8 +88,8 @@ const ProductPage = () => {
   useEffect(() => {
     if (!refCode) return;
     const fetchSellerByRef = async () => {
-      const { data } = await supabase
-        .from("profiles")
+      const { data } = await (supabase as any)
+        .from("public_shop_profiles")
         .select("shop_slug, shop_name, name")
         .eq("referral_code", refCode)
         .limit(1);

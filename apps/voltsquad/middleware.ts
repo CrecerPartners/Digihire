@@ -6,7 +6,11 @@ const BOT_AGENTS = /Googlebot|Twitterbot|facebookexternalhit|LinkedInBot|WhatsAp
 function buildMetaHtml(tags: Record<string, string>): string {
   const entries = Object.entries(tags)
     .map(([key, val]) => {
-      const escaped = val.replace(/"/g, '&quot;')
+      const escaped = val
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
       if (key.startsWith('og:') || key.startsWith('twitter:')) {
         const attr = key.startsWith('og:') ? 'property' : 'name'
         return `<meta ${attr}="${key}" content="${escaped}" />`
@@ -38,7 +42,9 @@ async function fetchProductMeta(slug: string, anonKey: string) {
 }
 
 async function fetchShopMeta(shopSlug: string, anonKey: string) {
-  const url = `${SUPABASE_URL}/rest/v1/profiles?shop_slug=eq.${encodeURIComponent(shopSlug)}&select=shop_name,name,shop_logo_url,shop_slug&limit=1`
+  // public_shop_profiles is the anon-safe view; the base profiles table is no
+  // longer readable by the anon role (it holds bank/NIN/BVN/PIN data).
+  const url = `${SUPABASE_URL}/rest/v1/public_shop_profiles?shop_slug=eq.${encodeURIComponent(shopSlug)}&select=shop_name,name,shop_logo_url,shop_slug&limit=1`
   const res = await fetch(url, {
     headers: { apikey: anonKey, Authorization: `Bearer ${anonKey}` },
     signal: AbortSignal.timeout(2000),

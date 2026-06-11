@@ -56,8 +56,9 @@ export function usePublicSellerShop(shopSlug: string | undefined) {
   const profileQuery = useQuery({
     queryKey: ["public-seller-profile", shopSlug],
     queryFn: async () => {
-      const { data, error } = await supabase
-        .from("profiles")
+      // public_shop_profiles is a view not present in the generated types
+      const { data, error } = await (supabase as any)
+        .from("public_shop_profiles")
         .select("name, bio, shop_name, shop_slug, avatar_url, referral_code, user_id, shop_logo_url, verification_status")
         .eq("shop_slug", shopSlug!)
         .maybeSingle();

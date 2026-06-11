@@ -7,7 +7,9 @@ async function fetchSlugs(anonKey: string): Promise<{ products: string[]; shops:
       headers: { apikey: anonKey, Authorization: `Bearer ${anonKey}` },
       signal: AbortSignal.timeout(5000),
     }),
-    fetch(`${SUPABASE_URL}/rest/v1/profiles?select=shop_slug&shop_slug=not.is.null&limit=1000`, {
+    // public_shop_profiles is the anon-safe view (base profiles is no longer
+    // anon-readable). It only contains rows where shop_slug IS NOT NULL.
+    fetch(`${SUPABASE_URL}/rest/v1/public_shop_profiles?select=shop_slug&limit=1000`, {
       headers: { apikey: anonKey, Authorization: `Bearer ${anonKey}` },
       signal: AbortSignal.timeout(5000),
     }),
@@ -77,6 +79,7 @@ export default async function handler(_req: Request): Promise<Response> {
       },
     })
   } catch (err) {
-    return new Response(`Sitemap generation failed: ${String(err)}`, { status: 500 })
+    console.error('Sitemap generation failed:', err)
+    return new Response('Sitemap generation failed', { status: 500 })
   }
 }
