@@ -22,6 +22,7 @@ import {
 } from "lucide-react";
 import { toast } from "sonner";
 import { copyToClipboard } from "@digihire/shared";
+import { useQueryClient } from "@tanstack/react-query";
 import { KYCModal } from "@/components/voltsquad/KYCModal";
 import { MfaSetup } from "@/components/voltsquad/MfaSetup";
 import { Lock } from "lucide-react";
@@ -68,6 +69,7 @@ const VoltSquadSettings = () => {
   const { data: profile, isLoading } = useProfile();
   const updateProfile = useUpdateProfile();
   const uploadAvatar = useUploadAvatar();
+  const queryClient = useQueryClient();
   const { data: shopItemIds = [] } = useMyShopItems();
   const { data: allProducts = [] } = useProducts();
   const removeFromShop = useRemoveFromShop();
@@ -184,14 +186,6 @@ const VoltSquadSettings = () => {
     }
   };
 
-  const hashPin = async (rawPin: string) => {
-    const encoder = new TextEncoder();
-    const data = encoder.encode(rawPin);
-    const hashBuffer = await crypto.subtle.digest('SHA-256', data);
-    const hashArray = Array.from(new Uint8Array(hashBuffer));
-    return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
-  };
-
   const handleSaveSecurity = async () => {
     if (!securityForm.transaction_pin) {
       toast.error("Please enter a 4-digit PIN");
@@ -203,12 +197,16 @@ const VoltSquadSettings = () => {
     }
 
     try {
-      const hashedPin = await hashPin(securityForm.transaction_pin);
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      await updateProfile.mutateAsync({
-        transaction_pin: hashedPin,
-        security_locked_until: new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString(),
-      } as any);
+      // PIN is hashed server-side (salted PBKDF2) in the edge function — the raw
+      // PIN never lands in the DB and is never hashed in the browser.
+      const { data, error } = await supabase.functions.invoke('set-transaction-pin', {
+        body: { pin: securityForm.transaction_pin },
+      });
+      if (error) throw new Error(error.message || "Failed to save PIN");
+      if (data?.error) throw new Error(data.error);
+
+      setSecurityForm({ transaction_pin: "" });
+      queryClient.invalidateQueries({ queryKey: ["profile"] });
       toast.success("Security settings updated! 24-hr cool-off period initiated for withdrawals.");
     } catch (err: unknown) { toast.error(err instanceof Error ? err.message : "Failed to save security settings"); }
   };

@@ -2,8 +2,10 @@ const SUPABASE_URL = 'https://yaojxewpkrjonrvqpsxi.supabase.co'
 const BASE_URL = 'https://talents.digihire.io'
 
 async function fetchJobIds(anonKey: string): Promise<string[]> {
+  // job_listings_public is the anon-readable view (published rows only, PII stripped).
+  // The base job_listings table is no longer readable by the anon role.
   const res = await fetch(
-    `${SUPABASE_URL}/rest/v1/job_listings?select=id&status=eq.published&limit=5000`,
+    `${SUPABASE_URL}/rest/v1/job_listings_public?select=id&limit=5000`,
     {
       headers: { apikey: anonKey, Authorization: `Bearer ${anonKey}` },
       signal: AbortSignal.timeout(5000),

@@ -27,7 +27,9 @@ function buildMetaHtml(tags: Record<string, string>): string {
 }
 
 async function fetchJobMeta(jobId: string, anonKey: string) {
-  const url = `${SUPABASE_URL}/rest/v1/job_listings?id=eq.${encodeURIComponent(jobId)}&select=title,description,location,category&limit=1`
+  // Read from the anon-safe public view — the base job_listings table is no
+  // longer readable by the anon role (only published rows are exposed here).
+  const url = `${SUPABASE_URL}/rest/v1/job_listings_public?id=eq.${encodeURIComponent(jobId)}&select=title,description,location,category&limit=1`
   const res = await fetch(url, {
     headers: { apikey: anonKey, Authorization: `Bearer ${anonKey}` },
     signal: AbortSignal.timeout(2000),

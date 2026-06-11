@@ -9,6 +9,10 @@ project_id = "yaojxewpkrjonrvqpsxi"
     verify_jwt = false
   [functions.score-talent-profile]
     verify_jwt = true
+  [functions.parse-cv]
+    verify_jwt = true
+  [functions.set-transaction-pin]
+    verify_jwt = true
 
 [functions.process-order-fulfillment]
 enabled = true

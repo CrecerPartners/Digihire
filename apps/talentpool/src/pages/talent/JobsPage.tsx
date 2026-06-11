@@ -20,7 +20,7 @@ const supabase = _supabase as any;
 
 interface JobListing {
   id: string;
-  company_name: string;
+  company_name?: string; // null for anonymous listings (public view)
   title: string;
   job_type: string;
   category: string;
@@ -97,10 +97,11 @@ export default function JobsPage() {
   useEffect(() => {
     const fetchJobs = async () => {
       setLoading(true);
+      // Read from the public view: identity columns (company_name/brand_id/logo_url)
+      // are null for anonymous listings, so the real employer is never exposed.
       const { data, error } = await supabase
-        .from('job_listings')
+        .from('job_listings_public')
         .select('*')
-        .eq('status', 'published')
         .order('featured', { ascending: false })
         .order('created_at', { ascending: false });
       if (!error) setJobs(data || []);
@@ -136,7 +137,7 @@ export default function JobsPage() {
 
   const filtered = jobs.filter(j => {
     const q = search.toLowerCase();
-    const matchSearch = !q || j.title.toLowerCase().includes(q) || j.company_name.toLowerCase().includes(q) || j.location?.toLowerCase().includes(q) || j.skills?.some(s => s.toLowerCase().includes(q));
+    const matchSearch = !q || j.title.toLowerCase().includes(q) || (j.company_name?.toLowerCase().includes(q) ?? false) || j.location?.toLowerCase().includes(q) || j.skills?.some(s => s.toLowerCase().includes(q));
     const matchType = filterType === 'all' || j.job_type === filterType;
     const matchMode = filterMode === 'all' || j.work_mode === filterMode;
     return matchSearch && matchType && matchMode;

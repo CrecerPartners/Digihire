@@ -64,6 +64,27 @@ const JOB_TYPE_LABELS: Record<string, string> = {
   internship: 'Internship',
 };
 
+// The job_listings_public view returns brand fields flattened as brand_* and
+// nulls all identity/PII for anonymous listings. Rebuild the nested
+// brand_profiles object the UI expects.
+function normalizeJob(row: Record<string, unknown>): JobListing {
+  const r = row as Record<string, any>;
+  return {
+    ...r,
+    brand_profiles: {
+      id: r.brand_id,
+      industry: r.brand_industry,
+      company_type: r.brand_company_type,
+      company_size: r.brand_company_size,
+      city: r.brand_city,
+      country: r.brand_country,
+      description: r.brand_description,
+      logo_url: r.brand_logo_url,
+      website: r.brand_website,
+    },
+  } as JobListing;
+}
+
 const JOB_TYPE_COLORS: Record<string, string> = {
   full_time: 'text-blue-600 bg-blue-500/10 border-blue-500/20 dark:text-blue-400',
   part_time: 'text-purple-600 bg-purple-500/10 border-purple-500/20 dark:text-purple-400',
@@ -136,10 +157,10 @@ export default function JobDetailPage() {
     const fetchJobData = async () => {
       setLoading(true);
       try {
-        // Fetch current job with brand profile joined
+        // Fetch from the public view (identity/PII stripped for anonymous listings)
         const { data, error } = await supabase
-          .from('job_listings')
-          .select('*, brand_profiles(*)')
+          .from('job_listings_public')
+          .select('*')
           .eq('id', id)
           .single();
 
@@ -149,7 +170,7 @@ export default function JobDetailPage() {
           return;
         }
 
-        const jobListing = data as JobListing;
+        const jobListing = normalizeJob(data);
         setJob(jobListing);
 
         // Check if user already applied
@@ -172,25 +193,23 @@ export default function JobDetailPage() {
           setApplicantCount(0);
         }
 
-        // Fetch active jobs count for this brand
+        // Fetch active jobs count for this brand (null for anonymous listings)
         if (jobListing.brand_id) {
           const { count: brandJobsCount } = await supabase
-            .from('job_listings')
+            .from('job_listings_public')
             .select('*', { count: 'exact', head: true })
-            .eq('brand_id', jobListing.brand_id)
-            .eq('status', 'published');
+            .eq('brand_id', jobListing.brand_id);
           setActiveJobsCount(brandJobsCount || 1);
         }
 
         // Fetch similar jobs
         const { data: similarData } = await supabase
-          .from('job_listings')
-          .select('*, brand_profiles(*)')
-          .eq('status', 'published')
+          .from('job_listings_public')
+          .select('*')
           .eq('category', jobListing.category)
           .neq('id', jobListing.id)
           .limit(3);
-        setSimilarJobs(similarData || []);
+        setSimilarJobs((similarData || []).map(normalizeJob));
 
         // Fetch matching talent count for Category via secure RPC
         const { data: matchingTalents, error: talentErr } = await supabase

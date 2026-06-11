@@ -1,5 +1,6 @@
 import { serve } from "https://deno.land/std@0.190.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2.39.3";
+import { verifyPin } from "../_shared/pin.ts";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -94,16 +95,11 @@ serve(async (req) => {
       }
     }
 
-    // 3. Verify Transaction PIN
-    const encoder = new TextEncoder();
-    const data = encoder.encode(pin);
-    const hashBuffer = await crypto.subtle.digest('SHA-256', data);
-    const hashArray = Array.from(new Uint8Array(hashBuffer));
-    const hashedPin = hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
-
-    if (profile.transaction_pin !== hashedPin && profile.transaction_pin !== pin) {
+    // 3. Verify Transaction PIN (salted PBKDF2; legacy SHA-256 still accepted, plaintext never)
+    const pinValid = await verifyPin(String(pin), profile.transaction_pin);
+    if (!pinValid) {
       return new Response(
-        JSON.stringify({ error: "Invalid Transaction PIN" }), 
+        JSON.stringify({ error: "Invalid Transaction PIN" }),
         { status: 403, headers: { ...corsHeaders, "Content-Type": "application/json" } }
       );
     }
