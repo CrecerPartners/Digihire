@@ -1,6 +1,6 @@
 import * as pdfjsLib from 'pdfjs-dist';
 import type { TextItem } from 'pdfjs-dist/types/src/display/api';
-import { supabase } from '@digihire/shared';
+import { supabase, getEdgeError, FriendlyError } from '@digihire/shared';
 
 // Use Vite's ?url import so the worker is served as a static asset
 import pdfjsWorkerUrl from 'pdfjs-dist/build/pdf.worker?url';
@@ -51,17 +51,15 @@ export async function parseCvWithOpenAI(cvBase64: string): Promise<ParsedCvData>
   // happens server-side in the `parse-cv` edge function so the API key is never
   // shipped in the browser bundle.
   const cvText = await extractTextFromPdf(cvBase64);
-  if (!cvText.trim()) throw new Error('Could not extract text from this PDF — try a text-based PDF (not a scanned image)');
+  if (!cvText.trim()) throw new FriendlyError("We couldn't read any text from this PDF. Please upload a text-based PDF (not a scanned image).");
 
   const { data, error } = await supabase.functions.invoke('parse-cv', {
     body: { cvText },
   });
 
-  if (error) {
-    throw new Error(error.message || 'CV parsing failed');
-  }
-  if (data && typeof data === 'object' && 'error' in data && (data as { error?: string }).error) {
-    throw new Error((data as { error: string }).error);
+  const errorBody = data && typeof data === 'object' && 'error' in data ? (data as { error?: string }).error : undefined;
+  if (error || errorBody) {
+    throw new FriendlyError(await getEdgeError(error, data, "We couldn't analyze your CV. Please try again."));
   }
 
   const parsed = (data ?? {}) as Record<string, unknown>;

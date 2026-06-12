@@ -43,6 +43,49 @@ const KNOWN_ERRORS: KnownError[] = [
   { match: /foreign key|violates foreign key/i, message: "That action can't be completed because related data is missing." },
 ];
 
+/**
+ * An error whose message is already safe and user-facing. `getFriendlyError`
+ * returns its message verbatim instead of falling back to a generic one. Use
+ * this for messages you author or that come from a trusted server response.
+ */
+export class FriendlyError extends Error {
+  constructor(message: string) {
+    super(message);
+    this.name = "FriendlyError";
+  }
+}
+
+/**
+ * Extract the user-facing message from a Supabase Edge Function invocation.
+ *
+ * Supabase returns a friendly `{ error }` body, but on a non-2xx response the
+ * body lives on the FunctionsHttpError's `context` (a Response), not in `data`.
+ * This reads it so the server's specific reason (e.g. "Invalid Transaction
+ * PIN") reaches the user instead of a generic "non-2xx status code" message.
+ */
+export async function getEdgeError(
+  functionError: unknown,
+  data: unknown,
+  fallback?: string,
+): Promise<string> {
+  if (data && typeof data === "object") {
+    const d = data as Record<string, unknown>;
+    if (typeof d.error === "string" && d.error) return d.error;
+  }
+
+  const ctx = (functionError as { context?: unknown } | null | undefined)?.context;
+  if (ctx && typeof (ctx as Response).json === "function") {
+    try {
+      const body = await (ctx as Response).clone().json();
+      if (body && typeof body.error === "string" && body.error) return String(body.error);
+    } catch {
+      /* body wasn't JSON — fall through */
+    }
+  }
+
+  return getFriendlyError(functionError, fallback);
+}
+
 function extractMessage(error: unknown): string {
   if (!error) return "";
   if (typeof error === "string") return error;
@@ -62,6 +105,9 @@ function extractMessage(error: unknown): string {
  *                 Omit to use the generic "Something went wrong" message.
  */
 export function getFriendlyError(error: unknown, fallback?: string): string {
+  // Messages we authored (or trusted server messages) are already safe to show.
+  if (error instanceof FriendlyError) return error.message;
+
   const raw = extractMessage(error);
 
   if (raw) {

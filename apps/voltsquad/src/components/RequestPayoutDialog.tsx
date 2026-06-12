@@ -20,7 +20,7 @@ import { useQueryClient } from "@tanstack/react-query";
 import { Link } from "react-router-dom";
 import { KYCModal } from "@/components/KYCModal";
 import { ShieldCheck } from "lucide-react";
-import { getFriendlyError } from '@digihire/shared';
+import { getFriendlyError, getEdgeError, FriendlyError } from '@digihire/shared';
 
 interface RequestPayoutDialogProps {
   open: boolean;
@@ -84,12 +84,9 @@ export function RequestPayoutDialog({ open, onOpenChange, availableBalance }: Re
         body: { amount: parsedAmount, pin, mfaCode }
       });
 
-      if (functionError) {
-        throw new Error(functionError.message || "Failed to process payout");
-      }
-
-      if (data?.error) {
-        throw new Error(data.error);
+      if (functionError || data?.error) {
+        // Surface the server's specific reason (e.g. "Invalid Transaction PIN").
+        throw new FriendlyError(await getEdgeError(functionError, data, "We couldn't process your payout. Please try again."));
       }
 
       queryClient.invalidateQueries({ queryKey: ["transactions"] });

@@ -26,7 +26,7 @@ import { useQueryClient } from "@tanstack/react-query";
 import { KYCModal } from "@/components/voltsquad/KYCModal";
 import { MfaSetup } from "@/components/voltsquad/MfaSetup";
 import { Lock } from "lucide-react";
-import { getFriendlyError } from '@digihire/shared';
+import { getFriendlyError, getEdgeError, FriendlyError } from '@digihire/shared';
 
 const toSlug = (s: string) =>
   s.toLowerCase().replace(/[^a-z0-9\s-]/g, "").replace(/\s+/g, "-").replace(/-+/g, "-").replace(/^-|-$/g, "");
@@ -158,12 +158,11 @@ const VoltSquadSettings = () => {
           });
 
           if (error || data?.error) {
-            throw new Error(data?.error || error?.message || "Failed to verify bank details");
+            throw new FriendlyError(await getEdgeError(error, data, "We couldn't verify your bank details. Please check them and try again."));
           }
 
           if (data?.account_name?.toLowerCase() !== profileForm.name.toLowerCase()) {
-            toast.warning(`Bank name mismatch: Found '${data.account_name}'. Expected '${profileForm.name}'`);
-            throw new Error(`Account name mismatch. Bank returned: ${data.account_name}. Must match your profile name exactly.`);
+            throw new FriendlyError(`The bank account name "${data.account_name}" doesn't match your profile name. They must match exactly.`);
           }
           toast.success("Bank details verified securely");
         }

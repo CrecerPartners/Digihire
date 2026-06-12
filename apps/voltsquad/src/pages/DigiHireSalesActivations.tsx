@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import { ArrowRight, MapPin, Users, Target, TrendingUp, CheckCircle2, Mic2, Package, Globe } from "lucide-react";
-import GradientBarsBackground from "@digihire/shared/components/ui/gradient-bars-background";
+import { GradientBarsBackground } from "@digihire/shared";
 
 const CYAN = "rgb(0, 194, 255)";
 const NAVY = "rgb(6, 17, 31)";

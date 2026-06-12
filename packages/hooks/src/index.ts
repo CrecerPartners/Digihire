@@ -39,7 +39,7 @@ export { useCountUp } from "./hooks/useCountUp";
 // useToast, toast, useIsMobile live in @digihire/ui — import from there or @digihire/shared
 
 export { formatNaira } from "./lib/utils";
-export { getFriendlyError } from "./lib/errors";
+export { getFriendlyError, getEdgeError, FriendlyError } from "./lib/errors";
 export * from "./lib/shareUtils";
 export * from "./lib/csvExport";
 export * from "./lib/productTaxonomy";
