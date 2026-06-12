@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { supabase as _supabase, useAuth } from '@digihire/shared';
 import type { ActivationRequest } from '../types';
+import { getFriendlyError } from '@digihire/shared';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const supabase = _supabase as any;
@@ -20,7 +21,7 @@ export function useActivationRequests() {
       .order('created_at', { ascending: false })
       .then(({ data, error: err }: { data: ActivationRequest[] | null; error: { message: string } | null }) => {
         setRequests(err ? [] : (data ?? []));
-        setError(err?.message ?? null);
+        setError(getFriendlyError(err));
         setLoading(false);
       });
   }, [user?.id]);

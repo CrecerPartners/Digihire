@@ -2,8 +2,9 @@ import React, { useState, useRef } from 'react';
 import { RichTextEditor } from '@digihire/shared';
 import { BrandProfile } from '../../types';
 import { useBrandProfile } from '../../hooks/useBrandProfile';
-import { useAuth, supabase as _supabase, uploadFileToR2 } from '@digihire/shared';
+import { useAuth, supabase as _supabase, uploadFileToR2, getFriendlyError } from '@digihire/shared';
 import { motion } from 'motion/react';
+import { toast } from 'sonner';
 import { Save, Building2, Globe, MapPin, Upload, X, ImageIcon } from 'lucide-react';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -68,11 +69,11 @@ export default function BrandSetup() {
         logo_url: logoUrl,
       });
       if (err) {
-        alert('Failed to update company profile.');
+        toast.error(getFriendlyError(err, 'Could not update your company profile. Please try again.'));
       } else {
         if (logoUrl) setFormData(prev => ({ ...prev, logo_url: logoUrl ?? undefined }));
         setLogoFile(null);
-        alert('Company profile updated!');
+        toast.success('Company profile updated!');
       }
     } finally {
       setSaving(false);

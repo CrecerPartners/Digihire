@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { supabase as _supabase, useAuth } from '@digihire/shared';
 import { motion } from 'motion/react';
 import { X, MapPin, Briefcase, GraduationCap, DollarSign, Calendar, User, Send, Sparkles, RefreshCw, AlertCircle } from 'lucide-react';
+import { getFriendlyError } from '@digihire/shared';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const supabase = _supabase as any;
@@ -135,7 +136,7 @@ export default function TalentDetailsModal({ talent, onClose, onStatusChange }: 
       if (error) throw error;
       if (data?.score) setScore(data.score);
     } catch (err: unknown) {
-      setScoreError(err instanceof Error ? err.message : 'Scoring failed. Try again.');
+      setScoreError(getFriendlyError(err, 'Scoring failed. Try again.'));
     } finally {
       setScoring(false);
     }

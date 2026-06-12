@@ -9,6 +9,7 @@ import {
 import { supabase } from "@digihire/shared";
 import { Loader2, QrCode, ShieldCheck, Copy } from "lucide-react";
 import { toast } from "sonner";
+import { getFriendlyError } from '@digihire/shared';
 
 export function MfaSetup() {
   const [isMfaEnabled, setIsMfaEnabled] = useState(false);
@@ -41,7 +42,7 @@ export function MfaSetup() {
       setMfaSecret(data.totp.secret);
       setStep("setup");
     } catch (err: unknown) {
-      toast.error(err instanceof Error ? err.message : "Failed to start MFA setup");
+      toast.error(getFriendlyError(err, "Failed to start MFA setup"));
     } finally {
       setLoading(false);
     }
@@ -63,7 +64,7 @@ export function MfaSetup() {
       setMfaSecret("");
       setMfaCode("");
     } catch (err: unknown) {
-      toast.error(err instanceof Error ? err.message : "Invalid verification code");
+      toast.error(getFriendlyError(err, "Invalid verification code"));
     } finally {
       setLoading(false);
     }
@@ -81,7 +82,7 @@ export function MfaSetup() {
         setIsMfaEnabled(false);
       }
     } catch (err: unknown) {
-      toast.error(err instanceof Error ? err.message : "Failed to disable MFA");
+      toast.error(getFriendlyError(err, "Failed to disable MFA"));
     } finally {
       setLoading(false);
     }

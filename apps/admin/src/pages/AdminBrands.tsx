@@ -3,6 +3,7 @@ import { RichTextEditor } from '@digihire/shared';
 import { supabase as _supabase } from '@digihire/shared';
 import { Building2, Search, Globe, Phone, Mail, Edit2, X, Save, Plus, PowerOff, Power } from 'lucide-react';
 import { toast } from 'sonner';
+import { getFriendlyError } from '@digihire/shared';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const supabase = _supabase as any;
@@ -154,7 +155,7 @@ export default function AdminBrands() {
       setCreateForm(EMPTY_FORM);
       toast.success('Brand created');
     } else {
-      toast.error(error?.message ?? 'Failed to create brand');
+      toast.error(getFriendlyError(error, 'Failed to create brand'));
     }
     setCreating(false);
   };

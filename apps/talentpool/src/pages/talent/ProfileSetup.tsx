@@ -9,6 +9,7 @@ import { Save, User, MapPin, Briefcase, GraduationCap, Link as LinkIcon, Camera,
 import { parseCvWithOpenAI, CV_SESSION_KEY, CV_NAME_SESSION_KEY, LINKEDIN_SESSION_KEY } from '../../lib/cv-parser';
 import Lottie from 'lottie-react';
 import trophyLottie from '../../../public/assets/success-trophy.json';
+import { getFriendlyError } from '@digihire/shared';
 
 interface Props {
   profile: TalentProfile | null;
@@ -101,7 +102,7 @@ export default function ProfileSetup({ profile, onUpdate }: Props) {
           setTimeout(() => setCvFillSuccess(false), 6000);
         })
         .catch(err => {
-          setCvError(err instanceof Error ? err.message : 'CV analysis failed');
+          setCvError(getFriendlyError(err, 'CV analysis failed'));
         })
         .finally(() => {
           setCvParsing(false);
@@ -211,7 +212,7 @@ export default function ProfileSetup({ profile, onUpdate }: Props) {
         setShowSuccessModal(true);
       }
     } catch (err: unknown) {
-      setError(err instanceof Error ? err.message : 'Update failed');
+      setError(getFriendlyError(err, 'Update failed'));
       console.error('Save error details:', err);
     } finally {
       setSaving(false);
@@ -258,7 +259,7 @@ export default function ProfileSetup({ profile, onUpdate }: Props) {
         setFormData(prev => ({ ...prev, [field]: publicUrl }));
       }
     } catch (err: unknown) {
-      setError(err instanceof Error ? err.message : 'Upload failed');
+      setError(getFriendlyError(err, 'Upload failed'));
     } finally {
       setSaving(false);
     }

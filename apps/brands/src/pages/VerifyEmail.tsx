@@ -4,6 +4,7 @@ import { useAuth, supabase } from '@digihire/shared';
 import { motion } from 'motion/react';
 import { Mail, RefreshCw, LogOut, ArrowRight } from 'lucide-react';
 import { Button, Card, CardContent } from '@digihire/shared';
+import { getFriendlyError } from '@digihire/shared';
 
 const SERVICE_NEXT: Record<string, string> = {
   voltsquad: 'Log in to your brand dashboard. Our team will be in touch within 48 hours to activate your VoltSquad campaign.',
@@ -85,7 +86,7 @@ export default function VerifyEmail() {
     setError('');
     setSuccess('');
     const { error: err } = await supabase.auth.resend({ type: 'signup', email });
-    if (err) setError(err.message);
+    if (err) setError(getFriendlyError(err));
     else setSuccess('New code sent! Check your inbox.');
     setSending(false);
   };

@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { supabase as _supabase } from '@digihire/shared';
 import { Megaphone, ChevronDown, ChevronUp, Save, Plus, X, MessageSquare, Users, BarChart3, Edit2 } from 'lucide-react';
 import { toast } from 'sonner';
+import { getFriendlyError } from '@digihire/shared';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const supabase = _supabase as any;
@@ -110,7 +111,7 @@ export default function AdminBrandCampaigns() {
         .select('id, company_name')
         .order('company_name'),
     ]).then(([{ data: cdata, error: cerr }, { data: bdata }]) => {
-      if (cerr) { setFetchError(cerr.message); setLoading(false); return; }
+      if (cerr) { setFetchError(getFriendlyError(cerr)); setLoading(false); return; }
       const rows: BrandCampaign[] = cdata ?? [];
       setCampaigns(rows);
       setBrands(bdata ?? []);
@@ -198,7 +199,7 @@ export default function AdminBrandCampaigns() {
         setCreateOpen(false);
         toast.success('Campaign updated');
       } else {
-        toast.error(error.message);
+        toast.error(getFriendlyError(error));
       }
     } else {
       const { data, error } = await supabase
@@ -215,7 +216,7 @@ export default function AdminBrandCampaigns() {
         setCreateOpen(false);
         toast.success('Campaign created');
       } else {
-        toast.error(error?.message ?? 'Failed');
+        toast.error(getFriendlyError(error, 'Failed'));
       }
     }
     setFormSaving(false);

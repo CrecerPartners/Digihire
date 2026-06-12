@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { supabase as _supabase } from '@digihire/shared';
+import { supabase as _supabase, getFriendlyError } from '@digihire/shared';
 import { Zap, Search, ChevronDown, ChevronUp, Save, Filter } from 'lucide-react';
 import { toast } from 'sonner';
 
@@ -49,7 +49,7 @@ export default function AdminVoltSquad() {
       supabase.from('campaign_memberships').select('seller_id, status'),
     ]).then(([profilesRes, membershipsRes]) => {
       if (profilesRes.error) {
-        setFetchError(profilesRes.error.message);
+        setFetchError(getFriendlyError(profilesRes.error, 'Unable to load data. Please refresh.'));
         setLoading(false);
         return;
       }

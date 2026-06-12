@@ -9,6 +9,7 @@ import {
   Eye, EyeOff,
 } from 'lucide-react';
 import { Button, Input } from '@digihire/shared';
+import { getFriendlyError } from '@digihire/shared';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const supabase = _supabase as any;
@@ -390,7 +391,7 @@ export default function Signup() {
       if (service) sessionStorage.setItem('pending_service', service);
       navigate('/verify-email');
     } catch (err: unknown) {
-      setError(err instanceof Error ? err.message : 'Failed to create account');
+      setError(getFriendlyError(err, 'Failed to create account'));
     } finally {
       setLoading(false);
     }

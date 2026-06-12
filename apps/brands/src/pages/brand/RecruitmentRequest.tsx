@@ -5,6 +5,7 @@ import { useRecruitmentRequests } from '../../hooks/useRecruitmentRequests';
 import { useBrandProfile } from '../../hooks/useBrandProfile';
 import { CheckCircle2, ArrowLeft, ArrowRight, ChevronLeft } from 'lucide-react';
 import type { RecruitmentRequest } from '../../types';
+import { getFriendlyError } from '@digihire/shared';
 
 type FormData = Omit<RecruitmentRequest, 'id' | 'brand_id' | 'status' | 'applicant_count' | 'shortlist_count' | 'assigned_support' | 'created_at' | 'updated_at'>;
 
@@ -93,7 +94,7 @@ export default function RecruitmentRequest() {
       if (err) throw err;
       setSubmitted(true);
     } catch (err: unknown) {
-      setError(err instanceof Error ? err.message : 'Failed to submit request.');
+      setError(getFriendlyError(err, 'Failed to submit request.'));
     } finally {
       setSubmitting(false);
     }

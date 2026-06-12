@@ -61,7 +61,8 @@ export default function AdminGigs() {
             .order('created_at', { ascending: false })
             .then(({ data: d2, error: e2 }: { data: GigProfile[] | null; error: { message: string } | null }) => {
               if (e2) {
-                setFetchError(`No gig_profiles table found. Create it or tag talent_profiles with gig role types. Error: ${e2.message}`);
+                console.error('Gig profiles load failed:', e2);
+                setFetchError('Unable to load gigs right now. Please try again.');
               } else {
                 initProfiles(d2 ?? []);
               }

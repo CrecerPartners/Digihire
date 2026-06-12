@@ -16,6 +16,7 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigge
 import { toast } from "sonner";
 import { Progress } from "@digihire/shared";
 import { Tabs, TabsList, TabsTrigger } from "@digihire/shared";
+import { getFriendlyError } from '@digihire/shared';
 
 interface PlanItem {
   productId: string;
@@ -109,7 +110,7 @@ const Calculator = () => {
       income_target_items: items,
     }, {
       onSuccess: () => toast.success("Income target saved to your profile! ⚡"),
-      onError: (err: unknown) => toast.error(err instanceof Error ? err.message : "Failed to save target"),
+      onError: (err: unknown) => toast.error(getFriendlyError(err, "Failed to save target")),
     });
   };
 

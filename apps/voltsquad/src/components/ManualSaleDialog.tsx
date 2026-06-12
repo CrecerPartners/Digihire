@@ -23,6 +23,7 @@ import {
 import { Upload, Calculator, Loader2, Minus, Plus, ImageIcon } from "lucide-react";
 import { toast } from "sonner";
 import { useQueryClient } from "@tanstack/react-query";
+import { getFriendlyError } from '@digihire/shared';
 
 interface ManualSaleDialogProps {
   open: boolean;
@@ -110,7 +111,7 @@ export function ManualSaleDialog({ open, onOpenChange }: ManualSaleDialogProps) 
       resetForm();
       onOpenChange(false);
     } catch (err: any) {
-      toast.error(err.message || "Failed to submit sale");
+      toast.error(getFriendlyError(err, "Failed to submit sale"));
     } finally {
       setSubmitting(false);
     }

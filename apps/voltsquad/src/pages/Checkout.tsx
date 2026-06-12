@@ -12,6 +12,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@digihire/shared";
 import { ChevronLeft, Loader2, ShoppingCart } from "lucide-react";
 import { toast } from "sonner";
 import { z } from "zod";
+import { getFriendlyError } from '@digihire/shared';
 
 const Checkout = () => {
   const { items, totalPrice, clearCart } = useCart();
@@ -227,7 +228,7 @@ const Checkout = () => {
       document.body.appendChild(script);
 
     } catch (err: any) {
-      toast.error(err.message || "Checkout failed. Please try again.");
+      toast.error(getFriendlyError(err, "Checkout failed. Please try again."));
       setLoading(false);
     }
   };

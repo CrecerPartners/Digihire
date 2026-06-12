@@ -3,6 +3,7 @@ import { supabase as _supabase, useAuth, uploadFileToR2 } from '@digihire/shared
 import { Avatar, AvatarFallback, AvatarImage } from '@digihire/shared';
 import { useTheme } from 'next-themes';
 import { toast } from 'sonner';
+import { getFriendlyError } from '@digihire/shared';
 import {
   User, Lock, Shield, Bell, Palette, AlertTriangle,
   Save, Trash2, UserPlus, LogOut, Sun, Moon, Monitor,
@@ -114,7 +115,7 @@ function AccountTab() {
       setAvatarUrl(url);
       toast.success('Profile photo updated');
     } catch (err: unknown) {
-      toast.error((err as { message?: string })?.message || 'Upload failed');
+      toast.error(getFriendlyError(err, 'Upload failed'));
     } finally {
       setUploadingAvatar(false);
       e.target.value = '';
@@ -124,7 +125,7 @@ function AccountTab() {
   const saveName = async () => {
     setSaving(true);
     const { error } = await supabase.auth.updateUser({ data: { name } });
-    if (error) toast.error(error.message); else toast.success('Name updated');
+    if (error) toast.error(getFriendlyError(error)); else toast.success('Name updated');
     setSaving(false);
   };
 
@@ -135,7 +136,7 @@ function AccountTab() {
     if (pwForm.newPw !== pwForm.confirmPw) return setPwError('Passwords do not match');
     setPwSaving(true);
     const { error } = await supabase.auth.updateUser({ password: pwForm.newPw });
-    if (error) { setPwError(error.message); } else { toast.success('Password updated'); setPwForm({ newPw: '', confirmPw: '' }); }
+    if (error) { setPwError(getFriendlyError(error)); } else { toast.success('Password updated'); setPwForm({ newPw: '', confirmPw: '' }); }
     setPwSaving(false);
   };
 
@@ -282,14 +283,14 @@ function TeamTab() {
     // Role writes go through an admin-only SECURITY DEFINER RPC (user_roles is
     // not directly writable by clients).
     const { error } = await supabase.rpc('grant_admin', { _target_user_id: profile.id });
-    if (error) { toast.error(error.message); } else { toast.success('Admin access granted'); setEmail(''); fetchAdmins(); }
+    if (error) { toast.error(getFriendlyError(error)); } else { toast.success('Admin access granted'); setEmail(''); fetchAdmins(); }
     setGranting(false);
   };
 
   const revokeAdmin = async (userId: string) => {
     setRevoking(userId);
     const { error } = await supabase.rpc('revoke_admin', { _target_user_id: userId });
-    if (error) { toast.error(error.message); } else { toast.success('Admin access revoked'); fetchAdmins(); }
+    if (error) { toast.error(getFriendlyError(error)); } else { toast.success('Admin access revoked'); fetchAdmins(); }
     setRevoking(null);
   };
 
@@ -367,7 +368,7 @@ function PlatformTab() {
   const upsert = async (key: keyof PlatformConfig, value: boolean | string) => {
     setSavingKey(key);
     const { error } = await supabase.from('platform_config').upsert({ key, value: String(value) }, { onConflict: 'key' });
-    if (error) toast.error(error.message);
+    if (error) toast.error(getFriendlyError(error));
     setSavingKey(null);
   };
 

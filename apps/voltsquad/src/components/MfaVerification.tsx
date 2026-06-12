@@ -4,6 +4,7 @@ import { Input } from "@digihire/shared";
 import { ShieldCheck, Loader2, ArrowLeft } from "lucide-react";
 import { supabase } from "@digihire/shared";
 import { toast } from "sonner";
+import { getFriendlyError } from '@digihire/shared';
 
 interface MfaVerificationProps {
   factorId: string;
@@ -35,7 +36,7 @@ export function MfaVerification({ factorId, onVerify, onBack }: MfaVerificationP
       toast.success("Security check passed! ⚡");
       onVerify();
     } catch (err: any) {
-      toast.error(err.message || "Invalid authenticator code");
+      toast.error(getFriendlyError(err, "Invalid authenticator code"));
     } finally {
       setLoading(false);
     }

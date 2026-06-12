@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { supabase as _supabase } from '@digihire/shared';
 import { MessageSquare, Phone, Mail, Plus, X, Save, Search, Bell, ChevronDown, ChevronUp } from 'lucide-react';
 import { toast } from 'sonner';
+import { getFriendlyError } from '@digihire/shared';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const supabase = _supabase as any;
@@ -95,7 +96,7 @@ export default function AdminCommunication() {
       setAddOpen(false);
       toast.success('Communication note added');
     } else {
-      toast.error(error?.message ?? 'Failed to save. Ensure brand_communication_notes table exists.');
+      toast.error(getFriendlyError(error, "Couldn't save your note. Please try again."));
     }
     setSaving(false);
   };

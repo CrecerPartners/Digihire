@@ -9,6 +9,7 @@ import { useAuth } from "@digihire/shared";
 import { useAdminRole } from "@/hooks/useAdminRole";
 import { supabase } from "@digihire/shared";
 import { toast } from "sonner";
+import { getFriendlyError } from '@digihire/shared';
 
 export default function AdminLogin() {
   const [email, setEmail] = useState("");
@@ -34,7 +35,7 @@ export default function AdminLogin() {
     try {
       const { error } = await signIn(email, password);
       if (error) {
-        toast.error(error.message);
+        toast.error(getFriendlyError(error));
         return;
       }
 

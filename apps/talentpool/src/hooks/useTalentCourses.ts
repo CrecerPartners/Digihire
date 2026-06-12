@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { supabase as _supabase } from '@digihire/shared';
 import type { TalentCourse } from '../types';
+import { getFriendlyError } from '@digihire/shared';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const supabase = _supabase as any;
@@ -19,7 +20,7 @@ export function useTalentCourses() {
       .then(({ data, error: err }: { data: TalentCourse[] | null; error: { message: string } | null }) => {
         if (mounted) {
           setCourses(err ? [] : (data ?? []));
-          setError(err?.message ?? null);
+          setError(getFriendlyError(err));
           setLoading(false);
         }
       });
@@ -46,7 +47,7 @@ export function useTalentCourse(id: string | undefined) {
       .then(({ data, error: err }: { data: TalentCourse | null; error: { message: string } | null }) => {
         if (mounted) {
           setCourse(err ? null : data);
-          setError(err?.message ?? null);
+          setError(getFriendlyError(err));
           setLoading(false);
         }
       });

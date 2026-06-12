@@ -25,6 +25,7 @@ import { copyToClipboard } from "@digihire/shared";
 import { KYCModal } from "@/components/KYCModal";
 import { MfaSetup } from "@/components/MfaSetup";
 import { Lock } from "lucide-react";
+import { getFriendlyError } from '@digihire/shared';
 
 const toSlug = (s: string) =>
   s.toLowerCase().replace(/[^a-z0-9\s-]/g, "").replace(/\s+/g, "-").replace(/-+/g, "-").replace(/^-|-$/g, "");
@@ -193,7 +194,7 @@ const Profile = () => {
       await updateProfile.mutateAsync(payload as any);
       toast.success("Profile saved!");
     } catch (err: any) { 
-      toast.error(err.message || "Failed to save"); 
+      toast.error(getFriendlyError(err, "Failed to save")); 
     } finally {
       setVerifyingBank(false);
     }
@@ -224,7 +225,7 @@ const Profile = () => {
         security_locked_until: new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString() // 24hr cool-off
       } as any);
       toast.success("Security settings updated! 24-hr cool-off period initiated for withdrawals.");
-    } catch (err: any) { toast.error(err.message || "Failed to save security settings"); }
+    } catch (err: any) { toast.error(getFriendlyError(err, "Failed to save security settings")); }
   };
 
   const handleSaveShop = async () => {
@@ -232,7 +233,7 @@ const Profile = () => {
     try {
       await updateProfile.mutateAsync({ shop_name: shopForm.shop_name, shop_slug: shopForm.shop_slug, bio: shopForm.bio } as any);
       toast.success("Shop settings saved!");
-    } catch (err: any) { toast.error(err.message || "Failed to save"); }
+    } catch (err: any) { toast.error(getFriendlyError(err, "Failed to save")); }
   };
 
   const handleAvatarClick = () => fileInputRef.current?.click();
@@ -241,7 +242,7 @@ const Profile = () => {
     if (!file) return;
     if (file.size > 2 * 1024 * 1024) { toast.error("Image must be under 2MB"); return; }
     try { await uploadAvatar.mutateAsync(file); toast.success("Avatar updated!"); }
-    catch (err: any) { toast.error(err.message || "Failed to upload avatar"); }
+    catch (err: any) { toast.error(getFriendlyError(err, "Failed to upload avatar")); }
   };
 
   const handleLogoUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -256,7 +257,7 @@ const Profile = () => {
       const shop_logo_url = logoUrl + "?t=" + Date.now();
       await updateProfile.mutateAsync({ shop_logo_url } as any);
       toast.success("Shop logo updated!");
-    } catch (err: any) { toast.error(err.message || "Failed to upload logo"); }
+    } catch (err: any) { toast.error(getFriendlyError(err, "Failed to upload logo")); }
     finally { setUploadingLogo(false); }
   };
 
@@ -271,7 +272,7 @@ const Profile = () => {
       const uploadedPath = await uploadFileToR2("verification-docs", path, file);
       await updateProfile.mutateAsync({ id_document_url: uploadedPath, verification_status: "pending" } as any);
       toast.success("ID document uploaded! Verification pending.");
-    } catch (err: any) { toast.error(err.message || "Failed to upload document"); }
+    } catch (err: any) { toast.error(getFriendlyError(err, "Failed to upload document")); }
     finally { setUploadingDoc(false); }
   };
 

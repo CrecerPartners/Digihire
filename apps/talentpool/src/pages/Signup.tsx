@@ -10,6 +10,7 @@ import {
 } from 'lucide-react';
 import { Button, Input } from '@digihire/shared';
 import { readFileAsBase64, CV_SESSION_KEY, CV_NAME_SESSION_KEY, LINKEDIN_SESSION_KEY } from '../lib/cv-parser';
+import { getFriendlyError } from '@digihire/shared';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const supabase = _supabase as any;
@@ -407,7 +408,7 @@ export default function Signup() {
 
       navigate('/verify-email');
     } catch (err: unknown) {
-      setError(err instanceof Error ? err.message : 'Failed to create account');
+      setError(getFriendlyError(err, 'Failed to create account'));
     } finally {
       setLoading(false);
     }

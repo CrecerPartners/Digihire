@@ -5,6 +5,8 @@ import { useTalentCourse } from '../../hooks/useTalentCourses';
 import { useTalentEnrollments } from '../../hooks/useTalentEnrollments';
 import { motion } from 'motion/react';
 import { Play, CheckCircle, Lock, GraduationCap, ArrowLeft, Download, FileText, Check } from 'lucide-react';
+import { toast } from 'sonner';
+import { getFriendlyError } from '@digihire/shared';
 
 function extractYouTubeId(url?: string): string | null {
   if (!url) return null;
@@ -26,8 +28,7 @@ export default function CourseDetailPage() {
     try {
       await enroll(id!);
     } catch (err: unknown) {
-      const message = err instanceof Error ? err.message : 'Failed to enroll';
-      alert(message);
+      toast.error(getFriendlyError(err, 'Could not enroll you in this course. Please try again.'));
     }
   };
 

@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { supabase as _supabase } from '@digihire/shared';
 import { Zap, ChevronDown, ChevronUp, Save, MessageSquare, UserPlus, FileText } from 'lucide-react';
 import { toast } from 'sonner';
+import { getFriendlyError } from '@digihire/shared';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const supabase = _supabase as any;
@@ -70,7 +71,7 @@ export default function AdminActivations() {
       .select('*, brand_profiles(company_name)')
       .order('created_at', { ascending: false })
       .then(({ data, error: err }: { data: ActivationRequest[] | null; error: { message: string } | null }) => {
-        if (err) { setFetchError(err.message); setLoading(false); return; }
+        if (err) { setFetchError(getFriendlyError(err)); setLoading(false); return; }
         const rows = data ?? [];
         setRequests(rows);
         const initialEdits: Record<string, EditRecord> = {};

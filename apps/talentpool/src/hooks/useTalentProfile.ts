@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { supabase as _supabase, useAuth } from '@digihire/shared';
 import type { TalentProfile } from '../types';
+import { getFriendlyError } from '@digihire/shared';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const supabase = _supabase as any;
@@ -23,7 +24,7 @@ export function useTalentProfile() {
       .then(({ data, error: err }: { data: TalentProfile | null; error: { message: string } | null }) => {
         if (mounted) {
           setProfile(err ? null : data);
-          setError(err?.message ?? null);
+          setError(getFriendlyError(err));
           setLoading(false);
         }
       });

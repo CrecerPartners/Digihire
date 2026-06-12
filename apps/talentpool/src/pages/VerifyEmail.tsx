@@ -8,6 +8,7 @@ import { motion } from 'motion/react';
 import { Mail, RefreshCw, LogOut, ArrowRight } from 'lucide-react';
 
 import { Button, Card, CardContent } from '@digihire/shared';
+import { getFriendlyError } from '@digihire/shared';
 
 const MODULE_NEXT: Record<string, string> = {
   talent_pool: 'Log in and complete your talent profile. Brands will be able to find you and match you to real opportunities.',
@@ -105,7 +106,7 @@ export default function VerifyEmail() {
     setError('');
     setSuccess('');
     const { error: err } = await supabase.auth.resend({ type: 'signup', email });
-    if (err) setError(err.message);
+    if (err) setError(getFriendlyError(err));
     else setSuccess('New code sent! Check your inbox.');
     setSending(false);
   };

@@ -2,6 +2,7 @@ import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@digihire/supabase";
 import { useAuth } from "../contexts/AuthContext";
 import { toast } from "sonner";
+import { getFriendlyError } from "../lib/errors";
 
 export interface Sale {
   id: string;
@@ -59,7 +60,7 @@ export function useDeleteSale() {
       queryClient.invalidateQueries({ queryKey: ["sales"] });
       toast.success("Sale deleted");
     },
-    onError: (err: any) => toast.error(err.message || "Failed to delete sale"),
+    onError: (err: unknown) => toast.error(getFriendlyError(err, "Failed to delete sale")),
   });
 }
 
@@ -77,7 +78,7 @@ export function useUpdateSale() {
       queryClient.invalidateQueries({ queryKey: ["sales"] });
       toast.success("Sale updated");
     },
-    onError: (err: any) => toast.error(err.message || "Failed to update sale"),
+    onError: (err: unknown) => toast.error(getFriendlyError(err, "Failed to update sale")),
   });
 }
 

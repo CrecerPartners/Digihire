@@ -26,6 +26,7 @@ import { useQueryClient } from "@tanstack/react-query";
 import { KYCModal } from "@/components/voltsquad/KYCModal";
 import { MfaSetup } from "@/components/voltsquad/MfaSetup";
 import { Lock } from "lucide-react";
+import { getFriendlyError } from '@digihire/shared';
 
 const toSlug = (s: string) =>
   s.toLowerCase().replace(/[^a-z0-9\s-]/g, "").replace(/\s+/g, "-").replace(/-+/g, "-").replace(/^-|-$/g, "");
@@ -180,7 +181,7 @@ const VoltSquadSettings = () => {
       await updateProfile.mutateAsync(payload as any);
       toast.success("Profile saved!");
     } catch (err: unknown) {
-      toast.error(err instanceof Error ? err.message : "Failed to save");
+      toast.error(getFriendlyError(err, "Failed to save"));
     } finally {
       setVerifyingBank(false);
     }
@@ -208,7 +209,7 @@ const VoltSquadSettings = () => {
       setSecurityForm({ transaction_pin: "" });
       queryClient.invalidateQueries({ queryKey: ["profile"] });
       toast.success("Security settings updated! 24-hr cool-off period initiated for withdrawals.");
-    } catch (err: unknown) { toast.error(err instanceof Error ? err.message : "Failed to save security settings"); }
+    } catch (err: unknown) { toast.error(getFriendlyError(err, "Failed to save security settings")); }
   };
 
   const handleSaveShop = async () => {
@@ -217,7 +218,7 @@ const VoltSquadSettings = () => {
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       await updateProfile.mutateAsync({ shop_name: shopForm.shop_name, shop_slug: shopForm.shop_slug, bio: shopForm.bio } as any);
       toast.success("Shop settings saved!");
-    } catch (err: unknown) { toast.error(err instanceof Error ? err.message : "Failed to save"); }
+    } catch (err: unknown) { toast.error(getFriendlyError(err, "Failed to save")); }
   };
 
   const handleAvatarClick = () => fileInputRef.current?.click();
@@ -226,7 +227,7 @@ const VoltSquadSettings = () => {
     if (!file) return;
     if (file.size > 2 * 1024 * 1024) { toast.error("Image must be under 2MB"); return; }
     try { await uploadAvatar.mutateAsync(file); toast.success("Avatar updated!"); }
-    catch (err: unknown) { toast.error(err instanceof Error ? err.message : "Failed to upload avatar"); }
+    catch (err: unknown) { toast.error(getFriendlyError(err, "Failed to upload avatar")); }
   };
 
   const handleLogoUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -242,7 +243,7 @@ const VoltSquadSettings = () => {
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       await updateProfile.mutateAsync({ shop_logo_url } as any);
       toast.success("Shop logo updated!");
-    } catch (err: unknown) { toast.error(err instanceof Error ? err.message : "Failed to upload logo"); }
+    } catch (err: unknown) { toast.error(getFriendlyError(err, "Failed to upload logo")); }
     finally { setUploadingLogo(false); }
   };
 
@@ -258,7 +259,7 @@ const VoltSquadSettings = () => {
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       await updateProfile.mutateAsync({ id_document_url: uploadedPath, verification_status: "pending" } as any);
       toast.success("ID document uploaded! Verification pending.");
-    } catch (err: unknown) { toast.error(err instanceof Error ? err.message : "Failed to upload document"); }
+    } catch (err: unknown) { toast.error(getFriendlyError(err, "Failed to upload document")); }
     finally { setUploadingDoc(false); }
   };
 

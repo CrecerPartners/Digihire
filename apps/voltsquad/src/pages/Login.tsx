@@ -12,6 +12,7 @@ import { toast } from "sonner";
 import OtpVerification from "@/components/OtpVerification";
 import { MfaVerification } from "@/components/MfaVerification";
 import { supabase } from "@digihire/shared";
+import { getFriendlyError } from '@digihire/shared';
 
 const sellerTypes = [
   "Student",
@@ -78,7 +79,7 @@ const Login = () => {
         const university = `${sellerType} — ${city}`;
         const { error } = await signUp(email, password, fullName, university, sellerType);
         if (error) {
-          toast.error(error.message);
+          toast.error(getFriendlyError(error));
         } else {
           toast.success("Verification code sent to your email!");
           setStep("otp");
@@ -90,7 +91,7 @@ const Login = () => {
         
         if (error) {
           isProcessingLogin.current = false;
-          toast.error(error.message);
+          toast.error(getFriendlyError(error));
         } else {
           // Check for MFA
           const { data: mfaData, error: mfaError } = await supabase.auth.mfa.listFactors();
@@ -114,7 +115,7 @@ const Login = () => {
           isProcessingLogin.current = false;
           const { error: otpError } = await sendLoginOtp(email);
           if (otpError) {
-            toast.error(otpError.message);
+            toast.error(getFriendlyError(otpError));
           } else {
             toast.success("Verification code sent to your email!");
             setStep("otp");
@@ -132,7 +133,7 @@ const Login = () => {
       const otpType = isSignup ? "signup" : "email";
       const { error } = await verifyOtp(email, token, otpType);
       if (error) {
-        toast.error(error.message);
+        toast.error(getFriendlyError(error));
       } else {
         toast.success(isSignup ? "Email verified! Welcome to DigiHire ⚡" : "Verified! Welcome back ⚡");
         navigate("/dashboard", { replace: true });
@@ -146,7 +147,7 @@ const Login = () => {
     const { error } = isSignup
       ? await resendSignupOtp(email)
       : await resendLoginOtp(email);
-    if (error) toast.error(error.message);
+    if (error) toast.error(getFriendlyError(error));
   };
 
   return (

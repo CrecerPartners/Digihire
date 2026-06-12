@@ -6,6 +6,7 @@ import { useBrandProfile } from '../../hooks/useBrandProfile';
 import { useAuth, supabase as _supabase, uploadFileToR2 } from '@digihire/shared';
 import { CheckCircle2, ArrowLeft, ArrowRight, Upload, X, FileText, Image } from 'lucide-react';
 import type { BrandCampaign } from '../../types';
+import { getFriendlyError } from '@digihire/shared';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const supabase = _supabase as any;
@@ -89,7 +90,7 @@ export default function CampaignLaunch() {
       if (err) throw err;
       setSubmitted(true);
     } catch (err: unknown) {
-      setError(err instanceof Error ? err.message : 'Failed to submit campaign request.');
+      setError(getFriendlyError(err, 'Failed to submit campaign request.'));
     } finally {
       setSubmitting(false);
     }

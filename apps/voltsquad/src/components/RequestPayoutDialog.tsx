@@ -20,6 +20,7 @@ import { useQueryClient } from "@tanstack/react-query";
 import { Link } from "react-router-dom";
 import { KYCModal } from "@/components/KYCModal";
 import { ShieldCheck } from "lucide-react";
+import { getFriendlyError } from '@digihire/shared';
 
 interface RequestPayoutDialogProps {
   open: boolean;
@@ -98,7 +99,7 @@ export function RequestPayoutDialog({ open, onOpenChange, availableBalance }: Re
       setMfaCode("");
       onOpenChange(false);
     } catch (err: any) {
-      toast.error(err.message || "Failed to request payout");
+      toast.error(getFriendlyError(err, "Failed to request payout"));
     } finally {
       setSubmitting(false);
     }

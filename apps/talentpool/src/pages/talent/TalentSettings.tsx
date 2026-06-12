@@ -3,6 +3,7 @@ import { supabase as _supabase, useAuth, uploadFileToR2 } from '@digihire/shared
 import { Avatar, AvatarFallback, AvatarImage } from '@digihire/shared';
 import { toast } from 'sonner';
 import { User, Bell, Camera, Loader2 } from 'lucide-react';
+import { getFriendlyError } from '@digihire/shared';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const supabase = _supabase as any;
@@ -67,7 +68,7 @@ function AccountTab() {
       setAvatarUrl(url);
       toast.success('Profile photo updated');
     } catch (err: unknown) {
-      toast.error((err as { message?: string })?.message || 'Upload failed');
+      toast.error(getFriendlyError(err, 'Upload failed'));
     } finally {
       setUploadingAvatar(false);
       e.target.value = '';
@@ -78,7 +79,7 @@ function AccountTab() {
     setSavingName(true);
     const { error } = await supabase.auth.updateUser({ data: { name } });
     setSavingName(false);
-    if (error) toast.error(error.message);
+    if (error) toast.error(getFriendlyError(error));
     else toast.success('Name updated');
   };
 
@@ -90,7 +91,7 @@ function AccountTab() {
     setSavingPw(true);
     const { error } = await supabase.auth.updateUser({ password: newPw });
     setSavingPw(false);
-    if (error) { setPwError(error.message); } else {
+    if (error) { setPwError(getFriendlyError(error)); } else {
       toast.success('Password updated');
       setNewPw('');
       setConfirmPw('');

@@ -14,6 +14,7 @@ import {
 } from "@digihire/shared";
 import { Plus, Pencil, Trash2, Loader2, Briefcase, Search } from "lucide-react";
 import { toast } from "sonner";
+import { getFriendlyError } from '@digihire/shared';
 
 const supabase = _supabase as any;
 
@@ -219,7 +220,7 @@ export default function AdminJobListings() {
       setFormOpen(false);
       fetchJobs();
     } catch (err: unknown) {
-      toast.error(err instanceof Error ? err.message : "Save failed");
+      toast.error(getFriendlyError(err, "Save failed"));
     } finally {
       setSaving(false);
     }

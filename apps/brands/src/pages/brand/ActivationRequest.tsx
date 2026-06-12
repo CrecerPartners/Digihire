@@ -4,6 +4,7 @@ import { RichTextEditor } from '@digihire/shared';
 import { useActivationRequests } from '../../hooks/useActivationRequests';
 import { useBrandProfile } from '../../hooks/useBrandProfile';
 import { FileText, Calendar } from 'lucide-react';
+import { getFriendlyError } from '@digihire/shared';
 
 const inputCls = 'w-full rounded-xl border border-gray-200 bg-gray-50 px-4 py-3 text-sm focus:bg-white focus:outline-none focus:border-[#2563eb] transition-all';
 
@@ -87,7 +88,7 @@ export default function ActivationRequest() {
       if (err) throw err;
       navigate('/brand/activations');
     } catch (err: unknown) {
-      setError(err instanceof Error ? err.message : 'Failed to submit.');
+      setError(getFriendlyError(err, 'Failed to submit.'));
     } finally {
       setSubmitting(false);
     }

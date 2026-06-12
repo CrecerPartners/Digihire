@@ -7,6 +7,7 @@ import { Zap, ArrowLeft, Mail } from "lucide-react";
 import { ThemeToggle } from "@/components/ThemeToggle";
 import { supabase } from "@digihire/shared";
 import { toast } from "sonner";
+import { getFriendlyError } from '@digihire/shared';
 
 const ForgotPassword = () => {
   const [email, setEmail] = useState("");
@@ -22,7 +23,7 @@ const ForgotPassword = () => {
         redirectTo: `${window.location.origin}/reset-password`,
       });
       if (error) {
-        toast.error(error.message);
+        toast.error(getFriendlyError(error));
       } else {
         setSent(true);
         toast.success("Password reset link sent!");

@@ -5,6 +5,7 @@ import { SEOMeta } from '../components/seo/SEOMeta';
 import { motion } from 'motion/react';
 import { Button, Input, Card, CardContent, CardHeader, CardTitle, CardDescription } from '@digihire/shared';
 import { Eye, EyeOff } from 'lucide-react';
+import { getFriendlyError } from '@digihire/shared';
 
 export default function Login() {
   const [email, setEmail] = useState('');
@@ -40,7 +41,7 @@ export default function Login() {
     setError('');
     try {
       const { error: err } = await signIn(email, password);
-      if (err) { setError(err.message || 'Failed to login'); return; }
+      if (err) { setError(getFriendlyError(err, 'Failed to login')); return; }
       navigate(safeRedirect, { replace: true });
     } finally {
       setLoading(false);

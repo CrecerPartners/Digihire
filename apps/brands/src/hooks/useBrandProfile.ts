@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { supabase as _supabase, useAuth } from '@digihire/shared';
 import type { BrandProfile } from '../types';
+import { getFriendlyError } from '@digihire/shared';
 
 const supabase = _supabase as any;
 
@@ -22,7 +23,7 @@ export function useBrandProfile() {
       .then(({ data, error: err }: { data: BrandProfile | null; error: { message: string } | null }) => {
         if (mounted) {
           setProfile(err ? null : data);
-          setError(err?.message ?? null);
+          setError(getFriendlyError(err));
           setLoading(false);
         }
       });

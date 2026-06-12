@@ -5,6 +5,7 @@ import { motion } from 'motion/react';
 import { Button, Input, Card, CardContent, CardHeader, CardTitle, CardDescription } from '@digihire/shared';
 import { Eye, EyeOff } from 'lucide-react';
 import { SEOMeta } from '../components/seo/SEOMeta';
+import { getFriendlyError } from '@digihire/shared';
 
 export default function Login() {
   const [email, setEmail] = useState('');
@@ -32,7 +33,7 @@ export default function Login() {
     setError('');
     try {
       const { error: err, data } = await signIn(email, password);
-      if (err) { setError(err.message || 'Failed to login'); return; }
+      if (err) { setError(getFriendlyError(err, 'Failed to login')); return; }
       const appMeta = (data?.user as { app_metadata?: { account_types?: string[]; account_type?: string } } | undefined)?.app_metadata ?? {};
       const roles: string[] = Array.isArray(appMeta.account_types)
         ? appMeta.account_types

@@ -7,6 +7,7 @@ import { Zap, CheckCircle, Eye, EyeOff } from "lucide-react";
 import { ThemeToggle } from "@/components/ThemeToggle";
 import { supabase } from "@digihire/shared";
 import { toast } from "sonner";
+import { getFriendlyError } from '@digihire/shared';
 
 const ResetPassword = () => {
   const [password, setPassword] = useState("");
@@ -57,7 +58,7 @@ const ResetPassword = () => {
     try {
       const { error } = await supabase.auth.updateUser({ password });
       if (error) {
-        toast.error(error.message);
+        toast.error(getFriendlyError(error));
       } else {
         const { data: { session: currentSession } } = await supabase.auth.getSession();
         setSuccess(true);
