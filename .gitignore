@@ -32,3 +32,12 @@ error.txt
 # Supabase CLI temp / local-only state
 supabase/.temp/
 supabase/.branches/
+
+# TypeScript incremental build cache (regenerated on every build)
+*.tsbuildinfo
+
+# Claude Code local agent worktrees
+.claude/worktrees/
+
+# Superpowers brainstorming session scratch state
+.superpowers/brainstorm/*/.lovable/
