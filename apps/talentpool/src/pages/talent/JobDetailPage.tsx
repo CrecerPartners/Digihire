@@ -245,8 +245,14 @@ export default function JobDetailPage() {
     setTimeout(() => setCopied(false), 2000);
   };
 
+  const hasCv = useStoredCv ? !!profile?.cv_url : !!newCvFile;
+
   const handleApply = async () => {
     if (!job || !user?.id) return;
+    if (!hasCv) {
+      setSubmitError('A CV / resume is required to apply for this job. Please upload one to continue.');
+      return;
+    }
     setSubmitting(true);
     setSubmitError(null);
 
@@ -886,7 +892,11 @@ export default function JobDetailPage() {
                   type="file"
                   className="hidden"
                   accept=".pdf,.doc,.docx"
-                  onChange={e => setNewCvFile(e.target.files?.[0] || null)}
+                  onChange={e => {
+                    const file = e.target.files?.[0] || null;
+                    setNewCvFile(file);
+                    if (file) setUseStoredCv(false);
+                  }}
                 />
               </div>
 
@@ -927,7 +937,8 @@ export default function JobDetailPage() {
                 <Button
                   className="flex-1 gap-2 rounded-xl bg-primary text-primary-foreground font-semibold"
                   onClick={handleApply}
-                  disabled={submitting}
+                  disabled={submitting || !hasCv}
+                  title={!hasCv ? 'Upload your CV / resume to apply' : undefined}
                 >
                   {submitting ? <Loader2 className="h-4 w-4 animate-spin" /> : <Send className="h-4 w-4" />}
                   {submitting ? 'Submitting...' : 'Submit Application'}
