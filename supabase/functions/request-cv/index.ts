@@ -45,9 +45,10 @@ serve(async (req) => {
       Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") ?? ""
     );
 
-    const { data: { user }, error: userError } = await supabaseClient.auth.getUser();
+    const jwt = req.headers.get("Authorization")?.replace("Bearer ", "");
+    const { data: { user }, error: userError } = await supabaseClient.auth.getUser(jwt);
     if (!user) {
-      console.warn("request-cv: no authenticated user", userError?.message, "hasAuthHeader:", !!req.headers.get("Authorization"));
+      console.warn("request-cv: no authenticated user", userError?.message, "hasAuthHeader:", !!jwt);
       return new Response(JSON.stringify({ error: "Unauthorized" }), {
         status: 401,
         headers: { ...corsHeaders, "Content-Type": "application/json" },
