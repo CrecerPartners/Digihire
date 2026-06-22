@@ -57,7 +57,7 @@ export default function AdminGigs() {
           supabase
             .from('talent_profiles')
             .select('*')
-            .or("role_interest.cs.{Merchandiser},role_interest.cs.{Field Agent},role_interest.cs.{Event Staff},work_preference.eq.gig")
+            .or("role_interests.cs.{Merchandiser},role_interests.cs.{Field Agent},role_interests.cs.{Event Staff},work_preference.eq.gig")
             .order('created_at', { ascending: false })
             .then(({ data: d2, error: e2 }: { data: GigProfile[] | null; error: { message: string } | null }) => {
               if (e2) {

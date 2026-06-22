@@ -13,7 +13,7 @@ interface TalentProfile {
   full_name: string;
   bio?: string;
   skills?: string[];
-  role_interest?: string[];
+  role_interests?: string[];
   city?: string;
   country?: string;
   years_of_experience?: number;
@@ -37,7 +37,7 @@ function calcCompletion(t: TalentProfile): number {
     !!t.full_name,
     !!t.bio,
     (t.skills?.length ?? 0) > 0,
-    (t.role_interest?.length ?? 0) > 0,
+    (t.role_interests?.length ?? 0) > 0,
     !!t.city,
     !!t.years_of_experience,
     !!t.availability_status,
@@ -125,9 +125,9 @@ export default function AdminTalentPool() {
     const matchesSearch = !q ||
       t.full_name.toLowerCase().includes(q) ||
       t.skills?.some(s => s.toLowerCase().includes(q)) ||
-      t.role_interest?.some(r => r.toLowerCase().includes(q));
+      t.role_interests?.some(r => r.toLowerCase().includes(q));
     const matchesStatus = statusFilter === 'all' || t.status === statusFilter;
-    const matchesRole = roleFilter === 'all' || t.role_interest?.includes(roleFilter);
+    const matchesRole = roleFilter === 'all' || t.role_interests?.includes(roleFilter);
     const matchesCity = cityFilter === 'all' || t.city === cityFilter;
     const matchesExp = expFilter === 'all' || (
       expFilter === '0-2' ? (t.years_of_experience ?? 0) <= 2 :
@@ -252,7 +252,7 @@ export default function AdminTalentPool() {
                             <span title="Verified"><ShieldCheck size={13} className="text-emerald-500 shrink-0" /></span>
                           )}
                         </div>
-                        <p className="text-xs text-muted-foreground truncate">{talent.role_interest?.slice(0, 1).join(' • ') || 'Sales'} · {talent.years_of_experience ?? 0} yrs</p>
+                        <p className="text-xs text-muted-foreground truncate">{talent.role_interests?.slice(0, 1).join(' • ') || 'Sales'} · {talent.years_of_experience ?? 0} yrs</p>
                       </div>
                     </div>
                     <span className={`shrink-0 px-2 py-0.5 rounded-lg border text-[10px] font-bold uppercase ${statusColors[talent.status] ?? statusColors['incomplete']}`}>

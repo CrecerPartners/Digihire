@@ -12,7 +12,7 @@ interface TalentProfile {
   full_name: string;
   bio?: string;
   skills?: string[];
-  role_interest?: string[];
+  role_interests?: string[];
   city?: string;
   country?: string;
   years_of_experience?: number;
@@ -297,10 +297,10 @@ export default function TalentDetailsModal({ talent, onClose, onStatusChange }: 
                   <section>
                     <SectionLabel label="Role Interests" />
                     <div className="flex flex-wrap gap-1.5">
-                      {talent.role_interest?.map(role => (
+                      {talent.role_interests?.map(role => (
                         <span key={role} className="px-2 py-0.5 rounded-md bg-muted text-muted-foreground text-[10px] font-semibold border border-border">{role}</span>
                       ))}
-                      {!talent.role_interest?.length && (
+                      {!talent.role_interests?.length && (
                         <span className="text-xs text-muted-foreground">None listed</span>
                       )}
                     </div>
