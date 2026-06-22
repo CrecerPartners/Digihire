@@ -55,3 +55,9 @@ verify_jwt = false  # Function enforces auth itself via auth.getUser()
 import_map = "./functions/r2-storage/deno.json"
 entrypoint = "./functions/r2-storage/index.ts"
 
+[functions.request-cv]
+enabled = true
+verify_jwt = false  # Function enforces auth itself via auth.getUser(), then checks admin/brand ownership
+import_map = "./functions/request-cv/deno.json"
+entrypoint = "./functions/request-cv/index.ts"
+
