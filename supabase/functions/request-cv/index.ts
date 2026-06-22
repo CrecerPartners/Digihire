@@ -24,11 +24,6 @@ interface JobApplicationRow {
   job_listings: { title: string; company_name: string; brand_id: string } | null;
 }
 
-function isAdmin(user: { app_metadata?: Record<string, unknown> }): boolean {
-  const meta = user.app_metadata || {};
-  return meta.role === "admin" || meta.account_type === "admin";
-}
-
 serve(async (req) => {
   if (req.method === "OPTIONS") {
     return new Response(null, { headers: corsHeaders });
@@ -78,11 +73,20 @@ serve(async (req) => {
 
     const job = application.job_listings;
     const isOwningBrand = !!job && job.brand_id === user.id;
-    if (!isAdmin(user) && !isOwningBrand) {
-      return new Response(JSON.stringify({ error: "Forbidden" }), {
-        status: 403,
-        headers: { ...corsHeaders, "Content-Type": "application/json" },
+
+    if (!isOwningBrand) {
+      // Single source of truth for admin status: the has_role RPC (backed by
+      // user_roles), same as the rest of the admin app — not JWT app_metadata.
+      const { data: hasAdminRole, error: roleError } = await supabaseAdmin.rpc("has_role", {
+        _user_id: user.id,
+        _role: "admin",
       });
+      if (roleError || !hasAdminRole) {
+        return new Response(JSON.stringify({ error: "Forbidden" }), {
+          status: 403,
+          headers: { ...corsHeaders, "Content-Type": "application/json" },
+        });
+      }
     }
 
     if (application.cv_url) {
