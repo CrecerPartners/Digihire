@@ -9,7 +9,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@digihire/shared';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from '@digihire/shared';
 import {
   Plus, Pencil, Trash2, Loader2, Briefcase, MapPin, Clock, Users,
-  Download, FileText, ChevronRight, Inbox,
+  Download, FileText, ChevronRight, Inbox, Mail,
 } from 'lucide-react';
 import { toast } from 'sonner';
 
@@ -50,6 +50,7 @@ interface Application {
   phone?: string;
   cover_note?: string;
   cv_url?: string;
+  cv_requested_at?: string;
   status: string;
   created_at: string;
 }
@@ -149,6 +150,7 @@ export default function JobListings() {
   const [appsJob, setAppsJob] = useState<JobListing | null>(null);
   const [applications, setApplications] = useState<Application[]>([]);
   const [appsLoading, setAppsLoading] = useState(false);
+  const [requestingCv, setRequestingCv] = useState<string | null>(null);
 
   const fetchJobs = async () => {
     setLoading(true);
@@ -213,6 +215,23 @@ export default function JobListings() {
       .order('created_at', { ascending: false });
     setApplications(data || []);
     setAppsLoading(false);
+  };
+
+  const handleRequestCv = async (app: Application) => {
+    setRequestingCv(app.id);
+    try {
+      const { data, error } = await supabase.functions.invoke('request-cv', {
+        body: { applicationId: app.id },
+      });
+      if (error || data?.error) throw new Error(data?.error || error?.message || 'Request failed');
+      setApplications(prev => prev.map(a => a.id === app.id ? { ...a, cv_requested_at: new Date().toISOString() } : a));
+      toast.success(`CV request sent to ${app.full_name || app.email}`);
+    } catch (err: unknown) {
+      const msg = (err as { message?: string })?.message || 'Failed to send CV request';
+      toast.error(msg);
+    } finally {
+      setRequestingCv(null);
+    }
   };
 
   const openCreate = () => {
@@ -560,8 +579,19 @@ export default function JobListings() {
                       >
                         <FileText className="h-3.5 w-3.5" /> Download CV
                       </a>
+                    ) : app.cv_requested_at ? (
+                      <span className="shrink-0 inline-flex items-center gap-1.5 text-xs text-muted-foreground border border-border/50 px-3 py-1.5 rounded-lg">
+                        <Mail className="h-3.5 w-3.5" /> Requested {new Date(app.cv_requested_at).toLocaleDateString('en-NG', { dateStyle: 'medium' })}
+                      </span>
                     ) : (
-                      <span className="shrink-0 text-xs text-muted-foreground border border-border/50 px-3 py-1.5 rounded-lg">No CV</span>
+                      <button
+                        onClick={() => handleRequestCv(app)}
+                        disabled={requestingCv === app.id}
+                        className="shrink-0 inline-flex items-center gap-1.5 text-xs font-medium text-amber-600 border border-amber-500/30 bg-amber-500/5 hover:bg-amber-500/10 px-3 py-1.5 rounded-lg transition-colors disabled:opacity-50"
+                      >
+                        {requestingCv === app.id ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <Mail className="h-3.5 w-3.5" />}
+                        Request CV
+                      </button>
                     )}
                   </div>
                   {app.cover_note && (

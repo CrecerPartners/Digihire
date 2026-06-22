@@ -12,7 +12,7 @@ import {
 import {
   Table, TableBody, TableCell, TableHead, TableHeader, TableRow,
 } from "@digihire/shared";
-import { Plus, Pencil, Trash2, Loader2, Briefcase, Search } from "lucide-react";
+import { Plus, Pencil, Trash2, Loader2, Briefcase, Search, Inbox, FileText, Download, ChevronRight, Mail } from "lucide-react";
 import { toast } from "sonner";
 import { getFriendlyError } from '@digihire/shared';
 
@@ -43,6 +43,49 @@ interface JobListing {
   logo_url?: string;
   created_at: string;
   brand_profiles?: { company_name: string };
+}
+
+interface Application {
+  id: string;
+  job_id: string;
+  talent_id: string;
+  full_name: string;
+  email: string;
+  phone?: string;
+  cover_note?: string;
+  cv_url?: string;
+  cv_requested_at?: string;
+  status: string;
+  created_at: string;
+}
+
+const APP_STATUS_COLORS: Record<string, string> = {
+  pending: "text-amber-600 bg-amber-500/10 border-amber-500/20",
+  reviewed: "text-blue-600 bg-blue-500/10 border-blue-500/20",
+  shortlisted: "text-green-600 bg-green-500/10 border-green-500/20",
+  rejected: "text-red-600 bg-red-500/10 border-red-500/20",
+  hired: "text-purple-600 bg-purple-500/10 border-purple-500/20",
+};
+
+function downloadCSV(apps: Application[], jobTitle: string) {
+  const headers = ["Name", "Email", "Phone", "Status", "CV Link", "Cover Note", "Applied"];
+  const rows = apps.map(a => [
+    a.full_name,
+    a.email,
+    a.phone || "",
+    a.status,
+    a.cv_url || "",
+    (a.cover_note || "").replace(/"/g, '""'),
+    new Date(a.created_at).toLocaleDateString("en-NG"),
+  ]);
+  const csv = [headers, ...rows].map(row => row.map(v => `"${v}"`).join(",")).join("\n");
+  const blob = new Blob([csv], { type: "text/csv" });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = `${jobTitle.replace(/\s+/g, "-").toLowerCase()}-applicants.csv`;
+  a.click();
+  URL.revokeObjectURL(url);
 }
 
 const emptyForm = {
@@ -103,6 +146,12 @@ export default function AdminJobListings() {
   const [form, setForm] = useState(emptyForm);
   const [saving, setSaving] = useState(false);
   const [uploadingLogo, setUploadingLogo] = useState(false);
+  const [applicationCounts, setApplicationCounts] = useState<Record<string, number>>({});
+  const [appsDialogOpen, setAppsDialogOpen] = useState(false);
+  const [appsJob, setAppsJob] = useState<JobListing | null>(null);
+  const [applications, setApplications] = useState<Application[]>([]);
+  const [appsLoading, setAppsLoading] = useState(false);
+  const [requestingCv, setRequestingCv] = useState<string | null>(null);
 
   const fetchJobs = async () => {
     setLoading(true);
@@ -110,8 +159,55 @@ export default function AdminJobListings() {
       .from("job_listings")
       .select("*, brand_profiles(company_name)")
       .order("created_at", { ascending: false });
-    if (!error) setJobs(data || []);
+    if (!error && data) {
+      setJobs(data);
+      await fetchApplicationCounts(data.map((j: JobListing) => j.id));
+    }
     setLoading(false);
+  };
+
+  const fetchApplicationCounts = async (jobIds: string[]) => {
+    if (!jobIds.length) return;
+    const { data } = await supabase
+      .from("job_applications")
+      .select("job_id")
+      .in("job_id", jobIds);
+    if (data) {
+      const counts: Record<string, number> = {};
+      (data as { job_id: string }[]).forEach(app => {
+        counts[app.job_id] = (counts[app.job_id] || 0) + 1;
+      });
+      setApplicationCounts(counts);
+    }
+  };
+
+  const openApplications = async (job: JobListing) => {
+    setAppsJob(job);
+    setAppsDialogOpen(true);
+    setAppsLoading(true);
+    const { data } = await supabase
+      .from("job_applications")
+      .select("*")
+      .eq("job_id", job.id)
+      .order("created_at", { ascending: false });
+    setApplications(data || []);
+    setAppsLoading(false);
+  };
+
+  const handleRequestCv = async (app: Application) => {
+    setRequestingCv(app.id);
+    try {
+      const { data, error } = await supabase.functions.invoke("request-cv", {
+        body: { applicationId: app.id },
+      });
+      if (error || data?.error) throw new Error(data?.error || error?.message || "Request failed");
+      setApplications(prev => prev.map(a => a.id === app.id ? { ...a, cv_requested_at: new Date().toISOString() } : a));
+      toast.success(`CV request sent to ${app.full_name || app.email}`);
+    } catch (err: unknown) {
+      toast.error(getFriendlyError(err, "Failed to send CV request"));
+    } finally {
+      setRequestingCv(null);
+    }
   };
 
   useEffect(() => { fetchJobs(); }, []);
@@ -282,6 +378,7 @@ export default function AdminJobListings() {
                 <TableHead>Location</TableHead>
                 <TableHead>Salary</TableHead>
                 <TableHead>Slots</TableHead>
+                <TableHead>Applicants</TableHead>
                 <TableHead>Status</TableHead>
                 <TableHead className="text-right">Actions</TableHead>
               </TableRow>
@@ -289,13 +386,13 @@ export default function AdminJobListings() {
             <TableBody>
               {loading ? (
                 <TableRow>
-                  <TableCell colSpan={7} className="text-center py-10">
+                  <TableCell colSpan={8} className="text-center py-10">
                     <Loader2 className="h-5 w-5 animate-spin mx-auto text-primary" />
                   </TableCell>
                 </TableRow>
               ) : filtered.length === 0 ? (
                 <TableRow>
-                  <TableCell colSpan={7} className="text-center py-10 text-muted-foreground italic">
+                  <TableCell colSpan={8} className="text-center py-10 text-muted-foreground italic">
                     No jobs found.
                   </TableCell>
                 </TableRow>
@@ -336,10 +433,23 @@ export default function AdminJobListings() {
                   <TableCell className="text-sm text-muted-foreground">{formatSalary(job.salary_min, job.salary_max, job.pay_type)}</TableCell>
                   <TableCell className="text-sm text-muted-foreground">{job.slots ?? 1}</TableCell>
                   <TableCell>
+                    <button
+                      onClick={() => openApplications(job)}
+                      className="flex items-center gap-1.5 text-xs text-primary hover:underline"
+                    >
+                      <Inbox className="h-3.5 w-3.5" />
+                      {applicationCounts[job.id] || 0}
+                      {(applicationCounts[job.id] || 0) > 0 && <ChevronRight className="h-3 w-3" />}
+                    </button>
+                  </TableCell>
+                  <TableCell>
                     <Badge variant="outline" className={`text-xs ${STATUS_COLORS[job.status] || ""}`}>{job.status}</Badge>
                   </TableCell>
                   <TableCell>
                     <div className="flex items-center justify-end gap-1">
+                      <Button variant="ghost" size="icon" className="h-7 w-7" onClick={() => openApplications(job)} title="View Applicants">
+                        <Inbox className="h-3.5 w-3.5 text-primary" />
+                      </Button>
                       <Button variant="ghost" size="icon" className="h-7 w-7" onClick={() => openEdit(job)} title="Edit">
                         <Pencil className="h-3.5 w-3.5" />
                       </Button>
@@ -357,6 +467,97 @@ export default function AdminJobListings() {
           </Table>
         </CardContent>
       </Card>
+
+      {/* Applicants Dialog */}
+      <Dialog open={appsDialogOpen} onOpenChange={setAppsDialogOpen}>
+        <DialogContent className="max-w-2xl max-h-[85vh] overflow-y-auto">
+          <DialogHeader>
+            <div className="flex items-start justify-between gap-3 pr-6">
+              <div>
+                <DialogTitle>Applicants — {appsJob?.title}</DialogTitle>
+                <p className="text-sm text-muted-foreground mt-0.5">{appsJob?.company_name}</p>
+              </div>
+              {applications.length > 0 && (
+                <Button
+                  size="sm"
+                  variant="outline"
+                  className="shrink-0 gap-2"
+                  onClick={() => appsJob && downloadCSV(applications, appsJob.title)}
+                >
+                  <Download className="h-3.5 w-3.5" /> Export CSV
+                </Button>
+              )}
+            </div>
+          </DialogHeader>
+
+          {appsLoading ? (
+            <div className="flex items-center justify-center py-16">
+              <Loader2 className="h-5 w-5 animate-spin text-primary" />
+            </div>
+          ) : applications.length === 0 ? (
+            <div className="flex flex-col items-center justify-center py-16 text-center">
+              <div className="h-12 w-12 rounded-full bg-secondary flex items-center justify-center mb-3">
+                <Inbox className="h-6 w-6 text-muted-foreground" />
+              </div>
+              <p className="text-sm font-medium text-foreground">No applications yet</p>
+              <p className="text-xs text-muted-foreground mt-1">Applications will appear here once candidates apply.</p>
+            </div>
+          ) : (
+            <div className="space-y-3 py-2">
+              <p className="text-xs text-muted-foreground">{applications.length} applicant{applications.length !== 1 ? "s" : ""}</p>
+              {applications.map(app => (
+                <div key={app.id} className="rounded-xl border border-border/50 bg-secondary/20 p-4 space-y-2">
+                  <div className="flex items-start justify-between gap-3">
+                    <div className="flex-1 min-w-0">
+                      <div className="flex items-center gap-2 flex-wrap">
+                        <p className="font-semibold text-sm text-foreground">{app.full_name || "—"}</p>
+                        <Badge variant="outline" className={`text-[11px] py-0 ${APP_STATUS_COLORS[app.status] || ""}`}>
+                          {app.status}
+                        </Badge>
+                      </div>
+                      <p className="text-xs text-muted-foreground mt-0.5">{app.email}</p>
+                      {app.phone && <p className="text-xs text-muted-foreground">{app.phone}</p>}
+                      <p className="text-[11px] text-muted-foreground mt-1">
+                        Applied {new Date(app.created_at).toLocaleDateString("en-NG", { dateStyle: "medium" })}
+                      </p>
+                    </div>
+                    {app.cv_url ? (
+                      <a
+                        href={app.cv_url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        download
+                        className="shrink-0 inline-flex items-center gap-1.5 text-xs font-medium text-primary border border-primary/30 bg-primary/5 hover:bg-primary/10 px-3 py-1.5 rounded-lg transition-colors"
+                      >
+                        <FileText className="h-3.5 w-3.5" /> Download CV
+                      </a>
+                    ) : app.cv_requested_at ? (
+                      <span className="shrink-0 inline-flex items-center gap-1.5 text-xs text-muted-foreground border border-border/50 px-3 py-1.5 rounded-lg">
+                        <Mail className="h-3.5 w-3.5" /> Requested {new Date(app.cv_requested_at).toLocaleDateString("en-NG", { dateStyle: "medium" })}
+                      </span>
+                    ) : (
+                      <button
+                        onClick={() => handleRequestCv(app)}
+                        disabled={requestingCv === app.id}
+                        className="shrink-0 inline-flex items-center gap-1.5 text-xs font-medium text-amber-600 border border-amber-500/30 bg-amber-500/5 hover:bg-amber-500/10 px-3 py-1.5 rounded-lg transition-colors disabled:opacity-50"
+                      >
+                        {requestingCv === app.id ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <Mail className="h-3.5 w-3.5" />}
+                        Request CV
+                      </button>
+                    )}
+                  </div>
+                  {app.cover_note && (
+                    <div className="rounded-lg bg-background border border-border/50 px-3 py-2">
+                      <p className="text-[11px] font-semibold text-muted-foreground uppercase tracking-wider mb-1">Cover Note</p>
+                      <p className="text-xs text-foreground leading-relaxed line-clamp-3">{app.cover_note}</p>
+                    </div>
+                  )}
+                </div>
+              ))}
+            </div>
+          )}
+        </DialogContent>
+      </Dialog>
 
       {/* Create / Edit Dialog */}
       <Dialog open={formOpen} onOpenChange={setFormOpen}>
