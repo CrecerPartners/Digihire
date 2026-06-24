@@ -12,7 +12,7 @@ import {
 import {
   Table, TableBody, TableCell, TableHead, TableHeader, TableRow,
 } from "@digihire/shared";
-import { Plus, Pencil, Trash2, Loader2, Briefcase, Search, Inbox, FileText, Download, ChevronRight, Mail } from "lucide-react";
+import { Plus, Pencil, Trash2, Loader2, Briefcase, Search, Inbox, FileText, Download, ChevronRight, Mail, ArrowLeft } from "lucide-react";
 import { toast } from "sonner";
 import { getFriendlyError } from '@digihire/shared';
 
@@ -58,6 +58,8 @@ interface Application {
   status: string;
   created_at: string;
 }
+
+const APP_STATUSES = ["pending", "reviewed", "shortlisted", "rejected", "hired"];
 
 const APP_STATUS_COLORS: Record<string, string> = {
   pending: "text-amber-600 bg-amber-500/10 border-amber-500/20",
@@ -152,6 +154,7 @@ export default function AdminJobListings() {
   const [applications, setApplications] = useState<Application[]>([]);
   const [appsLoading, setAppsLoading] = useState(false);
   const [requestingCv, setRequestingCv] = useState<string | null>(null);
+  const [selectedApp, setSelectedApp] = useState<Application | null>(null);
 
   const fetchJobs = async () => {
     setLoading(true);
@@ -185,6 +188,7 @@ export default function AdminJobListings() {
     setAppsJob(job);
     setAppsDialogOpen(true);
     setAppsLoading(true);
+    setSelectedApp(null);
     const { data } = await supabase
       .from("job_applications")
       .select("*")
@@ -201,7 +205,9 @@ export default function AdminJobListings() {
         body: { applicationId: app.id },
       });
       if (error || data?.error) throw new Error(data?.error || error?.message || "Request failed");
-      setApplications(prev => prev.map(a => a.id === app.id ? { ...a, cv_requested_at: new Date().toISOString() } : a));
+      const cv_requested_at = new Date().toISOString();
+      setApplications(prev => prev.map(a => a.id === app.id ? { ...a, cv_requested_at } : a));
+      setSelectedApp(prev => prev && prev.id === app.id ? { ...prev, cv_requested_at } : prev);
       toast.success(`CV request sent to ${app.full_name || app.email}`);
     } catch (err: unknown) {
       toast.error(getFriendlyError(err, "Failed to send CV request"));
@@ -210,7 +216,37 @@ export default function AdminJobListings() {
     }
   };
 
+  const handleStatusChange = async (app: Application, newStatus: string) => {
+    const { error } = await supabase
+      .from("job_applications")
+      .update({ status: newStatus, updated_at: new Date().toISOString() })
+      .eq("id", app.id);
+    if (error) { toast.error("Failed to update status"); return; }
+    setApplications(prev => prev.map(a => a.id === app.id ? { ...a, status: newStatus } : a));
+    setSelectedApp(prev => prev && prev.id === app.id ? { ...prev, status: newStatus } : prev);
+    toast.success("Application status updated");
+  };
+
   useEffect(() => { fetchJobs(); }, []);
+
+  // Live-sync applicant CVs and statuses while the dialog is open — e.g. a
+  // talent uploading their CV after a "Request CV" email reflects immediately.
+  useEffect(() => {
+    if (!appsDialogOpen || !appsJob) return;
+    const channel = supabase
+      .channel(`admin-job-applications-${appsJob.id}`)
+      .on(
+        "postgres_changes",
+        { event: "UPDATE", schema: "public", table: "job_applications", filter: `job_id=eq.${appsJob.id}` },
+        (payload: { new: Application }) => {
+          const updated = payload.new;
+          setApplications(prev => prev.map(a => a.id === updated.id ? { ...a, ...updated } : a));
+          setSelectedApp(prev => prev && prev.id === updated.id ? { ...prev, ...updated } : prev);
+        }
+      )
+      .subscribe();
+    return () => { supabase.removeChannel(channel); };
+  }, [appsDialogOpen, appsJob?.id]);
 
   const openCreate = () => {
     setEditJob(null);
@@ -474,10 +510,10 @@ export default function AdminJobListings() {
           <DialogHeader>
             <div className="flex items-start justify-between gap-3 pr-6">
               <div>
-                <DialogTitle>Applicants — {appsJob?.title}</DialogTitle>
+                <DialogTitle>{selectedApp ? selectedApp.full_name || "Applicant" : `Applicants — ${appsJob?.title}`}</DialogTitle>
                 <p className="text-sm text-muted-foreground mt-0.5">{appsJob?.company_name}</p>
               </div>
-              {applications.length > 0 && (
+              {!selectedApp && applications.length > 0 && (
                 <Button
                   size="sm"
                   variant="outline"
@@ -490,7 +526,72 @@ export default function AdminJobListings() {
             </div>
           </DialogHeader>
 
-          {appsLoading ? (
+          {selectedApp ? (
+            <div className="space-y-4 py-2">
+              <button
+                onClick={() => setSelectedApp(null)}
+                className="flex items-center gap-1.5 text-xs text-muted-foreground hover:text-foreground transition-colors"
+              >
+                <ArrowLeft className="h-3.5 w-3.5" /> Back to applicants
+              </button>
+
+              <div className="rounded-xl border border-border/50 bg-secondary/20 p-5 space-y-4">
+                <div className="flex items-start justify-between gap-3 flex-wrap">
+                  <div>
+                    <p className="font-semibold text-base text-foreground">{selectedApp.full_name || "—"}</p>
+                    <p className="text-xs text-muted-foreground mt-0.5">{selectedApp.email}</p>
+                    {selectedApp.phone && <p className="text-xs text-muted-foreground">{selectedApp.phone}</p>}
+                    <p className="text-[11px] text-muted-foreground mt-1">
+                      Applied {new Date(selectedApp.created_at).toLocaleDateString("en-NG", { dateStyle: "medium" })}
+                    </p>
+                  </div>
+                  <select
+                    value={selectedApp.status}
+                    onChange={e => handleStatusChange(selectedApp, e.target.value)}
+                    className={`text-xs font-medium rounded-lg border px-2.5 py-1.5 capitalize ${APP_STATUS_COLORS[selectedApp.status] || ""}`}
+                  >
+                    {APP_STATUSES.map(s => <option key={s} value={s}>{s}</option>)}
+                  </select>
+                </div>
+
+                <div>
+                  {selectedApp.cv_url ? (
+                    <a
+                      href={selectedApp.cv_url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      download
+                      className="inline-flex items-center gap-1.5 text-xs font-medium text-primary border border-primary/30 bg-primary/5 hover:bg-primary/10 px-3 py-1.5 rounded-lg transition-colors"
+                    >
+                      <FileText className="h-3.5 w-3.5" /> Download CV
+                    </a>
+                  ) : selectedApp.cv_requested_at ? (
+                    <span className="inline-flex items-center gap-1.5 text-xs text-muted-foreground border border-border/50 px-3 py-1.5 rounded-lg">
+                      <Mail className="h-3.5 w-3.5" /> Requested {new Date(selectedApp.cv_requested_at).toLocaleDateString("en-NG", { dateStyle: "medium" })}
+                    </span>
+                  ) : (
+                    <button
+                      onClick={() => handleRequestCv(selectedApp)}
+                      disabled={requestingCv === selectedApp.id}
+                      className="inline-flex items-center gap-1.5 text-xs font-medium text-amber-600 border border-amber-500/30 bg-amber-500/5 hover:bg-amber-500/10 px-3 py-1.5 rounded-lg transition-colors disabled:opacity-50"
+                    >
+                      {requestingCv === selectedApp.id ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <Mail className="h-3.5 w-3.5" />}
+                      Request CV
+                    </button>
+                  )}
+                </div>
+
+                <div>
+                  <p className="text-[11px] font-semibold text-muted-foreground uppercase tracking-wider mb-1.5">Cover Note</p>
+                  {selectedApp.cover_note ? (
+                    <p className="text-sm text-foreground leading-relaxed whitespace-pre-line">{selectedApp.cover_note}</p>
+                  ) : (
+                    <p className="text-xs text-muted-foreground italic">No cover note submitted.</p>
+                  )}
+                </div>
+              </div>
+            </div>
+          ) : appsLoading ? (
             <div className="flex items-center justify-center py-16">
               <Loader2 className="h-5 w-5 animate-spin text-primary" />
             </div>
@@ -506,7 +607,11 @@ export default function AdminJobListings() {
             <div className="space-y-3 py-2">
               <p className="text-xs text-muted-foreground">{applications.length} applicant{applications.length !== 1 ? "s" : ""}</p>
               {applications.map(app => (
-                <div key={app.id} className="rounded-xl border border-border/50 bg-secondary/20 p-4 space-y-2">
+                <div
+                  key={app.id}
+                  onClick={() => setSelectedApp(app)}
+                  className="rounded-xl border border-border/50 bg-secondary/20 p-4 space-y-2 cursor-pointer hover:border-primary/30 hover:bg-secondary/30 transition-colors"
+                >
                   <div className="flex items-start justify-between gap-3">
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center gap-2 flex-wrap">
@@ -527,6 +632,7 @@ export default function AdminJobListings() {
                         target="_blank"
                         rel="noopener noreferrer"
                         download
+                        onClick={e => e.stopPropagation()}
                         className="shrink-0 inline-flex items-center gap-1.5 text-xs font-medium text-primary border border-primary/30 bg-primary/5 hover:bg-primary/10 px-3 py-1.5 rounded-lg transition-colors"
                       >
                         <FileText className="h-3.5 w-3.5" /> Download CV
@@ -537,7 +643,7 @@ export default function AdminJobListings() {
                       </span>
                     ) : (
                       <button
-                        onClick={() => handleRequestCv(app)}
+                        onClick={e => { e.stopPropagation(); handleRequestCv(app); }}
                         disabled={requestingCv === app.id}
                         className="shrink-0 inline-flex items-center gap-1.5 text-xs font-medium text-amber-600 border border-amber-500/30 bg-amber-500/5 hover:bg-amber-500/10 px-3 py-1.5 rounded-lg transition-colors disabled:opacity-50"
                       >
