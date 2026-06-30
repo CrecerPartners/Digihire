@@ -1,3 +1,4 @@
+
 # SEO Optimization Design — DigiHire Monorepo
 
 **Date:** 2026-06-09
@@ -182,6 +183,7 @@ Dynamic pages (product, job, shop) use data from existing API queries to populat
 ### robots.txt per SPA
 
 **brands.digihire.io:**
+
 ```
 User-agent: *
 Disallow: /brand/
@@ -193,6 +195,7 @@ Sitemap: https://brands.digihire.io/sitemap.xml
 ```
 
 **talents.digihire.io:**
+
 ```
 User-agent: *
 Disallow: /talent/
@@ -207,6 +210,7 @@ Sitemap: https://talents.digihire.io/sitemap.xml
 ```
 
 **voltsquad.digihire.io:**
+
 ```
 User-agent: *
 Disallow: /dashboard/
@@ -276,6 +280,7 @@ export default async function middleware(request: Request) {
 **`injectMeta`** — fetches the SPA's `index.html`, replaces `</head>` with the meta block + `</head>`, sets `Cache-Control: s-maxage=300`.
 
 **Meta block injected for products:**
+
 ```html
 <title>{product.name} — VoltSquad</title>
 <meta name="description" content="{product.description}">
@@ -294,6 +299,7 @@ export default async function middleware(request: Request) {
 Handles: job detail/listing pages
 
 Same pattern — fetches job data from public jobs API, injects:
+
 ```html
 <title>{job.title} at {job.company} — DigiHire</title>
 <meta property="og:title" content="{job.title} at {job.company}">
@@ -324,6 +330,7 @@ If API fetch fails or times out (2s threshold): middleware returns `NextResponse
 | /s/:shopSlug | Store + BreadcrumbList |
 
 **Product schema:**
+
 ```json
 {
   "@context": "https://schema.org",
@@ -347,6 +354,7 @@ If API fetch fails or times out (2s threshold): middleware returns `NextResponse
 | Job pages | JobPosting |
 
 **JobPosting schema:**
+
 ```json
 {
   "@context": "https://schema.org",
@@ -393,6 +401,7 @@ const ProductPage = React.lazy(() => import('./pages/ProductPage'))
 ```
 
 **Google Fonts preconnect** (consistent across all apps):
+
 ```html
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -407,6 +416,7 @@ const ProductPage = React.lazy(() => import('./pages/ProductPage'))
 Fetches all product slugs and shop slugs from public API on request. Returns complete XML sitemap. Cached `s-maxage=3600` (hourly refresh).
 
 **Entries generated:**
+
 ```
 /marketplace
 /product/{slug} — one entry per product
@@ -447,12 +457,14 @@ After deployment: manually submit each sitemap URL once per domain in Google Sea
 ## Files to Create / Modify
 
 ### Landing (`apps/landing/`)
+
 - `index.html` + all 14 other `.html` files — meta tags, schema, image attributes
 - `public/robots.txt` — add Sitemap directive
 - `public/sitemap.xml` — new file
 - `public/images/og-default.png` — new 1200×630 social card
 
 ### Brands (`apps/brands/`)
+
 - `index.html` — base meta tags
 - `public/robots.txt` — new file
 - `public/sitemap.xml` — new file
@@ -461,11 +473,13 @@ After deployment: manually submit each sitemap URL once per domain in Google Sea
 - All public route page components — add `<SEOMeta>`
 
 ### TalentPool (`apps/talentpool/`)
+
 - Same structure as Brands
 - `middleware.ts` — new file (job page bot injection)
 - `public/sitemap.xml` — static routes only (dynamic via edge function)
 
 ### VoltSquad (`apps/voltsquad/`)
+
 - Same structure as Brands
 - `middleware.ts` — new file (product + shop bot injection)
 - `public/sitemap.xml` — static routes only (dynamic via edge function)

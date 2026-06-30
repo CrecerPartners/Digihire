@@ -259,22 +259,10 @@ export default function LandingPage() {
       hoverBg: "hover:bg-emerald-500 hover:text-white"
     },
     {
-      icon: ClipboardList,
-      title: "Request Merchandisers & Staff",
-      desc: "Access qualified merchandisers, in-store promoters, and short-term staff for retail coverage, audits, and physical distribution.",
-      cta: "Request Field Staff",
-      color: "#F97316", 
-      bg: "rgba(249,115,22,0.1)",
-      border: "rgba(249,115,22,0.2)",
-      link: "/signup?service=merchandisers",
-      hoverBorder: "hover:border-orange-500/40",
-      hoverBg: "hover:bg-orange-500 hover:text-white"
-    },
-    {
       icon: Target,
       title: "Activations & Field Marketing",
-      desc: "Deploy promoters and execution teams for on-ground mall activations, campus roadshows, and street-level marketing support.",
-      cta: "Plan Activations",
+      desc: "Deploy promoters, merchandisers, and execution teams for on-ground mall activations, campus roadshows, in-store promotions, and street-level marketing.",
+      cta: "Request Activation Talent",
       color: "#8B5CF6", 
       bg: "rgba(139,92,246,0.1)",
       border: "rgba(139,92,246,0.2)",

@@ -23,7 +23,7 @@ const SERVICE_FORM: Record<ServiceKey, { cta: string }> = {
   'recruitment-fulltime': { cta: 'Start Hiring Full-Time' },
   'recruitment-parttime': { cta: 'Start Hiring Part-Time' },
   merchandisers: { cta: 'Request Staff Now' },
-  activations: { cta: 'Book Activation Teams' },
+  activations: { cta: 'Request Activation Talent' },
 };
 
 function Label({ children }: { children: React.ReactNode }) {
@@ -343,7 +343,8 @@ function getContent(service: ServiceKey | null) {
 
 export default function Signup() {
   const [searchParams] = useSearchParams();
-  const service = searchParams.get('service') as ServiceKey | null;
+  const rawService = searchParams.get('service') as ServiceKey | null;
+  const service = rawService === 'merchandisers' ? 'activations' : rawService;
   const formConfig = (service && SERVICE_FORM[service]) ? SERVICE_FORM[service] : { cta: 'Create Brand Account' };
 
   const [formData, setFormData] = useState({ companyName: '', firstName: '', lastName: '', email: '', phoneNumber: '', password: '', confirmPassword: '' });
