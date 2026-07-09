@@ -581,10 +581,10 @@
     *, *::before, *::after { font-weight: 400 !important; }
 
     /* ── Mode toggle system ──────────────────────── */
-    .mode-brand { display: none; }
-    .mode-talent { display: block; }
-    body[data-mode="brand"] .mode-talent { display: none; }
-    body[data-mode="brand"] .mode-brand { display: block; }
+    .mode-talent { display: none; }
+    .mode-brand { display: block; }
+    body[data-mode="talent"] .mode-brand { display: none; }
+    body[data-mode="talent"] .mode-talent { display: block; }
 
     /* Smooth section transitions — only animate on actual mode switch, not initial render */
     .mode-talent.mode-switching, .mode-brand.mode-switching {
@@ -1495,10 +1495,10 @@
     }
 
     /* ── Logos label mode switch ─────────────────── */
-    .logos-label-talent-mode { display: block; }
-    .logos-label-brand-mode  { display: none; }
-    body[data-mode="brand"] .logos-label-talent-mode { display: none; }
-    body[data-mode="brand"] .logos-label-brand-mode  { display: block; }
+    .logos-label-talent-mode { display: none; }
+    .logos-label-brand-mode  { display: block; }
+    body[data-mode="talent"] .logos-label-brand-mode  { display: none; }
+    body[data-mode="talent"] .logos-label-talent-mode { display: block; }
     .logos-label-title {
       font-size: 14px; color: #0D1B33;
       line-height: 1.4; margin-bottom: 8px;
@@ -1956,19 +1956,19 @@
       <div class="hero-content-box">
         <!-- Toggle: exactly matching Blakskill's "I'm Looking for Jobs / I'm Hiring Talent" -->
         <div class="hero-tabs">
-          <button class="hero-tab active" onclick="setHeroTab(this,'job-seeker')">For Talent</button>
-          <button class="hero-tab" onclick="setHeroTab(this,'employer')">For Brands</button>
+          <button class="hero-tab" onclick="setHeroTab(this,'job-seeker')">For Talent</button>
+          <button class="hero-tab active" onclick="setHeroTab(this,'employer')">For Brands</button>
         </div>
 
         <h1 class="hero-headline" id="hero-headline">
-          Join Digihire to access sales gigs, jobs, and growth opportunities
+          Acquire users, recruit sales talent, and run field activations with Digihire
         </h1>
 
         <p class="hero-sub" id="hero-sub">
-          Access commission-based campaigns, project-based gigs, part-time roles, full-time jobs, and career-building opportunities with brands looking for people who can sell.
+          Digihire helps brands grow through structured sales campaigns, targeted recruitment, and field activations designed to drive visibility, users, and revenue.
         </p>
 
-        <a href="https://talents.digihire.io/signup" class="hero-cta-single" id="hero-cta-primary">Get Started</a>
+        <a href="https://brands.digihire.io/signup" class="hero-cta-single" id="hero-cta-primary">Get Started</a>
       </div>
     </div>
   </section>
@@ -3066,7 +3066,7 @@
   }
 
   /* Set default mode on load */
-  document.body.dataset.mode = 'talent';
+  document.body.dataset.mode = 'brand';
 
   /* ── Scroll reveal ────────────────────────────── */
   /* rootMargin '80px' triggers reveal before element fully enters viewport,
