@@ -244,17 +244,35 @@
       letter-spacing: 0.12em; text-transform: uppercase; color: #9AAFC7;
       margin-bottom: 26px;
     }
-    .sa-logos-track {
-      display: flex; align-items: center; justify-content: center;
-      flex-wrap: wrap; gap: 32px 56px;
+    .logos-slider {
+      width: 100%; overflow: hidden; position: relative;
     }
-    .sa-logo-img {
-      height: 38px; width: auto; max-width: 150px;
-      object-fit: contain; display: block;
-      filter: grayscale(100%); opacity: 0.55;
-      transition: filter 0.25s ease, opacity 0.25s ease, transform 0.25s ease;
+    .logos-slider::before,
+    .logos-slider::after {
+      content: ''; position: absolute; top: 0; bottom: 0; width: 60px; z-index: 2; pointer-events: none;
     }
-    .sa-logo-img:hover { filter: grayscale(0%); opacity: 1; transform: scale(1.04); }
+    .logos-slider::before { left: 0; background: linear-gradient(to right, #ffffff, transparent); }
+    .logos-slider::after  { right: 0; background: linear-gradient(to left, #ffffff, transparent); }
+    .logos-track {
+      display: flex; align-items: center; gap: 56px;
+      animation: logoScroll 22s linear infinite;
+      width: max-content;
+    }
+    .logos-track:hover { animation-play-state: paused; }
+    @keyframes logoScroll {
+      0%   { transform: translateX(0); }
+      100% { transform: translateX(-50%); }
+    }
+    .logo-item {
+      display: inline-flex; align-items: center; flex-shrink: 0;
+    }
+    .logo-item img {
+      height: 28px; width: auto; max-width: 130px;
+      filter: grayscale(1) opacity(0.45);
+      transition: filter 0.25s;
+      object-fit: contain;
+    }
+    .logo-item img:hover { filter: grayscale(0) opacity(0.8); }
 
     /* ════════════════════════════════
        INTRO
@@ -858,7 +876,7 @@
 <section class="sa-logos">
   <div class="container">
     <p class="sa-logos-label">Brands We've Worked With</p>
-    <div class="brand-usecases-slider">
+    <div class="logos-slider">
       <div class="logos-track">
         <div class="logo-item"><img src="logos/jumia.png" alt="Jumia" /></div>
         <div class="logo-item"><img src="logos/konga.png" alt="Konga" /></div>
