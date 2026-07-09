@@ -44,6 +44,7 @@ interface PlatformConfig {
   voltsquad_open: boolean;
   maintenance_mode: boolean;
   maintenance_message: string;
+  landing_default_mode: 'brand' | 'talent';
 }
 
 const DEFAULT_PLATFORM: PlatformConfig = {
@@ -52,6 +53,7 @@ const DEFAULT_PLATFORM: PlatformConfig = {
   voltsquad_open: true,
   maintenance_mode: false,
   maintenance_message: '',
+  landing_default_mode: 'brand',
 };
 
 function SectionCard({ title, description, children }: { title: string; description?: string; children: React.ReactNode }) {
@@ -360,6 +362,7 @@ function PlatformTab() {
         voltsquad_open: map.voltsquad_open !== 'false',
         maintenance_mode: map.maintenance_mode === 'true',
         maintenance_message: map.maintenance_message ?? '',
+        landing_default_mode: (map.landing_default_mode === 'talent') ? 'talent' : 'brand',
       });
       setLoading(false);
     })();
@@ -411,6 +414,26 @@ function PlatformTab() {
             </div>
           </FieldRow>
         ))}
+      </SectionCard>
+
+      <SectionCard title="Landing Page Default Mode" description="Controls which audience view loads first when visitors open digihire.io.">
+        <FieldRow label="Default audience" description="Visitors see this mode first — they can still switch tabs manually.">
+          <div className="flex items-center gap-2 rounded-lg border border-border overflow-hidden">
+            <button
+              onClick={() => { setConfig(p => ({ ...p, landing_default_mode: 'brand' })); upsert('landing_default_mode', 'brand'); }}
+              className={`px-4 py-1.5 text-sm font-semibold transition-colors ${config.landing_default_mode === 'brand' ? 'bg-primary text-primary-foreground' : 'bg-secondary text-muted-foreground hover:text-foreground'}`}
+            >
+              For Brands
+            </button>
+            <button
+              onClick={() => { setConfig(p => ({ ...p, landing_default_mode: 'talent' })); upsert('landing_default_mode', 'talent'); }}
+              className={`px-4 py-1.5 text-sm font-semibold transition-colors ${config.landing_default_mode === 'talent' ? 'bg-primary text-primary-foreground' : 'bg-secondary text-muted-foreground hover:text-foreground'}`}
+            >
+              For Talent
+            </button>
+          </div>
+        </FieldRow>
+        {savingKey === 'landing_default_mode' && <p className="text-xs text-muted-foreground">Saving…</p>}
       </SectionCard>
 
       <SectionCard title="Maintenance Message" description="Text shown in the maintenance banner when maintenance mode is on.">
