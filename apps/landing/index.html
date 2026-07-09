@@ -3065,8 +3065,37 @@
     }, 350);
   }
 
-  /* Set default mode on load */
-  document.body.dataset.mode = 'brand';
+  /* Set default mode on load — fetch from platform_config, fallback to 'brand' */
+  (function() {
+    var SUPABASE_URL_CFG = 'https://yaojxewpkrjonrvqpsxi.supabase.co';
+    var SUPABASE_KEY_CFG = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inlhb2p4ZXdwa3Jqb25ydnFwc3hpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzI4MDM2NjUsImV4cCI6MjA4ODM3OTY2NX0.QReagLpKOyB40i2bvjfIw8zlZkAAgJa-sFxIYYpykMU';
+    function applyMode(mode) {
+      document.body.dataset.mode = mode;
+      var isEmployer = mode === 'brand';
+      var tabs = document.querySelectorAll('.hero-tab');
+      tabs.forEach(function(t) { t.classList.remove('active'); });
+      if (isEmployer && tabs[1]) tabs[1].classList.add('active');
+      else if (!isEmployer && tabs[0]) tabs[0].classList.add('active');
+      var hl = document.getElementById('hero-headline');
+      var sub = document.getElementById('hero-sub');
+      var cta = document.getElementById('hero-cta-primary');
+      if (hl && sub && cta) {
+        var c = heroContent[isEmployer ? 'employer' : 'job-seeker'];
+        hl.textContent = c.headline; sub.textContent = c.sub;
+        cta.textContent = c.cta; cta.href = c.href;
+      }
+    }
+    applyMode('brand');
+    fetch(SUPABASE_URL_CFG + '/rest/v1/platform_config?select=value&key=eq.landing_default_mode&limit=1', {
+      headers: { 'apikey': SUPABASE_KEY_CFG, 'Authorization': 'Bearer ' + SUPABASE_KEY_CFG }
+    })
+    .then(function(r) { return r.json(); })
+    .then(function(data) {
+      var mode = (data && data[0] && data[0].value === 'talent') ? 'talent' : 'brand';
+      applyMode(mode);
+    })
+    .catch(function() {});
+  })();
 
   /* ── Scroll reveal ────────────────────────────── */
   /* rootMargin '80px' triggers reveal before element fully enters viewport,
