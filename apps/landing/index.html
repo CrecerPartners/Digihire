@@ -3,26 +3,13 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>DigiHire — Advance Your Career with Professional Growth Tools</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:ital,wdth,wght@0,75..100,400..700;1,75..100,400..700&display=swap" rel="stylesheet" />
+  <title>DigiHire — Sales Talents on Demand</title>
   <link rel="icon" type="image/png" href="assets/favicon.png" />
   <link rel="apple-touch-icon" href="assets/favicon.png" />
-  <style>
-    @font-face { font-family: 'CenturyGothic'; src: url('fonts/CenturyGothicPaneuropeanThin.ttf') format('truetype'); font-weight: 100; font-style: normal; }
-    @font-face { font-family: 'CenturyGothic'; src: url('fonts/CenturyGothicPaneuropeanThinItalic.ttf') format('truetype'); font-weight: 100; font-style: italic; }
-    @font-face { font-family: 'CenturyGothic'; src: url('fonts/CenturyGothicPaneuropeanLight.ttf') format('truetype'); font-weight: 300; font-style: normal; }
-    @font-face { font-family: 'CenturyGothic'; src: url('fonts/CenturyGothicPaneuropeanLightItalic.ttf') format('truetype'); font-weight: 300; font-style: italic; }
-    @font-face { font-family: 'CenturyGothic'; src: url('fonts/CenturyGothicPaneuropeanRegular.ttf') format('truetype'); font-weight: 400; font-style: normal; }
-    @font-face { font-family: 'CenturyGothic'; src: url('fonts/CenturyGothicPaneuropeanItalic.ttf') format('truetype'); font-weight: 400; font-style: italic; }
-    @font-face { font-family: 'CenturyGothic'; src: url('fonts/CenturyGothicPaneuropeanSemiBold.ttf') format('truetype'); font-weight: 600; font-style: normal; }
-    @font-face { font-family: 'CenturyGothic'; src: url('fonts/CenturyGothicPaneuropeanSemiBoldItalic.ttf') format('truetype'); font-weight: 600; font-style: italic; }
-    @font-face { font-family: 'CenturyGothic'; src: url('fonts/CenturyGothicPaneuropeanBold.ttf') format('truetype'); font-weight: 700; font-style: normal; }
-    @font-face { font-family: 'CenturyGothic'; src: url('fonts/CenturyGothicPaneuropeanBoldItalic.ttf') format('truetype'); font-weight: 700; font-style: italic; }
-    @font-face { font-family: 'CenturyGothic'; src: url('fonts/CenturyGothicPaneuropeanExtraBold.ttf') format('truetype'); font-weight: 800; font-style: normal; }
-    @font-face { font-family: 'CenturyGothic'; src: url('fonts/CenturyGothicPaneuropeanExtraBoldItalic.ttf') format('truetype'); font-weight: 800; font-style: italic; }
-    @font-face { font-family: 'CenturyGothic'; src: url('fonts/CenturyGothicPaneuropeanBlack.ttf') format('truetype'); font-weight: 900; font-style: normal; }
-    @font-face { font-family: 'CenturyGothic'; src: url('fonts/CenturyGothicPaneuropeanBlackItalic.ttf') format('truetype'); font-weight: 900; font-style: italic; }
-  </style>
-  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+  <script src="https://unpkg.com/lucide@0.474.0/dist/umd/lucide.min.js" integrity="sha384-wkxmY9HYHJVzx0oZ7k8stpLQ7g7ogSqBha75ozCZmxFadwtaIw5dzXKVWWfi9I36" crossorigin="anonymous" defer></script>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -54,7 +41,7 @@
     html { scroll-behavior: smooth; }
 
     body {
-      font-family: 'CenturyGothic', sans-serif;
+      font-family: 'Instrument Sans', sans-serif;
       background: var(--white);
       color: #111827;
       line-height: 1.6;
@@ -80,7 +67,7 @@
     .mic-icon.i3 .lucide { color: #00875A; }
 
     /* ── TYPOGRAPHY ──────────────────────────────── */
-    .syne { font-family: 'CenturyGothic', sans-serif; }
+    .syne { font-family: 'Instrument Sans', sans-serif; }
     .cyan { color: var(--cyan); }
     .white { color: var(--white); }
     .muted { color: var(--gray-2); }
@@ -92,7 +79,7 @@
     .btn {
       display: inline-flex; align-items: center; gap: 8px;
       padding: 11px 24px; border-radius: 8px; cursor: pointer;
-      font-family: 'CenturyGothic', sans-serif; font-size: 14px; font-weight: 700;
+      font-family: 'Instrument Sans', sans-serif; font-size: 14px; font-weight: 700;
       border: none; text-decoration: none; transition: all 0.22s ease;
       letter-spacing: 0.01em; white-space: nowrap;
     }
@@ -116,15 +103,18 @@
 
     /* ── ANIMATIONS ──────────────────────────────── */
     .reveal {
-      opacity: 0; transform: translateY(28px);
-      transition: opacity 0.65s ease, transform 0.65s ease;
+      opacity: 0; transform: translateY(20px);
+      transition: opacity 0.55s ease, transform 0.55s ease;
+      will-change: opacity, transform;
     }
-    .reveal.in { opacity: 1; transform: none; }
+    .reveal.in { opacity: 1; transform: none; will-change: auto; }
 
     .stagger-grid > * {
-      opacity: 0; transform: translateY(22px);
-      transition: opacity 0.55s ease, transform 0.55s ease;
+      opacity: 0; transform: translateY(16px);
+      transition: opacity 0.45s ease, transform 0.45s ease;
+      will-change: opacity, transform;
     }
+    .stagger-grid.in > * { will-change: auto; }
     .stagger-grid.in > *:nth-child(1) { opacity:1;transform:none;transition-delay:0s }
     .stagger-grid.in > *:nth-child(2) { opacity:1;transform:none;transition-delay:.1s }
     .stagger-grid.in > *:nth-child(3) { opacity:1;transform:none;transition-delay:.2s }
@@ -159,13 +149,17 @@
       top: 14px;
       left: 20%;
       right: 20%;
-      background: rgba(255,255,255,0.78);
-      backdrop-filter: blur(22px);
-      -webkit-backdrop-filter: blur(22px);
+      background: rgba(255,255,255,0.92);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
       border-radius: 999px;
       border-bottom: 1px solid rgba(255,255,255,0.55);
       box-shadow: 0 8px 32px rgba(0,0,0,0.12), 0 2px 8px rgba(0,0,0,0.06),
                   inset 0 1px 0 rgba(255,255,255,0.9);
+    }
+    /* Fallback: solid background for browsers that repaint poorly under blur */
+    @supports not (backdrop-filter: blur(1px)) {
+      #navbar.scrolled { background: rgba(255,255,255,0.98); }
     }
 
     .nav-inner {
@@ -213,7 +207,7 @@
     .btn-get-started {
       display: inline-flex; align-items: center; gap: 6px;
       padding: 9px 18px; border-radius: 8px; cursor: pointer;
-      font-family: 'CenturyGothic', sans-serif; font-size: 14px; font-weight: 700;
+      font-family: 'Instrument Sans', sans-serif; font-size: 14px; font-weight: 700;
       border: 1.5px solid rgba(255,255,255,0.45); background: transparent;
       color: #ffffff; text-decoration: none; transition: all 0.2s;
       white-space: nowrap;
@@ -223,6 +217,29 @@
     .btn-get-started:hover svg { transform: rotate(180deg); }
 
     /* Dropdown */
+    /* ── Logged-in user button in nav ────── */
+    .nav-user-btn {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 7px 14px; border-radius: 8px; cursor: pointer;
+      background: transparent; border: 1.5px solid rgba(255,255,255,0.35);
+      color: #fff; font-family: 'Instrument Sans', sans-serif;
+      font-size: 13px; font-weight: 700; text-decoration: none;
+      transition: all 0.2s ease; white-space: nowrap;
+    }
+    .nav-user-btn:hover { background: rgba(255,255,255,0.10); border-color: rgba(255,255,255,0.6); }
+    #navbar.scrolled .nav-user-btn { color: #1E293B; border-color: #CBD5E1; }
+    #navbar.scrolled .nav-user-btn:hover { background: rgba(0,0,0,0.05); border-color: #94A3B8; }
+    .nav-user-avatar {
+      width: 24px; height: 24px; border-radius: 50%;
+      background: var(--cyan); color: var(--navy);
+      display: inline-flex; align-items: center; justify-content: center;
+      font-size: 11px; font-weight: 800; flex-shrink: 0;
+    }
+    .nav-user-chevron { width: 12px; height: 12px; opacity: 0.7; }
+    .nav-user-dropdown { min-width: 190px; right: 0; left: auto; }
+    .nav-signout { color: #EF4444 !important; }
+    .nav-signout:hover { color: #DC2626 !important; }
+
     .nav-dropdown-wrap { position: relative; }
     .nav-dropdown {
       position: absolute; top: calc(100% + 10px); right: 0;
@@ -255,7 +272,7 @@
     .btn-launch {
       display: inline-flex; align-items: center; gap: 7px;
       padding: 10px 20px; border-radius: 8px; cursor: pointer;
-      font-family: 'CenturyGothic', sans-serif; font-size: 14px; font-weight: 800;
+      font-family: 'Instrument Sans', sans-serif; font-size: 14px; font-weight: 800;
       border: none; background: var(--cyan); color: var(--navy);
       text-decoration: none; transition: all 0.22s ease;
       white-space: nowrap; letter-spacing: 0.01em;
@@ -275,7 +292,7 @@
       font-size: 14px; color: rgba(255,255,255,0.82); text-decoration: none;
       font-weight: 500; padding: 6px 14px; border-radius: 6px;
       transition: color 0.2s, background 0.2s; cursor: pointer;
-      border: none; background: transparent; font-family: 'CenturyGothic', sans-serif;
+      border: none; background: transparent; font-family: 'Instrument Sans', sans-serif;
     }
     .nav-mega-trigger:hover,
     .nav-mega-wrap:hover .nav-mega-trigger,
@@ -315,7 +332,7 @@
       display: flex; flex-direction: column; gap: 0;
     }
     .mega-headline {
-      font-family: 'CenturyGothic', sans-serif; font-size: 18px; font-weight: 800;
+      font-family: 'Instrument Sans', sans-serif; font-size: 18px; font-weight: 800;
       color: #ffffff; line-height: 1.3; letter-spacing: -0.02em; margin-bottom: 12px;
     }
     .mega-body {
@@ -325,7 +342,7 @@
     .mega-learn {
       display: inline-flex; align-items: center; gap: 5px;
       font-size: 13px; font-weight: 700; color: var(--cyan);
-      text-decoration: none; font-family: 'CenturyGothic', sans-serif; transition: gap 0.2s;
+      text-decoration: none; font-family: 'Instrument Sans', sans-serif; transition: gap 0.2s;
       margin-bottom: 24px;
     }
     .mega-learn:hover { gap: 9px; }
@@ -357,7 +374,7 @@
       width: 44px; height: 44px; border-radius: 50%;
       background: var(--cyan); z-index: 2;
       display: flex; align-items: center; justify-content: center;
-      font-family: 'CenturyGothic', sans-serif; font-size: 9px; font-weight: 800; color: var(--navy);
+      font-family: 'Instrument Sans', sans-serif; font-size: 9px; font-weight: 800; color: var(--navy);
       text-align: center; line-height: 1.1;
       box-shadow: 0 0 0 6px rgba(0,194,255,0.15);
     }
@@ -403,14 +420,14 @@
     .mic-icon.i2 { background: #FFF5E6; }
     .mic-icon.i3 { background: #E8FDF5; }
     .mic-title {
-      font-family: 'CenturyGothic', sans-serif; font-size: 13px; font-weight: 800;
+      font-family: 'Instrument Sans', sans-serif; font-size: 13px; font-weight: 800;
       color: #0D1B33;
     }
     .mic-desc { font-size: 12px; color: #6B849E; line-height: 1.5; flex: 1; }
     .mic-cta {
       display: inline-flex; align-items: center; gap: 4px;
       font-size: 12px; font-weight: 700; color: var(--cyan);
-      font-family: 'CenturyGothic', sans-serif; margin-top: 6px;
+      font-family: 'Instrument Sans', sans-serif; margin-top: 6px;
       transition: gap 0.15s;
     }
     .mega-info-card:hover .mic-cta { gap: 7px; }
@@ -444,12 +461,12 @@
       display: inline-flex; align-items: center; gap: 5px;
       background: var(--cyan); color: var(--navy);
       font-size: 10px; font-weight: 800; padding: 3px 9px; border-radius: 5px;
-      font-family: 'CenturyGothic', sans-serif; letter-spacing: 0.04em;
+      font-family: 'Instrument Sans', sans-serif; letter-spacing: 0.04em;
       margin-bottom: 10px;
     }
     .mfc-volt-badge .lucide { width: 10px; height: 10px; }
     .mfc-title {
-      font-family: 'CenturyGothic', sans-serif; font-size: 14px; font-weight: 800;
+      font-family: 'Instrument Sans', sans-serif; font-size: 14px; font-weight: 800;
       margin-bottom: 6px;
     }
     .mfc-voltsquad .mfc-title { color: #ffffff; }
@@ -457,7 +474,7 @@
     .mfc-cta {
       display: inline-flex; align-items: center; gap: 4px;
       font-size: 12px; font-weight: 700;
-      font-family: 'CenturyGothic', sans-serif; transition: gap 0.15s;
+      font-family: 'Instrument Sans', sans-serif; transition: gap 0.15s;
     }
     .mfc-voltsquad .mfc-cta { color: var(--cyan); }
     .mega-feat-card:hover .mfc-cta { gap: 7px; }
@@ -471,7 +488,7 @@
       display: inline-flex; align-items: center; gap: 5px;
       background: rgba(0,194,255,0.12); color: var(--cyan-dim);
       font-size: 10px; font-weight: 800; padding: 3px 9px; border-radius: 5px;
-      font-family: 'CenturyGothic', sans-serif; letter-spacing: 0.04em;
+      font-family: 'Instrument Sans', sans-serif; letter-spacing: 0.04em;
       margin-bottom: 10px;
     }
     .mfc-sol-badge .lucide { width: 10px; height: 10px; }
@@ -504,11 +521,11 @@
       display: inline-flex; align-items: center; gap: 5px;
       background: var(--cyan); color: var(--navy);
       font-size: 9px; font-weight: 800; padding: 3px 9px; border-radius: 5px;
-      font-family: 'CenturyGothic', sans-serif; letter-spacing: 0.06em;
+      font-family: 'Instrument Sans', sans-serif; letter-spacing: 0.06em;
       margin-bottom: 8px;
     }
     .feat-product {
-      font-family: 'CenturyGothic', sans-serif; font-size: 16px; font-weight: 800;
+      font-family: 'Instrument Sans', sans-serif; font-size: 16px; font-weight: 800;
       color: #ffffff; margin-bottom: 8px;
     }
     .feat-desc {
@@ -518,7 +535,7 @@
     .feat-cta {
       display: inline-flex; align-items: center; gap: 4px;
       font-size: 12px; font-weight: 700; color: var(--cyan);
-      font-family: 'CenturyGothic', sans-serif; text-decoration: none;
+      font-family: 'Instrument Sans', sans-serif; text-decoration: none;
       transition: gap 0.15s;
     }
     .feat-cta:hover { gap: 8px; }
@@ -548,14 +565,14 @@
     .bsc-icon.i2 { background: #E8FDF5; }
     .bsc-icon.i3 { background: linear-gradient(135deg, #06111F 0%, #0F2544 100%); }
     .bsc-title {
-      font-family: 'CenturyGothic', sans-serif; font-size: 13px; font-weight: 800;
+      font-family: 'Instrument Sans', sans-serif; font-size: 13px; font-weight: 800;
       color: #0D1B33;
     }
     .bsc-desc { font-size: 12px; color: #6B849E; line-height: 1.55; flex: 1; }
     .bsc-cta {
       display: inline-flex; align-items: center; gap: 4px;
       font-size: 12px; font-weight: 700; color: var(--cyan);
-      font-family: 'CenturyGothic', sans-serif; margin-top: 6px;
+      font-family: 'Instrument Sans', sans-serif; margin-top: 6px;
       transition: gap 0.15s;
     }
     .brand-supp-card:hover .bsc-cta { gap: 7px; }
@@ -569,13 +586,13 @@
     body[data-mode="brand"] .mode-talent { display: none; }
     body[data-mode="brand"] .mode-brand { display: block; }
 
-    /* Smooth section transitions */
-    .mode-talent, .mode-brand {
-      animation: modeFadeIn 0.4s ease;
+    /* Smooth section transitions — only animate on actual mode switch, not initial render */
+    .mode-talent.mode-switching, .mode-brand.mode-switching {
+      animation: modeFadeIn 0.3s ease forwards;
     }
     @keyframes modeFadeIn {
-      from { opacity: 0; transform: translateY(10px); }
-      to   { opacity: 1; transform: translateY(0); }
+      from { opacity: 0.4; }
+      to   { opacity: 1; }
     }
 
     /* ── Brand mode sections ─────────────────────── */
@@ -645,7 +662,7 @@
     }
     .brand-stat { display: flex; flex-direction: column; gap: 6px; }
     .brand-stat-num {
-      font-family: 'CenturyGothic', sans-serif; font-size: clamp(32px, 4vw, 48px);
+      font-family: 'Instrument Sans', sans-serif; font-size: clamp(32px, 4vw, 48px);
       color: var(--cyan); line-height: 1; font-weight: 800;
     }
     .brand-stat-label { font-size: 13px; color: rgba(255,255,255,0.5); line-height: 1.5; }
@@ -698,12 +715,6 @@
     }
     .bwt:hover { border-color: var(--cyan); color: var(--navy); }
 
-    @media (max-width: 960px) {
-      .nav-links { display: none; }
-      .nav-actions { display: none; }
-      .nav-hamburger { display: flex; align-items: center; justify-content: center; }
-    }
-
     /* ── MOBILE NAV (hamburger + slide-in overlay) ── */
     .nav-hamburger {
       display: none; background: transparent; border: none; cursor: pointer;
@@ -713,8 +724,36 @@
     #navbar.scrolled .nav-hamburger { color: #1E3A5F; }
     .nav-hamburger:hover { background: rgba(255,255,255,0.1); }
     #navbar.scrolled .nav-hamburger:hover { background: rgba(0,0,0,0.05); }
+
+    @media (max-width: 1200px) {
+      #navbar.scrolled { left: 10%; right: 10%; }
+    }
+    @media (max-width: 960px) {
+      .nav-links { display: none; }
+      .nav-dropdown-wrap { display: none; }
+      .btn-launch { display: none; }
+      .nav-hamburger { display: flex; align-items: center; justify-content: center; }
+      /* Always show a solid navy bar on mobile so the hamburger is always visible */
+      #navbar {
+        background: rgba(6,17,31,0.96);
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+        border-bottom: 1px solid rgba(0,194,255,0.12);
+      }
+      #navbar.scrolled {
+        left: 0; right: 0; top: 0;
+        border-radius: 0;
+        background: rgba(6,17,31,0.96);
+        box-shadow: 0 2px 16px rgba(0,0,0,0.18);
+      }
+      .nav-logo-img.logo-white { opacity: 1 !important; }
+      .nav-logo-img.logo-color { opacity: 0 !important; }
+    }
+    @media (max-width: 640px) {
+      #navbar.scrolled { left: 0; right: 0; top: 0; border-radius: 0; }
+    }
     .nav-mobile-overlay {
-      position: fixed; inset: 0; z-index: 198; background: #06111F;
+      position: fixed; inset: 0; z-index: 210; background: #06111F;
       transform: translateX(100%); transition: transform 0.38s cubic-bezier(0.4,0,0.2,1);
       display: flex; flex-direction: column; overflow: hidden;
     }
@@ -733,7 +772,7 @@
     .nm-trigger {
       display: flex; align-items: center; justify-content: space-between; width: 100%;
       background: transparent; border: none; cursor: pointer; padding: 18px 0; text-align: left;
-      font-family: 'CenturyGothic', sans-serif; font-size: 17px; font-weight: 700;
+      font-family: 'Instrument Sans', sans-serif; font-size: 17px; font-weight: 700;
       color: rgba(255,255,255,0.85); transition: color 0.2s;
     }
     .nm-trigger:hover { color: #00C2FF; }
@@ -744,7 +783,7 @@
     .nm-submenu.nm-open { max-height: 400px; padding-bottom: 10px; }
     .nm-sub-item {
       display: block; padding: 10px 14px; margin: 3px 0;
-      font-family: 'CenturyGothic', sans-serif; font-size: 14px; font-weight: 500;
+      font-family: 'Instrument Sans', sans-serif; font-size: 14px; font-weight: 500;
       color: rgba(255,255,255,0.55); text-decoration: none;
       border-left: 2px solid rgba(0,194,255,0.18); border-radius: 0 6px 6px 0;
       transition: color 0.2s, border-color 0.2s, background 0.2s;
@@ -753,13 +792,13 @@
     .nm-actions { margin-top: auto; padding-top: 28px; display: flex; flex-direction: column; gap: 12px; }
     .nm-btn-outline {
       display: flex; align-items: center; justify-content: center; padding: 14px; border-radius: 10px;
-      text-decoration: none; font-family: 'CenturyGothic', sans-serif; font-size: 15px; font-weight: 700;
+      text-decoration: none; font-family: 'Instrument Sans', sans-serif; font-size: 15px; font-weight: 700;
       border: 1.5px solid rgba(255,255,255,0.25); background: transparent; color: rgba(255,255,255,0.85); transition: all 0.2s;
     }
     .nm-btn-outline:hover { border-color: #00C2FF; color: #00C2FF; }
     .nm-btn-cyan {
       display: flex; align-items: center; justify-content: center; gap: 8px; padding: 14px; border-radius: 10px;
-      text-decoration: none; font-family: 'CenturyGothic', sans-serif; font-size: 15px; font-weight: 800;
+      text-decoration: none; font-family: 'Instrument Sans', sans-serif; font-size: 15px; font-weight: 800;
       background: #00C2FF; color: #06111F; border: none; transition: background 0.22s;
     }
     .nm-btn-cyan:hover { background: #33CFFF; }
@@ -841,7 +880,7 @@
     }
     .hero-tab {
       padding: 9px 24px; border-radius: 999px;
-      font-family: 'CenturyGothic', sans-serif; font-size: 14px; font-weight: 600;
+      font-family: 'Instrument Sans', sans-serif; font-size: 14px; font-weight: 600;
       cursor: pointer; transition: all 0.28s ease;
       color: rgba(255,255,255,0.75); border: none; background: transparent;
       white-space: nowrap;
@@ -855,7 +894,7 @@
 
     /* Large centered headline */
     .hero-headline {
-      font-family: 'CenturyGothic', sans-serif;
+      font-family: 'Instrument Sans', sans-serif;
       font-size: clamp(34px, 5vw, 62px);
       font-weight: 300; line-height: 1.1; letter-spacing: -0.01em;
       color: #ffffff;
@@ -876,7 +915,7 @@
       display: inline-flex; align-items: center; justify-content: center;
       padding: 16px 44px; border-radius: 10px;
       background: var(--cyan); color: var(--navy);
-      font-family: 'CenturyGothic', sans-serif; font-size: 16px; font-weight: 800;
+      font-family: 'Instrument Sans', sans-serif; font-size: 16px; font-weight: 800;
       text-decoration: none; border: none; cursor: pointer;
       box-shadow: 0 6px 32px rgba(0,194,255,0.45);
       transition: all 0.22s ease; letter-spacing: 0.01em;
@@ -889,6 +928,22 @@
 
     /* keep .hero-ctas for any other use */
     .hero-ctas { display: flex; gap: 12px; flex-wrap: wrap; }
+
+    @media (max-width: 768px) {
+      .hero { min-height: auto; padding-top: 24px; padding-bottom: 40px; }
+      .hero-content { padding: 32px 16px 32px; }
+      .hero-content-box { padding: 32px 20px 36px; border-radius: 16px; }
+      .hero-tabs { margin-bottom: 24px; }
+      .hero-tab { padding: 8px 18px; font-size: 13px; }
+      .hero-headline { margin-bottom: 16px; }
+      .hero-sub { margin-bottom: 28px; font-size: 14px; }
+      .hero-cta-single { padding: 14px 32px; font-size: 15px; width: 100%; max-width: 320px; }
+    }
+    @media (max-width: 480px) {
+      .hero-content-box { padding: 24px 16px 28px; }
+      .hero-tabs { gap: 0; }
+      .hero-tab { padding: 8px 14px; font-size: 12px; }
+    }
 
     /* ════════════════════════════════════════════════
        3. LOGOS STRIP
@@ -944,7 +999,7 @@
     .logo-item img:hover { filter: grayscale(0) opacity(0.8); }
     .logo-item .logo-fallback {
       display: none;
-      font-family: 'CenturyGothic', sans-serif; font-size: 15px; font-weight: 800;
+      font-family: 'Instrument Sans', sans-serif; font-size: 15px; font-weight: 800;
       color: #BDC8D8; letter-spacing: -0.02em; white-space: nowrap;
     }
 
@@ -959,7 +1014,7 @@
       text-transform: uppercase; color: var(--cyan); margin-bottom: 10px;
     }
     .section-heading {
-      font-family: 'CenturyGothic', sans-serif;
+      font-family: 'Instrument Sans', sans-serif;
       font-size: clamp(26px, 4vw, 38px);
       font-weight: 800; letter-spacing: -0.025em; line-height: 1.15;
       color: #0D1B33; margin-bottom: 12px;
@@ -991,7 +1046,7 @@
       width: 100%; height: 100%;
       background: linear-gradient(160deg, var(--navy-2) 0%, var(--navy-4) 100%);
       display: flex; flex-direction: column; align-items: center; justify-content: center;
-      font-family: 'CenturyGothic', sans-serif; font-size: 42px; font-weight: 800;
+      font-family: 'Instrument Sans', sans-serif; font-size: 42px; font-weight: 800;
       color: var(--cyan);
     }
     .talent-card-overlay {
@@ -1000,7 +1055,7 @@
       background: linear-gradient(0deg, rgba(6,17,31,0.92) 0%, transparent 100%);
     }
     .talent-card-name {
-      font-family: 'CenturyGothic', sans-serif; font-size: 14px; font-weight: 700;
+      font-family: 'Instrument Sans', sans-serif; font-size: 14px; font-weight: 700;
       color: var(--white); margin-bottom: 2px;
       display: flex; align-items: center; gap: 6px;
     }
@@ -1010,7 +1065,7 @@
       display: inline-flex; align-items: center; gap: 5px;
       background: var(--cyan); color: var(--navy);
       font-size: 10px; font-weight: 800; padding: 2px 8px; border-radius: 4px;
-      font-family: 'CenturyGothic', sans-serif;
+      font-family: 'Instrument Sans', sans-serif;
     }
     .talent-verified::before { content: '✓'; font-size: 9px; }
 
@@ -1036,7 +1091,7 @@
       font-size: 18px;
     }
     .feature-item-title {
-      font-family: 'CenturyGothic', sans-serif; font-size: 15px; font-weight: 700;
+      font-family: 'Instrument Sans', sans-serif; font-size: 15px; font-weight: 700;
       color: #0D1B33; margin-bottom: 4px;
     }
     .feature-item-desc { font-size: 14px; color: #6B849E; line-height: 1.55; }
@@ -1051,7 +1106,7 @@
     }
     .stat-h-item {}
     .stat-h-value {
-      font-family: 'CenturyGothic', sans-serif; font-size: 36px; font-weight: 800;
+      font-family: 'Instrument Sans', sans-serif; font-size: 36px; font-weight: 800;
       color: var(--cyan); line-height: 1; margin-bottom: 4px;
     }
     .stat-h-label { font-size: 13px; color: var(--gray-2); }
@@ -1071,7 +1126,7 @@
       width: 36px; height: 36px; border-radius: 50%;
       background: var(--navy-2); flex-shrink: 0;
       display: flex; align-items: center; justify-content: center;
-      font-family: 'CenturyGothic', sans-serif; font-size: 13px; font-weight: 800; color: var(--cyan);
+      font-family: 'Instrument Sans', sans-serif; font-size: 13px; font-weight: 800; color: var(--cyan);
     }
     .testi-name { font-size: 13px; font-weight: 700; color: #0D1B33; }
     .testi-role { font-size: 12px; color: #6B849E; }
@@ -1082,7 +1137,7 @@
       padding: 22px 24px;
     }
     .value-badge-title {
-      font-family: 'CenturyGothic', sans-serif; font-size: 17px; font-weight: 800;
+      font-family: 'Instrument Sans', sans-serif; font-size: 17px; font-weight: 800;
       color: var(--navy); margin-bottom: 6px;
     }
     .value-badge-desc { font-size: 14px; color: rgba(6,17,31,0.75); line-height: 1.5; }
@@ -1115,7 +1170,7 @@
       color: var(--cyan-dim); margin-bottom: 14px;
     }
     .phc-title {
-      font-family: 'CenturyGothic', sans-serif; font-size: clamp(24px, 3vw, 36px);
+      font-family: 'Instrument Sans', sans-serif; font-size: clamp(24px, 3vw, 36px);
       font-weight: 800; color: #0D1B33; line-height: 1.15; letter-spacing: -0.02em;
       margin-bottom: 12px;
     }
@@ -1129,7 +1184,7 @@
     }
     .phc-visual-bg {
       position: absolute; inset: 0;
-      background: url('https://images.unsplash.com/photo-1556761175-5973dc0f32e7?w=900&h=600&fit=crop&crop=center&q=80') center/cover no-repeat;
+      background: url('https://plus.unsplash.com/premium_photo-1672997189701-7719c27a81af?w=900&h=600&fit=crop&crop=center&q=80') center/cover no-repeat;
     }
     .phc-visual-bg::after {
       content: ''; position: absolute; inset: 0;
@@ -1158,7 +1213,7 @@
       border: 1px solid rgba(0,194,255,0.25); border-radius: 14px;
       padding: 16px 20px; text-align: center; flex: 1;
     }
-    .phc-stat-val { font-family: 'CenturyGothic', sans-serif; font-size: 24px; font-weight: 800; color: var(--cyan); margin-bottom: 4px; }
+    .phc-stat-val { font-family: 'Instrument Sans', sans-serif; font-size: 24px; font-weight: 800; color: var(--cyan); margin-bottom: 4px; }
     .phc-float-label { font-size: 11px; color: rgba(255,255,255,0.5); margin-bottom: 5px; }
     .phc-stat-label { font-size: 12px; color: rgba(255,255,255,0.55); }
 
@@ -1184,7 +1239,7 @@
       color: var(--cyan-dim); margin-bottom: 14px;
     }
     .psc-title {
-      font-family: 'CenturyGothic', sans-serif; font-size: 18px; font-weight: 800;
+      font-family: 'Instrument Sans', sans-serif; font-size: 18px; font-weight: 800;
       color: #0D1B33; margin-bottom: 8px; letter-spacing: -0.015em;
     }
     .psc-desc { font-size: 13px; color: #5B7A9E; line-height: 1.55; }
@@ -1192,7 +1247,7 @@
       margin-top: 20px; background: rgba(0,0,0,0.05);
       border-radius: 10px; height: 90px;
       display: flex; align-items: center; justify-content: center;
-      font-family: 'CenturyGothic', sans-serif; font-size: 28px; color: var(--cyan);
+      font-family: 'Instrument Sans', sans-serif; font-size: 28px; color: var(--cyan);
       overflow: hidden;
     }
     .psc-visual img {
@@ -1214,7 +1269,7 @@
     }
     .find-content-tag { font-size: 11px; font-weight: 800; letter-spacing: 0.1em; text-transform: uppercase; color: var(--cyan-dim); margin-bottom: 12px; }
     .find-title {
-      font-family: 'CenturyGothic', sans-serif; font-size: clamp(26px, 4vw, 38px);
+      font-family: 'Instrument Sans', sans-serif; font-size: clamp(26px, 4vw, 38px);
       font-weight: 800; letter-spacing: -0.025em; color: #0D1B33; margin-bottom: 16px; line-height: 1.15;
     }
     .find-desc { font-size: 15px; color: #6B849E; line-height: 1.65; margin-bottom: 28px; }
@@ -1227,7 +1282,7 @@
     .net-center {
       width: 72px; height: 72px; border-radius: 50%;
       background: var(--cyan); display: flex; align-items: center; justify-content: center;
-      font-family: 'CenturyGothic', sans-serif; font-size: 11px; font-weight: 800; color: var(--navy);
+      font-family: 'Instrument Sans', sans-serif; font-size: 11px; font-weight: 800; color: var(--navy);
       position: absolute; z-index: 2;
       box-shadow: 0 0 0 12px rgba(0,194,255,0.12), 0 0 0 24px rgba(0,194,255,0.06);
     }
@@ -1235,7 +1290,7 @@
       position: absolute; width: 48px; height: 48px; border-radius: 50%;
       background: var(--navy); border: 2px solid var(--cyan-border);
       display: flex; align-items: center; justify-content: center;
-      font-family: 'CenturyGothic', sans-serif; font-size: 12px; font-weight: 800; color: var(--cyan);
+      font-family: 'Instrument Sans', sans-serif; font-size: 12px; font-weight: 800; color: var(--cyan);
       transition: transform 0.3s; z-index: 1;
     }
     .net-node:hover { transform: scale(1.15); }
@@ -1267,7 +1322,7 @@
     .hiring-content {}
     .hiring-tag { font-size: 11px; font-weight: 800; letter-spacing: 0.1em; text-transform: uppercase; color: var(--cyan); margin-bottom: 14px; }
     .hiring-title {
-      font-family: 'CenturyGothic', sans-serif; font-size: clamp(26px, 4vw, 40px);
+      font-family: 'Instrument Sans', sans-serif; font-size: clamp(26px, 4vw, 40px);
       font-weight: 800; color: var(--white); line-height: 1.12; letter-spacing: -0.025em; margin-bottom: 14px;
     }
     .hiring-desc { font-size: 15px; color: var(--gray-2); line-height: 1.65; margin-bottom: 32px; }
@@ -1293,7 +1348,7 @@
       border: 1px solid var(--cyan-border); border-radius: 12px;
       padding: 14px 18px; min-width: 180px;
     }
-    .hvc-name { font-family: 'CenturyGothic', sans-serif; font-size: 13px; font-weight: 700; color: var(--white); margin-bottom: 2px; }
+    .hvc-name { font-family: 'Instrument Sans', sans-serif; font-size: 13px; font-weight: 700; color: var(--white); margin-bottom: 2px; }
     .hvc-role { font-size: 12px; color: var(--gray-2); margin-bottom: 8px; }
     .hvc-verified {
       display: inline-flex; align-items: center; gap: 5px;
@@ -1312,8 +1367,8 @@
       transition: background 0.2s;
     }
     .hpg-item:hover { background: var(--navy-2); }
-    .hpg-num { font-family: 'CenturyGothic', sans-serif; font-size: 22px; font-weight: 800; color: var(--cyan); margin-bottom: 6px; }
-    .hpg-label { font-size: 13px; font-weight: 600; color: var(--white); margin-bottom: 4px; font-family: 'CenturyGothic', sans-serif; }
+    .hpg-num { font-family: 'Instrument Sans', sans-serif; font-size: 22px; font-weight: 800; color: var(--cyan); margin-bottom: 6px; }
+    .hpg-label { font-size: 13px; font-weight: 600; color: var(--white); margin-bottom: 4px; font-family: 'Instrument Sans', sans-serif; }
     .hpg-desc { font-size: 12px; color: var(--gray-2); line-height: 1.5; }
 
     @media (max-width: 768px) {
@@ -1330,7 +1385,7 @@
       margin-bottom: 40px;
     }
     .insights-header h2 {
-      font-family: 'CenturyGothic', sans-serif; font-size: clamp(22px, 3vw, 30px);
+      font-family: 'Instrument Sans', sans-serif; font-size: clamp(22px, 3vw, 30px);
       font-weight: 800; color: #0D1B33;
     }
     .insights-link { font-size: 14px; color: var(--cyan); font-weight: 600; text-decoration: none; }
@@ -1339,6 +1394,7 @@
       display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px;
     }
     .insight-card {
+      display: block; text-decoration: none; color: inherit;
       border: 1px solid #E2EBF5; border-radius: var(--radius-lg); overflow: hidden;
       transition: transform 0.3s, box-shadow 0.3s; cursor: pointer;
     }
@@ -1357,7 +1413,7 @@
       color: var(--cyan); margin-bottom: 8px;
     }
     .insight-card-title {
-      font-family: 'CenturyGothic', sans-serif; font-size: 16px; font-weight: 700;
+      font-family: 'Instrument Sans', sans-serif; font-size: 16px; font-weight: 700;
       color: #0D1B33; line-height: 1.35; margin-bottom: 8px;
     }
     .insight-card-desc { font-size: 13px; color: #6B849E; line-height: 1.55; }
@@ -1372,7 +1428,7 @@
       text-align: center;
     }
     .final-cta-title {
-      font-family: 'CenturyGothic', sans-serif; font-size: clamp(26px, 4.5vw, 44px);
+      font-family: 'Instrument Sans', sans-serif; font-size: clamp(26px, 4.5vw, 44px);
       font-weight: 800; color: var(--white); letter-spacing: -0.025em;
       margin-bottom: 14px; line-height: 1.12;
     }
@@ -1396,7 +1452,7 @@
     .footer-logo-wrap { margin-bottom: 14px; }
     .footer-logo {
       display: flex; align-items: center; gap: 8px;
-      font-family: 'CenturyGothic', sans-serif; font-size: 18px; font-weight: 800;
+      font-family: 'Instrument Sans', sans-serif; font-size: 18px; font-weight: 800;
       color: var(--white); text-decoration: none;
     }
     .footer-logo-mark {
@@ -1416,7 +1472,7 @@
     }
     .footer-social:hover { background: var(--cyan-ghost); border-color: var(--cyan-border); color: var(--cyan); }
     .footer-col-title {
-      font-family: 'CenturyGothic', sans-serif; font-size: 12px; font-weight: 700;
+      font-family: 'Instrument Sans', sans-serif; font-size: 12px; font-weight: 700;
       letter-spacing: 0.08em; text-transform: uppercase; color: var(--gray-3); margin-bottom: 16px;
     }
     .footer-col-links { list-style: none; display: flex; flex-direction: column; gap: 10px; }
@@ -1446,12 +1502,15 @@
     .logos-label-title {
       font-size: 14px; color: #0D1B33;
       line-height: 1.4; margin-bottom: 8px;
-      font-family: 'CenturyGothic', sans-serif;
+      font-family: 'Instrument Sans', sans-serif;
+    }
+    @media (max-width: 768px) {
+      .logos-label { display: none; }
     }
 
     /* ── What You Can Do (talent) ─────────────────── */
     .talent-what-section { background: #F4F8FF; padding: 80px 0; }
-    .talent-what-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 24px; }
+    .talent-what-grid { display: grid; grid-template-columns: repeat(2,1fr); gap: 24px; }
     .twc {
       border-radius: 20px; padding: 36px 28px;
       border: 1px solid #E8EEF5; display: flex; flex-direction: column; gap: 10px;
@@ -1461,18 +1520,23 @@
     .twc-1 { background: linear-gradient(135deg, var(--navy) 0%, var(--navy-3) 100%); border-color: rgba(0,194,255,0.2); }
     .twc-2 { background: var(--white); }
     .twc-3 { background: linear-gradient(135deg, #E8FDF5 0%, #CCF5E8 100%); border-color: rgba(0,150,100,0.15); }
+    .twc-4 { background: linear-gradient(135deg, #FFF8E6 0%, #FFE8B0 100%); border-color: rgba(200,130,0,0.15); }
     .twc-tag { font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase; margin-bottom: 6px; }
     .twc-1 .twc-tag { color: rgba(0,194,255,0.8); }
     .twc-2 .twc-tag, .twc-3 .twc-tag { color: var(--cyan-dim); }
-    .twc-title { font-family: 'CenturyGothic', sans-serif; font-size: 22px; line-height: 1.2; margin-bottom: 6px; }
+    .twc-title { font-family: 'Instrument Sans', sans-serif; font-size: 22px; line-height: 1.2; margin-bottom: 6px; }
     .twc-1 .twc-title { color: var(--white); }
     .twc-2 .twc-title, .twc-3 .twc-title { color: #0D1B33; }
     .twc-desc { font-size: 14px; line-height: 1.65; flex: 1; }
     .twc-1 .twc-desc { color: rgba(255,255,255,0.65); }
     .twc-2 .twc-desc, .twc-3 .twc-desc { color: #6B849E; }
+    .twc-4 .twc-tag { color: #B86800; }
+    .twc-4 .twc-title { color: #0D1B33; }
+    .twc-4 .twc-desc { color: #7A6840; }
     .twc-cta { display: inline-flex; align-items: center; gap: 5px; font-size: 13px; margin-top: 8px; text-decoration: none; transition: gap 0.15s; }
     .twc-1 .twc-cta { color: var(--cyan); }
     .twc-2 .twc-cta, .twc-3 .twc-cta { color: var(--cyan-dim); }
+    .twc-4 .twc-cta { color: #B86800; }
     .twc:hover .twc-cta { gap: 9px; }
 
     /* ── Talent polaroid split section ──────────────── */
@@ -1483,7 +1547,7 @@
     .talent-split-roles     { background: #F0F5FF; }
     .talent-split-inner { display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: center; }
     .talent-split-tag { font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--cyan); margin-bottom: 12px; }
-    .talent-split-title { font-family: 'CenturyGothic', sans-serif; font-size: clamp(26px, 3.5vw, 40px); color: #0D1B33; line-height: 1.12; letter-spacing: -0.02em; margin-bottom: 14px; }
+    .talent-split-title { font-family: 'Instrument Sans', sans-serif; font-size: clamp(26px, 3.5vw, 40px); color: #0D1B33; line-height: 1.12; letter-spacing: -0.02em; margin-bottom: 14px; }
     .talent-split-desc { font-size: 15px; color: #6B849E; line-height: 1.65; margin-bottom: 28px; }
     .talent-role-pills { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 20px; }
     .talent-role-pill { padding: 8px 16px; border-radius: 999px; background: var(--white); border: 1px solid #D0DFF0; font-size: 13px; color: #2C4A6E; transition: all 0.2s; }
@@ -1566,9 +1630,65 @@
     @media (max-width: 900px) {
       .talent-why-inner { grid-template-columns: 1fr; gap: 40px; }
       .talent-why-benefits { grid-template-columns: 1fr; }
-      .talent-what-grid { grid-template-columns: 1fr; }
     }
+    @media (max-width: 600px) { .talent-what-grid { grid-template-columns: 1fr; } }
   </style>
+  <!-- SEO -->
+  <meta name="description" content="DigiHire helps sales professionals advance their careers through job listings, training, and the VoltSquad campaign marketplace." />
+  <link rel="canonical" href="https://digihire.io/" />
+  <!-- Open Graph -->
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="DigiHire" />
+  <meta property="og:title" content="DigiHire — Sales Talents on Demand" />
+  <meta property="og:description" content="DigiHire helps sales professionals advance their careers through job listings, training, and the VoltSquad campaign marketplace." />
+  <meta property="og:url" content="https://digihire.io/" />
+  <meta property="og:image" content="https://digihire.io/images/og-default.png" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="DigiHire — Sales Talents on Demand" />
+  <meta name="twitter:description" content="DigiHire helps sales professionals advance their careers through job listings, training, and the VoltSquad campaign marketplace." />
+  <meta name="twitter:image" content="https://digihire.io/images/og-default.png" />
+  <!-- Organization Schema -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    "name": "DigiHire",
+    "url": "https://digihire.io",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://digihire.io/assets/favicon.png"
+    },
+    "sameAs": [
+      "https://www.linkedin.com/company/digihire",
+      "https://twitter.com/digihireio"
+    ],
+    "contactPoint": {
+      "@type": "ContactPoint",
+      "contactType": "customer support",
+      "url": "https://digihire.io/contact"
+    }
+  }
+  </script>
+  <!-- WebSite Schema -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    "name": "DigiHire",
+    "url": "https://digihire.io",
+    "potentialAction": {
+      "@type": "SearchAction",
+      "target": {
+        "@type": "EntryPoint",
+        "urlTemplate": "https://digihire.io/jobs?q={search_term_string}"
+      },
+      "query-input": "required name=search_term_string"
+    }
+  }
+  </script>
 </head>
 <body>
 
@@ -1577,7 +1697,7 @@
   <div class="nav-inner">
     <!-- LEFT: logo + links grouped together -->
     <div class="nav-left">
-      <a href="#" class="nav-logo">
+      <a href="/" class="nav-logo">
         <div class="nav-logo-wrap-img">
           <!-- White version: visible on transparent hero navbar -->
           <img src="assets/logo-white.png" alt="DigiHire" class="nav-logo-img logo-white" />
@@ -1683,25 +1803,25 @@
               <a href="/about" class="mega-learn">Explore all solutions <span>→</span></a>
             </div>
 
-            <!-- RIGHT: 3 service cards (VoltSquad, Recruitment, Activations) -->
-            <div class="mega-right brands-right">
-              <a href="https://voltsquad.digihire.io" class="brand-supp-card">
+            <!-- RIGHT: 4 service cards -->
+            <div class="mega-right brands-right" style="grid-template-columns: repeat(2,1fr);">
+              <a href="https://brands.digihire.io/signup?service=voltsquad" class="brand-supp-card">
                 <div class="bsc-icon i3"><i data-lucide="zap" class="lucide ic-lg"></i></div>
-                <p class="bsc-title">VoltSquad</p>
-                <p class="bsc-desc">Launch structured sales campaigns. Activate sellers across target audiences and locations, drive users or sales, and grow through performance-based selling.</p>
-                <span class="bsc-cta">Explore VoltSquad →</span>
+                <p class="bsc-title">VoltSquad Campaigns</p>
+                <p class="bsc-desc">Launch performance-based sales campaigns. Activate sellers across campuses, communities, and cities to drive signups, users, leads, and sales.</p>
+                <span class="bsc-cta">Launch a Campaign →</span>
               </a>
-              <a href="https://brands.digihire.io/signup" class="brand-supp-card">
+              <a href="https://brands.digihire.io/signup?service=recruitment-fulltime" class="brand-supp-card">
                 <div class="bsc-icon i1"><i data-lucide="users" class="lucide ic-lg"></i></div>
-                <p class="bsc-title">Sales Recruitment</p>
-                <p class="bsc-desc">Hire the right sales talent for your business, from tech sales and B2B sales to field reps, closers, SDRs, merchandisers, and contract sales roles.</p>
-                <span class="bsc-cta">Learn more →</span>
+                <p class="bsc-title">Hire Sales Talent</p>
+                <p class="bsc-desc">Hire full-time, part-time, or contract sales professionals — SDRs, closers, B2B reps, and field executives screened and ready.</p>
+                <span class="bsc-cta">Start Hiring →</span>
               </a>
-              <a href="#" class="brand-supp-card">
+              <a href="/sales-activations" class="brand-supp-card">
                 <div class="bsc-icon i2"><i data-lucide="map-pin" class="lucide ic-lg"></i></div>
-                <p class="bsc-title">Activations & Field Marketing</p>
-                <p class="bsc-desc">Take your product to the field through mall activations, high-traffic area campaigns, neighbourhood outreach, and temporary field support built for visibility and traction.</p>
-                <span class="bsc-cta">Learn more →</span>
+                <p class="bsc-title">Activations &amp; Field Marketing</p>
+                <p class="bsc-desc">Deploy promoters, merchandisers, and execution teams for on-ground mall activations, campus roadshows, in-store promotions, and field marketing.</p>
+                <span class="bsc-cta">Request Activation Talent →</span>
               </a>
             </div>
           </div>
@@ -1721,25 +1841,31 @@
               <a href="/about" class="mega-learn">Explore all opportunities <span>→</span></a>
             </div>
 
-            <!-- RIGHT: 3 service cards (VoltSquad, Talent Pool, Academy) -->
-            <div class="mega-right brands-right">
-              <a href="https://voltsquad.digihire.io/join-now" class="brand-supp-card">
+            <!-- RIGHT: 4 service cards (Talent Pool, VoltSquad, Gigs, Events) -->
+            <div class="mega-right brands-right" style="grid-template-columns: repeat(2,1fr);">
+              <a href="https://talents.digihire.io/signup?module=talent_pool" class="brand-supp-card">
+                <div class="bsc-icon i1"><i data-lucide="user-plus" class="lucide ic-lg"></i></div>
+                <p class="bsc-title">Talent Pool</p>
+                <p class="bsc-desc">Get discovered for full-time, part-time, contract, and project-based roles with brands hiring through Digihire.</p>
+                <span class="bsc-cta">Join the Talent Pool →</span>
+              </a>
+              <a href="https://talents.digihire.io/join-now" class="brand-supp-card">
                 <div class="bsc-icon i3"><i data-lucide="zap" class="lucide ic-lg"></i></div>
                 <p class="bsc-title">VoltSquad</p>
-                <p class="bsc-desc">Campaign marketplace for sales talent. Join brand campaigns, earn commissions, track your wallet, and grow your income through real sales opportunities.</p>
+                <p class="bsc-desc">Join brand campaigns, earn commissions, track your wallet, and grow your income through real sales opportunities.</p>
                 <span class="bsc-cta">Join VoltSquad →</span>
               </a>
-              <a href="https://talents.digihire.io/login" class="brand-supp-card">
-                <div class="bsc-icon i1"><i data-lucide="user-plus" class="lucide ic-lg"></i></div>
-                <p class="bsc-title">Enter Our Talent Pool</p>
-                <p class="bsc-desc">Create your profile, upload your CV, and get discovered for part-time, full-time, and project-based sales roles with brands hiring through Digihire.</p>
-                <span class="bsc-cta">Learn more →</span>
+              <a href="https://talents.digihire.io/signup?module=gigs" class="brand-supp-card">
+                <div class="bsc-icon i2"><i data-lucide="briefcase" class="lucide ic-lg"></i></div>
+                <p class="bsc-title">Short-Term Gigs</p>
+                <p class="bsc-desc">Apply for merchandising, field marketing, in-store promotions, activation staff, and event staffing roles.</p>
+                <span class="bsc-cta">Apply for Gigs →</span>
               </a>
-              <a href="https://talents.digihire.io/login" class="brand-supp-card">
-                <div class="bsc-icon i2"><i data-lucide="graduation-cap" class="lucide ic-lg"></i></div>
-                <p class="bsc-title">Sales Academy</p>
-                <p class="bsc-desc">Learn practical sales skills, get certified, and gain hands-on experience that prepares you for stronger opportunities, internships, and long-term career growth.</p>
-                <span class="bsc-cta">Learn more →</span>
+              <a href="https://talents.digihire.io/signup?module=events" class="brand-supp-card">
+                <div class="bsc-icon i1"><i data-lucide="calendar" class="lucide ic-lg"></i></div>
+                <p class="bsc-title">Events</p>
+                <p class="bsc-desc">Register for upcoming brand events, activations, networking sessions, and industry gatherings.</p>
+                <span class="bsc-cta">Register for Events →</span>
               </a>
             </div>
           </div>
@@ -1748,53 +1874,57 @@
     </div>
 
     <!-- Right: Get Started dropdown + Launch a Campaign CTA -->
-    <button class="nav-hamburger" id="nav-hamburger-btn" aria-label="Open menu">
-      <svg viewBox="0 0 24 24" fill="none" width="22" height="22" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 7h18M3 12h18M3 17h18"/></svg>
-    </button>
     <div class="nav-actions">
-      <!-- Get Started with hover dropdown -->
-      <div class="nav-dropdown-wrap">
-        <a href="https://voltsquad.digihire.io/login" class="btn-get-started">
+      <!-- Get Started with hover dropdown — replaced by JS when user is logged in -->
+      <div class="nav-dropdown-wrap" id="nav-auth-wrap">
+        <a href="https://talents.digihire.io/login" class="btn-get-started">
           Get Started
           <svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path d="M4 6l4 4 4-4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
           </svg>
         </a>
         <div class="nav-dropdown">
-          <!-- Talent section -->
-          <p class="dd-section-label">Talent</p>
-          <a href="https://talents.digihire.io/login">
-            <span>Log in</span>
+          <!-- For Talent -->
+          <p class="dd-section-label">For Talent</p>
+          <a href="https://talents.digihire.io/signup?module=talent_pool">
+            <span>Join the Talent Pool</span>
             <span class="dd-arrow">›</span>
           </a>
-          <a href="https://talents.digihire.io/signup">
-            <span>Sign up</span>
+          <a href="https://talents.digihire.io/join-now">
+            <span>Join VoltSquad</span>
+            <span class="dd-arrow">›</span>
+          </a>
+          <a href="https://talents.digihire.io/signup?module=gigs">
+            <span>Apply for Gigs / Field Roles</span>
+            <span class="dd-arrow">›</span>
+          </a>
+          <a href="https://talents.digihire.io/signup?module=events">
+            <span>Register for Events</span>
+            <span class="dd-arrow">›</span>
+          </a>
+          <a href="https://talents.digihire.io/login" style="opacity:0.6;font-size:12px;">
+            <span>Talent login</span>
             <span class="dd-arrow">›</span>
           </a>
 
           <div class="nav-dropdown-divider"></div>
 
-          <!-- Brand section -->
-          <p class="dd-section-label">Brand</p>
-          <a href="https://brands.digihire.io/login">
-            <span>Log in</span>
+          <!-- For Brands -->
+          <p class="dd-section-label">For Brands</p>
+          <a href="https://brands.digihire.io/signup?service=voltsquad">
+            <span>Launch VoltSquad Campaign</span>
             <span class="dd-arrow">›</span>
           </a>
-          <a href="https://brands.digihire.io/signup">
-            <span>Sign up</span>
+          <a href="https://brands.digihire.io/signup?service=recruitment-fulltime">
+            <span>Hire Sales Talent</span>
             <span class="dd-arrow">›</span>
           </a>
-
-          <div class="nav-dropdown-divider"></div>
-
-          <!-- VoltSquad section -->
-          <p class="dd-section-label">VoltSquad</p>
-          <a href="https://voltsquad.digihire.io/login">
-            <span>Log in</span>
+          <a href="/sales-activations">
+            <span>Activations &amp; Field Marketing</span>
             <span class="dd-arrow">›</span>
           </a>
-          <a href="https://voltsquad.digihire.io/join-now">
-            <span>Sign up</span>
+          <a href="https://brands.digihire.io/login" style="opacity:0.6;font-size:12px;">
+            <span>Brand login</span>
             <span class="dd-arrow">›</span>
           </a>
         </div>
@@ -1807,6 +1937,10 @@
           <path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
         </svg>
       </a>
+      <!-- Hamburger — inside nav-actions so it stays right-aligned -->
+      <button class="nav-hamburger" id="nav-hamburger-btn" aria-label="Open menu">
+        <svg viewBox="0 0 24 24" fill="none" width="22" height="22" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 7h18M3 12h18M3 17h18"/></svg>
+      </button>
     </div>
   </div>
 </nav>
@@ -1822,19 +1956,19 @@
       <div class="hero-content-box">
         <!-- Toggle: exactly matching Blakskill's "I'm Looking for Jobs / I'm Hiring Talent" -->
         <div class="hero-tabs">
-          <button class="hero-tab" onclick="setHeroTab(this,'job-seeker')">For Talent</button>
-          <button class="hero-tab active" onclick="setHeroTab(this,'employer')">For Brands</button>
+          <button class="hero-tab active" onclick="setHeroTab(this,'job-seeker')">For Talent</button>
+          <button class="hero-tab" onclick="setHeroTab(this,'employer')">For Brands</button>
         </div>
 
         <h1 class="hero-headline" id="hero-headline">
-          Acquire users, recruit sales talent, and run field activations with Digihire
+          Join Digihire to access sales gigs, jobs, and growth opportunities
         </h1>
 
         <p class="hero-sub" id="hero-sub">
-          Digihire helps brands grow through structured sales campaigns, targeted recruitment, and field activations designed to drive visibility, users, and revenue.
+          Access commission-based campaigns, project-based gigs, part-time roles, full-time jobs, and career-building opportunities with brands looking for people who can sell.
         </p>
 
-        <a href="https://brands.digihire.io/signup" class="hero-cta-single" id="hero-cta-primary">Get Started</a>
+        <a href="https://talents.digihire.io/signup" class="hero-cta-single" id="hero-cta-primary">Get Started</a>
       </div>
     </div>
   </section>
@@ -1851,6 +1985,7 @@
           <p class="logos-label">From fintechs and SaaS products to consumer brands and fast-growing businesses, Digihire connects talent to brands looking for sellers, closers, field reps, merchandisers, and sales teams that can drive results.</p>
         </div>
         <div class="logos-label-brand-mode">
+          <p class="logos-label-title">Brands We Work With</p>
           <p class="logos-label">Leading companies worldwide trust DigiHire to source and activate the best sales talent across Africa</p>
         </div>
       </div>
@@ -1869,6 +2004,278 @@
 <!-- ▼ TALENT MODE ▼ -->
 <div class="mode-talent">
 
+<!-- ════ JOBS & GIGS ═════════════════════════════════════════════ -->
+<section id="jobs" style="padding:80px 0;background:var(--white);">
+  <div class="container">
+    <div class="platform-header reveal">
+      <p class="section-label">Open Opportunities</p>
+      <h2 class="section-heading">Jobs &amp; Gigs Available Now</h2>
+      <p class="section-sub">Browse roles posted by brands hiring on Digihire. Visit the jobs page to explore and filter all opportunities.</p>
+    </div>
+
+    <!-- Slider -->
+    <div class="jobs-slider-outer">
+      <button class="jobs-nav-btn" id="jobs-prev" aria-label="Previous jobs" disabled>
+        <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg>
+      </button>
+      <div class="jobs-slider-viewport" id="jobs-viewport">
+        <div class="jobs-slider-track" id="jobs-track">
+          <div id="jobs-loading" style="display:flex;justify-content:center;align-items:center;min-height:200px;width:100%;">
+            <div style="width:32px;height:32px;border:3px solid var(--border);border-top-color:var(--cyan);border-radius:50%;animation:spin 0.7s linear infinite;"></div>
+          </div>
+        </div>
+      </div>
+      <button class="jobs-nav-btn" id="jobs-next" aria-label="Next jobs">
+        <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg>
+      </button>
+    </div>
+
+    <div id="jobs-dots" class="jobs-dots"></div>
+
+    <div id="jobs-empty" style="display:none;text-align:center;padding:60px 0;">
+      <p style="color:var(--gray-2);font-size:15px;">No jobs available right now. Check back soon.</p>
+    </div>
+
+    <div style="text-align:center;margin-top:36px;">
+      <a href="/jobs" class="btn btn-outline" style="border-color:var(--cyan-border);color:var(--navy);">View All Jobs &amp; Gigs →</a>
+    </div>
+  </div>
+</section>
+
+<style>
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  .jobs-slider-outer {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin: 0 auto;
+    max-width: 1200px;
+  }
+  .jobs-slider-viewport {
+    flex: 1;
+    overflow: hidden;
+    border-radius: var(--radius-lg);
+  }
+  .jobs-slider-track {
+    display: flex;
+    transition: transform 0.38s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    will-change: transform;
+  }
+  .job-slide {
+    flex: 0 0 25%;
+    box-sizing: border-box;
+    padding: 0 8px;
+  }
+  .job-card {
+    background: var(--white); border: 1px solid var(--border); border-radius: var(--radius-lg);
+    padding: 20px; cursor: pointer; transition: border-color 0.2s, box-shadow 0.2s, transform 0.2s;
+    text-decoration: none; display: block; height: 100%;
+  }
+  .job-card:hover { border-color: var(--cyan-border); box-shadow: 0 4px 20px rgba(0,194,255,0.08); transform: translateY(-2px); }
+  .job-card.featured { background: rgba(0,194,255,0.03); border-color: rgba(0,194,255,0.25); }
+
+  .jobs-nav-btn {
+    flex-shrink: 0;
+    width: 40px; height: 40px;
+    border-radius: 50%;
+    border: 1px solid var(--border);
+    background: var(--white);
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer;
+    color: var(--navy);
+    transition: border-color 0.2s, background 0.2s, color 0.2s, opacity 0.2s;
+  }
+  .jobs-nav-btn:hover:not(:disabled) { border-color: var(--cyan-border); background: rgba(0,194,255,0.06); color: var(--navy); }
+  .jobs-nav-btn:disabled { opacity: 0.3; cursor: not-allowed; }
+
+  .jobs-dots {
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    margin-top: 24px;
+  }
+  .jobs-dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    background: var(--border);
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    transition: background 0.2s, transform 0.2s;
+  }
+  .jobs-dot.active {
+    background: var(--cyan);
+    transform: scale(1.25);
+  }
+
+  .job-type-badge { display: inline-flex; align-items: center; font-size: 11px; font-weight: 600; padding: 2px 8px; border-radius: 20px; border: 1px solid; }
+  .badge-full_time  { background:rgba(59,130,246,0.08); color:#2563eb; border-color:rgba(59,130,246,0.2); }
+  .badge-part_time  { background:rgba(139,92,246,0.08); color:#7c3aed; border-color:rgba(139,92,246,0.2); }
+  .badge-contract   { background:rgba(234,88,12,0.08);  color:#c2410c; border-color:rgba(234,88,12,0.2); }
+  .badge-gig        { background:rgba(22,163,74,0.08);  color:#15803d; border-color:rgba(22,163,74,0.2); }
+  .badge-internship { background:rgba(219,39,119,0.08); color:#be185d; border-color:rgba(219,39,119,0.2); }
+  .badge-remote  { background:rgba(16,185,129,0.08); color:#047857; border-color:rgba(16,185,129,0.2); }
+  .badge-hybrid  { background:rgba(245,158,11,0.08);  color:#b45309; border-color:rgba(245,158,11,0.2); }
+
+  @media (max-width: 900px) {
+    .job-slide { flex: 0 0 50%; }
+  }
+  @media (max-width: 560px) {
+    .job-slide { flex: 0 0 100%; }
+    .jobs-nav-btn { width: 34px; height: 34px; }
+  }
+</style>
+
+<script>
+(function() {
+  var SUPABASE_URL = 'https://yaojxewpkrjonrvqpsxi.supabase.co';
+  var SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inlhb2p4ZXdwa3Jqb25ydnFwc3hpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzI4MDM2NjUsImV4cCI6MjA4ODM3OTY2NX0.QReagLpKOyB40i2bvjfIw8zlZkAAgJa-sFxIYYpykMU';
+  var TYPE_LABELS = { full_time:'Full-Time', part_time:'Part-Time', contract:'Contract', gig:'Gig', internship:'Internship' };
+  var jobs = [], currentPage = 0;
+
+  function esc(s) { return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;'); }
+  function safeUrl(url) {
+    if (!url) return '';
+    try { var u = new URL(url); return (u.protocol === 'http:' || u.protocol === 'https:') ? u.href : ''; } catch(e) { return ''; }
+  }
+  function slugify(s) { return String(s).toLowerCase().replace(/[^a-z0-9\s-]/g,'').trim().replace(/\s+/g,'-').replace(/-+/g,'-'); }
+  function jobPath(j) { return '/jobs/' + slugify(j.title) + '-' + j.id; }
+  function fmtSalary(min, max, pt) {
+    if (!min && !max) return null;
+    function f(n) { return n >= 1000 ? '₦' + (n/1000).toFixed(0) + 'k' : '₦' + n; }
+    var r = (min && max) ? f(min)+' – '+f(max) : min ? 'From '+f(min) : 'Up to '+f(max);
+    return r + (pt === 'hourly' ? '/hr' : pt === 'per_gig' ? '/gig' : pt === 'commission' ? ' (comm.)' : '/mo');
+  }
+
+  function getCardsPerPage() {
+    var w = window.innerWidth;
+    if (w <= 560) return 1;
+    if (w <= 900) return 2;
+    return 4;
+  }
+
+  function totalPages() {
+    return Math.ceil(jobs.length / getCardsPerPage());
+  }
+
+  function cardHtml(j) {
+    var sal = fmtSalary(j.salary_min, j.salary_max, j.pay_type);
+    var safeType = esc(j.job_type);
+    var safeMode = esc(j.work_mode || '');
+    var modeTag = (j.work_mode && j.work_mode !== 'onsite') ? '<span class="job-type-badge badge-' + safeMode + '" style="margin-left:4px;">' + safeMode + '</span>' : '';
+    
+    var logoSeed = j.id || j.brand_id || 'anonymous';
+    var logoUrl = j.logo_url
+      ? j.logo_url
+      : (j.anonymous
+         ? 'https://api.dicebear.com/7.x/identicon/svg?seed=' + logoSeed
+         : (j.brand_logo_url || 'https://api.dicebear.com/7.x/identicon/svg?seed=' + logoSeed));
+
+    return '<div class="job-slide"><a class="job-card' + (j.featured ? ' featured' : '') + '" href="' + esc(jobPath(j)) + '">'
+      + '<div style="display:flex;align-items:flex-start;gap:12px;">'
+      + '<img src="' + esc(safeUrl(logoUrl)) + '" width="32" height="32" style="border-radius:8px;flex-shrink:0;object-fit:cover;border:1px solid var(--border);" alt="" />'
+      + '<div style="flex:1;min-width:0;">'
+      + '<div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;"><span style="font-weight:700;font-size:15px;color:#06111F;">' + esc(j.title) + '</span>'
+      + (j.featured ? '<svg width="13" height="13" fill="#f59e0b" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87L18.18 21 12 17.77 5.82 21 7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>' : '') + '</div>'
+      + '<p style="font-size:13px;color:#7A9CC5;margin:2px 0 8px;">' + esc(j.anonymous ? "Anonymous Employer" : j.company_name) + '</p>'
+      + '<div style="display:flex;flex-wrap:wrap;gap:6px;align-items:center;"><span class="job-type-badge badge-' + safeType + '">' + (TYPE_LABELS[j.job_type] || safeType) + '</span>' + modeTag + '</div>'
+      + '<div style="display:flex;flex-wrap:wrap;gap:12px;margin-top:10px;">'
+      + (j.location ? '<span style="font-size:12px;color:#7A9CC5;display:flex;align-items:center;gap:4px;"><svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>' + esc(j.location) + '</span>' : '')
+      + (sal ? '<span style="font-size:12px;color:#7A9CC5;">' + esc(sal) + '</span>' : '')
+      + '</div></div></div>'
+      + '</a></div>';
+  }
+
+  function buildSlider() {
+    var track = document.getElementById('jobs-track');
+    var dotsEl = document.getElementById('jobs-dots');
+    var empty = document.getElementById('jobs-empty');
+
+    if (!jobs.length) { track.innerHTML = ''; empty.style.display = 'block'; dotsEl.innerHTML = ''; return; }
+    empty.style.display = 'none';
+
+    track.innerHTML = jobs.map(cardHtml).join('');
+
+    var tp = totalPages();
+    dotsEl.innerHTML = '';
+    for (var i = 0; i < tp; i++) {
+      var dot = document.createElement('button');
+      dot.className = 'jobs-dot' + (i === 0 ? ' active' : '');
+      dot.setAttribute('aria-label', 'Go to slide ' + (i + 1));
+      dot.setAttribute('data-page', i);
+      dot.addEventListener('click', function() { slideTo(parseInt(this.getAttribute('data-page'), 10)); });
+      dotsEl.appendChild(dot);
+    }
+
+    currentPage = 0;
+    applyTransform();
+    updateNav();
+  }
+
+  function applyTransform() {
+    var track = document.getElementById('jobs-track');
+    var viewport = document.getElementById('jobs-viewport');
+    var vw = viewport.offsetWidth;
+    track.style.transform = 'translateX(' + (currentPage * -vw) + 'px)';
+  }
+
+  function updateNav() {
+    var tp = totalPages();
+    document.getElementById('jobs-prev').disabled = currentPage === 0;
+    document.getElementById('jobs-next').disabled = currentPage >= tp - 1;
+    var dots = document.querySelectorAll('.jobs-dot');
+    dots.forEach(function(d, i) {
+      d.classList.toggle('active', i === currentPage);
+    });
+  }
+
+  function slideTo(page) {
+    var tp = totalPages();
+    currentPage = Math.max(0, Math.min(page, tp - 1));
+    applyTransform();
+    updateNav();
+  }
+
+  document.getElementById('jobs-prev').addEventListener('click', function() { slideTo(currentPage - 1); });
+  document.getElementById('jobs-next').addEventListener('click', function() { slideTo(currentPage + 1); });
+
+  /* Recalculate on resize */
+  var resizeTimer;
+  window.addEventListener('resize', function() {
+    clearTimeout(resizeTimer);
+    resizeTimer = setTimeout(function() {
+      currentPage = 0;
+      applyTransform();
+      buildSlider();
+    }, 150);
+  });
+
+  /* Touch/swipe support */
+  (function() {
+    var vp = document.getElementById('jobs-viewport');
+    var startX = 0, dragging = false;
+    vp.addEventListener('touchstart', function(e) { startX = e.touches[0].clientX; dragging = true; }, { passive: true });
+    vp.addEventListener('touchend', function(e) {
+      if (!dragging) return;
+      var diff = startX - e.changedTouches[0].clientX;
+      if (Math.abs(diff) > 50) slideTo(currentPage + (diff > 0 ? 1 : -1));
+      dragging = false;
+    }, { passive: true });
+  })();
+
+  /* Fetch jobs — job_listings_public is a safe view (published only, no PII,
+     anonymous listings stripped of identity) */
+  fetch(SUPABASE_URL + '/rest/v1/job_listings_public?select=*&order=featured.desc,created_at.desc&limit=10', {
+    headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY }
+  }).then(function(r) { return r.json(); }).then(function(data) {
+    document.getElementById('jobs-loading').style.display = 'none';
+    jobs = Array.isArray(data) ? data : [];
+    buildSlider();
+  }).catch(function() { document.getElementById('jobs-loading').style.display = 'none'; });
+})();
+</script>
+
 <!-- ════ T1. WHAT YOU CAN DO ════════════════════ -->
 <section class="talent-what-section">
   <div class="container">
@@ -1879,24 +2286,31 @@
     <div class="talent-what-grid stagger-grid">
 
       <div class="twc twc-1">
-        <div class="twc-tag">Be a part of campaigns and start earning</div>
+        <div class="twc-tag">Join campaigns and start earning</div>
         <h3 class="twc-title">Join VoltSquad</h3>
-        <p class="twc-desc">Campaign marketplace for sales talent. Join active brand campaigns, promote apps and products, earn commissions, track your wallet, set revenue targets, and grow your income through real sales opportunities.</p>
-        <a href="https://voltsquad.digihire.io/join-now" class="twc-cta">Join VoltSquad →</a>
+        <p class="twc-desc">Campaign marketplace for sales talent. Join active brand campaigns, promote apps and products, earn commissions, track your wallet, and grow your income through real sales opportunities.</p>
+        <a href="https://talents.digihire.io/join-now" class="twc-cta">Join VoltSquad →</a>
       </div>
 
       <div class="twc twc-2">
         <div class="twc-tag">Get discovered for roles</div>
-        <h3 class="twc-title">Join Our Talent Pool</h3>
-        <p class="twc-desc">Create your profile, upload your CV, and position yourself for part-time, full-time, and project-based opportunities with brands hiring through Digihire.</p>
-        <a href="https://talents.digihire.io/login" class="twc-cta">Set Up Your Profile →</a>
+        <h3 class="twc-title">Join the Talent Pool</h3>
+        <p class="twc-desc">Create your profile, upload your CV, and get discovered for full-time, part-time, contract, and project-based opportunities with brands hiring through Digihire.</p>
+        <a href="https://talents.digihire.io/signup?module=talent_pool" class="twc-cta">Set Up Your Profile →</a>
       </div>
 
       <div class="twc twc-3">
-        <div class="twc-tag">Learn, get certified, and grow</div>
-        <h3 class="twc-title">Join our Sales Academy</h3>
-        <p class="twc-desc">Join the Digihire Sales Academy to learn practical sales skills, earn certifications, gain internship experience, and prepare for stronger opportunities in the future of work.</p>
-        <a href="https://talents.digihire.io/login" class="twc-cta">Join the Academy →</a>
+        <div class="twc-tag">Flexible short-term roles</div>
+        <h3 class="twc-title">Apply for Short-Term Gigs</h3>
+        <p class="twc-desc">Merchandising roles, field marketing, in-store promotions, activation staff, and event staffing — flexible, short-term, and paid. Each role has its own sign-up flow.</p>
+        <a href="https://talents.digihire.io/signup?module=gigs" class="twc-cta">Apply for Gigs →</a>
+      </div>
+
+      <div class="twc twc-4">
+        <div class="twc-tag">Brand events and activations</div>
+        <h3 class="twc-title">Sign Up for Events</h3>
+        <p class="twc-desc">Register for upcoming brand events, field activations, networking sessions, and industry gatherings. Stay ahead of what's happening and get first access.</p>
+        <a href="https://talents.digihire.io/signup?module=events" class="twc-cta">Register for Events →</a>
       </div>
 
     </div>
@@ -1915,12 +2329,12 @@
           <div class="talent-split-tag">Community</div>
           <h2 class="talent-split-title">Join 1K+ sellers earning on Digihire</h2>
           <p class="talent-split-desc">Work with real brands, earn from campaigns, access job opportunities, and grow your sales career alongside a fast-growing community of sellers and sales talent.</p>
-          <a href="https://voltsquad.digihire.io/login" class="btn btn-cyan btn-lg">Get Started →</a>
+          <a href="https://talents.digihire.io/login" class="btn btn-cyan btn-lg">Get Started →</a>
         </div>
 
         <div class="talent-polaroid-wrap reveal" style="transition-delay:0.15s">
           <div class="tpcard tpcard-1">
-            <img class="tpcard-photo" src="https://images.unsplash.com/photo-1531123897727-8f129e1688ce?w=300&h=400&fit=crop&crop=face&q=80" alt="Seller" />
+            <img class="tpcard-photo" src="https://plus.unsplash.com/premium_photo-1669879860046-bb73a4c4597b?w=300&h=400&fit=crop&crop=face&q=80" alt="Seller" width="300" height="400" loading="lazy" />
             <div class="tpcard-badge b-blue"><i data-lucide="briefcase" class="lucide"></i></div>
             <div class="tpcard-body">
               <div class="tpcard-bar"></div>
@@ -1928,7 +2342,7 @@
             </div>
           </div>
           <div class="tpcard tpcard-2">
-            <img class="tpcard-photo" src="https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=300&h=400&fit=crop&crop=face&q=80" alt="Seller" />
+            <img class="tpcard-photo" src="https://images.unsplash.com/photo-1581341038810-5a2fa5b18f6e?w=300&h=400&fit=crop&crop=face&q=80" alt="Seller" width="300" height="400" loading="lazy" />
             <div class="tpcard-badge b-cyan"><i data-lucide="zap" class="lucide"></i></div>
             <div class="tpcard-body">
               <div class="tpcard-bar"></div>
@@ -1946,7 +2360,7 @@
 
         <div class="talent-polaroid-wrap reveal">
           <div class="tpcard tpcard-1">
-            <img class="tpcard-photo" src="https://images.unsplash.com/photo-1589156280159-27698a70f29e?w=300&h=400&fit=crop&crop=face&q=80" alt="Sales rep" />
+            <img class="tpcard-photo" src="https://images.unsplash.com/photo-1765648763848-665267cf9929?w=300&h=400&fit=crop&crop=face&q=80" alt="Sales rep" width="300" height="400" loading="lazy" />
             <div class="tpcard-badge b-cyan"><i data-lucide="users" class="lucide"></i></div>
             <div class="tpcard-body">
               <div class="tpcard-bar"></div>
@@ -1954,7 +2368,7 @@
             </div>
           </div>
           <div class="tpcard tpcard-2">
-            <img class="tpcard-photo" src="https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?w=300&h=400&fit=crop&crop=face&q=80" alt="Sales rep" />
+            <img class="tpcard-photo" src="https://images.unsplash.com/photo-1712083378178-7b06bd4c974e?w=300&h=400&fit=crop&crop=face&q=80" alt="Sales rep" width="300" height="400" loading="lazy" />
             <div class="tpcard-badge b-blue"><i data-lucide="trending-up" class="lucide"></i></div>
             <div class="tpcard-body">
               <div class="tpcard-bar"></div>
@@ -2072,7 +2486,7 @@
             <div class="feature-icon-wrap"><i data-lucide="graduation-cap" class="lucide ic-xl"></i></div>
             <div>
               <p class="feature-item-title">Learn Skills &amp; Earn Certifications</p>
-              <p class="feature-item-desc">Join the Sales Academy, complete practical courses, earn recognised certifications, and access internship and career growth pathways.</p>
+              <p class="feature-item-desc">Build your sales skills, earn recognised certifications, and access internship and career growth pathways through verified brand campaigns.</p>
             </div>
           </div>
           <div class="feature-item">
@@ -2084,8 +2498,8 @@
           </div>
         </div>
         <div class="features-ctas">
-          <a href="https://voltsquad.digihire.io/login" class="btn btn-cyan">Get Started →</a>
-          <a href="https://voltsquad.digihire.io" class="btn btn-outline-navy">Explore Campaigns</a>
+          <a href="https://talents.digihire.io/login" class="btn btn-cyan">Get Started →</a>
+          <a href="https://talents.digihire.io" class="btn btn-outline-navy">Explore Campaigns</a>
         </div>
       </div>
 
@@ -2167,7 +2581,7 @@
       <h2 class="final-cta-title">Ready to start earning and growing<br/>with Digihire?</h2>
       <p class="final-cta-sub">Join Digihire to access campaigns, jobs, and practical growth opportunities designed for people who want to work with brands and build real sales income.</p>
       <div style="display:flex;gap:14px;justify-content:center;flex-wrap:wrap;">
-        <a href="https://voltsquad.digihire.io/join-now" class="btn btn-cyan btn-lg">Join Digihire</a>
+        <a href="https://talents.digihire.io/join-now" class="btn btn-cyan btn-lg">Join Digihire</a>
         <a href="https://talents.digihire.io/login" class="btn btn-outline-white btn-lg">Set Up Your Profile</a>
       </div>
     </div>
@@ -2179,6 +2593,59 @@
 <!-- ▼ BRAND MODE ▼ -->
 <div class="mode-brand">
 
+<!-- ════ B0. WHAT BRANDS CAN DO ═════════════════════ -->
+<section class="talent-what-section">
+  <div class="container">
+    <div class="platform-header reveal">
+      <p class="section-label">Services</p>
+      <h2 class="section-heading">What Brands Can Do on Digihire</h2>
+      <p class="section-sub">Every service has its own sign-up flow and connects into the same brand dashboard.</p>
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:24px;" class="stagger-grid" id="brand-paths-grid">
+
+      <div class="twc" style="background:linear-gradient(135deg,var(--navy) 0%,var(--navy-3) 100%);border-color:rgba(0,194,255,0.2);">
+        <div class="twc-tag" style="color:rgba(0,194,255,0.8);">Performance-based selling</div>
+        <h3 class="twc-title" style="color:#fff;">Launch Campaigns on VoltSquad</h3>
+        <p class="twc-desc" style="color:rgba(255,255,255,0.65);">Activate sellers across campuses, communities, and cities. Drive signups, users, leads, and product sales through structured performance-based campaigns.</p>
+        <a href="https://brands.digihire.io/signup?service=voltsquad" class="twc-cta" style="color:var(--cyan);">Launch a Campaign →</a>
+      </div>
+
+      <div class="twc" style="background:#fff;">
+        <div class="twc-tag" style="color:var(--cyan-dim);">Permanent placement</div>
+        <h3 class="twc-title" style="color:#0D1B33;">Hire Full-Time Sales Talent</h3>
+        <p class="twc-desc" style="color:#6B849E;">Recruit dedicated sales professionals — SDRs, closers, B2B reps, and sales executives — for long-term placement in your team.</p>
+        <a href="https://brands.digihire.io/signup?service=recruitment-fulltime" class="twc-cta" style="color:var(--cyan-dim);">Start Hiring Full-Time →</a>
+      </div>
+
+      <div class="twc" style="background:linear-gradient(135deg,#E8FDF5 0%,#CCF5E8 100%);border-color:rgba(0,150,100,0.15);">
+        <div class="twc-tag" style="color:var(--cyan-dim);">Flexible workforce</div>
+        <h3 class="twc-title" style="color:#0D1B33;">Hire Part-Time / Contract Talent</h3>
+        <p class="twc-desc" style="color:#6B849E;">Scale your sales force with part-time reps or contract talent — perfect for project campaigns, seasonal peaks, and market expansions.</p>
+        <a href="https://brands.digihire.io/signup?service=recruitment-parttime" class="twc-cta" style="color:var(--cyan-dim);">Start Hiring Part-Time →</a>
+      </div>
+
+      <div class="twc" style="background:linear-gradient(135deg,#FFF8E6 0%,#FFE8B0 100%);border-color:rgba(200,130,0,0.15);">
+        <div class="twc-tag" style="color:#B86800;">Short-term staff</div>
+        <h3 class="twc-title" style="color:#0D1B33;">Request Merchandisers &amp; Short-Term Staff</h3>
+        <p class="twc-desc" style="color:#7A6840;">Get trained merchandisers, in-store promoters, and field staff for retail coverage, distribution support, and on-ground visibility.</p>
+        <a href="/sales-activations" class="twc-cta" style="color:#B86800;">Request Staff →</a>
+      </div>
+
+      <div class="twc" style="background:linear-gradient(135deg,#EEF2FF 0%,#D4DDFF 100%);border-color:rgba(80,80,200,0.12);">
+        <div class="twc-tag" style="color:#4444BB;">On-ground presence</div>
+        <h3 class="twc-title" style="color:#0D1B33;">Request Activations &amp; Field Marketing</h3>
+        <p class="twc-desc" style="color:#5B6A9E;">Run mall activations, high-traffic area campaigns, and neighbourhood outreach. Field marketing that creates awareness, engagement, and conversions.</p>
+        <a href="/sales-activations" class="twc-cta" style="color:#4444BB;">Plan an Activation →</a>
+      </div>
+
+    </div>
+  </div>
+</section>
+<style>
+  @media (max-width: 1024px) { #brand-paths-grid { grid-template-columns: repeat(2,1fr) !important; } }
+  @media (max-width: 600px) { #brand-paths-grid { grid-template-columns: 1fr !important; } }
+</style>
+
 <!-- ════ B1. TALENT GRID ══════════════════════════ -->
 <section class="talent-unlock" id="brand-talent">
   <div class="container">
@@ -2187,7 +2654,7 @@
     </div>
     <div class="talent-cards stagger-grid">
       <div class="talent-card">
-        <img class="talent-card-img" src="https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=400&h=533&fit=crop&crop=face&q=80" alt="Sales Rep" />
+        <img class="talent-card-img" src="https://plus.unsplash.com/premium_photo-1669879859992-5252477fa489?w=400&h=533&fit=crop&crop=face&q=80" alt="Sales Executive" width="400" height="533" loading="lazy" />
         <div class="talent-card-overlay">
           <div class="talent-card-name">Sales Executive</div>
           <div class="talent-card-role">B2B & Tech Sales</div>
@@ -2195,7 +2662,7 @@
         </div>
       </div>
       <div class="talent-card">
-        <img class="talent-card-img" src="https://images.unsplash.com/photo-1531123897727-8f129e1688ce?w=400&h=533&fit=crop&crop=face&q=80" alt="Field Agent" />
+        <img class="talent-card-img" src="https://images.unsplash.com/photo-1769636930016-5d9f0ca653aa?w=400&h=533&fit=crop&crop=face&q=80" alt="Field Agent" width="400" height="533" loading="lazy" />
         <div class="talent-card-overlay">
           <div class="talent-card-name">Field Activation Agent</div>
           <div class="talent-card-role">Campus & Community</div>
@@ -2203,7 +2670,7 @@
         </div>
       </div>
       <div class="talent-card">
-        <img class="talent-card-img" src="https://images.unsplash.com/photo-1589156280159-27698a70f29e?w=400&h=533&fit=crop&crop=face&q=80" alt="SDR" />
+        <img class="talent-card-img" src="https://images.unsplash.com/photo-1655720357761-f18ea9e5e7e6?w=400&h=533&fit=crop&crop=face&q=80" alt="SDR" width="400" height="533" loading="lazy" />
         <div class="talent-card-overlay">
           <div class="talent-card-name">SDR / BDR</div>
           <div class="talent-card-role">Pipeline & Outbound</div>
@@ -2211,7 +2678,7 @@
         </div>
       </div>
       <div class="talent-card">
-        <img class="talent-card-img" src="https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?w=400&h=533&fit=crop&crop=face&q=80" alt="Merchandiser" />
+        <img class="talent-card-img" src="https://plus.unsplash.com/premium_photo-1661778504126-9e61ffce7ed7?w=400&h=533&fit=crop&crop=face&q=80" alt="Merchandiser" width="400" height="533" loading="lazy" />
         <div class="talent-card-overlay">
           <div class="talent-card-name">Merchandiser</div>
           <div class="talent-card-role">Retail & Distribution</div>
@@ -2243,9 +2710,9 @@
         <div class="phc-visual-bg"></div>
         <div class="phc-visual-body">
           <div class="phc-avatars">
-            <img class="phc-avatar" src="https://images.unsplash.com/photo-1531123897727-8f129e1688ce?w=104&h=104&fit=crop&crop=face&q=80" alt="Seller" />
-            <img class="phc-avatar" src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=104&h=104&fit=crop&crop=face&q=80" alt="Field Agent" />
-            <img class="phc-avatar" src="https://images.unsplash.com/photo-1573164713988-8665fc963095?w=104&h=104&fit=crop&crop=face&q=80" alt="Brand Driver" />
+            <img class="phc-avatar" src="https://images.unsplash.com/photo-1588178454780-441fa5b99fa5?w=104&h=104&fit=crop&crop=face&q=80" alt="Seller" width="104" height="104" loading="lazy" />
+            <img class="phc-avatar" src="https://images.unsplash.com/photo-1561406636-b80293969660?w=104&h=104&fit=crop&crop=face&q=80" alt="Field Agent" width="104" height="104" loading="lazy" />
+            <img class="phc-avatar" src="https://images.unsplash.com/photo-1611581186957-4b3c92be2e6f?w=104&h=104&fit=crop&crop=face&q=80" alt="Brand Driver" width="104" height="104" loading="lazy" />
           </div>
           <div class="phc-cards-row">
             <div class="phc-stat-card">
@@ -2268,7 +2735,7 @@
         <h4 class="psc-title">Launch sales campaigns on VoltSquad</h4>
         <p class="psc-desc">Performance-based campaigns tied to real outcomes, signups, users, leads, and sales across campuses, communities, and cities.</p>
         <div class="psc-visual psc-visual-img">
-          <img src="https://images.unsplash.com/photo-1605647540924-852290f6b0d5?w=700&h=320&fit=crop&crop=center&q=80" alt="Sales campaign team" />
+          <img src="https://plus.unsplash.com/premium_photo-1713821698191-7db0f93bec40?w=700&h=320&fit=crop&crop=center&q=80" alt="Sales campaign team" width="700" height="320" loading="lazy" />
         </div>
       </div>
       <div class="psc psc-2">
@@ -2276,7 +2743,7 @@
         <h4 class="psc-title">Hire sales talent built for<br>execution</h4>
         <p class="psc-desc">From tech sales reps and SDRs to merchandisers, closers, and field teams project-based or long-term hires that can sell.</p>
         <div class="psc-visual psc-visual-img">
-          <img src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=700&h=320&fit=crop&crop=top&q=80" alt="Sales recruitment interview" />
+          <img src="https://images.unsplash.com/photo-1739285452621-59d92842fcc8?w=700&h=320&fit=crop&crop=top&q=80" alt="Sales recruitment interview" width="700" height="320" loading="lazy" />
         </div>
       </div>
       <div class="psc psc-3">
@@ -2284,7 +2751,7 @@
         <h4 class="psc-title">Run on-ground activations that drive traction</h4>
         <p class="psc-desc">Malls, campuses, high-traffic areas, and target locations, field marketing that creates awareness, engagement, and conversions.</p>
         <div class="psc-visual psc-visual-img">
-          <img src="https://images.unsplash.com/photo-1571260899304-425eee4c7efc?w=700&h=320&fit=crop&crop=center&q=80" alt="Field activation event" />
+          <img src="https://crecerpartners.com/wp-content/uploads/2025/08/WhatsApp-Image-2025-09-08-at-08.48.44_9afe4066.jpg" alt="Field activation event" width="700" height="320" loading="lazy" />
         </div>
       </div>
     </div>
@@ -2388,39 +2855,13 @@
         </div>
       </div>
     </div>
-  </div>
-</section>
-
-<!-- ════ B5. WHO THIS IS FOR ═════════════════════════ -->
-<section class="brand-who-section">
-  <div class="container reveal">
-    <p class="section-label">Who This Is For</p>
-    <h2 class="section-heading">Built for brands that need traction</h2>
-  </div>
-  <div class="brand-who-slider">
-    <div class="brand-who-track">
-      <span class="bwt">Fintechs</span>
-      <span class="bwt">SaaS products</span>
-      <span class="bwt">Consumer brands</span>
-      <span class="bwt">Telecom-related products</span>
-      <span class="bwt">Businesses entering new cities</span>
-      <span class="bwt">Foreign brands entering Nigeria</span>
-      <span class="bwt">Businesses running product launches</span>
-      <span class="bwt">Companies hiring sales reps &amp; merchandisers</span>
-      <!-- duplicate for seamless loop -->
-      <span class="bwt">Fintechs</span>
-      <span class="bwt">SaaS products</span>
-      <span class="bwt">Consumer brands</span>
-      <span class="bwt">Telecom-related products</span>
-      <span class="bwt">Businesses entering new cities</span>
-      <span class="bwt">Foreign brands entering Nigeria</span>
-      <span class="bwt">Businesses running product launches</span>
-      <span class="bwt">Companies hiring sales reps &amp; merchandisers</span>
+    <div style="margin-top:48px;text-align:center;">
+      <p style="font-size:16px;color:rgba(255,255,255,0.6);margin-bottom:20px;">Ready to activate distribution at scale?</p>
+      <a href="https://brands.digihire.io/signup?service=voltsquad" class="btn btn-cyan btn-lg">
+        <i data-lucide="zap" class="lucide ic-md"></i>
+        Launch a VoltSquad Campaign
+      </a>
     </div>
-  </div>
-  <div class="container">
-    <p class="section-sub" style="text-align:center;max-width:none;white-space:nowrap;margin-top:12px;">People-powered sales infrastructure for growing brands across Africa.</p>
-    <a href="https://brands.digihire.io/signup" class="btn btn-cyan btn-lg" style="margin-top:28px;display:inline-block;">Get Started</a>
   </div>
 </section>
 
@@ -2442,39 +2883,39 @@
   <div class="container">
     <div class="insights-header reveal" id="insights-hdr">
       <h2>Insights &amp; Resources</h2>
-      <a href="#" class="insights-link">Explore our Blog →</a>
+      <a href="/blog" class="insights-link">Explore our Blog →</a>
     </div>
     <div class="insights-grid stagger-grid" id="insights-grid">
-      <div class="insight-card">
+      <a href="blog-tech-sales.html" class="insight-card">
         <div class="insight-card-img">
-          <img src="https://images.unsplash.com/photo-1521737711867-e3b97375f902?w=700&h=360&fit=crop&crop=center&q=80" alt="Career Growth" />
+          <img src="https://plus.unsplash.com/premium_photo-1677553953699-e62954777d8f?w=700&h=360&fit=crop&crop=center&q=80" alt="Career Growth" width="700" height="360" loading="lazy" />
         </div>
         <div class="insight-card-body">
           <div class="insight-card-cat">Career Growth</div>
           <h4 class="insight-card-title">How to Break Into Tech Sales with Zero Experience</h4>
           <p class="insight-card-desc">A practical guide to landing your first tech sales role in Africa's booming technology sector — even without prior experience.</p>
         </div>
-      </div>
-      <div class="insight-card">
+      </a>
+      <a href="blog-remote-hiring.html" class="insight-card">
         <div class="insight-card-img">
-          <img src="https://images.unsplash.com/photo-1600880292203-757bb62b4baf?w=700&h=360&fit=crop&crop=center&q=80" alt="Hiring Strategy" />
+          <img src="https://images.unsplash.com/photo-1611432579402-7037e3e2c1e4?w=700&h=360&fit=crop&crop=center&q=80" alt="Hiring Strategy" width="700" height="360" loading="lazy" />
         </div>
         <div class="insight-card-body">
           <div class="insight-card-cat">Hiring Strategy</div>
           <h4 class="insight-card-title">Why African Companies Are Winning with Remote-First Hiring</h4>
           <p class="insight-card-desc">Discover how forward-thinking companies are accessing top talent pools across the continent with DigiHire's remote hiring solutions.</p>
         </div>
-      </div>
-      <div class="insight-card">
+      </a>
+      <a href="blog-ai-resume.html" class="insight-card">
         <div class="insight-card-img">
-          <img src="https://images.unsplash.com/photo-1551434678-e076c223a692?w=700&h=360&fit=crop&crop=center&q=80" alt="Platform Update" />
+          <img src="https://plus.unsplash.com/premium_photo-1681398563948-c2045c0c8660?w=700&h=360&fit=crop&crop=center&q=80" alt="Platform Update" width="700" height="360" loading="lazy" />
         </div>
         <div class="insight-card-body">
           <div class="insight-card-cat">Platform Update</div>
           <h4 class="insight-card-title">DigiHire Launches Advanced AI Resume Optimization</h4>
           <p class="insight-card-desc">Our new AI-powered resume builder helps professionals get past ATS filters and land interviews at top global tech companies.</p>
         </div>
-      </div>
+      </a>
     </div>
   </div>
 </section>
@@ -2514,10 +2955,9 @@
       <div>
         <p class="footer-col-title">Solutions</p>
         <ul class="footer-col-links">
-          <li><a href="https://voltsquad.digihire.io">VoltSquad</a></li>
-          <li><a href="https://brands.digihire.io">Sales Recruitment</a></li>
+          <li><a href="https://brands.digihire.io/signup?service=voltsquad">VoltSquad Campaigns</a></li>
+          <li><a href="https://brands.digihire.io/signup?service=recruitment-fulltime">Sales Recruitment</a></li>
           <li><a href="/sales-activations">Activations &amp; Field Marketing</a></li>
-          <li><a href="https://talents.digihire.io/academy">Sales Academy</a></li>
         </ul>
       </div>
 
@@ -2525,9 +2965,10 @@
       <div>
         <p class="footer-col-title">Talent</p>
         <ul class="footer-col-links">
-          <li><a href="https://talents.digihire.io">Join the Talent Pool</a></li>
-          <li><a href="https://talents.digihire.io/academy">Sales Academy</a></li>
-          <li><a href="https://voltsquad.digihire.io">VoltSquad</a></li>
+          <li><a href="https://talents.digihire.io/signup?module=talent_pool">Join the Talent Pool</a></li>
+          <li><a href="https://talents.digihire.io/join-now">Join VoltSquad</a></li>
+          <li><a href="https://talents.digihire.io/signup?module=gigs">Apply for Gigs</a></li>
+          <li><a href="https://talents.digihire.io/signup?module=events">Register for Events</a></li>
         </ul>
       </div>
 
@@ -2535,8 +2976,8 @@
       <div>
         <p class="footer-col-title">Brands</p>
         <ul class="footer-col-links">
-          <li><a href="https://voltsquad.digihire.io">VoltSquad</a></li>
-          <li><a href="https://brands.digihire.io">Sales Recruitment</a></li>
+          <li><a href="https://brands.digihire.io/signup?service=voltsquad">Launch a Campaign</a></li>
+          <li><a href="https://brands.digihire.io/signup?service=recruitment-fulltime">Hire Sales Talent</a></li>
           <li><a href="/sales-activations">Activations &amp; Field Marketing</a></li>
         </ul>
       </div>
@@ -2614,19 +3055,27 @@
     }, 200);
 
     /* Switch page-wide content mode */
-    document.body.dataset.mode = (key === 'employer') ? 'brand' : 'talent';
-    setTimeout(() => lucide.createIcons(), 50);
+    const newMode = (key === 'employer') ? 'brand' : 'talent';
+    const modeEls = document.querySelectorAll('.mode-talent, .mode-brand');
+    modeEls.forEach(el => el.classList.add('mode-switching'));
+    document.body.dataset.mode = newMode;
+    setTimeout(() => {
+      modeEls.forEach(el => el.classList.remove('mode-switching'));
+      if (window.lucide) lucide.createIcons();
+    }, 350);
   }
 
   /* Set default mode on load */
-  document.body.dataset.mode = 'brand';
+  document.body.dataset.mode = 'talent';
 
   /* ── Scroll reveal ────────────────────────────── */
+  /* rootMargin '80px' triggers reveal before element fully enters viewport,
+     preventing blank white sections during fast scrolling. */
   const revealObs = new IntersectionObserver((entries) => {
     entries.forEach(e => {
       if (e.isIntersecting) { e.target.classList.add('in'); revealObs.unobserve(e.target); }
     });
-  }, { threshold: 0.12 });
+  }, { threshold: 0.05, rootMargin: '80px 0px' });
 
   document.querySelectorAll('.reveal, .stagger-grid').forEach(el => revealObs.observe(el));
 
@@ -2698,7 +3147,11 @@
   })();
 
   /* ── Lucide icons ────────────────────────────── */
-  lucide.createIcons();
+  /* The CDN script is deferred, so it has not executed yet when this inline
+     block runs — wait for DOMContentLoaded (deferred scripts run before it). */
+  document.addEventListener('DOMContentLoaded', function () {
+    if (window.lucide) lucide.createIcons();
+  });
 
   /* ── Navbar: float + shrink + blur on scroll ─── */
   const nav = document.getElementById('navbar');
@@ -2710,26 +3163,86 @@
     }
   }, { passive: true });
 
-  /* Mobile menu */
+
+  /* ── Auth hint: show user profile in nav when logged in ─ */
   (function () {
-    var overlay = document.getElementById('nav-mobile-overlay');
-    var openBtn = document.getElementById('nav-hamburger-btn');
-    var closeBtn = document.getElementById('nm-close-btn');
-    if (!overlay || !openBtn) return;
-    function open() { overlay.classList.add('nm-open'); overlay.setAttribute('aria-hidden', 'false'); document.body.style.overflow = 'hidden'; }
-    function close() { overlay.classList.remove('nm-open'); overlay.setAttribute('aria-hidden', 'true'); document.body.style.overflow = ''; }
-    openBtn.addEventListener('click', open);
-    if (closeBtn) closeBtn.addEventListener('click', close);
-    overlay.querySelectorAll('a').forEach(function (a) { a.addEventListener('click', close); });
-    overlay.querySelectorAll('.nm-trigger[data-nm-target]').forEach(function (btn) {
-      btn.addEventListener('click', function () {
-        var sm = document.getElementById(btn.getAttribute('data-nm-target'));
-        var isOpen = sm && sm.classList.contains('nm-open');
-        overlay.querySelectorAll('.nm-submenu.nm-open').forEach(function (el) { el.classList.remove('nm-open'); });
-        overlay.querySelectorAll('.nm-trigger.nm-active').forEach(function (el) { el.classList.remove('nm-active'); });
-        if (!isOpen && sm) { sm.classList.add('nm-open'); btn.classList.add('nm-active'); }
+    function readHint() {
+      var m = document.cookie.match(/(?:^|;\s*)dh_hint=([^;]*)/);
+      return m ? decodeURIComponent(m[1]) : null;
+    }
+
+    function el(tag, cls, href) {
+      var e = document.createElement(tag);
+      if (cls) e.className = cls;
+      if (href) e.setAttribute('href', href);
+      return e;
+    }
+
+    var hint = readHint();
+    if (!hint) return;
+
+    /* Only allow word-character names to prevent injection from a tampered cookie */
+    var safeName = hint.replace(/[^A-Za-z0-9 _'-]/g, '').trim();
+    if (!safeName) return;
+
+    var firstName = safeName.split(' ')[0];
+    var initial = firstName.charAt(0).toUpperCase();
+
+    /* Replace desktop nav auth area using safe DOM construction (no innerHTML for user data) */
+    var wrap = document.getElementById('nav-auth-wrap');
+    if (wrap) {
+      wrap.innerHTML = '';
+
+      /* User button */
+      var btn = el('a', 'nav-user-btn', 'https://talents.digihire.io/talent');
+      var avatar = el('span', 'nav-user-avatar');
+      avatar.textContent = initial;
+      var nameSpan = document.createTextNode(' ' + firstName + ' ');
+      var chevron = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+      chevron.setAttribute('viewBox', '0 0 16 16');
+      chevron.setAttribute('fill', 'none');
+      chevron.setAttribute('width', '12');
+      chevron.setAttribute('height', '12');
+      chevron.setAttribute('stroke', 'currentColor');
+      chevron.setAttribute('stroke-width', '1.8');
+      chevron.setAttribute('stroke-linecap', 'round');
+      chevron.setAttribute('stroke-linejoin', 'round');
+      chevron.innerHTML = '<path d="M4 6l4 4 4-4"/>'; /* static SVG path, safe */
+      btn.appendChild(avatar);
+      btn.appendChild(nameSpan);
+      btn.appendChild(chevron);
+
+      /* Dropdown */
+      var dd = el('div', 'nav-dropdown nav-user-dropdown');
+      [
+        ['My Dashboard',    'https://talents.digihire.io/talent'],
+        ['My Profile',      'https://talents.digihire.io/talent/profile'],
+        ['My Applications', 'https://talents.digihire.io/talent/applications'],
+      ].forEach(function(item) {
+        var a = el('a', '', item[1]);
+        var s = el('span'); s.textContent = item[0];
+        var arr = el('span', 'dd-arrow'); arr.textContent = '›';
+        a.appendChild(s); a.appendChild(arr);
+        dd.appendChild(a);
       });
-    });
+      var divider = el('div', 'nav-dropdown-divider');
+      dd.appendChild(divider);
+      var dashLink = el('a', '', 'https://talents.digihire.io/talent');
+      var ds = el('span'); ds.textContent = 'Go to Dashboard';
+      var da = el('span', 'dd-arrow'); da.textContent = '›';
+      dashLink.appendChild(ds); dashLink.appendChild(da);
+      dd.appendChild(dashLink);
+
+      wrap.appendChild(btn);
+      wrap.appendChild(dd);
+    }
+
+    /* Update mobile menu button */
+    var nmBtn = document.getElementById('nm-auth-btn');
+    if (nmBtn) {
+      nmBtn.textContent = 'My Dashboard';
+      nmBtn.setAttribute('href', 'https://talents.digihire.io/talent');
+    }
   })();
 </script>
 
@@ -2752,7 +3265,7 @@
         <a href="/about" class="nm-sub-item">About Us</a>
         <a href="/blog" class="nm-sub-item">Blog</a>
         <a href="/events" class="nm-sub-item">Events</a>
-        <a href="https://voltsquad.digihire.io" class="nm-sub-item">VoltSquad</a>
+        <a href="https://talents.digihire.io" class="nm-sub-item">VoltSquad</a>
       </div>
     </div>
     <div class="nm-section">
@@ -2760,8 +3273,8 @@
         <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6l4 4 4-4"/></svg>
       </button>
       <div class="nm-submenu" id="nm-brands">
-        <a href="https://voltsquad.digihire.io" class="nm-sub-item">VoltSquad</a>
-        <a href="https://brands.digihire.io" class="nm-sub-item">Sales Recruitment</a>
+        <a href="https://brands.digihire.io/signup?service=voltsquad" class="nm-sub-item">Launch VoltSquad Campaign</a>
+        <a href="https://brands.digihire.io/signup?service=recruitment-fulltime" class="nm-sub-item">Hire Sales Talent</a>
         <a href="/sales-activations" class="nm-sub-item">Activations &amp; Field Marketing</a>
       </div>
     </div>
@@ -2770,18 +3283,43 @@
         <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6l4 4 4-4"/></svg>
       </button>
       <div class="nm-submenu" id="nm-talents">
-        <a href="https://voltsquad.digihire.io/join-now" class="nm-sub-item">VoltSquad</a>
-        <a href="https://talents.digihire.io" class="nm-sub-item">Enter Talent Pool</a>
-        <a href="https://talents.digihire.io/academy" class="nm-sub-item">Sales Academy</a>
+        <a href="https://talents.digihire.io/signup?module=talent_pool" class="nm-sub-item">Join the Talent Pool</a>
+        <a href="https://talents.digihire.io/join-now" class="nm-sub-item">Join VoltSquad</a>
+        <a href="https://talents.digihire.io/signup?module=gigs" class="nm-sub-item">Apply for Gigs / Field Roles</a>
+        <a href="https://talents.digihire.io/signup?module=events" class="nm-sub-item">Register for Events</a>
       </div>
     </div>
     <div class="nm-actions">
-      <a href="https://voltsquad.digihire.io/login" class="nm-btn-outline">Get Started</a>
+      <a href="https://talents.digihire.io/login" class="nm-btn-outline" id="nm-auth-btn">Get Started</a>
       <a href="https://brands.digihire.io/login" class="nm-btn-cyan">Launch a Campaign
         <svg viewBox="0 0 16 16" fill="none" width="14" height="14" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8h10M9 4l4 4-4 4"/></svg>
       </a>
     </div>
   </div>
 </div>
+<script>
+(function () {
+  var overlay = document.getElementById('nav-mobile-overlay');
+  var openBtn = document.getElementById('nav-hamburger-btn');
+  var closeBtn = document.getElementById('nm-close-btn');
+  if (!overlay || !openBtn) return;
+  function openMenu() { overlay.classList.add('nm-open'); overlay.setAttribute('aria-hidden', 'false'); document.body.style.overflow = 'hidden'; }
+  function closeMenu() { overlay.classList.remove('nm-open'); overlay.setAttribute('aria-hidden', 'true'); document.body.style.overflow = ''; }
+  openBtn.addEventListener('click', function () {
+    if (overlay.classList.contains('nm-open')) { closeMenu(); } else { openMenu(); }
+  });
+  if (closeBtn) closeBtn.addEventListener('click', closeMenu);
+  overlay.querySelectorAll('a').forEach(function (a) { a.addEventListener('click', closeMenu); });
+  overlay.querySelectorAll('.nm-trigger[data-nm-target]').forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      var sm = document.getElementById(btn.getAttribute('data-nm-target'));
+      var isOpen = sm && sm.classList.contains('nm-open');
+      overlay.querySelectorAll('.nm-submenu.nm-open').forEach(function (el) { el.classList.remove('nm-open'); });
+      overlay.querySelectorAll('.nm-trigger.nm-active').forEach(function (el) { el.classList.remove('nm-active'); });
+      if (!isOpen && sm) { sm.classList.add('nm-open'); btn.classList.add('nm-active'); }
+    });
+  });
+})();
+</script>
 </body>
 </html>

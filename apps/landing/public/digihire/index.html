@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>DigiHire — Advance Your Career with Professional Growth Tools</title>
+  <title>DigiHire — Sales Talents on Demand</title>
   <link rel="icon" type="image/png" href="assets/favicon.png" />
   <link rel="apple-touch-icon" href="assets/favicon.png" />
   <style>
@@ -220,6 +220,16 @@
     .btn-get-started:hover { border-color: rgba(255,255,255,0.8); background: rgba(255,255,255,0.08); }
     .btn-get-started svg { width: 14px; height: 14px; transition: transform 0.2s; }
     .btn-get-started:hover svg { transform: rotate(180deg); }
+
+    /* Plain nav link (no mega menu) */
+    #navbar .nav-link-plain {
+      font-size: 14px; color: rgba(255,255,255,0.82); text-decoration: none;
+      font-weight: 500; padding: 6px 14px; border-radius: 6px;
+      transition: color 0.2s, background 0.2s; display: inline-block;
+    }
+    #navbar .nav-link-plain:hover { color: var(--cyan); background: var(--cyan-ghost); }
+    #navbar.scrolled .nav-link-plain { color: #374151; }
+    #navbar.scrolled .nav-link-plain:hover { color: #0096C7; background: rgba(0,194,255,0.07); }
 
     /* Dropdown */
     .nav-dropdown-wrap { position: relative; }
@@ -1561,7 +1571,7 @@
             <div class="mega-right">
               <!-- Top row: 3 info cards -->
               <div class="mega-top-row">
-                <a href="about.html" class="mega-info-card">
+                <a href="/about" class="mega-info-card">
                   <div class="mic-icon i1"><i data-lucide="info" class="lucide ic-md"></i></div>
                   <p class="mic-title">About Us</p>
                   <p class="mic-desc">Get to know who we are, what we are building, and how Digihire helps brands and sales talent grow together.</p>
@@ -1679,6 +1689,10 @@
               </a>
             </div>
           </div>
+        </li>
+
+        <li>
+          <a href="#jobs" class="nav-link-plain">Jobs</a>
         </li>
       </ul>
     </div>
@@ -2357,12 +2371,32 @@
 
 </div><!-- end .mode-brand -->
 
+<!-- ════ JOBS SECTION ═══════════════════════════════════════════════ -->
+<section id="jobs" style="padding:80px 0;background:#F4F8FF;">
+  <div class="container">
+    <div class="reveal" style="text-align:center;margin-bottom:48px;">
+      <p class="section-label">Open Roles</p>
+      <h2 class="section-heading">Jobs &amp; Gigs on Digihire</h2>
+      <p class="section-sub">Browse sales, marketing, and field roles posted by brands hiring through Digihire.</p>
+    </div>
+    <div id="landing-jobs-list" style="display:grid;gap:12px;max-width:860px;margin:0 auto;">
+      <div style="text-align:center;padding:40px 0;color:#7A9CC5;font-size:14px;">Loading jobs…</div>
+    </div>
+    <div style="text-align:center;margin-top:36px;">
+      <a href="/jobs" style="display:inline-flex;align-items:center;gap:8px;padding:13px 28px;border-radius:10px;background:var(--navy);color:#fff;font-size:14px;font-weight:700;text-decoration:none;font-family:'Instrument Sans',sans-serif;transition:background 0.2s;box-shadow:0 4px 20px rgba(6,17,31,0.15);" onmouseover="this.style.background='#0F2544'" onmouseout="this.style.background='var(--navy)'">
+        View All Jobs
+        <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+      </a>
+    </div>
+  </div>
+</section>
+
 <!-- ════ INSIGHTS / BLOG — shared across both modes ═══════════════ -->
 <section class="insights" id="insights">
   <div class="container">
     <div class="insights-header reveal" id="insights-hdr">
       <h2>Insights &amp; Resources</h2>
-      <a href="blog.html" class="insights-link">Explore our Blog →</a>
+      <a href="/blog" class="insights-link">Explore our Blog →</a>
     </div>
     <div class="insights-grid stagger-grid" id="insights-grid">
       <div class="insight-card">
@@ -2423,10 +2457,10 @@
       <div>
         <p class="footer-col-title">Company</p>
         <ul class="footer-col-links">
-          <li><a href="about.html">About Us</a></li>
-          <li><a href="contact.html">Contact</a></li>
-          <li><a href="events.html">Events</a></li>
-          <li><a href="blog.html">Blog</a></li>
+          <li><a href="/about">About Us</a></li>
+          <li><a href="/contact">Contact</a></li>
+          <li><a href="/events">Events</a></li>
+          <li><a href="/blog">Blog</a></li>
         </ul>
       </div>
 
@@ -2611,6 +2645,73 @@
       span.appendChild(img);
       span.appendChild(fallback);
       track.appendChild(span);
+    });
+  })();
+
+  /* ── Jobs section fetch ─────────────────────── */
+  (function() {
+    var SB_URL = 'https://yaojxewpkrjonrvqpsxi.supabase.co';
+    var SB_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inlhb2p4ZXdwa3Jqb25ydnFwc3hpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzI4MDM2NjUsImV4cCI6MjA4ODM3OTY2NX0.QReagLpKOyB40i2bvjfIw8zlZkAAgJa-sFxIYYpykMU';
+    var TYPE_LABELS = { full_time:'Full-Time', part_time:'Part-Time', contract:'Contract', gig:'Gig', internship:'Internship' };
+    var TYPE_COLORS = { full_time:'#2563eb;background:rgba(37,99,235,0.08)', part_time:'#7c3aed;background:rgba(124,58,237,0.08)', contract:'#c2410c;background:rgba(194,65,12,0.08)', gig:'#15803d;background:rgba(21,128,61,0.08)', internship:'#be185d;background:rgba(190,24,93,0.08)' };
+    var MODE_COLORS = { remote:'#047857;background:rgba(4,120,87,0.08)', hybrid:'#b45309;background:rgba(180,83,9,0.08)', onsite:'#475569;background:rgba(71,85,105,0.08)' };
+
+    function esc(s) {
+      return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');
+    }
+    function slugify(s) { return String(s).toLowerCase().replace(/[^a-z0-9\s-]/g,'').trim().replace(/\s+/g,'-').replace(/-+/g,'-'); }
+    function jobPath(j) { return '/jobs/' + slugify(j.title) + '-' + j.id; }
+    function badge(label, colorStr) {
+      return '<span style="display:inline-flex;align-items:center;font-size:11px;font-weight:600;padding:3px 9px;border-radius:20px;border:1px solid currentColor;color:' + colorStr + ';">' + esc(label) + '</span>';
+    }
+    function timeAgo(d) {
+      var days = Math.floor((Date.now() - new Date(d).getTime()) / 86400000);
+      if (days === 0) return 'Today';
+      if (days === 1) return 'Yesterday';
+      if (days < 7) return days + 'd ago';
+      if (days < 30) return Math.floor(days/7) + 'w ago';
+      return Math.floor(days/30) + 'mo ago';
+    }
+
+    fetch(SB_URL + '/rest/v1/job_listings_public?select=*&order=featured.desc,created_at.desc&limit=6', {
+      headers: { 'apikey': SB_KEY, 'Authorization': 'Bearer ' + SB_KEY }
+    }).then(function(r) { return r.json(); }).then(function(jobs) {
+      var el = document.getElementById('landing-jobs-list');
+      if (!el) return;
+      if (!Array.isArray(jobs) || jobs.length === 0) {
+        el.innerHTML = '<div style="text-align:center;padding:40px 0;color:#7A9CC5;font-size:14px;">No jobs available right now. Check back soon.</div>';
+        return;
+      }
+      el.innerHTML = jobs.map(function(j) {
+        var tc = TYPE_COLORS[j.job_type] || '#374151;background:#f1f5f9';
+        var mc = j.work_mode ? MODE_COLORS[j.work_mode] || '#475569;background:#f1f5f9' : null;
+        return '<a href="' + esc(jobPath(j)) + '" style="display:block;background:#fff;border:1px solid rgba(0,194,255,0.14);border-radius:14px;padding:18px 20px;text-decoration:none;transition:border-color 0.2s,box-shadow 0.2s,transform 0.15s;" onmouseover="this.style.borderColor=\'rgba(0,194,255,0.4)\';this.style.boxShadow=\'0 4px 20px rgba(0,194,255,0.1)\';this.style.transform=\'translateY(-2px)\'" onmouseout="this.style.borderColor=\'rgba(0,194,255,0.14)\';this.style.boxShadow=\'none\';this.style.transform=\'none\'">'
+          + '<div style="display:flex;align-items:flex-start;justify-content:space-between;gap:12px;">'
+          + '<div style="display:flex;align-items:flex-start;gap:12px;flex:1;min-width:0;">'
+          + '<div style="width:40px;height:40px;border-radius:10px;background:rgba(0,194,255,0.08);display:flex;align-items:center;justify-content:center;flex-shrink:0;">'
+          + '<svg width="18" height="18" fill="none" stroke="#00C2FF" stroke-width="2" viewBox="0 0 24 24"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/></svg>'
+          + '</div>'
+          + '<div style="flex:1;min-width:0;">'
+          + '<div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;">'
+          + '<span style="font-size:15px;font-weight:700;color:#06111F;">' + esc(j.title) + '</span>'
+          + (j.featured ? '<svg width="12" height="12" fill="#f59e0b" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87L18.18 21 12 17.77 5.82 21 7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>' : '')
+          + '</div>'
+          + '<div style="font-size:13px;color:#7A9CC5;margin-top:2px;">' + (j.anonymous ? 'Anonymous Employer' : esc(j.company_name)) + '</div>'
+          + '<div style="display:flex;flex-wrap:wrap;gap:6px;margin-top:8px;">'
+          + badge(TYPE_LABELS[j.job_type] || j.job_type, tc)
+          + (mc ? badge(j.work_mode, mc) : '')
+          + (j.location ? '<span style="font-size:12px;color:#7A9CC5;display:inline-flex;align-items:center;gap:3px;"><svg width="11" height="11" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>' + esc(j.location) + '</span>' : '')
+          + '<span style="font-size:12px;color:#7A9CC5;">' + timeAgo(j.created_at) + '</span>'
+          + '</div>'
+          + '</div>'
+          + '</div>'
+          + '<svg width="16" height="16" fill="none" stroke="#C8DBF0" stroke-width="2" viewBox="0 0 24 24" style="flex-shrink:0;margin-top:4px;"><path d="M9 18l6-6-6-6"/></svg>'
+          + '</div>'
+          + '</a>';
+      }).join('');
+    }).catch(function() {
+      var el = document.getElementById('landing-jobs-list');
+      if (el) el.innerHTML = '<div style="text-align:center;padding:40px 0;color:#7A9CC5;font-size:14px;">Unable to load jobs. <a href="/jobs" style="color:#00C2FF;">Browse all jobs →</a></div>';
     });
   })();
 

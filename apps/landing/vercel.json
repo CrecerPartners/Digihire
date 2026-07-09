@@ -1,23 +1,37 @@
 {
-  "installCommand": "npm install",
-  "buildCommand": "npm run build:landing",
+  "installCommand": "cd ../.. && npm install",
+  "buildCommand": "cd ../.. && npm run build:landing",
   "outputDirectory": "dist",
+  "headers": [
+    {
+      "source": "/(.*)",
+      "headers": [
+        { "key": "X-Content-Type-Options", "value": "nosniff" },
+        { "key": "X-Frame-Options", "value": "DENY" },
+        { "key": "Referrer-Policy", "value": "strict-origin-when-cross-origin" },
+        { "key": "Permissions-Policy", "value": "camera=(), microphone=(), geolocation=()" }
+      ]
+    }
+  ],
   "rewrites": [
     { "source": "/about", "destination": "/about.html" },
     { "source": "/blog", "destination": "/blog.html" },
+    { "source": "/blog/:slug", "destination": "/blog-:slug.html" },
     { "source": "/contact", "destination": "/contact.html" },
     { "source": "/events", "destination": "/events.html" },
     { "source": "/voltsquad", "destination": "/voltsquad.html" },
     { "source": "/sales-activations", "destination": "/sales-activations.html" },
-    { "source": "/admin/:path*", "destination": "${ADMIN_VERCEL_URL}/admin/:path*" }
+    { "source": "/jobs", "destination": "/jobs.html" },
+    { "source": "/jobs/:id", "destination": "/jobs.html" },
+    { "source": "/admin/:path*", "destination": "https://digihire-admin.vercel.app/admin/:path*" }
   ],
   "redirects": [
-    { "source": "/login", "destination": "https://voltsquad.digihire.io/login", "permanent": false },
-    { "source": "/signup", "destination": "https://voltsquad.digihire.io/join-now", "permanent": false },
-    { "source": "/join-now", "destination": "https://voltsquad.digihire.io/join-now", "permanent": false },
-    { "source": "/dashboard", "destination": "https://voltsquad.digihire.io/dashboard", "permanent": false },
-    { "source": "/dashboard/:path*", "destination": "https://voltsquad.digihire.io/dashboard/:path*", "permanent": false },
-    { "source": "/onboarding/:path*", "destination": "https://voltsquad.digihire.io/onboarding/:path*", "permanent": false },
+    { "source": "/login", "destination": "https://talents.digihire.io/login", "permanent": false },
+    { "source": "/signup", "destination": "https://talents.digihire.io/join-now", "permanent": false },
+    { "source": "/join-now", "destination": "https://talents.digihire.io/join-now", "permanent": false },
+    { "source": "/dashboard", "destination": "https://talents.digihire.io/dashboard", "permanent": false },
+    { "source": "/dashboard/:path*", "destination": "https://talents.digihire.io/dashboard/:path*", "permanent": false },
+    { "source": "/onboarding/:path*", "destination": "https://talents.digihire.io/onboarding/:path*", "permanent": false },
     { "source": "/brand", "destination": "https://brands.digihire.io", "permanent": false },
     { "source": "/brand/:path*", "destination": "https://brands.digihire.io/brand/:path*", "permanent": false },
     { "source": "/talent", "destination": "https://talents.digihire.io", "permanent": false },
