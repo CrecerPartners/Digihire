@@ -9,12 +9,13 @@
   <link
     href="https://fonts.googleapis.com/css2?family=Instrument+Sans:ital,wdth,wght@0,75..100,400..700;1,75..100,400..700&display=swap"
     rel="stylesheet" />
-  <title>VoltSquad — Digihire's Campaign Marketplace for Brands and Sellers</title>
+  <title>VoltSquad — Campaign Marketplace for Brands and Sellers | DigiHire</title>
   <meta name="description"
-    content="VoltSquad is Digihire's campaign marketplace where brands launch targeted sales campaigns and sellers join real opportunities to earn commissions and grow." />
+    content="VoltSquad is DigiHire's campaign marketplace — brands launch performance-based sales campaigns, sellers join real opportunities to earn commissions and grow." />
   <link rel="icon" type="image/png" href="assets/favicon.png" />
   <link rel="apple-touch-icon" href="assets/favicon.png" />
   <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+
   <style>
     *,
     *::before,
@@ -22,6 +23,7 @@
       box-sizing: border-box;
       margin: 0;
       padding: 0;
+      font-weight: 400 !important;
     }
 
     :root {
@@ -33,12 +35,19 @@
       --cyan: #00C2FF;
       --cyan-dim: #0096C7;
       --cyan-soft: #33CFFF;
-      --cyan-border: rgba(0, 194, 255, 0.18);
+      --cyan-glow: rgba(0, 194, 255, 0.20);
+      --cyan-ghost: rgba(0, 194, 255, 0.08);
+      --cyan-border: rgba(0, 194, 255, 0.22);
       --white: #FFFFFF;
+      --off-white: #F0F6FF;
+      --gray-1: #C8DBF0;
       --gray-2: #7A9CC5;
+      --gray-3: #3D5A7E;
       --gray-bg: #F4F8FF;
       --border: rgba(0, 194, 255, 0.12);
-      --radius-lg: 18px;
+      --radius-sm: 8px;
+      --radius-md: 14px;
+      --radius-lg: 20px;
       --radius-xl: 28px;
     }
 
@@ -62,8 +71,8 @@
     }
 
     .ic-sm {
-      width: 14px;
-      height: 14px;
+      width: 15px;
+      height: 15px;
     }
 
     .ic-md {
@@ -87,12 +96,27 @@
       padding: 0 28px;
     }
 
+    /* ── TYPOGRAPHY ── */
+    .cyan {
+      color: var(--cyan);
+    }
+
+    .white {
+      color: var(--white);
+    }
+
+    .muted {
+      color: var(--gray-2);
+    }
+
+    /* ── BUTTONS ── */
     .btn {
       display: inline-flex;
       align-items: center;
-      gap: 8px;
-      padding: 11px 24px;
-      border-radius: 8px;
+      justify-content: center;
+      gap: 9px;
+      padding: 12px 26px;
+      border-radius: 10px;
       cursor: pointer;
       font-family: 'Instrument Sans', sans-serif;
       font-size: 14px;
@@ -100,6 +124,7 @@
       border: none;
       text-decoration: none;
       transition: all 0.22s ease;
+      letter-spacing: 0.01em;
       white-space: nowrap;
     }
 
@@ -111,8 +136,8 @@
 
     .btn-cyan:hover {
       background: var(--cyan-soft);
-      transform: translateY(-1px);
-      box-shadow: 0 6px 28px rgba(0, 194, 255, 0.5);
+      transform: translateY(-2px);
+      box-shadow: 0 8px 30px rgba(0, 194, 255, 0.5);
     }
 
     .btn-outline-white {
@@ -124,303 +149,120 @@
     .btn-outline-white:hover {
       border-color: var(--white);
       background: rgba(255, 255, 255, 0.08);
+      transform: translateY(-2px);
     }
 
     .btn-outline-navy {
       background: transparent;
       color: var(--navy);
-      border: 1.5px solid rgba(0, 0, 0, 0.18);
+      border: 1.5px solid rgba(6, 17, 31, 0.2);
     }
 
     .btn-outline-navy:hover {
-      border-color: var(--cyan);
-      color: var(--cyan);
+      border-color: var(--cyan-dim);
+      color: var(--cyan-dim);
+      background: rgba(0, 194, 255, 0.05);
+      transform: translateY(-2px);
     }
 
     .btn-lg {
-      padding: 14px 32px;
+      padding: 15px 32px;
       font-size: 15px;
-      border-radius: 10px;
+      border-radius: 12px;
     }
 
+    /* ── ANIMATIONS ── */
     .reveal {
       opacity: 0;
-      transform: translateY(28px);
-      transition: opacity 0.65s ease, transform 0.65s ease;
+      transform: translateY(22px);
+      transition: opacity 0.55s ease, transform 0.55s ease;
+      will-change: opacity, transform;
     }
 
     .reveal.in {
       opacity: 1;
       transform: none;
+      will-change: auto;
     }
 
-    .stagger-grid>* {
+    .stagger-grid > * {
       opacity: 0;
-      transform: translateY(22px);
-      transition: opacity 0.55s ease, transform 0.55s ease;
+      transform: translateY(18px);
+      transition: opacity 0.45s ease, transform 0.45s ease;
+      will-change: opacity, transform;
     }
 
-    .stagger-grid.in>*:nth-child(1) {
-      opacity: 1;
-      transform: none;
-      transition-delay: 0s
+    .stagger-grid.in > * {
+      will-change: auto;
     }
 
-    .stagger-grid.in>*:nth-child(2) {
-      opacity: 1;
-      transform: none;
-      transition-delay: .08s
-    }
+    .stagger-grid.in > *:nth-child(1) { opacity: 1; transform: none; transition-delay: 0s; }
+    .stagger-grid.in > *:nth-child(2) { opacity: 1; transform: none; transition-delay: .08s; }
+    .stagger-grid.in > *:nth-child(3) { opacity: 1; transform: none; transition-delay: .16s; }
+    .stagger-grid.in > *:nth-child(4) { opacity: 1; transform: none; transition-delay: .24s; }
+    .stagger-grid.in > *:nth-child(5) { opacity: 1; transform: none; transition-delay: .32s; }
+    .stagger-grid.in > *:nth-child(6) { opacity: 1; transform: none; transition-delay: .4s; }
+    .stagger-grid.in > *:nth-child(7) { opacity: 1; transform: none; transition-delay: .48s; }
+    .stagger-grid.in > *:nth-child(8) { opacity: 1; transform: none; transition-delay: .56s; }
 
-    .stagger-grid.in>*:nth-child(3) {
-      opacity: 1;
-      transform: none;
-      transition-delay: .16s
-    }
-
-    .stagger-grid.in>*:nth-child(4) {
-      opacity: 1;
-      transform: none;
-      transition-delay: .24s
-    }
-
-    .stagger-grid.in>*:nth-child(5) {
-      opacity: 1;
-      transform: none;
-      transition-delay: .32s
-    }
-
-    .stagger-grid.in>*:nth-child(6) {
-      opacity: 1;
-      transform: none;
-      transition-delay: .4s
-    }
-
-    /* ── NAVBAR ── */
-    #navbar {
-      position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
-      z-index: 200;
-      background: transparent;
-      border-bottom: 1px solid transparent;
-      transition: top 0.45s cubic-bezier(0.34, 1.56, 0.64, 1), left 0.45s cubic-bezier(0.34, 1.56, 0.64, 1),
-        right 0.45s cubic-bezier(0.34, 1.56, 0.64, 1), background 0.3s ease,
-        border-radius 0.45s ease, box-shadow 0.3s ease, border-color 0.3s ease;
-    }
-
-    #navbar.scrolled {
-      top: 14px;
-      left: 20%;
-      right: 20%;
-      background: rgba(255, 255, 255, 0.78);
-      backdrop-filter: blur(22px);
-      border-radius: 999px;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.55);
-      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12), 0 2px 8px rgba(0, 0, 0, 0.06), inset 0 1px 0 rgba(255, 255, 255, 0.9);
-    }
-
-    .nav-inner {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      height: 72px;
-      max-width: 1340px;
-      width: 100%;
-      margin: 0 auto;
-      padding: 0 28px;
-      transition: height 0.3s ease, padding 0.3s ease;
-    }
-
-    #navbar.scrolled .nav-inner {
-      height: 54px;
-      padding: 0 24px;
-    }
-
-    .nav-left {
-      display: flex;
-      align-items: center;
-    }
-
-    .nav-logo {
-      display: flex;
-      align-items: center;
-      text-decoration: none;
-      flex-shrink: 0;
-      margin-right: 32px;
-    }
-
-    .nav-logo-wrap-img {
-      position: relative;
-      display: flex;
-      align-items: center;
-    }
-
-    .nav-logo-img {
-      height: 36px;
-      width: auto;
-      display: block;
-      transition: opacity 0.3s;
-    }
-
-    .nav-logo-img.logo-white {
-      opacity: 1;
-    }
-
-    .nav-logo-img.logo-color {
-      opacity: 0;
-      position: absolute;
-    }
-
-    #navbar.scrolled .nav-logo-img.logo-white {
-      opacity: 0;
-    }
-
-    #navbar.scrolled .nav-logo-img.logo-color {
-      opacity: 1;
-    }
-
-    .nav-links {
-      display: flex;
-      align-items: center;
-      gap: 2px;
-      list-style: none;
-    }
-
-    .nav-links a {
-      font-size: 14px;
-      color: rgba(255, 255, 255, 0.82);
-      text-decoration: none;
-      font-weight: 500;
-      padding: 6px 14px;
-      border-radius: 6px;
-      transition: color 0.2s, background 0.2s;
-    }
-
-    .nav-links a:hover {
-      color: var(--white);
-    }
-
-    #navbar.scrolled .nav-links a {
-      color: #1E3A5F;
-    }
-
-    #navbar.scrolled .nav-links a:hover {
-      color: var(--navy);
-      background: rgba(0, 0, 0, 0.04);
-    }
-
-    .nav-links a.active-page {
-      color: var(--cyan);
-      font-weight: 700;
-    }
-
-    #navbar.scrolled .nav-links a.active-page {
-      color: var(--cyan-dim);
-    }
-
-    .nav-right {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
-
-    .btn-get-started {
-      font-size: 14px;
-      font-weight: 700;
-      color: rgba(255, 255, 255, 0.88);
-      border: 1.5px solid rgba(255, 255, 255, 0.3);
-      border-radius: 8px;
-      padding: 7px 18px;
-      background: transparent;
-      cursor: pointer;
-      text-decoration: none;
-      transition: all 0.2s;
-      white-space: nowrap;
-      font-family: 'Instrument Sans', sans-serif;
-    }
-
-    .btn-get-started:hover {
-      border-color: var(--white);
-      color: var(--white);
-    }
-
-    #navbar.scrolled .btn-get-started {
-      color: var(--navy);
-      border-color: rgba(0, 0, 0, 0.18);
-    }
-
-    #navbar.scrolled .btn-get-started:hover {
-      border-color: var(--cyan);
-      color: var(--cyan);
-    }
-
-    .btn-launch-campaign {
-      font-size: 14px;
-      font-weight: 700;
-      background: var(--cyan);
-      color: var(--navy);
-      border: none;
-      border-radius: 8px;
-      padding: 9px 20px;
-      cursor: pointer;
-      text-decoration: none;
-      transition: all 0.22s;
-      white-space: nowrap;
-      font-family: 'Instrument Sans', sans-serif;
-      box-shadow: 0 3px 12px rgba(0, 194, 255, 0.35);
-    }
-
-    .btn-launch-campaign:hover {
-      background: var(--cyan-soft);
-      transform: translateY(-1px);
-    }
-
-    /* ── SECTION LABELS ── */
+    /* ── SECTION LABELS & HEADINGS ── */
     .section-label {
       font-size: 11px;
       font-weight: 800;
-      letter-spacing: 0.1em;
+      letter-spacing: 0.12em;
       text-transform: uppercase;
       color: var(--cyan-dim);
-      margin-bottom: 10px;
+      margin-bottom: 12px;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
     }
 
     .section-heading {
       font-family: 'Instrument Sans', sans-serif;
-      font-size: clamp(26px, 3.5vw, 40px);
+      font-size: clamp(28px, 3.8vw, 42px);
       font-weight: 800;
       color: var(--navy);
       line-height: 1.15;
-      letter-spacing: -0.02em;
-      margin-bottom: 14px;
+      letter-spacing: -0.025em;
+      margin-bottom: 16px;
     }
 
     .section-sub {
       font-size: 16px;
-      color: #6B849E;
-      max-width: 620px;
+      color: #5B7A9E;
+      max-width: 640px;
       line-height: 1.7;
     }
 
     /* ════════════════════════════════
-       HERO
+       HERO & TAB SWITCHER
     ════════════════════════════════ */
     .vs-hero {
       background: var(--navy);
-      padding: 160px 0 110px;
+      padding: 160px 0 90px;
       position: relative;
       overflow: hidden;
       text-align: center;
+      color: var(--white);
     }
 
     .vs-hero::before {
       content: '';
       position: absolute;
       inset: 0;
-      background: radial-gradient(ellipse 80% 60% at 50% 0%, rgba(0, 194, 255, 0.14) 0%, transparent 70%);
+      background: radial-gradient(ellipse 90% 65% at 50% -10%, rgba(0, 194, 255, 0.22) 0%, rgba(6, 17, 31, 0) 70%);
       pointer-events: none;
+    }
+
+    .vs-hero::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 1px;
+      background: linear-gradient(90deg, transparent 0%, rgba(0, 194, 255, 0.3) 50%, transparent 100%);
     }
 
     .vs-hero-eyebrow {
@@ -428,26 +270,91 @@
       align-items: center;
       gap: 8px;
       font-size: 12px;
-      font-weight: 700;
+      font-weight: 800;
       letter-spacing: 0.08em;
       text-transform: uppercase;
       color: var(--cyan);
-      background: rgba(0, 194, 255, 0.08);
-      border: 1px solid rgba(0, 194, 255, 0.22);
+      background: rgba(0, 194, 255, 0.1);
+      border: 1px solid rgba(0, 194, 255, 0.25);
       border-radius: 999px;
-      padding: 8px 16px;
+      padding: 8px 18px;
       margin-bottom: 24px;
+      box-shadow: 0 0 20px rgba(0, 194, 255, 0.15);
+    }
+
+    /* Floating Main Dual Tab Selector */
+    .vs-tab-switcher-wrap {
+      display: flex;
+      justify-content: center;
+      margin-bottom: 36px;
+    }
+
+    .vs-tab-switcher {
+      display: inline-flex;
+      align-items: center;
+      background: rgba(11, 29, 51, 0.85);
+      border: 1.5px solid rgba(0, 194, 255, 0.25);
+      border-radius: 999px;
+      padding: 6px;
+      backdrop-filter: blur(16px);
+      box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+      position: relative;
+      z-index: 10;
+    }
+
+    .vs-tab-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 12px 28px;
+      border-radius: 999px;
+      border: none;
+      background: transparent;
+      color: rgba(255, 255, 255, 0.7);
+      font-family: 'Instrument Sans', sans-serif;
+      font-size: 15px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+      white-space: nowrap;
+    }
+
+    .vs-tab-btn:hover {
+      color: var(--white);
+      background: rgba(255, 255, 255, 0.06);
+    }
+
+    .vs-tab-btn.active {
+      background: var(--cyan);
+      color: var(--navy);
+      box-shadow: 0 4px 20px rgba(0, 194, 255, 0.45);
+      font-weight: 800;
+    }
+
+    .vs-tab-btn .tab-badge {
+      font-size: 10px;
+      font-weight: 800;
+      padding: 2px 7px;
+      border-radius: 99px;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      background: rgba(255, 255, 255, 0.2);
+    }
+
+    .vs-tab-btn.active .tab-badge {
+      background: var(--navy);
+      color: var(--cyan);
     }
 
     .vs-hero-title {
       font-family: 'Instrument Sans', sans-serif;
-      font-size: clamp(34px, 5.5vw, 64px);
+      font-size: clamp(34px, 5.5vw, 62px);
       font-weight: 800;
       color: var(--white);
       line-height: 1.08;
-      letter-spacing: -0.025em;
+      letter-spacing: -0.03em;
       margin-bottom: 20px;
-      max-width: 860px;
+      max-width: 880px;
       margin-left: auto;
       margin-right: auto;
     }
@@ -455,930 +362,1473 @@
     .vs-hero-title em {
       color: var(--cyan);
       font-style: normal;
+      background: linear-gradient(135deg, #00C2FF 0%, #33CFFF 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
     }
 
     .vs-hero-lede {
       font-size: clamp(16px, 1.9vw, 19px);
       color: rgba(255, 255, 255, 0.82);
-      max-width: 640px;
-      margin: 0 auto 20px;
-      line-height: 1.55;
-      font-weight: 600;
-    }
-
-    .vs-hero-sub {
-      font-size: clamp(14px, 1.6vw, 16px);
-      color: rgba(255, 255, 255, 0.6);
       max-width: 680px;
-      margin: 0 auto 44px;
-      line-height: 1.75;
+      margin: 0 auto 36px;
+      line-height: 1.6;
+      font-weight: 500;
     }
 
     .vs-hero-actions {
       display: flex;
-      gap: 14px;
+      gap: 16px;
       justify-content: center;
       flex-wrap: wrap;
     }
 
+    /* Tab Content Pane Visibility */
+    .vs-tab-pane {
+      display: none;
+      opacity: 0;
+      transform: translateY(12px);
+      transition: opacity 0.35s ease, transform 0.35s ease;
+    }
+
+    .vs-tab-pane.active {
+      display: block;
+      opacity: 1;
+      transform: translateY(0);
+    }
+
     /* ════════════════════════════════
-       INTRO
+       TRUST BAR
     ════════════════════════════════ */
-    .vs-intro {
+    .vs-trust-bar {
+      background: var(--navy-1);
+      border-bottom: 1px solid rgba(0, 194, 255, 0.12);
+      padding: 24px 0;
+    }
+
+    .trust-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+    }
+
+    .trust-item {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      color: rgba(255, 255, 255, 0.9);
+      font-size: 14px;
+      font-weight: 700;
+      padding: 12px 16px;
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(0, 194, 255, 0.12);
+      border-radius: 12px;
+      text-align: center;
+      transition: all 0.2s;
+    }
+
+    .trust-item:hover {
+      border-color: rgba(0, 194, 255, 0.3);
+      background: rgba(0, 194, 255, 0.06);
+    }
+
+    .trust-icon {
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      background: var(--cyan);
+      color: var(--navy);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      font-weight: 800;
+    }
+
+    /* ════════════════════════════════
+       SECTION 2: NETWORK INTO INCOME
+    ════════════════════════════════ */
+    .vs-intro-section {
       padding: 100px 0;
       background: var(--white);
     }
 
-    .vs-intro-inner {
-      max-width: 780px;
-      margin: 0 auto;
-      text-align: center;
-    }
-
-    .vs-intro-inner .section-heading {
-      font-size: clamp(26px, 3.2vw, 36px);
-    }
-
-    .vs-intro-inner p {
-      font-size: 17px;
-      color: #5B7A9E;
-      line-height: 1.8;
-      margin-top: 20px;
-    }
-
-    /* ════════════════════════════════
-       FEATURES
-    ════════════════════════════════ */
-    .vs-features {
-      padding: 110px 0;
-      background: var(--gray-bg);
-    }
-
-    .vs-features-header {
-      text-align: center;
-      margin-bottom: 64px;
-    }
-
-    .vs-features-header .section-sub {
-      margin: 0 auto;
-    }
-
-    .feat-grid {
+    .intro-card-wrap {
       display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      grid-auto-rows: minmax(180px, auto);
-      gap: 20px;
-    }
-
-    .feat-card {
-      grid-column: span 1;
-      background: var(--white);
-      border: 1px solid #E2EBF5;
-      border-radius: var(--radius-xl);
-      overflow: hidden;
-      transition: transform 0.28s ease, box-shadow 0.28s ease, border-color 0.28s ease;
-      display: flex;
-      flex-direction: column;
-      padding: 28px 26px;
-      position: relative;
-    }
-
-    .feat-card:hover {
-      transform: translateY(-4px);
-      box-shadow: 0 24px 60px rgba(6, 17, 31, 0.1);
-      border-color: var(--cyan-border);
-    }
-
-    .feat-card-head {
-      display: flex;
+      grid-template-columns: 1fr 1fr;
+      gap: 40px;
       align-items: center;
-      gap: 14px;
-      margin-bottom: 16px;
     }
 
-    .feat-num {
-      font-family: 'Instrument Sans', sans-serif;
-      font-size: 12px;
-      font-weight: 800;
-      letter-spacing: 0.08em;
-      color: var(--cyan-dim);
-      background: rgba(0, 194, 255, 0.08);
-      border: 1px solid rgba(0, 194, 255, 0.18);
-      border-radius: 8px;
-      padding: 4px 10px;
-    }
-
-    .feat-icon {
-      width: 40px;
-      height: 40px;
-      border-radius: 10px;
-      background: rgba(0, 194, 255, 0.1);
-      border: 1px solid rgba(0, 194, 255, 0.2);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: var(--cyan-dim);
-      flex-shrink: 0;
-    }
-
-    .feat-card h3 {
-      font-family: 'Instrument Sans', sans-serif;
-      font-size: 19px;
-      font-weight: 800;
-      color: var(--navy);
-      margin-bottom: 10px;
-      letter-spacing: -0.015em;
-    }
-
-    .feat-card p {
-      font-size: 14px;
-      color: #5B7A9E;
-      line-height: 1.65;
-    }
-
-    /* ── Photo accent (top-bleed strip, compact cards) ── */
-    .feat-photo-top {
-      margin: -28px -26px 18px;
-      height: 108px;
-      background: var(--navy);
-      flex-shrink: 0;
-    }
-
-    .feat-photo-top img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      object-position: 50% 8%;
-      display: block;
-    }
-
-    /* ── Hero tiles (2 of 6, wider + richer) ── */
-    .feat-card.feat-hero {
-      grid-column: span 2;
-      padding: 36px 40px;
-      justify-content: flex-end;
-      background: linear-gradient(165deg, var(--white) 60%, #F2F8FF 100%);
-    }
-
-    .feat-hero-num {
-      position: absolute;
-      top: 18px;
-      right: 26px;
-      font-family: 'Instrument Sans', sans-serif;
-      font-size: 68px;
-      font-weight: 800;
-      line-height: 1;
-      color: rgba(0, 194, 255, 0.09);
-      pointer-events: none;
-    }
-
-    .feat-card.feat-hero .feat-icon {
-      width: 56px;
-      height: 56px;
-      border-radius: 14px;
+    .intro-content-side .section-heading {
       margin-bottom: 20px;
     }
 
-    .feat-card.feat-hero h3 {
-      font-size: 27px;
-      margin-bottom: 12px;
-    }
-
-    .feat-card.feat-hero p {
-      font-size: 15.5px;
-      max-width: 380px;
-    }
-
-    .feat-hero-body {
-      display: flex;
-      align-items: flex-end;
-      gap: 28px;
-      width: 100%;
-    }
-
-    .feat-hero-text {
-      flex: 1;
-      min-width: 0;
-    }
-
-    .feat-hero-photo {
-      width: 136px;
-      height: 176px;
-      border-radius: 16px;
-      overflow: hidden;
-      flex-shrink: 0;
-      background: var(--navy);
-    }
-
-    .feat-hero-photo img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      object-position: 50% 10%;
-      display: block;
-    }
-
-    @media (max-width: 960px) {
-      .feat-card.feat-hero {
-        grid-column: span 1;
-        padding: 28px 26px;
-      }
-
-      .feat-hero-num {
-        font-size: 48px;
-      }
-
-      .feat-card.feat-hero h3 {
-        font-size: 21px;
-      }
-
-      .feat-hero-body {
-        flex-direction: column-reverse;
-        align-items: stretch;
-        gap: 18px;
-      }
-
-      .feat-hero-photo {
-        width: 100%;
-        height: 140px;
-      }
-    }
-
-    /* ════════════════════════════════
-       BENEFITS (split)
-    ════════════════════════════════ */
-    .vs-benefits {
-      padding: 110px 0;
-      background: var(--white);
-    }
-
-    .vs-benefits-header {
-      text-align: center;
-      margin-bottom: 64px;
-    }
-
-    .vs-benefits-header .section-sub {
-      margin: 0 auto;
-    }
-
-    .benefits-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 32px;
-    }
-
-    .benefit-col {
-      border: 1px solid #E2EBF5;
-      border-radius: var(--radius-xl);
-      padding: 44px 40px;
-      background: linear-gradient(180deg, #FDFEFF 0%, #F7FBFF 100%);
-    }
-
-    .benefit-col.dark {
-      background: var(--navy);
-      border-color: rgba(0, 194, 255, 0.16);
-    }
-
-    .benefit-col-label {
-      display: inline-block;
-      font-size: 11px;
-      font-weight: 800;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-      color: var(--cyan-dim);
-      margin-bottom: 14px;
-    }
-
-    .benefit-col.dark .benefit-col-label {
-      color: var(--cyan);
-    }
-
-    .benefit-col h3 {
-      font-family: 'Instrument Sans', sans-serif;
-      font-size: 26px;
-      font-weight: 800;
-      color: var(--navy);
-      margin-bottom: 28px;
-      letter-spacing: -0.02em;
-    }
-
-    .benefit-col.dark h3 {
-      color: var(--white);
-    }
-
-    .benefit-list {
+    .intro-bullets {
       list-style: none;
       display: flex;
       flex-direction: column;
-      gap: 14px;
+      gap: 12px;
+      margin: 24px 0 28px;
     }
 
-    .benefit-list li {
+    .intro-bullets li {
       display: flex;
-      align-items: flex-start;
+      align-items: center;
       gap: 12px;
       font-size: 15px;
-      color: #3E5A7A;
-      line-height: 1.6;
+      font-weight: 600;
+      color: #374151;
     }
 
-    .benefit-col.dark .benefit-list li {
-      color: rgba(255, 255, 255, 0.78);
-    }
-
-    .benefit-list li .check {
-      width: 22px;
-      height: 22px;
-      flex-shrink: 0;
-      border-radius: 50%;
-      background: rgba(0, 194, 255, 0.14);
-      border: 1px solid rgba(0, 194, 255, 0.28);
+    .bullet-check {
+      width: 24px;
+      height: 24px;
+      border-radius: 6px;
+      background: rgba(0, 194, 255, 0.12);
       color: var(--cyan-dim);
       display: flex;
       align-items: center;
       justify-content: center;
-      margin-top: 1px;
+      flex-shrink: 0;
     }
 
-    .benefit-col.dark .benefit-list li .check {
-      color: var(--cyan);
+    .intro-box-card {
+      background: linear-gradient(135deg, var(--navy) 0%, var(--navy-3) 100%);
+      border: 1px solid rgba(0, 194, 255, 0.25);
+      border-radius: var(--radius-xl);
+      padding: 44px 38px;
+      color: var(--white);
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 20px 50px rgba(6, 17, 31, 0.15);
+    }
+
+    .intro-box-card.with-side-photo {
+      display: grid;
+      grid-template-columns: 1.2fr 0.8fr;
+      gap: 32px;
+      align-items: center;
+      padding: 40px 44px;
+    }
+
+    .intro-box-photo-wrap {
+      width: 100%;
+      height: 220px;
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      border: 1px solid rgba(0, 194, 255, 0.25);
+      box-shadow: 0 16px 36px rgba(0, 0, 0, 0.35);
+      position: relative;
+    }
+
+    .intro-box-photo-wrap img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.35s ease;
+    }
+
+    .intro-box-card.with-side-photo:hover .intro-box-photo-wrap img {
+      transform: scale(1.05);
+    }
+
+    .intro-box-card::before {
+      content: '';
+      position: absolute;
+      top: -40px;
+      right: -40px;
+      width: 160px;
+      height: 160px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(0, 194, 255, 0.3) 0%, transparent 70%);
+    }
+
+    .intro-box-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: var(--cyan);
+      color: var(--navy);
+      font-size: 11px;
+      font-weight: 800;
+      padding: 4px 12px;
+      border-radius: 6px;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      margin-bottom: 20px;
+    }
+
+    .intro-box-card h3 {
+      font-size: 24px;
+      font-weight: 800;
+      margin-bottom: 16px;
+      line-height: 1.3;
+    }
+
+    .intro-box-card p {
+      font-size: 15px;
+      color: rgba(255, 255, 255, 0.78);
+      line-height: 1.7;
     }
 
     /* ════════════════════════════════
-       MORE WAYS (CTA cards)
+       WHO CAN JOIN (PHOTO CARDS)
     ════════════════════════════════ */
-    .vs-more {
+    .vs-persona-section {
+      padding: 100px 0;
+      background: var(--gray-bg);
+    }
+
+    .vs-persona-header {
+      text-align: center;
+      margin-bottom: 56px;
+    }
+
+    .vs-persona-header .section-sub {
+      margin: 0 auto;
+    }
+
+    .persona-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 20px;
+    }
+
+    .persona-card {
+      background: var(--white);
+      border: 1px solid #E2EBF5;
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      transition: all 0.28s ease;
+      display: flex;
+      flex-direction: column;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.03);
+    }
+
+    .persona-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 20px 48px rgba(6, 17, 31, 0.12);
+      border-color: var(--cyan-border);
+    }
+
+    .persona-photo-wrap {
+      width: 100%;
+      height: 190px;
+      overflow: hidden;
+      position: relative;
+      background: var(--navy-1);
+    }
+
+    .persona-photo-wrap img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: top center;
+      transition: transform 0.35s ease;
+    }
+
+    .persona-card:hover .persona-photo-wrap img {
+      transform: scale(1.06);
+    }
+
+    .persona-lucide-badge {
+      position: absolute;
+      top: 12px;
+      right: 12px;
+      width: 32px;
+      height: 32px;
+      border-radius: 8px;
+      background: var(--navy);
+      color: var(--cyan);
+      border: 1px solid rgba(0, 194, 255, 0.3);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    }
+
+    .persona-info {
+      padding: 20px 18px;
+      text-align: left;
+    }
+
+    .persona-info h4 {
+      font-size: 17px;
+      font-weight: 800;
+      color: var(--navy);
+      margin-bottom: 4px;
+    }
+
+    .persona-info p {
+      font-size: 13px;
+      color: #6B849E;
+      line-height: 1.5;
+    }
+
+    .persona-banner {
+      margin-top: 40px;
+      background: linear-gradient(90deg, var(--navy) 0%, var(--navy-2) 100%);
+      border: 1px solid rgba(0, 194, 255, 0.2);
+      border-radius: var(--radius-lg);
+      padding: 20px 30px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      color: var(--white);
+    }
+
+    .persona-banner p {
+      font-size: 16px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    /* ════════════════════════════════
+       HOW IT WORKS (CONNECTING STEPS)
+    ════════════════════════════════ */
+    .vs-how-section {
+      padding: 110px 0;
+      background: var(--white);
+    }
+
+    .how-header {
+      text-align: center;
+      margin-bottom: 64px;
+    }
+
+    .steps-flow {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 20px;
+      position: relative;
+    }
+
+    .steps-flow-5 {
+      grid-template-columns: repeat(5, 1fr);
+    }
+
+    .step-card {
+      background: var(--gray-bg);
+      border: 1px solid #E2EBF5;
+      border-radius: var(--radius-lg);
+      padding: 30px 24px;
+      position: relative;
+      transition: all 0.25s ease;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .step-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 16px 40px rgba(6, 17, 31, 0.08);
+      border-color: var(--cyan-border);
+      background: var(--white);
+    }
+
+    .step-num-badge {
+      width: 36px;
+      height: 36px;
+      border-radius: 10px;
+      background: var(--navy);
+      color: var(--cyan);
+      font-size: 14px;
+      font-weight: 800;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 18px;
+    }
+
+    .step-card h3 {
+      font-size: 18px;
+      font-weight: 800;
+      color: var(--navy);
+      margin-bottom: 10px;
+    }
+
+    .step-card p {
+      font-size: 14px;
+      color: #5B7A9E;
+      line-height: 1.6;
+    }
+
+    /* ════════════════════════════════
+       SELL EVERYTHING FROM (PHOTO CARDS)
+    ════════════════════════════════ */
+    .categories-box {
+      margin-top: 60px;
+      background: var(--navy);
+      border-radius: var(--radius-xl);
+      padding: 48px 40px;
+      color: var(--white);
+      border: 1px solid rgba(0, 194, 255, 0.2);
+    }
+
+    .categories-box h3 {
+      font-size: 24px;
+      font-weight: 800;
+      margin-bottom: 30px;
+      text-align: center;
+    }
+
+    .cat-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 18px;
+    }
+
+    .cat-card {
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(0, 194, 255, 0.18);
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      transition: all 0.28s ease;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .cat-card:hover {
+      background: rgba(0, 194, 255, 0.08);
+      border-color: var(--cyan);
+      transform: translateY(-4px);
+      box-shadow: 0 16px 36px rgba(0, 0, 0, 0.35);
+    }
+
+    .cat-photo-wrap {
+      width: 100%;
+      height: 135px;
+      overflow: hidden;
+      position: relative;
+      background: var(--navy-3);
+    }
+
+    .cat-photo-wrap img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.35s ease;
+    }
+
+    .cat-card:hover .cat-photo-wrap img {
+      transform: scale(1.08);
+    }
+
+    .cat-lucide-badge {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      width: 30px;
+      height: 30px;
+      border-radius: 8px;
+      background: var(--navy);
+      color: var(--cyan);
+      border: 1px solid rgba(0, 194, 255, 0.3);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+    }
+
+    .cat-card-body {
+      padding: 16px 18px;
+    }
+
+    .cat-card-body h4 {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--white);
+      line-height: 1.4;
+    }
+
+    /* ════════════════════════════════
+       WHY CHOOSE CARDS
+    ════════════════════════════════ */
+    .vs-why-section {
       padding: 110px 0;
       background: var(--gray-bg);
     }
 
-    .vs-more-header {
+    .why-header {
       text-align: center;
       margin-bottom: 64px;
-      max-width: 720px;
-      margin-left: auto;
-      margin-right: auto;
     }
 
-    .vs-more-header .section-sub {
-      margin: 0 auto;
-    }
-
-    .more-grid {
+    .why-grid {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
       gap: 24px;
     }
 
-    .more-card {
+    .why-card {
       background: var(--white);
       border: 1px solid #E2EBF5;
-      border-radius: var(--radius-xl);
-      padding: 36px 32px;
-      display: flex;
-      flex-direction: column;
-      transition: transform 0.28s ease, box-shadow 0.28s ease, border-color 0.28s ease;
+      border-radius: var(--radius-lg);
+      padding: 30px 26px;
+      transition: all 0.25s ease;
     }
 
-    .more-card:hover {
+    .why-card:hover {
       transform: translateY(-4px);
-      box-shadow: 0 24px 60px rgba(6, 17, 31, 0.08);
+      box-shadow: 0 20px 48px rgba(6, 17, 31, 0.09);
       border-color: var(--cyan-border);
     }
 
-    .more-icon {
-      width: 52px;
-      height: 52px;
-      border-radius: 14px;
+    .why-icon-wrap {
+      width: 48px;
+      height: 48px;
+      border-radius: 12px;
       background: rgba(0, 194, 255, 0.1);
-      border: 1px solid rgba(0, 194, 255, 0.22);
+      border: 1px solid rgba(0, 194, 255, 0.2);
+      color: var(--cyan-dim);
       display: flex;
       align-items: center;
       justify-content: center;
-      color: var(--cyan-dim);
-      margin-bottom: 22px;
+      margin-bottom: 20px;
     }
 
-    .more-card h4 {
-      font-family: 'Instrument Sans', sans-serif;
-      font-size: 20px;
+    .why-card h3 {
+      font-size: 18px;
       font-weight: 800;
       color: var(--navy);
-      margin-bottom: 12px;
-      letter-spacing: -0.015em;
+      margin-bottom: 10px;
     }
 
-    .more-card p {
-      font-size: 14.5px;
-      color: #5B7A9E;
-      line-height: 1.7;
-      margin-bottom: 24px;
-      flex: 1;
-    }
-
-    .more-card-cta {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
+    .why-card p {
       font-size: 14px;
-      font-weight: 700;
-      color: var(--cyan-dim);
-      text-decoration: none;
-      transition: gap 0.2s, color 0.2s;
-      align-self: flex-start;
+      color: #5B7A9E;
+      line-height: 1.6;
     }
 
-    .more-card-cta:hover {
-      gap: 10px;
+    /* ════════════════════════════════
+       DISTRIBUTION ACROSS NIGERIA (BRANDS)
+    ════════════════════════════════ */
+    .vs-distro-section {
+      padding: 110px 0;
+      background: var(--navy);
+      color: var(--white);
+      position: relative;
+    }
+
+    .distro-header {
+      text-align: center;
+      margin-bottom: 60px;
+    }
+
+    .distro-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 20px;
+    }
+
+    .distro-card {
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(0, 194, 255, 0.18);
+      border-radius: var(--radius-lg);
+      padding: 24px 20px;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      transition: all 0.22s;
+    }
+
+    .distro-card:hover {
+      background: rgba(0, 194, 255, 0.08);
+      border-color: var(--cyan);
+      transform: translateY(-3px);
+    }
+
+    .distro-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 10px;
+      background: var(--cyan);
       color: var(--navy);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      font-weight: 800;
+    }
+
+    .distro-card span {
+      font-size: 15px;
+      font-weight: 700;
     }
 
     /* ════════════════════════════════
        FINAL CTA
     ════════════════════════════════ */
     .vs-cta {
-      background: var(--navy);
-      padding: 110px 0;
-      text-align: center;
+      padding: 120px 0;
+      background: linear-gradient(135deg, var(--navy) 0%, var(--navy-2) 100%);
       position: relative;
       overflow: hidden;
+      text-align: center;
+      color: var(--white);
     }
 
     .vs-cta::before {
       content: '';
       position: absolute;
-      inset: 0;
-      background: radial-gradient(ellipse 60% 80% at 50% 100%, rgba(0, 194, 255, 0.14) 0%, transparent 70%);
+      top: -50%;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 800px;
+      height: 400px;
+      background: radial-gradient(ellipse, rgba(0, 194, 255, 0.2) 0%, transparent 70%);
       pointer-events: none;
     }
 
     .vs-cta-inner {
+      max-width: 720px;
+      margin: 0 auto;
       position: relative;
-      z-index: 1;
+      z-index: 2;
     }
 
     .vs-cta-title {
-      font-family: 'Instrument Sans', sans-serif;
-      font-size: clamp(28px, 4.5vw, 48px);
+      font-size: clamp(32px, 4vw, 50px);
       font-weight: 800;
-      color: var(--white);
       letter-spacing: -0.025em;
-      margin-bottom: 16px;
-      line-height: 1.1;
+      line-height: 1.15;
+      margin-bottom: 20px;
     }
 
     .vs-cta-sub {
-      font-size: 16px;
-      color: rgba(255, 255, 255, 0.6);
-      max-width: 580px;
-      margin: 0 auto 40px;
-      line-height: 1.7;
+      font-size: 17px;
+      color: rgba(255, 255, 255, 0.8);
+      margin-bottom: 40px;
+      line-height: 1.6;
     }
 
     .vs-cta-actions {
       display: flex;
-      gap: 14px;
+      gap: 16px;
       justify-content: center;
       flex-wrap: wrap;
     }
 
     /* ════════════════════════════════
-       FOOTER
+       RESPONSIVE BREAKPOINTS
     ════════════════════════════════ */
-    footer {
-      background: var(--navy);
-      border-top: 1px solid rgba(0, 194, 255, 0.1);
-      padding: 56px 0 28px;
+    @media (max-width: 1024px) {
+      .trust-grid { grid-template-columns: repeat(2, 1fr); }
+      .intro-card-wrap { grid-template-columns: 1fr; }
+      .persona-grid { grid-template-columns: repeat(2, 1fr); }
+      .steps-flow, .steps-flow-5 { grid-template-columns: repeat(2, 1fr); }
+      .cat-grid { grid-template-columns: repeat(2, 1fr); }
+      .why-grid { grid-template-columns: repeat(2, 1fr); }
+      .distro-grid { grid-template-columns: repeat(2, 1fr); }
     }
 
-    .footer-grid {
-      display: grid;
-      grid-template-columns: 2fr 1fr 1fr 1fr 1fr;
-      gap: 40px;
-      margin-bottom: 48px;
-    }
-
-    .footer-logo-wrap {
-      margin-bottom: 16px;
-    }
-
-    .footer-tagline {
-      font-size: 13px;
-      color: var(--gray-2);
-      line-height: 1.65;
-      max-width: 220px;
-      margin-bottom: 20px;
-    }
-
-    .footer-socials {
-      display: flex;
-      gap: 8px;
-    }
-
-    .footer-social {
-      width: 34px;
-      height: 34px;
-      border-radius: 8px;
-      background: rgba(255, 255, 255, 0.05);
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      color: var(--gray-2);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 13px;
-      text-decoration: none;
-      transition: all 0.2s;
-    }
-
-    .footer-social:hover {
-      border-color: rgba(0, 194, 255, 0.4);
-      color: var(--cyan);
-    }
-
-    .footer-col-title {
-      font-size: 11px;
-      font-weight: 800;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      color: rgba(255, 255, 255, 0.3);
-      margin-bottom: 16px;
-    }
-
-    .footer-col-links {
-      list-style: none;
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-    }
-
-    .footer-col-links a {
-      font-size: 14px;
-      color: var(--gray-2);
-      text-decoration: none;
-      transition: color 0.2s;
-    }
-
-    .footer-col-links a:hover {
-      color: var(--white);
-    }
-
-    .footer-bottom {
-      padding-top: 24px;
-      border-top: 1px solid rgba(255, 255, 255, 0.06);
-      display: flex;
-      flex-wrap: wrap;
-      align-items: center;
-      justify-content: space-between;
-      gap: 16px;
-    }
-
-    .footer-copy {
-      font-size: 12px;
-      color: rgba(255, 255, 255, 0.3);
-    }
-
-    .footer-locations {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 20px;
-    }
-
-    .footer-location-item {
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      font-size: 12px;
-      color: rgba(255, 255, 255, 0.3);
-    }
-
-    /* ── RESPONSIVE ── */
-    @media (max-width: 960px) {
-      #navbar.scrolled {
-        left: 12px;
-        right: 12px;
-      }
-
-      .nav-links {
-        display: none;
-      }
-
-      .feat-grid {
-        grid-template-columns: 1fr;
-      }
-
-      .benefits-grid {
-        grid-template-columns: 1fr;
-      }
-
-      .more-grid {
-        grid-template-columns: 1fr;
-      }
-
-      .footer-grid {
-        grid-template-columns: 1fr 1fr 1fr;
-      }
-
-      .footer-grid> :first-child {
-        grid-column: 1 / -1;
-      }
-    }
-
-    @media (max-width: 600px) {
-      .vs-hero {
-        padding: 130px 0 80px;
-      }
-
-      .vs-intro,
-      .vs-features,
-      .vs-benefits,
-      .vs-more,
-      .vs-cta {
-        padding: 70px 0;
-      }
-
-      .benefit-col {
-        padding: 32px 24px;
-      }
-
-      .footer-grid {
-        grid-template-columns: 1fr 1fr;
-      }
-    }
-
-    /* ── No bold anywhere ────────────────────────── */
-    *,
-    *::before,
-    *::after {
-      font-weight: 400 !important;
+    @media (max-width: 640px) {
+      .trust-grid { grid-template-columns: 1fr; }
+      .persona-grid { grid-template-columns: 1fr; }
+      .steps-flow, .steps-flow-5 { grid-template-columns: 1fr; }
+      .cat-grid { grid-template-columns: 1fr; }
+      .why-grid { grid-template-columns: 1fr; }
+      .distro-grid { grid-template-columns: 1fr; }
+      .vs-tab-btn { padding: 10px 18px; font-size: 13.5px; }
+      .persona-banner { flex-direction: column; gap: 14px; text-align: center; }
     }
   </style>
 </head>
 
 <body>
 
-  <!-- ════ NAVBAR (shared) ═══════════════════════════ -->
+  <!-- ════ NAVBAR (shared loader) ════════════════════ -->
   <div id="nav-root"></div>
   <script src="/nav-loader.js"></script>
 
-  <!-- ════ HERO ══════════════════════════════════════ -->
+  <!-- ════ HERO & DUAL TAB SWITCHER ═════════════════ -->
   <section class="vs-hero">
     <div class="container">
       <div class="reveal">
-        <h1 class="vs-hero-title">
-          The seller network for <em>campaigns, commissions,</em> and real sales activity.
-        </h1>
-        <p class="vs-hero-lede">
-          VoltSquad is Digihire's campaign marketplace.
-        </p>
-        <p class="vs-hero-sub">
-          Brands launch targeted sales campaigns. Sellers join real opportunities to promote products,
-          earn commissions, track performance, and grow their income — all in one place.
-        </p>
-        <div class="vs-hero-actions">
-          <a href="/login?role=brand" class="btn btn-cyan btn-lg">Launch a Campaign</a>
-          <a href="/login?role=talent" class="btn btn-outline-white btn-lg">Join VoltSquad</a>
+        
+        <!-- DUAL TAB SWITCHER -->
+        <div class="vs-tab-switcher-wrap">
+          <div class="vs-tab-switcher" role="tablist" aria-label="Target Audience Switcher">
+            <button class="vs-tab-btn active" data-tab="sellers" id="tab-btn-sellers" role="tab" aria-selected="true" aria-controls="pane-sellers">
+              <i data-lucide="user-check" class="lucide ic-md"></i>
+              <span>For Sellers</span>
+              <span class="tab-badge">Earn</span>
+            </button>
+            <button class="vs-tab-btn" data-tab="brands" id="tab-btn-brands" role="tab" aria-selected="false" aria-controls="pane-brands">
+              <i data-lucide="building-2" class="lucide ic-md"></i>
+              <span>For Brands</span>
+              <span class="tab-badge">Scale</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- HERO FOR SELLERS -->
+        <div class="vs-tab-pane active" id="pane-sellers" data-pane="sellers" role="tabpanel" aria-labelledby="tab-btn-sellers">
+          <h1 class="vs-hero-title">
+            Get Paid to Sell for <em>Top Brands.</em>
+          </h1>
+          <p class="vs-hero-lede">
+            Join commission-based sales campaigns from brands looking for people who can sell. Whether you’re a student, salesperson, creator, freelancer, or entrepreneur, VoltSquad helps you earn by promoting products people already need.
+          </p>
+          <div class="vs-hero-actions">
+            <a href="/login?role=talent" class="btn btn-cyan btn-lg">
+              <i data-lucide="user-plus" class="lucide ic-md"></i> Join VoltSquad
+            </a>
+            <a href="#sellers-how-it-works" class="btn btn-outline-white btn-lg">
+              <i data-lucide="compass" class="lucide ic-md"></i> See Active Campaigns
+            </a>
+          </div>
+        </div>
+
+        <!-- HERO FOR BRANDS -->
+        <div class="vs-tab-pane" id="pane-brands" data-pane="brands" role="tabpanel" aria-labelledby="tab-btn-brands">
+          <h1 class="vs-hero-title">
+            Launch Sales Campaigns <em>Without Hiring a Sales Team.</em>
+          </h1>
+          <p class="vs-hero-lede">
+            Activate hundreds of sellers across campuses, cities, and communities to generate leads, customers, downloads, signups, and sales.
+          </p>
+          <div class="vs-hero-actions">
+            <a href="/login?role=brand" class="btn btn-cyan btn-lg">
+              <i data-lucide="rocket" class="lucide ic-md"></i> Launch Your Campaign
+            </a>
+            <a href="#book-demo" class="btn btn-outline-white btn-lg">
+              <i data-lucide="calendar" class="lucide ic-md"></i> Book a Demo
+            </a>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ════════════════════════════════════════════════
+       SELLERS TAB PANE MAIN CONTENT
+  ════════════════════════════════════════════════ -->
+  <div class="vs-tab-pane active" data-pane="sellers">
+
+    <!-- TRUST BAR FOR SELLERS -->
+    <section class="vs-trust-bar">
+      <div class="container">
+        <div class="trust-grid">
+          <div class="trust-item">
+            <span class="trust-icon"><i data-lucide="check" class="lucide ic-sm"></i></span>
+            <span>Commission-Based Campaigns</span>
+          </div>
+          <div class="trust-item">
+            <span class="trust-icon"><i data-lucide="check" class="lucide ic-sm"></i></span>
+            <span>Weekly New Opportunities</span>
+          </div>
+          <div class="trust-item">
+            <span class="trust-icon"><i data-lucide="check" class="lucide ic-sm"></i></span>
+            <span>Work From Anywhere</span>
+          </div>
+          <div class="trust-item">
+            <span class="trust-icon"><i data-lucide="check" class="lucide ic-sm"></i></span>
+            <span>Get Paid for Results</span>
+          </div>
         </div>
       </div>
-    </div>
-  </section>
+    </section>
 
-  <!-- ════ INTRO ═════════════════════════════════════ -->
-  <section class="vs-intro">
-    <div class="container">
-      <div class="vs-intro-inner reveal">
-        <p class="section-label">What is VoltSquad?</p>
-        <h2 class="section-heading">A campaign marketplace for brands and sellers.</h2>
-        <p>
-          Brands use VoltSquad to launch targeted sales campaigns and track performance in real time.
-          Sellers use it to discover campaigns, access sales content, track earnings, set revenue targets,
-          and sell across active opportunities.
-        </p>
+    <!-- SECTION 2: TURN YOUR NETWORK INTO INCOME -->
+    <section class="vs-intro-section">
+      <div class="container">
+        <div class="intro-card-wrap reveal">
+          <div class="intro-content-side">
+            <span class="section-label"><i data-lucide="trending-up" class="lucide ic-sm"></i> Monetize Your Influence</span>
+            <h2 class="section-heading">Turn Your Network Into Income.</h2>
+            <p style="font-size: 16px; color: #5B7A9E; line-height: 1.7;">
+              Every day, leading brands need motivated people to promote their products and drive tangible results across communities.
+            </p>
+
+            <ul class="intro-bullets">
+              <li><span class="bullet-check"><i data-lucide="arrow-right" class="lucide ic-sm"></i></span> Drive app downloads</li>
+              <li><span class="bullet-check"><i data-lucide="arrow-right" class="lucide ic-sm"></i></span> Generate qualified leads</li>
+              <li><span class="bullet-check"><i data-lucide="arrow-right" class="lucide ic-sm"></i></span> Sell high-demand products</li>
+              <li><span class="bullet-check"><i data-lucide="arrow-right" class="lucide ic-sm"></i></span> Acquire new customers</li>
+              <li><span class="bullet-check"><i data-lucide="arrow-right" class="lucide ic-sm"></i></span> Promote active services</li>
+            </ul>
+          </div>
+
+          <div class="intro-box-card">
+            <span class="intro-box-badge">The VoltSquad Advantage</span>
+            <h3>No Sales Team Needed — Just Performance.</h3>
+            <p>
+              Instead of hiring large traditional sales teams, top companies launch campaigns on VoltSquad.
+            </p>
+            <p style="margin-top: 14px;">
+              You choose the campaigns you want to join, complete sales tasks using our provided brand assets, and earn directly based on your performance.
+            </p>
+          </div>
+        </div>
       </div>
-    </div>
-  </section>
+    </section>
 
-  <!-- ════ FEATURES ══════════════════════════════════ -->
-  <section class="vs-features">
-    <div class="container">
-      <div class="vs-features-header reveal">
-        <p class="section-label">Features</p>
-        <h2 class="section-heading">Built with the tools brands and sellers need.</h2>
-        <p class="section-sub">
-          Everything required to launch, sell, track, and grow — in one campaign platform.
-        </p>
-      </div>
+    <!-- SECTION 3: WHO CAN JOIN? (PHOTO CARDS) -->
+    <section class="vs-persona-section">
+      <div class="container">
+        <div class="vs-persona-header reveal">
+          <span class="section-label"><i data-lucide="users" class="lucide ic-sm"></i> Inclusive Opportunities</span>
+          <h2 class="section-heading">Who Can Join VoltSquad?</h2>
+          <p class="section-sub">VoltSquad is built for anyone with drive and a network to sell.</p>
+        </div>
 
-      <div class="feat-grid stagger-grid">
-        <div class="feat-card feat-hero">
-          <span class="feat-hero-num">01</span>
-          <div class="feat-hero-body">
-            <div class="feat-hero-text">
-              <div class="feat-icon"><i data-lucide="megaphone" class="lucide ic-lg"></i></div>
-              <h3>Campaign Marketplace</h3>
-              <p>
-                Discover active campaigns and see which brands are currently hiring sellers. Browse opportunities,
-                review payout structures, and join the campaigns that fit you best.
-              </p>
+        <div class="persona-grid stagger-grid">
+          <div class="persona-card">
+            <div class="persona-photo-wrap">
+              <img src="/persona-student.png" alt="Students" loading="lazy" />
+              <span class="persona-lucide-badge"><i data-lucide="graduation-cap" class="lucide ic-sm"></i></span>
             </div>
-            <div class="feat-hero-photo"><img src="/feature-marketplace.png"
-                alt="Seller receiving a Volt Squad campaign credit notification" loading="lazy"></div>
+            <div class="persona-info">
+              <h4>Students</h4>
+              <p>Campus ambassadors &amp; active student sellers</p>
+            </div>
+          </div>
+
+          <div class="persona-card">
+            <div class="persona-photo-wrap">
+              <img src="/persona-sales-pro.png" alt="Sales Professionals" loading="lazy" />
+              <span class="persona-lucide-badge"><i data-lucide="briefcase" class="lucide ic-sm"></i></span>
+            </div>
+            <div class="persona-info">
+              <h4>Sales Professionals</h4>
+              <p>Experienced agents monetizing their networks</p>
+            </div>
+          </div>
+
+          <div class="persona-card">
+            <div class="persona-photo-wrap">
+              <img src="/persona-creator.png" alt="Content Creators" loading="lazy" />
+              <span class="persona-lucide-badge"><i data-lucide="camera" class="lucide ic-sm"></i></span>
+            </div>
+            <div class="persona-info">
+              <h4>Content Creators</h4>
+              <p>Digital creators driving social conversions</p>
+            </div>
+          </div>
+
+          <div class="persona-card">
+            <div class="persona-photo-wrap">
+              <img src="/persona-freelancer.png" alt="Freelancers" loading="lazy" />
+              <span class="persona-lucide-badge"><i data-lucide="laptop" class="lucide ic-sm"></i></span>
+            </div>
+            <div class="persona-info">
+              <h4>Freelancers</h4>
+              <p>Remote workers adding extra revenue streams</p>
+            </div>
+          </div>
+
+          <div class="persona-card">
+            <div class="persona-photo-wrap">
+              <img src="/persona-entrepreneur.png" alt="Entrepreneurs" loading="lazy" />
+              <span class="persona-lucide-badge"><i data-lucide="rocket" class="lucide ic-sm"></i></span>
+            </div>
+            <div class="persona-info">
+              <h4>Entrepreneurs</h4>
+              <p>Founders expanding their business reach</p>
+            </div>
+          </div>
+
+          <div class="persona-card">
+            <div class="persona-photo-wrap">
+              <img src="/persona-influencer.png" alt="Campus Influencers" loading="lazy" />
+              <span class="persona-lucide-badge"><i data-lucide="megaphone" class="lucide ic-sm"></i></span>
+            </div>
+            <div class="persona-info">
+              <h4>Campus Influencers</h4>
+              <p>Trendsetters leading peer campaigns</p>
+            </div>
+          </div>
+
+          <div class="persona-card">
+            <div class="persona-photo-wrap">
+              <img src="/persona-community-leader.png" alt="Community Leaders" loading="lazy" />
+              <span class="persona-lucide-badge"><i data-lucide="users" class="lucide ic-sm"></i></span>
+            </div>
+            <div class="persona-info">
+              <h4>Community Leaders</h4>
+              <p>Trusted organizers building grassroots momentum</p>
+            </div>
+          </div>
+
+          <div class="persona-card">
+            <div class="persona-photo-wrap">
+              <img src="/persona-seller.png" alt="Anyone Who Can Sell" loading="lazy" />
+              <span class="persona-lucide-badge"><i data-lucide="zap" class="lucide ic-sm"></i></span>
+            </div>
+            <div class="persona-info">
+              <h4>Anyone Who Can Sell</h4>
+              <p>No prior experience required — just ambition</p>
+            </div>
           </div>
         </div>
 
-        <div class="feat-card">
-          <div class="feat-photo-top"><img src="/feature-wallet.png" alt="Seller sharing a successful payout receipt"
-              loading="lazy"></div>
-          <div class="feat-card-head">
-            <div class="feat-icon"><i data-lucide="wallet" class="lucide ic-lg"></i></div>
-            <span class="feat-num">02</span>
+        <div class="persona-banner reveal">
+          <p><i data-lucide="shield-check" class="lucide ic-md" style="color: var(--cyan);"></i> No previous sales experience required. We equip you with campaign assets and training.</p>
+          <a href="/login?role=talent" class="btn btn-cyan">Start Selling Today</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION 4: HOW IT WORKS & CATEGORIES -->
+    <section class="vs-how-section" id="sellers-how-it-works">
+      <div class="container">
+        <div class="how-header reveal">
+          <span class="section-label"><i data-lucide="git-commit" class="lucide ic-sm"></i> Simple 4-Step Process</span>
+          <h2 class="section-heading">How It Works for Sellers</h2>
+          <p class="section-sub">Start earning in four easy steps from anywhere.</p>
+        </div>
+
+        <div class="steps-flow stagger-grid">
+          <div class="step-card">
+            <div class="step-num-badge">01</div>
+            <h3>Join</h3>
+            <p>Create your free VoltSquad account in less than 2 minutes.</p>
           </div>
-          <h3>Wallet &amp; Earnings Tracker</h3>
-          <p>
-            Track your commissions, monitor earnings, and stay on top of your payout activity through a
-            clear wallet dashboard.
-          </p>
-        </div>
-
-        <div class="feat-card">
-          <div class="feat-card-head">
-            <div class="feat-icon"><i data-lucide="target" class="lucide ic-lg"></i></div>
-            <span class="feat-num">03</span>
+          <div class="step-card">
+            <div class="step-num-badge">02</div>
+            <h3>Browse Campaigns</h3>
+            <p>Choose top brands and products you want to represent.</p>
           </div>
-          <h3>Target Calculator</h3>
-          <p>
-            Set your revenue goals, track your progress, and work toward clear income targets with
-            built-in performance visibility.
-          </p>
-        </div>
-
-        <div class="feat-card">
-          <div class="feat-photo-top"><img src="/feature-content.png"
-              alt="Seller reviewing campaign materials on the go" loading="lazy"></div>
-          <div class="feat-card-head">
-            <div class="feat-icon"><i data-lucide="file-text" class="lucide ic-lg"></i></div>
-            <span class="feat-num">04</span>
+          <div class="step-card">
+            <div class="step-num-badge">03</div>
+            <h3>Sell</h3>
+            <p>Share, promote, and convert using your custom referral links and promo assets.</p>
           </div>
-          <h3>Sales Content &amp; Brand Assets</h3>
-          <p>
-            Get access to campaign details, designs, talking points, selling materials, and the information
-            you need to confidently promote each brand.
-          </p>
-        </div>
-
-        <div class="feat-card">
-          <div class="feat-card-head">
-            <div class="feat-icon"><i data-lucide="store" class="lucide ic-lg"></i></div>
-            <span class="feat-num">05</span>
+          <div class="step-card">
+            <div class="step-num-badge">04</div>
+            <h3>Earn</h3>
+            <p>Track commissions in real time and withdraw your earnings directly to your bank account.</p>
           </div>
-          <h3>Seller Shop / Product Stack</h3>
-          <p>
-            Create your own selling flow by combining products and offers you want to push, making it
-            easier to manage what you are actively selling.
+        </div>
+
+        <!-- CATEGORIES WITH PHOTO CARDS & LUCIDE BADGES -->
+        <div class="categories-box reveal">
+          <h3>Sell Everything From:</h3>
+          <div class="cat-grid stagger-grid">
+            <div class="cat-card">
+              <div class="cat-photo-wrap">
+                <img src="/cat-mobile-apps.png" alt="Mobile Apps & Digital Products" loading="lazy" />
+                <span class="cat-lucide-badge"><i data-lucide="smartphone" class="lucide ic-sm"></i></span>
+              </div>
+              <div class="cat-card-body">
+                <h4>Mobile Apps &amp; Digital Products</h4>
+              </div>
+            </div>
+
+            <div class="cat-card">
+              <div class="cat-photo-wrap">
+                <img src="/cat-fintech.png" alt="Fintech & Financial Services" loading="lazy" />
+                <span class="cat-lucide-badge"><i data-lucide="credit-card" class="lucide ic-sm"></i></span>
+              </div>
+              <div class="cat-card-body">
+                <h4>Fintech &amp; Financial Services</h4>
+              </div>
+            </div>
+
+            <div class="cat-card">
+              <div class="cat-photo-wrap">
+                <img src="/cat-fashion.png" alt="Fashion & Lifestyle Products" loading="lazy" />
+                <span class="cat-lucide-badge"><i data-lucide="shopping-bag" class="lucide ic-sm"></i></span>
+              </div>
+              <div class="cat-card-body">
+                <h4>Fashion &amp; Lifestyle Products</h4>
+              </div>
+            </div>
+
+            <div class="cat-card">
+              <div class="cat-photo-wrap">
+                <img src="/cat-gadgets.png" alt="Gadgets & Electronics" loading="lazy" />
+                <span class="cat-lucide-badge"><i data-lucide="headphones" class="lucide ic-sm"></i></span>
+              </div>
+              <div class="cat-card-body">
+                <h4>Gadgets &amp; Electronics</h4>
+              </div>
+            </div>
+
+            <div class="cat-card">
+              <div class="cat-photo-wrap">
+                <img src="/cat-consumer.png" alt="Consumer & Retail Products" loading="lazy" />
+                <span class="cat-lucide-badge"><i data-lucide="shopping-cart" class="lucide ic-sm"></i></span>
+              </div>
+              <div class="cat-card-body">
+                <h4>Consumer &amp; Retail Products</h4>
+              </div>
+            </div>
+
+            <div class="cat-card">
+              <div class="cat-photo-wrap">
+                <img src="/persona-student.png" alt="Education & Training Programs" loading="lazy" />
+                <span class="cat-lucide-badge"><i data-lucide="graduation-cap" class="lucide ic-sm"></i></span>
+              </div>
+              <div class="cat-card-body">
+                <h4>Education &amp; Training Programs</h4>
+              </div>
+            </div>
+
+            <div class="cat-card">
+              <div class="cat-photo-wrap">
+                <img src="/cat-mobile-apps.png" alt="Subscription & SaaS Products" loading="lazy" />
+                <span class="cat-lucide-badge"><i data-lucide="package" class="lucide ic-sm"></i></span>
+              </div>
+              <div class="cat-card-body">
+                <h4>Subscription &amp; SaaS Products</h4>
+              </div>
+            </div>
+
+            <div class="cat-card">
+              <div class="cat-photo-wrap">
+                <img src="/cat-fashion.png" alt="Event Tickets & Experiences" loading="lazy" />
+                <span class="cat-lucide-badge"><i data-lucide="ticket" class="lucide ic-sm"></i></span>
+              </div>
+              <div class="cat-card-body">
+                <h4>Event Tickets &amp; Experiences</h4>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION 5: WHY SELLERS LOVE VOLTSQUAD -->
+    <section class="vs-why-section">
+      <div class="container">
+        <div class="why-header reveal">
+          <span class="section-label"><i data-lucide="heart" class="lucide ic-sm"></i> Seller Benefits</span>
+          <h2 class="section-heading">Why Sellers Love VoltSquad</h2>
+          <p class="section-sub">Freedom, flexibility, and real income rewards for your effort.</p>
+        </div>
+
+        <div class="why-grid stagger-grid">
+          <div class="why-card">
+            <div class="why-icon-wrap"><i data-lucide="clock" class="lucide ic-lg"></i></div>
+            <h3>Work Whenever You Want</h3>
+            <p>Total freedom over your schedule. Work full-time or side hustle on your own terms.</p>
+          </div>
+          <div class="why-card">
+            <div class="why-icon-wrap"><i data-lucide="layers" class="lucide ic-lg"></i></div>
+            <h3>Join Multiple Campaigns</h3>
+            <p>Don't limit yourself to one product. Promote multiple brand campaigns simultaneously.</p>
+          </div>
+          <div class="why-card">
+            <div class="why-icon-wrap"><i data-lucide="calendar-off" class="lucide ic-lg"></i></div>
+            <h3>No Fixed Schedule</h3>
+            <p>No mandatory office hours or fixed shifts. You are your own boss.</p>
+          </div>
+          <div class="why-card">
+            <div class="why-icon-wrap"><i data-lucide="award" class="lucide ic-lg"></i></div>
+            <h3>Get Rewarded for Performance</h3>
+            <p>The more sales and leads you convert, the higher your payout bonuses.</p>
+          </div>
+          <div class="why-card">
+            <div class="why-icon-wrap"><i data-lucide="trending-up" class="lucide ic-lg"></i></div>
+            <h3>Grow Your Sales Skills</h3>
+            <p>Gain practical sales and marketing experience representing top African brands.</p>
+          </div>
+          <div class="why-card">
+            <div class="why-icon-wrap"><i data-lucide="star" class="lucide ic-lg"></i></div>
+            <h3>Build Your Reputation</h3>
+            <p>Earn verified seller badges and unlock high-tier campaigns with premium commission rates.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- FINAL CTA FOR SELLERS -->
+    <section class="vs-cta">
+      <div class="container">
+        <div class="vs-cta-inner reveal">
+          <h2 class="vs-cta-title">Ready to Start Earning?</h2>
+          <p class="vs-cta-sub">
+            Join thousands of sellers building extra income through VoltSquad campaigns today.
+          </p>
+          <div class="vs-cta-actions">
+            <a href="/login?role=talent" class="btn btn-cyan btn-lg">
+              <i data-lucide="user-plus" class="lucide ic-md"></i> Join VoltSquad Today
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </div>
+
+
+  <!-- ════════════════════════════════════════════════
+       BRANDS TAB PANE MAIN CONTENT
+  ════════════════════════════════════════════════ -->
+  <div class="vs-tab-pane" data-pane="brands">
+
+    <!-- SUBHEADLINE CARD BANNER FOR BRANDS -->
+    <section class="vs-intro-section" style="padding: 60px 0 0;">
+      <div class="container">
+        <div class="intro-box-card with-side-photo reveal" style="background: linear-gradient(135deg, var(--navy-1) 0%, var(--navy-3) 100%);">
+          <div class="intro-box-text">
+            <span class="intro-box-badge"><i data-lucide="target" class="lucide ic-sm"></i> On-Demand Sales Network</span>
+            <h3 style="font-size: 28px;">Scale Revenue on Demand.</h3>
+            <p style="font-size: 16px; color: rgba(255, 255, 255, 0.82); margin-top: 12px; line-height: 1.65;">
+              Whether you’re launching a new product, entering a new market, or looking to accelerate growth, VoltSquad gives you an on-demand network of motivated sellers paid strictly based on performance.
+            </p>
+          </div>
+          <div class="intro-box-photo-wrap">
+            <img src="/feature-marketplace.png" alt="Scale Revenue on Demand" loading="lazy" />
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- PERFECT FOR SECTORS (LUCIDE ICONS) -->
+    <section class="vs-persona-section">
+      <div class="container">
+        <div class="vs-persona-header reveal">
+          <span class="section-label"><i data-lucide="briefcase" class="lucide ic-sm"></i> Industry Fit</span>
+          <h2 class="section-heading">Perfect For Growing Businesses</h2>
+          <p class="section-sub">VoltSquad powers performance campaigns for high-growth verticals.</p>
+        </div>
+
+        <div class="persona-grid stagger-grid">
+          <div class="persona-card" style="padding: 22px; flex-direction: row; align-items: center;">
+            <div class="why-icon-wrap" style="margin-bottom: 0; flex-shrink: 0;"><i data-lucide="credit-card" class="lucide ic-lg"></i></div>
+            <div class="persona-info" style="padding: 0 0 0 14px;">
+              <h4>Fintechs</h4>
+            </div>
+          </div>
+
+          <div class="persona-card" style="padding: 22px; flex-direction: row; align-items: center;">
+            <div class="why-icon-wrap" style="margin-bottom: 0; flex-shrink: 0;"><i data-lucide="cloud" class="lucide ic-lg"></i></div>
+            <div class="persona-info" style="padding: 0 0 0 14px;">
+              <h4>SaaS Companies</h4>
+            </div>
+          </div>
+
+          <div class="persona-card" style="padding: 22px; flex-direction: row; align-items: center;">
+            <div class="why-icon-wrap" style="margin-bottom: 0; flex-shrink: 0;"><i data-lucide="shopping-bag" class="lucide ic-lg"></i></div>
+            <div class="persona-info" style="padding: 0 0 0 14px;">
+              <h4>E-commerce Brands</h4>
+            </div>
+          </div>
+
+          <div class="persona-card" style="padding: 22px; flex-direction: row; align-items: center;">
+            <div class="why-icon-wrap" style="margin-bottom: 0; flex-shrink: 0;"><i data-lucide="radio" class="lucide ic-lg"></i></div>
+            <div class="persona-info" style="padding: 0 0 0 14px;">
+              <h4>Telecoms</h4>
+            </div>
+          </div>
+
+          <div class="persona-card" style="padding: 22px; flex-direction: row; align-items: center;">
+            <div class="why-icon-wrap" style="margin-bottom: 0; flex-shrink: 0;"><i data-lucide="package" class="lucide ic-lg"></i></div>
+            <div class="persona-info" style="padding: 0 0 0 14px;">
+              <h4>FMCG Brands</h4>
+            </div>
+          </div>
+
+          <div class="persona-card" style="padding: 22px; flex-direction: row; align-items: center;">
+            <div class="why-icon-wrap" style="margin-bottom: 0; flex-shrink: 0;"><i data-lucide="rocket" class="lucide ic-lg"></i></div>
+            <div class="persona-info" style="padding: 0 0 0 14px;">
+              <h4>Startups</h4>
+            </div>
+          </div>
+
+          <div class="persona-card" style="padding: 22px; flex-direction: row; align-items: center;">
+            <div class="why-icon-wrap" style="margin-bottom: 0; flex-shrink: 0;"><i data-lucide="shopping-cart" class="lucide ic-lg"></i></div>
+            <div class="persona-info" style="padding: 0 0 0 14px;">
+              <h4>Consumer Products</h4>
+            </div>
+          </div>
+
+          <div class="persona-card" style="padding: 22px; flex-direction: row; align-items: center;">
+            <div class="why-icon-wrap" style="margin-bottom: 0; flex-shrink: 0;"><i data-lucide="graduation-cap" class="lucide ic-lg"></i></div>
+            <div class="persona-info" style="padding: 0 0 0 14px;">
+              <h4>Education Platforms</h4>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- WHAT CAN YOU ACHIEVE & CAMPAIGN GOALS -->
+    <section class="vs-intro-section">
+      <div class="container">
+        <div class="intro-card-wrap reveal">
+          <div class="intro-content-side">
+            <span class="section-label"><i data-lucide="check-circle-2" class="lucide ic-sm"></i> Measurable Outcomes</span>
+            <h2 class="section-heading">What Can You Achieve?</h2>
+            <p style="font-size: 16px; color: #5B7A9E;">
+              Deploy targeted campaigns focused on your exact growth metrics:
+            </p>
+
+            <ul class="intro-bullets">
+              <li><span class="bullet-check"><i data-lucide="check" class="lucide ic-sm"></i></span> Acquire New Customers at lower cost</li>
+              <li><span class="bullet-check"><i data-lucide="check" class="lucide ic-sm"></i></span> Generate Qualified Leads directly</li>
+              <li><span class="bullet-check"><i data-lucide="check" class="lucide ic-sm"></i></span> Increase Product Sales volume</li>
+              <li><span class="bullet-check"><i data-lucide="check" class="lucide ic-sm"></i></span> Drive App Downloads &amp; Registrations</li>
+              <li><span class="bullet-check"><i data-lucide="check" class="lucide ic-sm"></i></span> Expand Into New Geographic Markets</li>
+              <li><span class="bullet-check"><i data-lucide="check" class="lucide ic-sm"></i></span> Launch Products Faster with instant reach</li>
+            </ul>
+          </div>
+
+          <div class="intro-box-card" style="background: var(--navy);">
+            <span class="intro-box-badge">Campaign Objectives</span>
+            <h3>Launch campaigns to:</h3>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 20px;">
+              <div style="background: rgba(255,255,255,0.06); padding: 10px 14px; border-radius: 8px; font-size: 13px; font-weight: 700; display: flex; align-items: center; gap: 8px;">
+                <i data-lucide="user-check" class="lucide ic-sm" style="color: var(--cyan);"></i> Acquire Customers
+              </div>
+              <div style="background: rgba(255,255,255,0.06); padding: 10px 14px; border-radius: 8px; font-size: 13px; font-weight: 700; display: flex; align-items: center; gap: 8px;">
+                <i data-lucide="trending-up" class="lucide ic-sm" style="color: var(--cyan);"></i> Drive Product Sales
+              </div>
+              <div style="background: rgba(255,255,255,0.06); padding: 10px 14px; border-radius: 8px; font-size: 13px; font-weight: 700; display: flex; align-items: center; gap: 8px;">
+                <i data-lucide="download" class="lucide ic-sm" style="color: var(--cyan);"></i> Increase Downloads
+              </div>
+              <div style="background: rgba(255,255,255,0.06); padding: 10px 14px; border-radius: 8px; font-size: 13px; font-weight: 700; display: flex; align-items: center; gap: 8px;">
+                <i data-lucide="target" class="lucide ic-sm" style="color: var(--cyan);"></i> Generate Leads
+              </div>
+              <div style="background: rgba(255,255,255,0.06); padding: 10px 14px; border-radius: 8px; font-size: 13px; font-weight: 700; display: flex; align-items: center; gap: 8px;">
+                <i data-lucide="box" class="lucide ic-sm" style="color: var(--cyan);"></i> Promote New Products
+              </div>
+              <div style="background: rgba(255,255,255,0.06); padding: 10px 14px; border-radius: 8px; font-size: 13px; font-weight: 700; display: flex; align-items: center; gap: 8px;">
+                <i data-lucide="globe" class="lucide ic-sm" style="color: var(--cyan);"></i> Expand Markets
+              </div>
+              <div style="background: rgba(255,255,255,0.06); padding: 10px 14px; border-radius: 8px; font-size: 13px; font-weight: 700; display: flex; align-items: center; gap: 8px;">
+                <i data-lucide="shield-check" class="lucide ic-sm" style="color: var(--cyan);"></i> Validate Offers
+              </div>
+              <div style="background: rgba(255,255,255,0.06); padding: 10px 14px; border-radius: 8px; font-size: 13px; font-weight: 700; display: flex; align-items: center; gap: 8px;">
+                <i data-lucide="megaphone" class="lucide ic-sm" style="color: var(--cyan);"></i> Build Awareness
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- HOW VOLTSQUAD WORKS (FOR BRANDS) -->
+    <section class="vs-how-section">
+      <div class="container">
+        <div class="how-header reveal">
+          <span class="section-label"><i data-lucide="sliders" class="lucide ic-sm"></i> Workflow</span>
+          <h2 class="section-heading">How VoltSquad Works for Brands</h2>
+          <p class="section-sub">A streamlined pipeline from campaign creation to performance payouts.</p>
+        </div>
+
+        <div class="steps-flow steps-flow-5 stagger-grid">
+          <div class="step-card">
+            <div class="step-num-badge">01</div>
+            <h3>Launch Campaign</h3>
+            <p>Define your sales goal, target audience, and payout per conversion.</p>
+          </div>
+          <div class="step-card">
+            <div class="step-num-badge">02</div>
+            <h3>We Onboard Sellers</h3>
+            <p>Our platform matches and activates verified sellers to your campaign.</p>
+          </div>
+          <div class="step-card">
+            <div class="step-num-badge">03</div>
+            <h3>Sellers Promote</h3>
+            <p>Sellers share talking points, demo your product, and drive customer action.</p>
+          </div>
+          <div class="step-card">
+            <div class="step-num-badge">04</div>
+            <h3>Track in Real Time</h3>
+            <p>Monitor real-time dashboard analytics for conversions and seller metrics.</p>
+          </div>
+          <div class="step-card">
+            <div class="step-num-badge">05</div>
+            <h3>Pay for Performance</h3>
+            <p>Only pay for verified leads, app installs, signups, and completed sales.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- WHY BRANDS CHOOSE VOLTSQUAD -->
+    <section class="vs-why-section">
+      <div class="container">
+        <div class="why-header reveal">
+          <span class="section-label"><i data-lucide="shield-check" class="lucide ic-sm"></i> Competitive Edge</span>
+          <h2 class="section-heading">Why Brands Choose VoltSquad</h2>
+          <p class="section-sub">Lower risk, zero fixed sales overhead, and faster time-to-market.</p>
+        </div>
+
+        <div class="why-grid stagger-grid">
+          <div class="why-card">
+            <div class="why-icon-wrap"><i data-lucide="zap" class="lucide ic-lg"></i></div>
+            <h3>Faster Market Entry</h3>
+            <p>Deploy campaigns across cities and campuses in days, not months.</p>
+          </div>
+          <div class="why-card">
+            <div class="why-icon-wrap"><i data-lucide="sliders-horizontal" class="lucide ic-lg"></i></div>
+            <h3>Flexible Campaign Sizes</h3>
+            <p>Scale your campaign budget up or down depending on your current growth phase.</p>
+          </div>
+          <div class="why-card">
+            <div class="why-icon-wrap"><i data-lucide="globe" class="lucide ic-lg"></i></div>
+            <h3>Nationwide Reach</h3>
+            <p>Tap into coordinated seller networks across major regions and states in Nigeria.</p>
+          </div>
+          <div class="why-card">
+            <div class="why-icon-wrap"><i data-lucide="pie-chart" class="lucide ic-lg"></i></div>
+            <h3>Performance-Based Selling</h3>
+            <p>Never waste marketing budget. You pay only when actual results are delivered.</p>
+          </div>
+          <div class="why-card">
+            <div class="why-icon-wrap"><i data-lucide="arrow-down-right" class="lucide ic-lg"></i></div>
+            <h3>Lower Acquisition Costs</h3>
+            <p>Drastically cut CAC by replacing expensive traditional ads with human recommendations.</p>
+          </div>
+          <div class="why-card">
+            <div class="why-icon-wrap"><i data-lucide="bar-chart-2" class="lucide ic-lg"></i></div>
+            <h3>Scalable Campaigns</h3>
+            <p>Expand from 10 sellers to 1,000+ sellers effortlessly without HR overhead.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- STRUCTURED SALES DISTRIBUTION ACROSS NIGERIA (LUCIDE ICONS) -->
+    <section class="vs-distro-section">
+      <div class="container">
+        <div class="distro-header reveal">
+          <span class="section-label" style="color: var(--cyan);"><i data-lucide="map-pin" class="lucide ic-sm"></i> Coordinated Deployment</span>
+          <h2 class="section-heading" style="color: var(--white);">Structured Sales Distribution Across Nigeria</h2>
+          <p class="section-sub" style="color: rgba(255,255,255,0.7); margin: 0 auto;">
+            VoltSquad helps brands deploy coordinated sales campaigns across high-conversion environments:
           </p>
         </div>
 
-        <div class="feat-card feat-hero">
-          <span class="feat-hero-num">06</span>
-          <div class="feat-icon"><i data-lucide="bar-chart-3" class="lucide ic-lg"></i></div>
-          <h3>Brand Campaign Dashboard</h3>
-          <p>
-            For brands, VoltSquad provides campaign visibility in real time — campaign activity, seller
-            participation, conversions, and performance updates.
+        <div class="distro-grid stagger-grid">
+          <div class="distro-card">
+            <div class="distro-icon"><i data-lucide="graduation-cap" class="lucide ic-md"></i></div>
+            <span>Universities &amp; Campuses</span>
+          </div>
+          <div class="distro-card">
+            <div class="distro-icon"><i data-lucide="award" class="lucide ic-md"></i></div>
+            <span>NYSC Camps &amp; Corps Member Networks</span>
+          </div>
+          <div class="distro-card">
+            <div class="distro-icon"><i data-lucide="building-2" class="lucide ic-md"></i></div>
+            <span>Corporate Offices</span>
+          </div>
+          <div class="distro-card">
+            <div class="distro-icon"><i data-lucide="store" class="lucide ic-md"></i></div>
+            <span>Retail Locations</span>
+          </div>
+          <div class="distro-card">
+            <div class="distro-icon"><i data-lucide="shopping-bag" class="lucide ic-md"></i></div>
+            <span>Shopping Malls</span>
+          </div>
+          <div class="distro-card">
+            <div class="distro-icon"><i data-lucide="home" class="lucide ic-md"></i></div>
+            <span>Communities &amp; Residential Estates</span>
+          </div>
+          <div class="distro-card">
+            <div class="distro-icon"><i data-lucide="ticket" class="lucide ic-md"></i></div>
+            <span>Events &amp; Exhibitions</span>
+          </div>
+          <div class="distro-card">
+            <div class="distro-icon"><i data-lucide="globe" class="lucide ic-md"></i></div>
+            <span>Digital Communities</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- FINAL CTA FOR BRANDS -->
+    <section class="vs-cta" id="book-demo">
+      <div class="container">
+        <div class="vs-cta-inner reveal">
+          <h2 class="vs-cta-title">Ready to Grow Faster?</h2>
+          <p class="vs-cta-sub">
+            Launch a performance-based sales campaign and start reaching more customers with VoltSquad.
           </p>
+          <div class="vs-cta-actions">
+            <a href="/login?role=brand" class="btn btn-cyan btn-lg">
+              <i data-lucide="rocket" class="lucide ic-md"></i> Launch Your Campaign
+            </a>
+          </div>
         </div>
       </div>
-    </div>
-  </section>
+    </section>
 
-  <!-- ════ BENEFITS ══════════════════════════════════ -->
-  <section class="vs-benefits">
-    <div class="container">
-      <div class="vs-benefits-header reveal">
-        <p class="section-label">Benefits</p>
-        <h2 class="section-heading">Why VoltSquad works.</h2>
-        <p class="section-sub">
-          Two sides of the same marketplace — structured to help both sellers earn and brands grow.
-        </p>
-      </div>
+  </div>
 
-      <div class="benefits-grid">
-        <div class="benefit-col reveal">
-          <span class="benefit-col-label">For Sellers</span>
-          <h3>Earn through real brand campaigns.</h3>
-          <ul class="benefit-list">
-            <li><span class="check"><i data-lucide="check" class="lucide ic-sm"></i></span> Access real brand campaigns
-              in one place</li>
-            <li><span class="check"><i data-lucide="check" class="lucide ic-sm"></i></span> Earn through commissions and
-              performance</li>
-            <li><span class="check"><i data-lucide="check" class="lucide ic-sm"></i></span> Track your wallet and
-              monitor growth</li>
-            <li><span class="check"><i data-lucide="check" class="lucide ic-sm"></i></span> Stay organized with targets
-              and campaign materials</li>
-            <li><span class="check"><i data-lucide="check" class="lucide ic-sm"></i></span> Work across multiple
-              products and opportunities</li>
-          </ul>
-        </div>
-
-        <div class="benefit-col dark reveal">
-          <span class="benefit-col-label">For Brands</span>
-          <h3>Scale sales through people-powered campaigns.</h3>
-          <ul class="benefit-list">
-            <li><span class="check"><i data-lucide="check" class="lucide ic-sm"></i></span> Launch targeted sales
-              campaigns faster</li>
-            <li><span class="check"><i data-lucide="check" class="lucide ic-sm"></i></span> Reach sellers across cities,
-              campuses, and communities</li>
-            <li><span class="check"><i data-lucide="check" class="lucide ic-sm"></i></span> Track seller activity and
-              campaign traction</li>
-            <li><span class="check"><i data-lucide="check" class="lucide ic-sm"></i></span> Monitor conversions and
-              campaign performance</li>
-            <li><span class="check"><i data-lucide="check" class="lucide ic-sm"></i></span> Grow through structured,
-              people-powered sales execution</li>
-          </ul>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- ════ MORE WAYS ═════════════════════════════════ -->
-  <section class="vs-more">
-    <div class="container">
-      <div class="vs-more-header reveal">
-        <p class="section-label">More Ways to Grow</p>
-        <h2 class="section-heading">More ways to grow with Digihire.</h2>
-        <p class="section-sub">
-          VoltSquad is just one way to drive growth. Digihire also helps brands hire sales talent and
-          run on-ground campaigns built for real traction.
-        </p>
-      </div>
-
-      <div class="more-grid stagger-grid">
-        <div class="more-card">
-          <div class="more-icon"><i data-lucide="users" class="lucide ic-xl"></i></div>
-          <h4>Hire Sales Talent</h4>
-          <p>
-            Recruit full-time, part-time, or contract sales teams across tech sales, B2B sales, field sales,
-            and merchandising roles.
-          </p>
-          <a href="/" class="more-card-cta">Hire Sales Talent <i data-lucide="arrow-right" class="lucide ic-sm"></i></a>
-        </div>
-
-        <div class="more-card">
-          <div class="more-icon"><i data-lucide="map-pin" class="lucide ic-xl"></i></div>
-          <h4>Launch Sales Activations</h4>
-          <p>
-            Run on-ground campaigns across malls, campuses, and high-traffic areas with trained merchandisers
-            and field marketers.
-          </p>
-          <a href="/digihire/sales-activations" class="more-card-cta">Plan an Activation <i data-lucide="arrow-right"
-              class="lucide ic-sm"></i></a>
-        </div>
-
-        <div class="more-card">
-          <div class="more-icon"><i data-lucide="graduation-cap" class="lucide ic-xl"></i></div>
-          <h4>Train Sales Teams</h4>
-          <p>
-            Upskill your team or onboard new sales talent through structured training, certifications, and
-            practical learning.
-          </p>
-          <a href="/" class="more-card-cta">Explore Training <i data-lucide="arrow-right" class="lucide ic-sm"></i></a>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- ════ FINAL CTA ═════════════════════════════════ -->
-  <section class="vs-cta">
-    <div class="container">
-      <div class="vs-cta-inner reveal">
-        <h2 class="vs-cta-title">Ready to grow with VoltSquad?</h2>
-        <p class="vs-cta-sub">
-          Launch a campaign as a brand, or join as a seller and start earning on real opportunities today.
-        </p>
-        <div class="vs-cta-actions">
-          <a href="/login?role=brand" class="btn btn-cyan btn-lg">Launch a Campaign</a>
-          <a href="/login?role=talent" class="btn btn-outline-white btn-lg">Join VoltSquad</a>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- ════ FOOTER ════════════════════════════════════ -->
+  <!-- ════ FOOTER (shared loader) ════════════════════ -->
   <div id="footer-root"></div>
-
   <script src="/footer-loader.js"></script>
 
+  <!-- ════ TAB SWITCHING SCRIPT & ANIMATIONS ═════════ -->
   <script>
-    /* Navbar scroll handled by /nav-loader.js */
+    document.addEventListener('DOMContentLoaded', () => {
+      const tabBtns = document.querySelectorAll('.vs-tab-btn');
+      const tabPanes = document.querySelectorAll('.vs-tab-pane');
 
-    /* Scroll reveal */
-    const revealObs = new IntersectionObserver((entries) => {
-      entries.forEach(e => {
-        if (e.isIntersecting) { e.target.classList.add('in'); revealObs.unobserve(e.target); }
+      function switchTab(targetTab) {
+        tabBtns.forEach(btn => {
+          const isMatch = btn.getAttribute('data-tab') === targetTab;
+          btn.classList.toggle('active', isMatch);
+          btn.setAttribute('aria-selected', isMatch ? 'true' : 'false');
+        });
+
+        tabPanes.forEach(pane => {
+          const isMatch = pane.getAttribute('data-pane') === targetTab;
+          if (isMatch) {
+            pane.classList.add('active');
+          } else {
+            pane.classList.remove('active');
+          }
+        });
+
+        // Update URL search param or hash for shareable tabs without scroll jumping
+        if (window.history.replaceState) {
+          const url = new URL(window.location);
+          url.searchParams.set('tab', targetTab);
+          window.history.replaceState({}, '', url);
+        }
+
+        // Re-trigger scroll observer for newly visible elements
+        setTimeout(() => {
+          document.querySelectorAll('.vs-tab-pane.active .reveal, .vs-tab-pane.active .stagger-grid').forEach(el => {
+            revealObs.observe(el);
+          });
+          if (window.lucide) {
+            lucide.createIcons();
+          }
+        }, 50);
+      }
+
+      tabBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+          const selectedTab = btn.getAttribute('data-tab');
+          switchTab(selectedTab);
+        });
       });
-    }, { threshold: 0.12 });
-    document.querySelectorAll('.reveal, .stagger-grid').forEach(el => revealObs.observe(el));
 
-    lucide.createIcons();
+      // Check URL parameters for tab preference (e.g., ?tab=brands)
+      const urlParams = new URLSearchParams(window.location.search);
+      const initialTab = urlParams.get('tab');
+      if (initialTab === 'brands' || initialTab === 'sellers') {
+        switchTab(initialTab);
+      }
+
+      /* Scroll reveal intersection observer */
+      const revealObs = new IntersectionObserver((entries) => {
+        entries.forEach(e => {
+          if (e.isIntersecting) {
+            e.target.classList.add('in');
+            revealObs.unobserve(e.target);
+          }
+        });
+      }, { threshold: 0.1 });
+
+      document.querySelectorAll('.reveal, .stagger-grid').forEach(el => revealObs.observe(el));
+
+      if (window.lucide) {
+        lucide.createIcons();
+      }
+    });
   </script>
 </body>
 
