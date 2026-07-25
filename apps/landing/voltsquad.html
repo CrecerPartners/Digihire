@@ -247,12 +247,29 @@
       color: var(--white);
     }
 
+    #aurora-canvas {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      display: block;
+    }
+
+    /* dark scrim — keeps top text legible, lets aurora breathe at the bottom */
     .vs-hero::before {
       content: '';
       position: absolute;
       inset: 0;
-      background: radial-gradient(ellipse 90% 65% at 50% -10%, rgba(0, 194, 255, 0.22) 0%, rgba(6, 17, 31, 0) 70%);
+      background:
+        linear-gradient(to bottom,
+          rgba(6,17,31,0.96) 0%,
+          rgba(6,17,31,0.72) 30%,
+          rgba(6,17,31,0.18) 65%,
+          transparent 100%),
+        radial-gradient(ellipse 70% 40% at 50% 100%, rgba(0,194,255,0.18) 0%, transparent 70%);
       pointer-events: none;
+      z-index: 1;
     }
 
     .vs-hero::after {
@@ -1046,7 +1063,8 @@
 
   <!-- ════ HERO & DUAL TAB SWITCHER ═════════════════ -->
   <section class="vs-hero">
-    <div class="container">
+    <canvas id="aurora-canvas" aria-hidden="true"></canvas>
+    <div class="container" style="position:relative;z-index:2;">
       <div class="reveal">
         <div class="vs-hero-eyebrow">
           <i data-lucide="zap" class="lucide ic-sm"></i> VoltSquad Campaign Marketplace
@@ -1832,6 +1850,110 @@
         lucide.createIcons();
       }
     });
+  </script>
+
+  <!-- ── AURORA BARS canvas animation ── -->
+  <script>
+    (function () {
+      var canvas = document.getElementById('aurora-canvas');
+      if (!canvas) return;
+      var ctx = canvas.getContext('2d');
+
+      var BAR_COUNT = 28;
+      var MIN_H = 0.10;
+      var MAX_H = 0.72;
+      var SPEED = 0.45;
+      var GAP = 2; // px each side of each bar
+
+      // Brand gradient stops — bottom (#0096C7) → cyan → soft cyan → transparent
+      var COLORS = ['#003D5C', '#0096C7', '#00C2FF', '#33CFFF', 'rgba(0,194,255,0.28)', 'rgba(0,194,255,0)'];
+
+      function calcHeight(i, total, t) {
+        var norm = i / (total - 1);
+        var arch = Math.sin(norm * Math.PI);
+        var phase1 = (i / total) * Math.PI * 2;
+        var phase2 = (i / total) * Math.PI * 5.3;
+        var wave = 0.5 + 0.25 * Math.sin(t * 1.1 + phase1) + 0.25 * Math.sin(t * 0.7 + phase2);
+        var blended = arch * 0.65 + wave * 0.35;
+        return MIN_H + blended * (MAX_H - MIN_H);
+      }
+
+      var dpr = window.devicePixelRatio || 1;
+
+      function resize() {
+        var rect = canvas.parentElement.getBoundingClientRect();
+        canvas.width = rect.width * dpr;
+        canvas.height = rect.height * dpr;
+        canvas.style.width = rect.width + 'px';
+        canvas.style.height = rect.height + 'px';
+      }
+
+      resize();
+      window.addEventListener('resize', resize);
+
+      var time = 0;
+      var last = null;
+      var raf;
+
+      function draw(ts) {
+        if (last !== null) time += ((ts - last) / 1000) * SPEED;
+        last = ts;
+
+        var W = canvas.width / dpr;
+        var H = canvas.height / dpr;
+
+        ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+        ctx.clearRect(0, 0, W, H);
+
+        var barW = W / BAR_COUNT;
+
+        for (var i = 0; i < BAR_COUNT; i++) {
+          var hFrac = calcHeight(i, BAR_COUNT, time);
+          var bh = hFrac * H;
+          var x = i * barW + GAP;
+          var bw = barW - GAP * 2;
+          var y = H - bh;
+
+          var grad = ctx.createLinearGradient(0, H, 0, y);
+          for (var ci = 0; ci < COLORS.length; ci++) {
+            grad.addColorStop(ci / (COLORS.length - 1), COLORS[ci]);
+          }
+
+          var r = Math.min(bw / 2, 8);
+          ctx.globalAlpha = 0.82;
+          ctx.fillStyle = grad;
+          ctx.beginPath();
+          ctx.moveTo(x, H);
+          ctx.lineTo(x, y + r);
+          ctx.quadraticCurveTo(x, y, x + r, y);
+          ctx.lineTo(x + bw - r, y);
+          ctx.quadraticCurveTo(x + bw, y, x + bw, y + r);
+          ctx.lineTo(x + bw, H);
+          ctx.closePath();
+          ctx.fill();
+        }
+
+        ctx.globalAlpha = 1;
+        raf = requestAnimationFrame(draw);
+      }
+
+      raf = requestAnimationFrame(draw);
+
+      // Pause when hero scrolls out of view (perf)
+      if ('IntersectionObserver' in window) {
+        new IntersectionObserver(function (entries) {
+          entries.forEach(function (e) {
+            if (e.isIntersecting) {
+              if (!raf) raf = requestAnimationFrame(draw);
+            } else {
+              cancelAnimationFrame(raf);
+              raf = null;
+              last = null;
+            }
+          });
+        }, { threshold: 0 }).observe(canvas.parentElement);
+      }
+    })();
   </script>
 </body>
 
