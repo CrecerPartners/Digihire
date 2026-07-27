@@ -254,20 +254,19 @@
       height: 100%;
       pointer-events: none;
       display: block;
+      z-index: 0;
     }
 
-    /* dark scrim — keeps top text legible, lets aurora breathe at the bottom */
+    /* dark scrim — protects text at top, fully clear at the bottom so bars show */
     .vs-hero::before {
       content: '';
       position: absolute;
       inset: 0;
-      background:
-        linear-gradient(to bottom,
-          rgba(6,17,31,0.96) 0%,
-          rgba(6,17,31,0.72) 30%,
-          rgba(6,17,31,0.18) 65%,
-          transparent 100%),
-        radial-gradient(ellipse 70% 40% at 50% 100%, rgba(0,194,255,0.18) 0%, transparent 70%);
+      background: linear-gradient(to bottom,
+        rgba(6,17,31,0.92) 0%,
+        rgba(6,17,31,0.65) 28%,
+        rgba(6,17,31,0.15) 55%,
+        transparent 70%);
       pointer-events: none;
       z-index: 1;
     }
@@ -1858,15 +1857,16 @@
       var canvas = document.getElementById('aurora-canvas');
       if (!canvas) return;
       var ctx = canvas.getContext('2d');
+      var hero = canvas.parentElement;
 
       var BAR_COUNT = 28;
-      var MIN_H = 0.10;
-      var MAX_H = 0.72;
+      var MIN_H = 0.12;
+      var MAX_H = 0.80;
       var SPEED = 0.45;
-      var GAP = 2; // px each side of each bar
+      var GAP = 2;
 
-      // Brand gradient stops — bottom (#0096C7) → cyan → soft cyan → transparent
-      var COLORS = ['#003D5C', '#0096C7', '#00C2FF', '#33CFFF', 'rgba(0,194,255,0.28)', 'rgba(0,194,255,0)'];
+      // Brightest at the BASE (visible through clear scrim), fades to transparent at top
+      var COLORS = ['#33CFFF', '#00C2FF', '#0096C7', 'rgba(0,150,199,0.45)', 'rgba(0,130,190,0)'];
 
       function calcHeight(i, total, t) {
         var norm = i / (total - 1);
@@ -1874,21 +1874,21 @@
         var phase1 = (i / total) * Math.PI * 2;
         var phase2 = (i / total) * Math.PI * 5.3;
         var wave = 0.5 + 0.25 * Math.sin(t * 1.1 + phase1) + 0.25 * Math.sin(t * 0.7 + phase2);
-        var blended = arch * 0.65 + wave * 0.35;
-        return MIN_H + blended * (MAX_H - MIN_H);
+        return MIN_H + (arch * 0.65 + wave * 0.35) * (MAX_H - MIN_H);
       }
 
       var dpr = window.devicePixelRatio || 1;
+      var W = 0, H = 0;
 
       function resize() {
-        var rect = canvas.parentElement.getBoundingClientRect();
-        canvas.width = rect.width * dpr;
-        canvas.height = rect.height * dpr;
-        canvas.style.width = rect.width + 'px';
-        canvas.style.height = rect.height + 'px';
+        W = hero.offsetWidth;
+        H = hero.offsetHeight;
+        canvas.width = W * dpr;
+        canvas.height = H * dpr;
+        canvas.style.width = W + 'px';
+        canvas.style.height = H + 'px';
       }
 
-      resize();
       window.addEventListener('resize', resize);
 
       var time = 0;
@@ -1898,9 +1898,6 @@
       function draw(ts) {
         if (last !== null) time += ((ts - last) / 1000) * SPEED;
         last = ts;
-
-        var W = canvas.width / dpr;
-        var H = canvas.height / dpr;
 
         ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
         ctx.clearRect(0, 0, W, H);
@@ -1914,13 +1911,14 @@
           var bw = barW - GAP * 2;
           var y = H - bh;
 
+          // bright cyan at bottom, fades to transparent upward
           var grad = ctx.createLinearGradient(0, H, 0, y);
           for (var ci = 0; ci < COLORS.length; ci++) {
             grad.addColorStop(ci / (COLORS.length - 1), COLORS[ci]);
           }
 
-          var r = Math.min(bw / 2, 8);
-          ctx.globalAlpha = 0.82;
+          var r = Math.min(bw / 2, 6);
+          ctx.globalAlpha = 0.92;
           ctx.fillStyle = grad;
           ctx.beginPath();
           ctx.moveTo(x, H);
@@ -1937,9 +1935,13 @@
         raf = requestAnimationFrame(draw);
       }
 
-      raf = requestAnimationFrame(draw);
+      // Defer until after first paint so hero.offsetHeight is real
+      requestAnimationFrame(function () {
+        resize();
+        raf = requestAnimationFrame(draw);
+      });
 
-      // Pause when hero scrolls out of view (perf)
+      // Pause animation when hero is off-screen
       if ('IntersectionObserver' in window) {
         new IntersectionObserver(function (entries) {
           entries.forEach(function (e) {
@@ -1951,7 +1953,7 @@
               last = null;
             }
           });
-        }, { threshold: 0 }).observe(canvas.parentElement);
+        }, { threshold: 0 }).observe(hero);
       }
     })();
   </script>
