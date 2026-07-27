@@ -41,3 +41,4 @@ supabase/.branches/
 
 # Superpowers brainstorming session scratch state
 .superpowers/brainstorm/*/.lovable/
+.gstack/
