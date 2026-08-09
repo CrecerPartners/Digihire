@@ -752,6 +752,81 @@
     @media (max-width: 640px) {
       #navbar.scrolled { left: 0; right: 0; top: 0; border-radius: 0; }
     }
+
+    /* ── BRAND WAITLIST MODAL ── */
+    .modal-dialog {
+      border: none;
+      background: transparent;
+      padding: 0;
+      margin: auto;
+      max-width: 680px;
+      width: 92%;
+      overflow: visible;
+    }
+    .modal-dialog::backdrop {
+      background: rgba(6, 17, 31, 0.8);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+    }
+    .modal-card {
+      background: #ffffff;
+      border: 1px solid #E2ECF5;
+      border-radius: 24px;
+      padding: 32px 28px 24px;
+      box-shadow: 0 25px 50px -12px rgba(6, 17, 31, 0.35);
+      position: relative;
+      animation: modalSlideIn 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    @keyframes modalSlideIn {
+      from { opacity: 0; transform: scale(0.95) translateY(12px); }
+      to { opacity: 1; transform: scale(1) translateY(0); }
+    }
+    .modal-close-btn {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      border: 1px solid #E2ECF5;
+      background: #F8FAFC;
+      color: #64748B;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all 0.2s;
+      z-index: 10;
+    }
+    .modal-close-btn:hover {
+      background: #EEF2FF;
+      color: #0D1B33;
+      border-color: #CBD5E1;
+    }
+    .modal-header {
+      margin-bottom: 16px;
+      padding-right: 40px;
+    }
+    .modal-title {
+      font-size: 24px;
+      font-weight: 800;
+      color: #0D1B33;
+      margin-bottom: 6px;
+      line-height: 1.2;
+    }
+    .modal-sub {
+      font-size: 14px;
+      color: #64748B;
+      line-height: 1.5;
+    }
+    .modal-body {
+      width: 100%;
+      border-radius: 12px;
+      overflow: hidden;
+      background: #F8FAFC;
+      min-height: 500px;
+    }
+
     .nav-mobile-overlay {
       position: fixed; inset: 0; z-index: 210; background: #06111F;
       transform: translateX(100%); transition: transform 0.38s cubic-bezier(0.4,0,0.2,1);
@@ -1805,19 +1880,19 @@
 
             <!-- RIGHT: 4 service cards -->
             <div class="mega-right brands-right" style="grid-template-columns: repeat(2,1fr);">
-              <a href="https://brands.digihire.io/signup?service=voltsquad" class="brand-supp-card">
+              <a href="https://brands.digihire.io/signup?service=voltsquad" onclick="openBrandWaitlistModal(event)" class="brand-supp-card">
                 <div class="bsc-icon i3"><i data-lucide="zap" class="lucide ic-lg"></i></div>
                 <p class="bsc-title">VoltSquad Campaigns</p>
                 <p class="bsc-desc">Launch performance-based sales campaigns. Activate sellers across campuses, communities, and cities to drive signups, users, leads, and sales.</p>
                 <span class="bsc-cta">Launch a Campaign →</span>
               </a>
-              <a href="https://brands.digihire.io/signup?service=recruitment-fulltime" class="brand-supp-card">
+              <a href="https://brands.digihire.io/signup?service=recruitment-fulltime" onclick="openBrandWaitlistModal(event)" class="brand-supp-card">
                 <div class="bsc-icon i1"><i data-lucide="users" class="lucide ic-lg"></i></div>
                 <p class="bsc-title">Hire Sales Talent</p>
                 <p class="bsc-desc">Hire full-time, part-time, or contract sales professionals — SDRs, closers, B2B reps, and field executives screened and ready.</p>
                 <span class="bsc-cta">Start Hiring →</span>
               </a>
-              <a href="/sales-activations" class="brand-supp-card">
+              <a href="/sales-activations" onclick="openBrandWaitlistModal(event)" class="brand-supp-card">
                 <div class="bsc-icon i2"><i data-lucide="map-pin" class="lucide ic-lg"></i></div>
                 <p class="bsc-title">Activations &amp; Field Marketing</p>
                 <p class="bsc-desc">Deploy promoters, merchandisers, and execution teams for on-ground mall activations, campus roadshows, in-store promotions, and field marketing.</p>
@@ -1911,19 +1986,19 @@
 
           <!-- For Brands -->
           <p class="dd-section-label">For Brands</p>
-          <a href="https://brands.digihire.io/signup?service=voltsquad">
+          <a href="https://brands.digihire.io/signup?service=voltsquad" onclick="openBrandWaitlistModal(event)">
             <span>Launch VoltSquad Campaign</span>
             <span class="dd-arrow">›</span>
           </a>
-          <a href="https://brands.digihire.io/signup?service=recruitment-fulltime">
+          <a href="https://brands.digihire.io/signup?service=recruitment-fulltime" onclick="openBrandWaitlistModal(event)">
             <span>Hire Sales Talent</span>
             <span class="dd-arrow">›</span>
           </a>
-          <a href="/sales-activations">
+          <a href="/sales-activations" onclick="openBrandWaitlistModal(event)">
             <span>Activations &amp; Field Marketing</span>
             <span class="dd-arrow">›</span>
           </a>
-          <a href="https://brands.digihire.io/login" style="opacity:0.6;font-size:12px;">
+          <a href="https://brands.digihire.io/login" onclick="openBrandWaitlistModal(event)" style="opacity:0.6;font-size:12px;">
             <span>Brand login</span>
             <span class="dd-arrow">›</span>
           </a>
@@ -1931,7 +2006,7 @@
       </div>
 
       <!-- Main CTA -->
-      <a href="https://brands.digihire.io/login" class="btn-launch">
+      <a href="https://brands.digihire.io/login" onclick="openBrandWaitlistModal(event)" class="btn-launch">
         Launch a Campaign
         <svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" width="14" height="14">
           <path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
@@ -1961,14 +2036,17 @@
         </div>
 
         <h1 class="hero-headline" id="hero-headline">
-          Acquire users, recruit sales talent, and run field activations with Digihire
+          Hire High-Performing Sales, Activation &amp; Field Teams.
         </h1>
 
         <p class="hero-sub" id="hero-sub">
-          Digihire helps brands grow through structured sales campaigns, targeted recruitment, and field activations designed to drive visibility, users, and revenue.
+          Digihire helps businesses recruit sales professionals and deploy activation staff, promoters, merchandisers, and field marketing teams across Nigeria.
         </p>
 
-        <a href="https://brands.digihire.io/signup" class="hero-cta-single" id="hero-cta-primary">Get Started</a>
+        <div style="display:flex;gap:14px;justify-content:center;flex-wrap:wrap;margin-top:8px;" id="hero-ctas-container">
+          <a href="https://brands.digihire.io/signup?service=recruitment-fulltime" onclick="openBrandWaitlistModal(event)" class="hero-cta-single" id="hero-cta-primary">Hire Sales Talent</a>
+          <a href="/sales-activations" onclick="openBrandWaitlistModal(event)" class="btn btn-outline-white btn-lg" id="hero-cta-secondary" style="border-radius:10px;padding:16px 32px;">Request Activation Staff</a>
+        </div>
       </div>
     </div>
   </section>
@@ -2003,6 +2081,42 @@
 
 <!-- ▼ TALENT MODE ▼ -->
 <div class="mode-talent">
+
+<!-- ══════════════════════════════════════════════════════════════
+     V1: TALENT MODE (COMMENTED OUT FOR ROLLBACK / REFERENCE)
+     ══════════════════════════════════════════════════════════════ -->
+<!--
+[-- ════ T1. WHAT YOU CAN DO (V1) ═════════════════════ --]
+<section class="talent-what-section">
+  <div class="container">
+    <div class="platform-header reveal">
+      <p class="section-label">Opportunities</p>
+      <h2 class="section-heading">What You Can Do on Digihire</h2>
+    </div>
+    <div class="talent-what-grid stagger-grid">
+      <div class="twc twc-1">
+        <h3 class="twc-title">Join VoltSquad</h3>
+      </div>
+    </div>
+  </div>
+</section>
+
+[-- ════ T4. FEATURES + STATS (V1) ════════════════════ --]
+<section class="features-stats">
+  <div class="container">
+    <div class="stat-highlight">
+      <div class="stat-h-label">Sellers on the platform</div>
+    </div>
+    <div class="testi-card">
+      <p class="testi-text">Temi Adeyemi VoltSquad Seller</p>
+    </div>
+  </div>
+</section>
+══════════════════════════════════════════════════════════════
+END V1 TALENT MODE COMMENTED OUT
+══════════════════════════════════════════════════════════════ -->
+
+<!-- ▼ V2: TALENT MODE CONTENT ▼ -->
 
 <!-- ════ JOBS & GIGS ═════════════════════════════════════════════ -->
 <section id="jobs" style="padding:80px 0;background:var(--white);">
@@ -2264,8 +2378,6 @@
     }, { passive: true });
   })();
 
-  /* Fetch jobs — job_listings_public is a safe view (published only, no PII,
-     anonymous listings stripped of identity) */
   fetch(SUPABASE_URL + '/rest/v1/job_listings_public?select=*&order=featured.desc,created_at.desc&limit=10', {
     headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY }
   }).then(function(r) { return r.json(); }).then(function(data) {
@@ -2276,41 +2388,41 @@
 })();
 </script>
 
-<!-- ════ T1. WHAT YOU CAN DO ════════════════════ -->
-<section class="talent-what-section">
+<!-- ════ T1. START YOUR SALES CAREER (V2) ════════════════════ -->
+<section class="talent-what-section" id="talent-opportunities">
   <div class="container">
     <div class="platform-header reveal">
       <p class="section-label">Opportunities</p>
-      <h2 class="section-heading">What You Can Do on Digihire</h2>
+      <h2 class="section-heading">Start Your Sales Career with Digihire</h2>
     </div>
-    <div class="talent-what-grid stagger-grid">
+    <div class="talent-what-grid stagger-grid" style="display:grid;grid-template-columns:repeat(2,1fr);gap:24px;">
 
-      <div class="twc twc-1">
-        <div class="twc-tag">Join campaigns and start earning</div>
-        <h3 class="twc-title">Join VoltSquad</h3>
-        <p class="twc-desc">Campaign marketplace for sales talent. Join active brand campaigns, promote apps and products, earn commissions, track your wallet, and grow your income through real sales opportunities.</p>
-        <a href="https://talents.digihire.io/join-now" class="twc-cta">Join VoltSquad →</a>
+      <div class="twc" style="background:#fff;border:1px solid #E2ECF5;padding:28px;border-radius:18px;">
+        <div class="twc-tag" style="color:var(--cyan-dim);font-weight:700;">Talent Discovery</div>
+        <h3 class="twc-title" style="color:#0D1B33;margin-top:6px;font-size:22px;">Join the Talent Pool</h3>
+        <p class="twc-desc" style="color:#475569;font-size:15px;margin-top:10px;margin-bottom:20px;">Create your profile, upload your CV, and get discovered for full-time, contract, and project-based sales opportunities.</p>
+        <a href="https://talents.digihire.io/signup?module=talent_pool" class="btn btn-cyan">Set Up Your Profile →</a>
       </div>
 
-      <div class="twc twc-2">
-        <div class="twc-tag">Get discovered for roles</div>
-        <h3 class="twc-title">Join the Talent Pool</h3>
-        <p class="twc-desc">Create your profile, upload your CV, and get discovered for full-time, part-time, contract, and project-based opportunities with brands hiring through Digihire.</p>
-        <a href="https://talents.digihire.io/signup?module=talent_pool" class="twc-cta">Set Up Your Profile →</a>
+      <div class="twc" style="background:#fff;border:1px solid #E2ECF5;padding:28px;border-radius:18px;">
+        <div class="twc-tag" style="color:var(--cyan-dim);font-weight:700;">Full-Time &amp; Contract</div>
+        <h3 class="twc-title" style="color:#0D1B33;margin-top:6px;font-size:22px;">Apply for Sales Jobs</h3>
+        <p class="twc-desc" style="color:#475569;font-size:15px;margin-top:10px;margin-bottom:20px;">Browse opportunities from companies hiring Sales Executives, SDRs, BDRs, Tech Sales Professionals, and Business Development Executives.</p>
+        <a href="/jobs" class="btn btn-cyan">Apply for Jobs →</a>
       </div>
 
-      <div class="twc twc-3">
-        <div class="twc-tag">Flexible short-term roles</div>
-        <h3 class="twc-title">Apply for Short-Term Gigs</h3>
-        <p class="twc-desc">Merchandising roles, field marketing, in-store promotions, activation staff, and event staffing — flexible, short-term, and paid. Each role has its own sign-up flow.</p>
-        <a href="https://talents.digihire.io/signup?module=gigs" class="twc-cta">Apply for Gigs →</a>
+      <div class="twc" style="background:linear-gradient(135deg,#F8FAFC 0%,#EEF2FF 100%);border:1px solid #D4DDFF;padding:28px;border-radius:18px;">
+        <div class="twc-tag" style="color:#4444BB;font-weight:700;">On-Ground Gigs</div>
+        <h3 class="twc-title" style="color:#0D1B33;margin-top:6px;font-size:22px;">Apply for Activation &amp; Field Opportunities</h3>
+        <p class="twc-desc" style="color:#475569;font-size:15px;margin-top:10px;margin-bottom:20px;">Find paid merchandising, field marketing, in-store promotion, exhibition staffing, event staffing, and activation roles.</p>
+        <a href="https://talents.digihire.io/signup?module=gigs" class="btn btn-cyan" style="background:#4444BB;color:#fff;">Find Opportunities →</a>
       </div>
 
-      <div class="twc twc-4">
-        <div class="twc-tag">Brand events and activations</div>
-        <h3 class="twc-title">Sign Up for Events</h3>
-        <p class="twc-desc">Register for upcoming brand events, field activations, networking sessions, and industry gatherings. Stay ahead of what's happening and get first access.</p>
-        <a href="https://talents.digihire.io/signup?module=events" class="twc-cta">Register for Events →</a>
+      <div class="twc" style="background:linear-gradient(135deg,#F8FAFC 0%,#E8FDF5 100%);border:1px solid #CCF5E8;padding:28px;border-radius:18px;">
+        <div class="twc-tag" style="color:#00875A;font-weight:700;">Instant Job Alerts</div>
+        <h3 class="twc-title" style="color:#0D1B33;margin-top:6px;font-size:22px;">Join WhatsApp Channel</h3>
+        <p class="twc-desc" style="color:#475569;font-size:15px;margin-top:10px;margin-bottom:20px;">Find jobs and gigs in tech sales, software sales, SDR, BDR, full-time, part-time, contract, merchandiser, field and event roles.</p>
+        <a href="https://chat.whatsapp.com/DigihireTalentCommunity" class="btn btn-cyan" style="background:#00875A;color:#fff;">Join WhatsApp →</a>
       </div>
 
     </div>
@@ -2327,14 +2439,14 @@
 
         <div class="reveal">
           <div class="talent-split-tag">Community</div>
-          <h2 class="talent-split-title">Join 1K+ sellers earning on Digihire</h2>
-          <p class="talent-split-desc">Work with real brands, earn from campaigns, access job opportunities, and grow your sales career alongside a fast-growing community of sellers and sales talent.</p>
+          <h2 class="talent-split-title">Join a growing network of sales talent</h2>
+          <p class="talent-split-desc">Work with real brands, access job opportunities, and grow your sales career alongside a community of ambitious sales professionals across Nigeria.</p>
           <a href="https://talents.digihire.io/login" class="btn btn-cyan btn-lg">Get Started →</a>
         </div>
 
         <div class="talent-polaroid-wrap reveal" style="transition-delay:0.15s">
           <div class="tpcard tpcard-1">
-            <img class="tpcard-photo" src="https://plus.unsplash.com/premium_photo-1669879860046-bb73a4c4597b?w=300&h=400&fit=crop&crop=face&q=80" alt="Seller" width="300" height="400" loading="lazy" />
+            <img class="tpcard-photo" src="https://plus.unsplash.com/premium_photo-1669879860046-bb73a4c4597b?w=300&h=400&fit=crop&crop=face&q=80" alt="Sales talent" width="300" height="400" loading="lazy" />
             <div class="tpcard-badge b-blue"><i data-lucide="briefcase" class="lucide"></i></div>
             <div class="tpcard-body">
               <div class="tpcard-bar"></div>
@@ -2342,7 +2454,7 @@
             </div>
           </div>
           <div class="tpcard tpcard-2">
-            <img class="tpcard-photo" src="https://images.unsplash.com/photo-1581341038810-5a2fa5b18f6e?w=300&h=400&fit=crop&crop=face&q=80" alt="Seller" width="300" height="400" loading="lazy" />
+            <img class="tpcard-photo" src="https://images.unsplash.com/photo-1581341038810-5a2fa5b18f6e?w=300&h=400&fit=crop&crop=face&q=80" alt="Sales rep" width="300" height="400" loading="lazy" />
             <div class="tpcard-badge b-cyan"><i data-lucide="zap" class="lucide"></i></div>
             <div class="tpcard-body">
               <div class="tpcard-bar"></div>
@@ -2379,16 +2491,20 @@
 
         <div class="reveal" style="transition-delay:0.15s">
           <div class="talent-split-tag">Sales Roles</div>
-          <h2 class="talent-split-title">Opportunities across multiple sales roles</h2>
+          <h2 class="talent-split-title">Explore Sales Careers Across Multiple Industries</h2>
           <div class="talent-role-pills">
-            <span class="talent-role-pill">B2B Sales Executives</span>
-            <span class="talent-role-pill">Tech Sales &amp; SaaS Sales Executives</span>
-            <span class="talent-role-pill">Closers &amp; Account Executives</span>
-            <span class="talent-role-pill">Business Development Executives</span>
-            <span class="talent-role-pill">SDRs &amp; Lead Qualification Teams</span>
-            <span class="talent-role-pill">Field &amp; External Sales Agents</span>
+            <span class="talent-role-pill">Sales Executives</span>
+            <span class="talent-role-pill">Tech Sales</span>
+            <span class="talent-role-pill">SaaS Sales</span>
+            <span class="talent-role-pill">B2B Sales</span>
+            <span class="talent-role-pill">SDRs</span>
+            <span class="talent-role-pill">BDRs</span>
+            <span class="talent-role-pill">Business Development</span>
+            <span class="talent-role-pill">Account Executives</span>
+            <span class="talent-role-pill">Field Sales</span>
             <span class="talent-role-pill">Merchandisers</span>
-            <span class="talent-role-pill">Field Sales Reps</span>
+            <span class="talent-role-pill">Promoters</span>
+            <span class="talent-role-pill">Brand Ambassadors</span>
           </div>
           <p class="talent-role-supporting">Whether you are just starting out or already have experience, Digihire gives you access to opportunities across different sales paths.</p>
         </div>
@@ -2399,12 +2515,12 @@
   </div>
 </section>
 
-<!-- ════ T3. BRANDS YOU CAN WORK WITH ═══════════ -->
+<!-- ════ T3. BRAND PARTNERS ═══════════ -->
 <section class="talent-brands-section">
   <div class="container">
     <div class="reveal">
       <p class="section-label">Brand Partners</p>
-      <h2 class="section-heading">The Kind of Brands You Can Work With</h2>
+      <h2 class="section-heading">The Kind of Companies You Can Work With</h2>
     </div>
   </div>
 
@@ -2456,78 +2572,50 @@
   </div>
 </section>
 
-<!-- ════ T4. FEATURES + STATS ════════════════════ -->
+<!-- ════ T4. READY FOR YOUR NEXT ROLE ════════════════ -->
 <section class="features-stats" id="features">
   <div class="container">
-    <div class="features-stats-inner">
+    <div style="max-width:1000px;margin:0 auto;">
 
       <div class="reveal">
-        <div class="features-col-header">
+        <div class="features-col-header" style="text-align:center;">
           <p class="section-label">Ready for Your Next Role?</p>
-          <h2 class="section-heading">Your career in sales starts here.</h2>
-          <p class="section-sub" style="margin-top:12px">Digihire gives you the tools, campaigns, and opportunities to earn more, get hired faster, and grow your sales career over time.</p>
+          <h2 class="section-heading">Build a Career in Sales</h2>
+          <p class="section-sub" style="margin-top:12px;margin-left:auto;margin-right:auto;">Digihire helps you discover opportunities, get noticed by employers, and build experience through sales, activation, merchandising, and field marketing opportunities.</p>
         </div>
-        <div class="features-list">
-          <div class="feature-item">
-            <div class="feature-icon-wrap"><i data-lucide="zap" class="lucide ic-xl"></i></div>
+        <div class="features-list" style="display:grid;grid-template-columns:repeat(2,1fr);gap:24px;margin-top:32px;">
+          <div class="feature-item" style="background:#fff;border:1px solid #E2ECF5;padding:24px;border-radius:16px;">
+            <div class="feature-icon-wrap" style="background:rgba(0,194,255,0.12);"><i data-lucide="user-plus" class="lucide ic-xl" style="color:var(--cyan-dim);"></i></div>
             <div>
-              <p class="feature-item-title">Join Active Brand Campaigns</p>
-              <p class="feature-item-desc">Access campaigns on VoltSquad, promote products and apps, earn commissions, and track your wallet and revenue goals in real time.</p>
+              <p class="feature-item-title" style="font-size:18px;font-weight:800;color:#0D1B33;">Build Your Talent Profile</p>
+              <p class="feature-item-desc" style="color:#64748B;font-size:14px;margin-top:4px;">Upload your CV, complete your profile, and get discovered by employers.</p>
             </div>
           </div>
-          <div class="feature-item">
-            <div class="feature-icon-wrap"><i data-lucide="user-plus" class="lucide ic-xl"></i></div>
+          <div class="feature-item" style="background:#fff;border:1px solid #E2ECF5;padding:24px;border-radius:16px;">
+            <div class="feature-icon-wrap" style="background:rgba(0,194,255,0.12);"><i data-lucide="briefcase" class="lucide ic-xl" style="color:var(--cyan-dim);"></i></div>
             <div>
-              <p class="feature-item-title">Build Your Profile &amp; Get Discovered</p>
-              <p class="feature-item-desc">Upload your CV, set up your talent profile, and get found by brands hiring part-time, full-time, and project-based sales roles.</p>
+              <p class="feature-item-title" style="font-size:18px;font-weight:800;color:#0D1B33;">Apply for Jobs</p>
+              <p class="feature-item-desc" style="color:#64748B;font-size:14px;margin-top:4px;">Track your applications and apply for new opportunities.</p>
             </div>
           </div>
-          <div class="feature-item">
-            <div class="feature-icon-wrap"><i data-lucide="graduation-cap" class="lucide ic-xl"></i></div>
+          <div class="feature-item" style="background:#fff;border:1px solid #E2ECF5;padding:24px;border-radius:16px;">
+            <div class="feature-icon-wrap" style="background:rgba(0,194,255,0.12);"><i data-lucide="map-pin" class="lucide ic-xl" style="color:var(--cyan-dim);"></i></div>
             <div>
-              <p class="feature-item-title">Learn Skills &amp; Earn Certifications</p>
-              <p class="feature-item-desc">Build your sales skills, earn recognised certifications, and access internship and career growth pathways through verified brand campaigns.</p>
+              <p class="feature-item-title" style="font-size:18px;font-weight:800;color:#0D1B33;">Activation &amp; Field Opportunities</p>
+              <p class="feature-item-desc" style="color:#64748B;font-size:14px;margin-top:4px;">Get access to merchandising, event staffing, in-store promotion, and field marketing campaigns.</p>
             </div>
           </div>
-          <div class="feature-item">
-            <div class="feature-icon-wrap"><i data-lucide="bar-chart-2" class="lucide ic-xl"></i></div>
+          <div class="feature-item" style="background:#fff;border:1px solid #E2ECF5;padding:24px;border-radius:16px;">
+            <div class="feature-icon-wrap" style="background:rgba(0,194,255,0.12);"><i data-lucide="book-open" class="lucide ic-xl" style="color:var(--cyan-dim);"></i></div>
             <div>
-              <p class="feature-item-title">Track Your Earnings &amp; Goals</p>
-              <p class="feature-item-desc">Monitor campaign performance, wallet balance, and income targets from your dashboard. Know exactly how you're growing.</p>
-            </div>
-          </div>
-        </div>
-        <div class="features-ctas">
-          <a href="https://talents.digihire.io/login" class="btn btn-cyan">Get Started →</a>
-          <a href="https://talents.digihire.io" class="btn btn-outline-navy">Explore Campaigns</a>
-        </div>
-      </div>
-
-      <div class="stats-col reveal" style="transition-delay:0.15s">
-        <div class="stat-highlight">
-          <div class="stat-h-item">
-            <div class="stat-h-value" data-target="1" data-suffix="K+">0+</div>
-            <div class="stat-h-label">Sellers on the platform</div>
-          </div>
-          <div class="stat-h-item">
-            <div class="stat-h-value" data-target="50" data-suffix="+">0+</div>
-            <div class="stat-h-label">Active brand campaigns</div>
-          </div>
-        </div>
-        <div class="testi-card">
-          <div class="testi-stars">★★★★★</div>
-          <p class="testi-text">"I joined a VoltSquad campaign and made my first ₦50,000 in three weeks. Digihire made it genuinely easy to find real brand work and earn from it."</p>
-          <div class="testi-author">
-            <div class="testi-av">TA</div>
-            <div>
-              <div class="testi-name">Temi Adeyemi</div>
-              <div class="testi-role">VoltSquad Seller · Lagos</div>
+              <p class="feature-item-title" style="font-size:18px;font-weight:800;color:#0D1B33;">Career Resources</p>
+              <p class="feature-item-desc" style="color:#64748B;font-size:14px;margin-top:4px;">Access practical sales career advice, interview tips, CV guides, and industry insights.</p>
             </div>
           </div>
         </div>
-        <div class="value-badge">
-          <div class="value-badge-title">Earn while you build</div>
-          <p class="value-badge-desc">Sellers on VoltSquad earn commission on every sale and signup they drive — real income from brand campaigns while growing experience and career profile.</p>
+        <div class="features-ctas" style="justify-content:center;margin-top:32px;">
+          <a href="https://talents.digihire.io/signup?module=talent_pool" class="btn btn-cyan btn-lg">Set Up Your Profile →</a>
+          <a href="/jobs" class="btn btn-outline-navy btn-lg">Browse Opportunities</a>
         </div>
       </div>
 
@@ -2535,41 +2623,55 @@
   </div>
 </section>
 
-<!-- ════ T5. WHY JOIN DIGIHIRE ════════════════════ -->
+<!-- ════ T5. WHY DIGIHIRE ════════════════════ -->
 <section class="talent-why-section">
   <div class="container">
     <div class="talent-why-inner reveal">
       <div class="talent-why-left">
         <p class="section-label">Why Digihire</p>
-        <h2 class="section-heading">More than random gigs</h2>
-        <p class="section-sub">Digihire helps you move beyond scattered opportunities by giving you a more structured way to work with brands, earn from sales, access jobs, and build long-term career value.</p>
+        <h2 class="section-heading">More Than Just Another Job Board</h2>
+        <p class="section-sub">Digihire helps you build a long-term career in sales by connecting you with employers, activation opportunities, and some of Nigeria’s fastest-growing brands.</p>
       </div>
       <div class="talent-why-benefits stagger-grid">
         <div class="twb">
           <div class="twb-check">✓</div>
-          <span class="twb-text">Access real brand campaigns</span>
+          <span class="twb-text">Build one professional profile</span>
         </div>
         <div class="twb">
           <div class="twb-check">✓</div>
-          <span class="twb-text">Earn through commissions and paid opportunities</span>
+          <span class="twb-text">Get discovered by employers</span>
         </div>
         <div class="twb">
           <div class="twb-check">✓</div>
-          <span class="twb-text">Get considered for sales roles</span>
+          <span class="twb-text">Access full-time and contract opportunities</span>
         </div>
         <div class="twb">
           <div class="twb-check">✓</div>
-          <span class="twb-text">Build experience that grows over time</span>
+          <span class="twb-text">Find activation and merchandising gigs</span>
         </div>
         <div class="twb">
           <div class="twb-check">✓</div>
-          <span class="twb-text">Learn practical sales skills</span>
+          <span class="twb-text">Track your job applications</span>
         </div>
         <div class="twb">
           <div class="twb-check">✓</div>
-          <span class="twb-text">Track your earnings and goals</span>
+          <span class="twb-text">Grow your sales career</span>
         </div>
       </div>
+    </div>
+  </div>
+</section>
+
+<!-- ════ T-COMING-SOON. VOLTSQUAD ════════════════════ -->
+<section style="padding:60px 0;background:var(--navy);color:#fff;" id="voltsquad-coming-soon">
+  <div class="container">
+    <div style="background:linear-gradient(135deg,var(--navy-2) 0%,var(--navy-4) 100%);border:1px solid rgba(0,194,255,0.25);border-radius:24px;padding:40px 48px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:24px;" class="reveal">
+      <div style="max-width:600px;">
+        <span style="background:rgba(0,194,255,0.2);color:var(--cyan);font-size:11px;font-weight:800;letter-spacing:0.1em;text-transform:uppercase;padding:4px 10px;border-radius:20px;border:1px solid rgba(0,194,255,0.4);">Coming Soon</span>
+        <h3 style="font-size:32px;font-weight:800;color:#fff;margin-top:12px;margin-bottom:8px;">VoltSquad</h3>
+        <p style="font-size:16px;color:rgba(255,255,255,0.85);line-height:1.6;">A commission-based marketplace where sellers can work with brands, promote products, and earn based on performance.</p>
+      </div>
+      <button type="button" onclick="openBrandWaitlistModal(event)" class="btn btn-cyan btn-lg" style="border:none;cursor:pointer;">Join the Waitlist →</button>
     </div>
   </div>
 </section>
@@ -2578,11 +2680,11 @@
 <section class="final-cta" id="training">
   <div class="container">
     <div class="reveal">
-      <h2 class="final-cta-title">Ready to start earning and growing<br/>with Digihire?</h2>
-      <p class="final-cta-sub">Join Digihire to access campaigns, jobs, and practical growth opportunities designed for people who want to work with brands and build real sales income.</p>
+      <h2 class="final-cta-title">Ready for Your Next Opportunity?</h2>
+      <p class="final-cta-sub">Whether you’re looking for your first sales role or your next activation gig, Digihire helps you connect with brands that are hiring.</p>
       <div style="display:flex;gap:14px;justify-content:center;flex-wrap:wrap;">
-        <a href="https://talents.digihire.io/join-now" class="btn btn-cyan btn-lg">Join Digihire</a>
-        <a href="https://talents.digihire.io/login" class="btn btn-outline-white btn-lg">Set Up Your Profile</a>
+        <a href="https://talents.digihire.io/signup?module=talent_pool" class="btn btn-cyan btn-lg">Join Talent Pool</a>
+        <a href="/jobs" class="btn btn-outline-white btn-lg">Browse Jobs</a>
       </div>
     </div>
   </div>
@@ -2593,7 +2695,10 @@
 <!-- ▼ BRAND MODE ▼ -->
 <div class="mode-brand">
 
-<!-- ════ B0. WHAT BRANDS CAN DO ═════════════════════ -->
+<!-- ══════════════════════════════════════════════════════════════
+     V1: BRAND MODE (COMMENTED OUT FOR ROLLBACK / REFERENCE)
+     ══════════════════════════════════════════════════════════════
+[-- ════ B0. WHAT BRANDS CAN DO (V1) ═════════════════════ --]
 <section class="talent-what-section">
   <div class="container">
     <div class="platform-header reveal">
@@ -2641,6 +2746,97 @@
     </div>
   </div>
 </section>
+
+[-- ════ B2. ALL-IN-ONE PLATFORM (V1) ════════════════ --]
+<section class="platform-discover">
+  <div class="container">
+    <div class="platform-header reveal">
+      <p class="section-label">All in one platform</p>
+      <h2 class="section-heading">Built for the moments when brands need traction fast</h2>
+      <p class="section-sub">Whether you are launching a product, entering a new market, or trying to grow across cities, Digihire helps you execute with the right campaigns, talent, and on-ground presence.</p>
+    </div>
+  </div>
+</section>
+
+[-- ════ B4. STRUCTURED DISTRIBUTION (V1) ════════════ --]
+<section class="brand-distribution">
+  <div class="container">
+    <h2 class="section-heading">Structured Distribution Across the Audiences That Move Markets</h2>
+  </div>
+</section>
+══════════════════════════════════════════════════════════════
+END V1 COMMENTED OUT
+══════════════════════════════════════════════════════════════ -->
+
+<!-- ▼ V2: BRAND MODE CONTENT ▼ -->
+
+<!-- ════ B0. SERVICES (V2) ═════════════════════ -->
+<section class="talent-what-section" id="brand-services">
+  <div class="container">
+    <div class="platform-header reveal">
+      <p class="section-label">SERVICES</p>
+      <h2 class="section-heading">How Digihire Helps Your Business</h2>
+      <p class="section-sub" style="font-size:18px;font-weight:600;color:var(--cyan-dim);">Find the Right Sales Talent for Every Stage of Growth</p>
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:24px;" class="stagger-grid" id="brand-paths-grid">
+
+      <!-- Card 1: Hire Sales Professionals -->
+      <div class="twc" style="background:#fff;border:1px solid #E2ECF5;display:flex;flex-direction:column;justify-content:space-between;padding:28px;">
+        <div>
+          <div class="twc-tag" style="color:var(--cyan-dim);font-weight:700;">Permanent &amp; Contract Roles</div>
+          <h3 class="twc-title" style="color:#0D1B33;margin-top:8px;font-size:22px;">Hire Sales Professionals</h3>
+          <p style="font-size:14px;color:#4B5563;margin-top:12px;margin-bottom:8px;font-weight:600;">Recruit experienced:</p>
+          <ul style="list-style:none;padding:0;margin:0 0 16px 0;display:flex;flex-direction:column;gap:8px;font-size:14px;color:#475569;">
+            <li style="display:flex;align-items:center;gap:8px;"><span style="color:var(--cyan-dim);font-weight:800;font-size:16px;">•</span> Sales Executives</li>
+            <li style="display:flex;align-items:center;gap:8px;"><span style="color:var(--cyan-dim);font-weight:800;font-size:16px;">•</span> SDRs &amp; BDRs</li>
+            <li style="display:flex;align-items:center;gap:8px;"><span style="color:var(--cyan-dim);font-weight:800;font-size:16px;">•</span> Tech Sales Professionals</li>
+            <li style="display:flex;align-items:center;gap:8px;"><span style="color:var(--cyan-dim);font-weight:800;font-size:16px;">•</span> Business Development Executives</li>
+            <li style="display:flex;align-items:center;gap:8px;"><span style="color:var(--cyan-dim);font-weight:800;font-size:16px;">•</span> Account Managers</li>
+          </ul>
+          <p style="font-size:13px;color:#64748B;margin-bottom:16px;font-weight:500;">For permanent and contract roles.</p>
+        </div>
+        <a href="https://brands.digihire.io/signup?service=recruitment-fulltime" onclick="openBrandWaitlistModal(event)" class="btn btn-cyan" style="align-self:flex-start;margin-top:auto;">Start Hiring →</a>
+      </div>
+
+      <!-- Card 2: Hire Activation & Field Teams -->
+      <div class="twc" style="background:linear-gradient(135deg,#F8FAFC 0%,#EEF2FF 100%);border:1px solid #D4DDFF;display:flex;flex-direction:column;justify-content:space-between;padding:28px;">
+        <div>
+          <div class="twc-tag" style="color:#4444BB;font-weight:700;">On-Ground Campaigns</div>
+          <h3 class="twc-title" style="color:#0D1B33;margin-top:8px;font-size:22px;">Hire Activation &amp; Field Teams</h3>
+          <p style="font-size:14px;color:#4B5563;margin-top:12px;margin-bottom:8px;font-weight:600;">Deploy:</p>
+          <ul style="list-style:none;padding:0;margin:0 0 16px 0;display:flex;flex-direction:column;gap:8px;font-size:14px;color:#475569;">
+            <li style="display:flex;align-items:center;gap:8px;"><span style="color:#4444BB;font-weight:800;font-size:16px;">•</span> Promoters</li>
+            <li style="display:flex;align-items:center;gap:8px;"><span style="color:#4444BB;font-weight:800;font-size:16px;">•</span> Merchandisers</li>
+            <li style="display:flex;align-items:center;gap:8px;"><span style="color:#4444BB;font-weight:800;font-size:16px;">•</span> Brand Ambassadors</li>
+            <li style="display:flex;align-items:center;gap:8px;"><span style="color:#4444BB;font-weight:800;font-size:16px;">•</span> Event Staff</li>
+            <li style="display:flex;align-items:center;gap:8px;"><span style="color:#4444BB;font-weight:800;font-size:16px;">•</span> Product Demonstrators</li>
+            <li style="display:flex;align-items:center;gap:8px;"><span style="color:#4444BB;font-weight:800;font-size:16px;">•</span> Field Marketers</li>
+          </ul>
+          <p style="font-size:13px;color:#64748B;margin-bottom:16px;font-weight:500;">For activations, exhibitions, product launches, retail campaigns, and in-store promotions.</p>
+        </div>
+        <a href="/sales-activations" onclick="openBrandWaitlistModal(event)" class="btn btn-cyan" style="align-self:flex-start;margin-top:auto;background:#4444BB;color:#fff;">Start Hiring →</a>
+      </div>
+
+      <!-- Card 3: Hire Contract Sales Talent -->
+      <div class="twc" style="background:linear-gradient(135deg,#F8FAFC 0%,#E8FDF5 100%);border:1px solid #CCF5E8;display:flex;flex-direction:column;justify-content:space-between;padding:28px;">
+        <div>
+          <div class="twc-tag" style="color:#00875A;font-weight:700;">Flexible Workforce</div>
+          <h3 class="twc-title" style="color:#0D1B33;margin-top:8px;font-size:22px;">Hire Contract Sales Talent</h3>
+          <p style="font-size:14px;color:#334155;margin-top:12px;margin-bottom:12px;line-height:1.5;">Scale your sales team without permanent hiring.</p>
+          <p style="font-size:13px;color:#475569;margin-bottom:8px;font-weight:700;">Perfect for:</p>
+          <ul style="list-style:none;padding:0;margin:0 0 16px 0;display:flex;flex-direction:column;gap:8px;font-size:14px;color:#475569;">
+            <li style="display:flex;align-items:center;gap:8px;"><span style="color:#00875A;font-weight:800;font-size:16px;">•</span> Seasonal campaigns</li>
+            <li style="display:flex;align-items:center;gap:8px;"><span style="color:#00875A;font-weight:800;font-size:16px;">•</span> Product launches</li>
+            <li style="display:flex;align-items:center;gap:8px;"><span style="color:#00875A;font-weight:800;font-size:16px;">•</span> Market expansion</li>
+            <li style="display:flex;align-items:center;gap:8px;"><span style="color:#00875A;font-weight:800;font-size:16px;">•</span> Short-term projects</li>
+          </ul>
+        </div>
+        <a href="https://brands.digihire.io/signup?service=recruitment-parttime" onclick="openBrandWaitlistModal(event)" class="btn btn-cyan" style="align-self:flex-start;margin-top:auto;background:#00875A;color:#fff;">Start Hiring →</a>
+      </div>
+
+    </div>
+  </div>
+</section>
 <style>
   @media (max-width: 1024px) { #brand-paths-grid { grid-template-columns: repeat(2,1fr) !important; } }
   @media (max-width: 600px) { #brand-paths-grid { grid-template-columns: 1fr !important; } }
@@ -2650,14 +2846,14 @@
 <section class="talent-unlock" id="brand-talent">
   <div class="container">
     <div class="talent-header reveal">
-      <h2 class="section-heading">Ready to deploy sales talent that can deliver?</h2>
+      <h2 class="section-heading">Ready to Hire? We’ve Got the Talent.</h2>
     </div>
     <div class="talent-cards stagger-grid">
       <div class="talent-card">
         <img class="talent-card-img" src="https://plus.unsplash.com/premium_photo-1669879859992-5252477fa489?w=400&h=533&fit=crop&crop=face&q=80" alt="Sales Executive" width="400" height="533" loading="lazy" />
         <div class="talent-card-overlay">
           <div class="talent-card-name">Sales Executive</div>
-          <div class="talent-card-role">B2B & Tech Sales</div>
+          <div class="talent-card-role">B2B &amp; Tech Sales</div>
           <span class="talent-verified">Verified</span>
         </div>
       </div>
@@ -2665,7 +2861,7 @@
         <img class="talent-card-img" src="https://images.unsplash.com/photo-1769636930016-5d9f0ca653aa?w=400&h=533&fit=crop&crop=face&q=80" alt="Field Agent" width="400" height="533" loading="lazy" />
         <div class="talent-card-overlay">
           <div class="talent-card-name">Field Activation Agent</div>
-          <div class="talent-card-role">Campus & Community</div>
+          <div class="talent-card-role">Campus &amp; Community</div>
           <span class="talent-verified">Verified</span>
         </div>
       </div>
@@ -2673,7 +2869,7 @@
         <img class="talent-card-img" src="https://images.unsplash.com/photo-1655720357761-f18ea9e5e7e6?w=400&h=533&fit=crop&crop=face&q=80" alt="SDR" width="400" height="533" loading="lazy" />
         <div class="talent-card-overlay">
           <div class="talent-card-name">SDR / BDR</div>
-          <div class="talent-card-role">Pipeline & Outbound</div>
+          <div class="talent-card-role">Pipeline &amp; Outbound</div>
           <span class="talent-verified">Verified</span>
         </div>
       </div>
@@ -2681,7 +2877,7 @@
         <img class="talent-card-img" src="https://plus.unsplash.com/premium_photo-1661778504126-9e61ffce7ed7?w=400&h=533&fit=crop&crop=face&q=80" alt="Merchandiser" width="400" height="533" loading="lazy" />
         <div class="talent-card-overlay">
           <div class="talent-card-name">Merchandiser</div>
-          <div class="talent-card-role">Retail & Distribution</div>
+          <div class="talent-card-role">Retail &amp; Distribution</div>
           <span class="talent-verified">Verified</span>
         </div>
       </div>
@@ -2689,22 +2885,58 @@
   </div>
 </section>
 
-<!-- ════ B2. ALL-IN-ONE PLATFORM ════════════════════ -->
+<!-- ════ B2. ALL-IN-ONE PLATFORM (V2) ════════════════ -->
 <section class="platform-discover" id="brand-platform">
   <div class="container">
     <div class="platform-header reveal">
-      <p class="section-label">All in one platform</p>
-      <h2 class="section-heading">Built for the moments when brands need traction fast</h2>
-      <p class="section-sub">Whether you are launching a product, entering a new market, or trying to grow across cities, Digihire helps you execute with the right campaigns, talent, and on-ground presence.</p>
+      <p class="section-label">Why Businesses Choose Digihire</p>
+      <h2 class="section-heading">Why Businesses Choose Digihire</h2>
+      <p class="section-sub">Whether you need one salesperson or an entire activation team, Digihire helps you recruit, deploy, and manage sales talent quickly.</p>
     </div>
 
-    <!-- Hero feature card -->
-    <div class="platform-hero-card reveal">
+    <!-- Value proposition highlight box -->
+    <div style="background:#fff;border:1px solid #E2ECF5;border-radius:18px;padding:28px 36px;margin-bottom:32px;box-shadow:0 4px 20px rgba(0,0,0,0.04);" class="reveal">
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:20px;align-items:center;">
+        <div style="display:flex;align-items:center;gap:12px;">
+          <div style="width:36px;height:36px;border-radius:50%;background:rgba(0,194,255,0.12);color:var(--cyan-dim);display:flex;align-items:center;justify-content:center;font-weight:800;">✓</div>
+          <span style="font-size:15px;font-weight:700;color:#0D1B33;">Verified sales professionals</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:12px;">
+          <div style="width:36px;height:36px;border-radius:50%;background:rgba(0,194,255,0.12);color:var(--cyan-dim);display:flex;align-items:center;justify-content:center;font-weight:800;">✓</div>
+          <span style="font-size:15px;font-weight:700;color:#0D1B33;">Activation-ready field staff</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:12px;">
+          <div style="width:36px;height:36px;border-radius:50%;background:rgba(0,194,255,0.12);color:var(--cyan-dim);display:flex;align-items:center;justify-content:center;font-weight:800;">✓</div>
+          <span style="font-size:15px;font-weight:700;color:#0D1B33;">Faster hiring</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:12px;">
+          <div style="width:36px;height:36px;border-radius:50%;background:rgba(0,194,255,0.12);color:var(--cyan-dim);display:flex;align-items:center;justify-content:center;font-weight:800;">✓</div>
+          <span style="font-size:15px;font-weight:700;color:#0D1B33;">Flexible staffing options</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:12px;">
+          <div style="width:36px;height:36px;border-radius:50%;background:rgba(0,194,255,0.12);color:var(--cyan-dim);display:flex;align-items:center;justify-content:center;font-weight:800;">✓</div>
+          <span style="font-size:15px;font-weight:700;color:#0D1B33;">Nationwide talent network</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Hero feature card: COMING SOON (VoltSquad) -->
+    <div class="platform-hero-card reveal" style="background:linear-gradient(135deg,var(--navy) 0%,var(--navy-3) 100%);border:1px solid rgba(0,194,255,0.25);">
       <div class="phc-content">
-        <div class="phc-tag">VoltSquad</div>
-        <h3 class="phc-title">Launch sales campaigns on VoltSquad</h3>
-        <p class="phc-desc">VoltSquad helps brands launch targeted sales campaigns across campuses, communities, cities, and distribution networks using real sellers who drive signups, users, leads, and product sales.</p>
-        <a href="https://brands.digihire.io/login" class="btn btn-cyan" style="margin-top:20px;align-self:flex-start;">Launch a Campaign</a>
+        <div style="display:inline-flex;align-items:center;gap:8px;margin-bottom:12px;">
+          <span style="background:rgba(0,194,255,0.2);color:var(--cyan);font-size:11px;font-weight:800;letter-spacing:0.1em;text-transform:uppercase;padding:4px 10px;border-radius:20px;border:1px solid rgba(0,194,255,0.4);">Coming Soon</span>
+        </div>
+        <h3 class="phc-title" style="font-size:28px;color:#fff;">VoltSquad</h3>
+        <p class="phc-desc" style="color:rgba(255,255,255,0.85);font-size:15px;margin-bottom:16px;">Launch commission-based sales campaigns powered by a network of independent sellers.</p>
+        <p style="font-size:13px;font-weight:700;color:var(--cyan);margin-bottom:8px;">Recruit people to:</p>
+        <ul style="list-style:none;padding:0;margin:0 0 20px 0;display:flex;flex-direction:column;gap:6px;font-size:14px;color:rgba(255,255,255,0.8);">
+          <li style="display:flex;align-items:center;gap:8px;"><span style="color:var(--cyan);font-weight:800;">✓</span> Sell your products</li>
+          <li style="display:flex;align-items:center;gap:8px;"><span style="color:var(--cyan);font-weight:800;">✓</span> Drive app downloads</li>
+          <li style="display:flex;align-items:center;gap:8px;"><span style="color:var(--cyan);font-weight:800;">✓</span> Generate qualified leads</li>
+          <li style="display:flex;align-items:center;gap:8px;"><span style="color:var(--cyan);font-weight:800;">✓</span> Increase customer sign-ups</li>
+          <li style="display:flex;align-items:center;gap:8px;"><span style="color:var(--cyan);font-weight:800;">✓</span> Grow sales through performance-based selling</li>
+        </ul>
+        <button type="button" onclick="openBrandWaitlistModal(event)" class="btn btn-cyan" style="margin-top:10px;align-self:flex-start;border:none;cursor:pointer;">Join the Brand Waitlist</button>
       </div>
       <div class="phc-visual">
         <div class="phc-visual-bg"></div>
@@ -2716,152 +2948,77 @@
           </div>
           <div class="phc-cards-row">
             <div class="phc-stat-card">
-              <div class="phc-stat-val">12 Active</div>
-              <div class="phc-stat-label">Campaigns running today</div>
+              <div class="phc-stat-val">Performance</div>
+              <div class="phc-stat-label">Independent seller network</div>
             </div>
             <div class="phc-stat-card">
-              <div class="phc-float-label">Avg. campaign launch</div>
-              <div class="phc-stat-val">48hrs</div>
+              <div class="phc-float-label">Status</div>
+              <div class="phc-stat-val" style="color:var(--cyan);">Coming Soon</div>
             </div>
           </div>
         </div>
       </div>
     </div>
 
-    <!-- 3 sub-cards -->
-    <div class="platform-sub-cards stagger-grid" style="margin-top:20px">
+    <!-- 3 feature sub-cards -->
+    <div class="platform-sub-cards stagger-grid" style="margin-top:24px">
       <div class="psc psc-1">
-        <div class="psc-label">Sales Campaigns</div>
-        <h4 class="psc-title">Launch sales campaigns on VoltSquad</h4>
-        <p class="psc-desc">Performance-based campaigns tied to real outcomes, signups, users, leads, and sales across campuses, communities, and cities.</p>
+        <div class="psc-label">Sales Recruitment</div>
+        <h4 class="psc-title">Sales Recruitment</h4>
+        <p class="psc-desc">Find experienced sales professionals for permanent and contract roles.</p>
         <div class="psc-visual psc-visual-img">
-          <img src="https://plus.unsplash.com/premium_photo-1713821698191-7db0f93bec40?w=700&h=320&fit=crop&crop=center&q=80" alt="Sales campaign team" width="700" height="320" loading="lazy" />
+          <img src="https://images.unsplash.com/photo-1739285452621-59d92842fcc8?w=700&h=320&fit=crop&crop=top&q=80" alt="Sales recruitment" width="700" height="320" loading="lazy" />
         </div>
       </div>
       <div class="psc psc-2">
-        <div class="psc-label">Sales Recruitment</div>
-        <h4 class="psc-title">Hire sales talent built for<br>execution</h4>
-        <p class="psc-desc">From tech sales reps and SDRs to merchandisers, closers, and field teams project-based or long-term hires that can sell.</p>
+        <div class="psc-label">Field Staffing</div>
+        <h4 class="psc-title">Activation &amp; Field Staffing</h4>
+        <p class="psc-desc">Deploy promoters, merchandisers, event staff, and field marketers for your next campaign.</p>
         <div class="psc-visual psc-visual-img">
-          <img src="https://images.unsplash.com/photo-1739285452621-59d92842fcc8?w=700&h=320&fit=crop&crop=top&q=80" alt="Sales recruitment interview" width="700" height="320" loading="lazy" />
+          <img src="https://crecerpartners.com/wp-content/uploads/2025/08/WhatsApp-Image-2025-09-08-at-08.48.44_9afe4066.jpg" alt="Activation and field staffing" width="700" height="320" loading="lazy" />
         </div>
       </div>
       <div class="psc psc-3">
-        <div class="psc-label">Sales Activations & Field Marketing</div>
-        <h4 class="psc-title">Run on-ground activations that drive traction</h4>
-        <p class="psc-desc">Malls, campuses, high-traffic areas, and target locations, field marketing that creates awareness, engagement, and conversions.</p>
+        <div class="psc-label">Talent Network</div>
+        <h4 class="psc-title">Talent Network</h4>
+        <p class="psc-desc">Access a growing network of verified sales professionals across multiple industries and locations.</p>
         <div class="psc-visual psc-visual-img">
-          <img src="https://crecerpartners.com/wp-content/uploads/2025/08/WhatsApp-Image-2025-09-08-at-08.48.44_9afe4066.jpg" alt="Field activation event" width="700" height="320" loading="lazy" />
+          <img src="https://plus.unsplash.com/premium_photo-1713821698191-7db0f93bec40?w=700&h=320&fit=crop&crop=center&q=80" alt="Talent network" width="700" height="320" loading="lazy" />
         </div>
       </div>
     </div>
   </div>
 </section>
 
-<!-- ════ B3. WHAT BRANDS USE DIGIHIRE FOR ═══════════ -->
+<!-- ════ B3. WHAT BUSINESSES USE DIGIHIRE FOR ═══════════ -->
 <section class="brand-usecases-section reveal">
   <div class="container">
     <p class="section-label">Use Cases</p>
-    <h2 class="section-heading">What business owners use Digihire for</h2>
+    <h2 class="section-heading">What Businesses Use Digihire For</h2>
   </div>
   <div class="brand-usecases-slider">
     <div class="brand-usecases-track">
-      <span class="brand-usecase-pill">Acquire users</span>
-      <span class="brand-usecase-pill">Recruit sales talent</span>
-      <span class="brand-usecase-pill">Launch new products</span>
-      <span class="brand-usecase-pill">Enter new markets</span>
-      <span class="brand-usecase-pill">Activate cities</span>
-      <span class="brand-usecase-pill">Drive visibility in high-traffic areas</span>
-      <span class="brand-usecase-pill">Grow through human-led sales</span>
-      <span class="brand-usecase-pill">Run field activations</span>
-      <span class="brand-usecase-pill">Scale distribution networks</span>
+      <span class="brand-usecase-pill">Hire Sales Professionals</span>
+      <span class="brand-usecase-pill">Recruit Tech Sales Teams</span>
+      <span class="brand-usecase-pill">Staff Product Launches</span>
+      <span class="brand-usecase-pill">Run Mall Activations</span>
+      <span class="brand-usecase-pill">Hire Exhibition Staff</span>
+      <span class="brand-usecase-pill">Deploy Merchandisers</span>
+      <span class="brand-usecase-pill">Build Field Sales Teams</span>
+      <span class="brand-usecase-pill">Expand Into New Markets</span>
       <!-- duplicate for seamless loop -->
-      <span class="brand-usecase-pill">Acquire users</span>
-      <span class="brand-usecase-pill">Recruit sales talent</span>
-      <span class="brand-usecase-pill">Launch new products</span>
-      <span class="brand-usecase-pill">Enter new markets</span>
-      <span class="brand-usecase-pill">Activate cities</span>
-      <span class="brand-usecase-pill">Drive visibility in high-traffic areas</span>
-      <span class="brand-usecase-pill">Grow through human-led sales</span>
-      <span class="brand-usecase-pill">Run field activations</span>
-      <span class="brand-usecase-pill">Scale distribution networks</span>
+      <span class="brand-usecase-pill">Hire Sales Professionals</span>
+      <span class="brand-usecase-pill">Recruit Tech Sales Teams</span>
+      <span class="brand-usecase-pill">Staff Product Launches</span>
+      <span class="brand-usecase-pill">Run Mall Activations</span>
+      <span class="brand-usecase-pill">Hire Exhibition Staff</span>
+      <span class="brand-usecase-pill">Deploy Merchandisers</span>
+      <span class="brand-usecase-pill">Build Field Sales Teams</span>
+      <span class="brand-usecase-pill">Expand Into New Markets</span>
     </div>
   </div>
   <div class="container">
-    <p class="section-sub" style="margin-top:12px;text-align:center;max-width:none;white-space:nowrap;">From product launches to city-wide activations, Digihire gives brands the people and structure to execute at scale.</p>
-  </div>
-</section>
-
-<!-- ════ B4. STRUCTURED DISTRIBUTION ════════════════ -->
-<section class="brand-distribution">
-  <div class="container">
-    <div class="brand-dist-inner reveal">
-      <!-- LEFT: label + heading + 2×2 stats -->
-      <div class="brand-dist-left">
-        <div>
-          <p class="section-label">Distribution</p>
-          <h2 class="section-heading">Structured Distribution Across the Audiences That Move Markets</h2>
-        </div>
-        <div class="brand-stats-row">
-          <div class="brand-stat">
-            <div class="brand-stat-num">107M+</div>
-            <div class="brand-stat-label">Digitally connected users in Nigeria</div>
-          </div>
-          <div class="brand-stat">
-            <div class="brand-stat-num">150M+</div>
-            <div class="brand-stat-label">Active mobile connections in Nigeria</div>
-          </div>
-          <div class="brand-stat">
-            <div class="brand-stat-num">2M+</div>
-            <div class="brand-stat-label">Students enrolled in tertiary institutions</div>
-          </div>
-          <div class="brand-stat">
-            <div class="brand-stat-num">130M+</div>
-            <div class="brand-stat-label">Working-age Nigerians aged 15–64</div>
-          </div>
-        </div>
-      </div>
-      <!-- RIGHT: 2×3 audience cards -->
-      <div class="brand-audience-grid stagger-grid">
-        <div class="brand-audience-card">
-          <i data-lucide="graduation-cap" class="lucide ic-lg"></i>
-          <h4>Campuses</h4>
-          <p>Tap into student communities with strong peer influence and fast product spread.</p>
-        </div>
-        <div class="brand-audience-card">
-          <i data-lucide="flag" class="lucide ic-lg"></i>
-          <h4>Corps Members</h4>
-          <p>Activate ambitious young professionals with reach across cities, networks, and local communities.</p>
-        </div>
-        <div class="brand-audience-card">
-          <i data-lucide="users" class="lucide ic-lg"></i>
-          <h4>Youth Communities</h4>
-          <p>Reach engaged groups where trust, conversation, and recommendations drive action.</p>
-        </div>
-        <div class="brand-audience-card">
-          <i data-lucide="smartphone" class="lucide ic-lg"></i>
-          <h4>Digital-First Users</h4>
-          <p>Connect with active online consumers who discover, download, try, and share products quickly.</p>
-        </div>
-        <div class="brand-audience-card">
-          <i data-lucide="trending-up" class="lucide ic-lg"></i>
-          <h4>Millennials</h4>
-          <p>Reach working-age consumers with stronger spending power and everyday purchase potential.</p>
-        </div>
-        <div class="brand-audience-card">
-          <i data-lucide="map-pin" class="lucide ic-lg"></i>
-          <h4>Local City Networks</h4>
-          <p>Activate neighborhood-level visibility through real people embedded in local markets and communities.</p>
-        </div>
-      </div>
-    </div>
-    <div style="margin-top:48px;text-align:center;">
-      <p style="font-size:16px;color:rgba(255,255,255,0.6);margin-bottom:20px;">Ready to activate distribution at scale?</p>
-      <a href="https://brands.digihire.io/signup?service=voltsquad" class="btn btn-cyan btn-lg">
-        <i data-lucide="zap" class="lucide ic-md"></i>
-        Launch a VoltSquad Campaign
-      </a>
-    </div>
+    <p class="section-sub" style="margin-top:12px;text-align:center;max-width:none;white-space:nowrap;">From sales recruitment to field activations, Digihire connects you with verified sales talent, fast.</p>
   </div>
 </section>
 
@@ -2869,9 +3026,12 @@
 <section class="final-cta">
   <div class="container">
     <div class="reveal">
-      <h2 class="final-cta-title">Grow through the people who can actually sell</h2>
-      <p class="final-cta-sub">Launch campaigns, hire sales talent, and run activations that put your brand in front of the right people across Africa.</p>
-      <a href="https://brands.digihire.io/signup" class="btn btn-cyan btn-lg">Get Started</a>
+      <h2 class="final-cta-title">Ready to Build Your Sales Team?</h2>
+      <p class="final-cta-sub">Whether you’re hiring a Sales Executive, activation staff, merchandisers, or an entire field team, Digihire helps you find the right people, fast.</p>
+      <div style="display:flex;gap:14px;justify-content:center;flex-wrap:wrap;margin-top:20px;">
+        <a href="https://brands.digihire.io/signup?service=recruitment-fulltime" onclick="openBrandWaitlistModal(event)" class="btn btn-cyan btn-lg">Hire Sales Talent</a>
+        <a href="/sales-activations" onclick="openBrandWaitlistModal(event)" class="btn btn-outline-white btn-lg">Request Activation Staff</a>
+      </div>
     </div>
   </div>
 </section>
@@ -2882,7 +3042,7 @@
 <section class="insights" id="insights">
   <div class="container">
     <div class="insights-header reveal" id="insights-hdr">
-      <h2>Insights &amp; Resources</h2>
+      <h2>Insights &amp; Sales Career Resources</h2>
       <a href="/blog" class="insights-link">Explore our Blog →</a>
     </div>
     <div class="insights-grid stagger-grid" id="insights-grid">
@@ -2891,29 +3051,29 @@
           <img src="https://plus.unsplash.com/premium_photo-1677553953699-e62954777d8f?w=700&h=360&fit=crop&crop=center&q=80" alt="Career Growth" width="700" height="360" loading="lazy" />
         </div>
         <div class="insight-card-body">
-          <div class="insight-card-cat">Career Growth</div>
-          <h4 class="insight-card-title">How to Break Into Tech Sales with Zero Experience</h4>
-          <p class="insight-card-desc">A practical guide to landing your first tech sales role in Africa's booming technology sector — even without prior experience.</p>
+          <div class="insight-card-cat">Career Advice</div>
+          <h4 class="insight-card-title">How to Write a Sales CV That Gets Interviews</h4>
+          <p class="insight-card-desc">Practical tips on structuring your resume, highlighting sales metrics, and standing out to hiring managers.</p>
         </div>
       </a>
       <a href="blog-remote-hiring.html" class="insight-card">
         <div class="insight-card-img">
-          <img src="https://images.unsplash.com/photo-1611432579402-7037e3e2c1e4?w=700&h=360&fit=crop&crop=center&q=80" alt="Hiring Strategy" width="700" height="360" loading="lazy" />
+          <img src="https://images.unsplash.com/photo-1611432579402-7037e3e2c1e4?w=700&h=360&fit=crop&crop=center&q=80" alt="Tech Sales" width="700" height="360" loading="lazy" />
         </div>
         <div class="insight-card-body">
-          <div class="insight-card-cat">Hiring Strategy</div>
-          <h4 class="insight-card-title">Why African Companies Are Winning with Remote-First Hiring</h4>
-          <p class="insight-card-desc">Discover how forward-thinking companies are accessing top talent pools across the continent with DigiHire's remote hiring solutions.</p>
+          <div class="insight-card-cat">Tech Sales</div>
+          <h4 class="insight-card-title">How to Become a Tech Sales Executive</h4>
+          <p class="insight-card-desc">Step-by-step guide to breaking into software, SaaS, and B2B tech sales roles with top employers in Nigeria.</p>
         </div>
       </a>
       <a href="blog-ai-resume.html" class="insight-card">
         <div class="insight-card-img">
-          <img src="https://plus.unsplash.com/premium_photo-1681398563948-c2045c0c8660?w=700&h=360&fit=crop&crop=center&q=80" alt="Platform Update" width="700" height="360" loading="lazy" />
+          <img src="https://plus.unsplash.com/premium_photo-1681398563948-c2045c0c8660?w=700&h=360&fit=crop&crop=center&q=80" alt="Interview Prep" width="700" height="360" loading="lazy" />
         </div>
         <div class="insight-card-body">
-          <div class="insight-card-cat">Platform Update</div>
-          <h4 class="insight-card-title">DigiHire Launches Advanced AI Resume Optimization</h4>
-          <p class="insight-card-desc">Our new AI-powered resume builder helps professionals get past ATS filters and land interviews at top global tech companies.</p>
+          <div class="insight-card-cat">Interview Prep</div>
+          <h4 class="insight-card-title">10 Interview Questions Every Sales Professional Should Prepare For</h4>
+          <p class="insight-card-desc">Master the most common sales interview scenarios and learn how to frame your past experience for maximum impact.</p>
         </div>
       </a>
     </div>
@@ -2931,7 +3091,7 @@
             <img src="assets/logo-white.png" alt="DigiHire" style="height:32px;width:auto;" />
           </a>
         </div>
-        <p class="footer-tagline">Africa's premier tech sales talent platform. Connecting top professionals with forward-thinking companies.</p>
+        <p class="footer-tagline">Nigeria's premier sales recruitment and activation deployment platform.</p>
         <div class="footer-socials">
           <a href="#" class="footer-social">𝕏</a>
           <a href="#" class="footer-social">in</a>
@@ -2951,24 +3111,14 @@
         </ul>
       </div>
 
-      <!-- Solutions -->
-      <div>
-        <p class="footer-col-title">Solutions</p>
-        <ul class="footer-col-links">
-          <li><a href="https://brands.digihire.io/signup?service=voltsquad">VoltSquad Campaigns</a></li>
-          <li><a href="https://brands.digihire.io/signup?service=recruitment-fulltime">Sales Recruitment</a></li>
-          <li><a href="/sales-activations">Activations &amp; Field Marketing</a></li>
-        </ul>
-      </div>
-
       <!-- Talent -->
       <div>
         <p class="footer-col-title">Talent</p>
         <ul class="footer-col-links">
-          <li><a href="https://talents.digihire.io/signup?module=talent_pool">Join the Talent Pool</a></li>
-          <li><a href="https://talents.digihire.io/join-now">Join VoltSquad</a></li>
-          <li><a href="https://talents.digihire.io/signup?module=gigs">Apply for Gigs</a></li>
-          <li><a href="https://talents.digihire.io/signup?module=events">Register for Events</a></li>
+          <li><a href="https://talents.digihire.io/signup?module=talent_pool">Join Talent Pool</a></li>
+          <li><a href="/jobs">Browse Jobs</a></li>
+          <li><a href="https://talents.digihire.io/signup?module=gigs">Activation Opportunities</a></li>
+          <li><a href="/events">Events</a></li>
         </ul>
       </div>
 
@@ -2976,9 +3126,10 @@
       <div>
         <p class="footer-col-title">Brands</p>
         <ul class="footer-col-links">
-          <li><a href="https://brands.digihire.io/signup?service=voltsquad">Launch a Campaign</a></li>
-          <li><a href="https://brands.digihire.io/signup?service=recruitment-fulltime">Hire Sales Talent</a></li>
-          <li><a href="/sales-activations">Activations &amp; Field Marketing</a></li>
+          <li><a href="https://brands.digihire.io/signup?service=recruitment-fulltime" onclick="openBrandWaitlistModal(event)">Hire Sales Talent</a></li>
+          <li><a href="/sales-activations" onclick="openBrandWaitlistModal(event)">Hire Activation Teams</a></li>
+          <li><a href="/sales-activations" onclick="openBrandWaitlistModal(event)">Request Merchandisers</a></li>
+          <li><a href="/sales-activations" onclick="openBrandWaitlistModal(event)">Request Field Marketing Teams</a></li>
         </ul>
       </div>
     </div>
@@ -2986,9 +3137,9 @@
     <div class="footer-bottom">
       <p class="footer-copy">© 2025 DigiHire Africa Ltd. All rights reserved.</p>
       <div class="footer-locations">
-        <div class="footer-location-item"><i data-lucide="map-pin" class="lucide ic-sm"></i> <span>Lagos, Nigeria — 7 Adewale Close, Surulere</span></div>
+        <div class="footer-location-item"><i data-lucide="map-pin" class="lucide ic-sm"></i> <span>Lagos, Nigeria | 7 Adewale Close, Surulere</span></div>
         <div class="footer-location-item"><i data-lucide="map-pin" class="lucide ic-sm"></i> <span>Accra, Ghana</span></div>
-        <div class="footer-location-item"><i data-lucide="map-pin" class="lucide ic-sm"></i> <span>Nairobi, Kenya — Kilimani Business Hub</span></div>
+        <div class="footer-location-item"><i data-lucide="map-pin" class="lucide ic-sm"></i> <span>Nairobi, Kenya | Kilimani Business Hub</span></div>
       </div>
     </div>
   </div>
@@ -3022,16 +3173,20 @@
   /* ── Hero tab toggle ──────────────────────────── */
   const heroContent = {
     'job-seeker': {
-      headline: 'Join Digihire to access sales gigs, jobs, and growth opportunities',
-      sub: 'Access commission-based campaigns, project-based gigs, part-time roles, full-time jobs, and career-building opportunities with brands looking for people who can sell.',
-      cta: 'Get Started',
-      href: 'https://talents.digihire.io/signup'
+      headline: 'Join Digihire to assess Sales Jobs, Activation gigs & Field Opportunities.',
+      sub: 'Whether you’re looking for a full-time sales role, tech sales opportunity, merchandising gig, activation job, or field marketing campaign, Digihire connects you with brands looking for people who can sell.',
+      cta: 'Join Talent Pool',
+      href: 'https://talents.digihire.io/signup?module=talent_pool',
+      secCtaText: 'Join WhatsApp channel',
+      secCtaHref: 'https://chat.whatsapp.com/DigihireTalentCommunity'
     },
     'employer': {
-      headline: 'Acquire users, recruit sales talent, and run field activations with Digihire',
-      sub: 'Digihire helps brands grow through structured sales campaigns, targeted recruitment, and field activations designed to drive visibility, users, and revenue.',
-      cta: 'Get Started',
-      href: 'https://brands.digihire.io/signup'
+      headline: 'Hire High-Performing Sales, Activation & Field Teams.',
+      sub: 'Digihire helps businesses recruit sales professionals and deploy activation staff, promoters, merchandisers, and field marketing teams across Nigeria.',
+      cta: 'Hire Sales Talent',
+      href: 'https://brands.digihire.io/signup?service=recruitment-fulltime',
+      secCtaText: 'Request Activation Staff',
+      secCtaHref: '/sales-activations'
     }
   };
 
@@ -3042,6 +3197,7 @@
     const hl = document.getElementById('hero-headline');
     const sub = document.getElementById('hero-sub');
     const cta = document.getElementById('hero-cta-primary');
+    const secCta = document.getElementById('hero-cta-secondary');
     hl.style.opacity = 0; hl.style.transform = 'translateY(10px)';
     sub.style.opacity = 0;
     setTimeout(() => {
@@ -3049,6 +3205,18 @@
       sub.textContent = c.sub;
       cta.textContent = c.cta;
       cta.href = c.href;
+      if (secCta) {
+        secCta.textContent = c.secCtaText;
+        secCta.href = c.secCtaHref;
+        secCta.style.display = 'inline-flex';
+      }
+      if (key === 'employer') {
+        cta.onclick = openBrandWaitlistModal;
+        if (secCta) secCta.onclick = openBrandWaitlistModal;
+      } else {
+        cta.onclick = null;
+        if (secCta) secCta.onclick = null;
+      }
       hl.style.transition = 'opacity 0.4s, transform 0.4s';
       hl.style.opacity = 1; hl.style.transform = 'none';
       sub.style.transition = 'opacity 0.4s'; sub.style.opacity = 1;
@@ -3079,10 +3247,23 @@
       var hl = document.getElementById('hero-headline');
       var sub = document.getElementById('hero-sub');
       var cta = document.getElementById('hero-cta-primary');
+      var secCta = document.getElementById('hero-cta-secondary');
       if (hl && sub && cta) {
         var c = heroContent[isEmployer ? 'employer' : 'job-seeker'];
         hl.textContent = c.headline; sub.textContent = c.sub;
         cta.textContent = c.cta; cta.href = c.href;
+        if (secCta) {
+          secCta.textContent = c.secCtaText;
+          secCta.href = c.secCtaHref;
+          secCta.style.display = 'inline-flex';
+        }
+        if (isEmployer) {
+          cta.onclick = openBrandWaitlistModal;
+          if (secCta) secCta.onclick = openBrandWaitlistModal;
+        } else {
+          cta.onclick = null;
+          if (secCta) secCta.onclick = null;
+        }
       }
     }
     applyMode('brand');
@@ -3349,6 +3530,65 @@
     });
   });
 })();
+
+/* ── BRAND WAITLIST MODAL SCRIPT ── */
+function openBrandWaitlistModal(e) {
+  if (e) e.preventDefault();
+  var modal = document.getElementById('waitlist-modal');
+  if (modal) {
+    if (typeof modal.showModal === 'function') {
+      modal.showModal();
+    } else {
+      modal.setAttribute('open', '');
+    }
+    document.body.style.overflow = 'hidden';
+  }
+}
+
+function closeBrandWaitlistModal() {
+  var modal = document.getElementById('waitlist-modal');
+  if (modal) {
+    if (typeof modal.close === 'function') {
+      modal.close();
+    } else {
+      modal.removeAttribute('open');
+    }
+    document.body.style.overflow = '';
+  }
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+  var modal = document.getElementById('waitlist-modal');
+  if (modal) {
+    modal.addEventListener('click', function(e) {
+      var rect = modal.getBoundingClientRect();
+      var isInDialog = (rect.top <= e.clientY && e.clientY <= rect.top + rect.height
+        && rect.left <= e.clientX && e.clientX <= rect.left + rect.width);
+      if (!isInDialog) {
+        closeBrandWaitlistModal();
+      }
+    });
+    modal.addEventListener('close', function() {
+      document.body.style.overflow = '';
+    });
+  }
+});
 </script>
+
+<!-- ════ BRAND WAITLIST MODAL DIALOG ════ -->
+<dialog id="waitlist-modal" class="modal-dialog">
+  <div class="modal-card">
+    <button type="button" class="modal-close-btn" onclick="closeBrandWaitlistModal()" aria-label="Close dialog">
+      <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+    </button>
+    <div class="modal-header">
+      <h3 class="modal-title">Join the Brand Waitlist</h3>
+      <p class="modal-sub">Fill in the form below to get early access to launch sales campaigns on VoltSquad.</p>
+    </div>
+    <div class="modal-body">
+      <iframe id="fluentform" width="100%" height="500px" style="min-height: 500px;width: 100%;border:none;border-radius:12px;" frameborder="0" src="https://segun.innoveal.com.ng/?fluent-form=28&embedded=1"></iframe>
+    </div>
+  </div>
+</dialog>
 </body>
 </html>
