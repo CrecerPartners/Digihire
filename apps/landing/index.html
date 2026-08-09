@@ -1882,9 +1882,12 @@
             <div class="mega-right brands-right" style="grid-template-columns: repeat(2,1fr);">
               <a href="https://brands.digihire.io/signup?service=voltsquad" onclick="openBrandWaitlistModal(event)" class="brand-supp-card">
                 <div class="bsc-icon i3"><i data-lucide="zap" class="lucide ic-lg"></i></div>
-                <p class="bsc-title">VoltSquad Campaigns</p>
-                <p class="bsc-desc">Launch performance-based sales campaigns. Activate sellers across campuses, communities, and cities to drive signups, users, leads, and sales.</p>
-                <span class="bsc-cta">Launch a Campaign →</span>
+                <div style="display:flex;align-items:center;gap:6px;">
+                  <p class="bsc-title" style="margin:0;">VoltSquad Campaigns</p>
+                  <span style="background:rgba(0,194,255,0.15);color:var(--cyan);font-size:9px;font-weight:800;padding:2px 6px;border-radius:10px;border:1px solid rgba(0,194,255,0.3);text-transform:uppercase;">Coming Soon</span>
+                </div>
+                <p class="bsc-desc" style="margin-top:4px;">Launch performance-based sales campaigns. Activate sellers across campuses, communities, and cities to drive signups, users, leads, and sales.</p>
+                <span class="bsc-cta">Join Waitlist →</span>
               </a>
               <a href="https://brands.digihire.io/signup?service=recruitment-fulltime" onclick="openBrandWaitlistModal(event)" class="brand-supp-card">
                 <div class="bsc-icon i1"><i data-lucide="users" class="lucide ic-lg"></i></div>
@@ -1924,11 +1927,14 @@
                 <p class="bsc-desc">Get discovered for full-time, part-time, contract, and project-based roles with brands hiring through Digihire.</p>
                 <span class="bsc-cta">Join the Talent Pool →</span>
               </a>
-              <a href="https://talents.digihire.io/join-now" class="brand-supp-card">
+              <a href="https://talents.digihire.io/join-now" onclick="openBrandWaitlistModal(event)" class="brand-supp-card">
                 <div class="bsc-icon i3"><i data-lucide="zap" class="lucide ic-lg"></i></div>
-                <p class="bsc-title">VoltSquad</p>
-                <p class="bsc-desc">Join brand campaigns, earn commissions, track your wallet, and grow your income through real sales opportunities.</p>
-                <span class="bsc-cta">Join VoltSquad →</span>
+                <div style="display:flex;align-items:center;gap:6px;">
+                  <p class="bsc-title" style="margin:0;">VoltSquad</p>
+                  <span style="background:rgba(0,194,255,0.15);color:var(--cyan);font-size:9px;font-weight:800;padding:2px 6px;border-radius:10px;border:1px solid rgba(0,194,255,0.3);text-transform:uppercase;">Coming Soon</span>
+                </div>
+                <p class="bsc-desc" style="margin-top:4px;">Join brand campaigns, earn commissions, track your wallet, and grow your income through real sales opportunities.</p>
+                <span class="bsc-cta">Join Waitlist →</span>
               </a>
               <a href="https://talents.digihire.io/signup?module=gigs" class="brand-supp-card">
                 <div class="bsc-icon i2"><i data-lucide="briefcase" class="lucide ic-lg"></i></div>
@@ -1965,8 +1971,8 @@
             <span>Join the Talent Pool</span>
             <span class="dd-arrow">›</span>
           </a>
-          <a href="https://talents.digihire.io/join-now">
-            <span>Join VoltSquad</span>
+          <a href="https://talents.digihire.io/join-now" onclick="openBrandWaitlistModal(event)">
+            <span>Join VoltSquad <span style="font-size:10px;color:var(--cyan);font-weight:700;margin-left:4px;">(Coming Soon)</span></span>
             <span class="dd-arrow">›</span>
           </a>
           <a href="https://talents.digihire.io/signup?module=gigs">
@@ -1987,7 +1993,7 @@
           <!-- For Brands -->
           <p class="dd-section-label">For Brands</p>
           <a href="https://brands.digihire.io/signup?service=voltsquad" onclick="openBrandWaitlistModal(event)">
-            <span>Launch VoltSquad Campaign</span>
+            <span>Launch VoltSquad Campaign <span style="font-size:10px;color:var(--cyan);font-weight:700;margin-left:4px;">(Coming Soon)</span></span>
             <span class="dd-arrow">›</span>
           </a>
           <a href="https://brands.digihire.io/signup?service=recruitment-fulltime" onclick="openBrandWaitlistModal(event)">
@@ -3146,6 +3152,32 @@ END V1 COMMENTED OUT
 </footer>
 
 <script>
+  /* ── BRAND WAITLIST MODAL FUNCTIONS ── */
+  window.openBrandWaitlistModal = function(e) {
+    if (e && typeof e.preventDefault === 'function') e.preventDefault();
+    var modal = document.getElementById('waitlist-modal');
+    if (modal) {
+      if (typeof modal.showModal === 'function') {
+        modal.showModal();
+      } else {
+        modal.setAttribute('open', '');
+      }
+      document.body.style.overflow = 'hidden';
+    }
+  };
+
+  window.closeBrandWaitlistModal = function() {
+    var modal = document.getElementById('waitlist-modal');
+    if (modal) {
+      if (typeof modal.close === 'function') {
+        modal.close();
+      } else {
+        modal.removeAttribute('open');
+      }
+      document.body.style.overflow = '';
+    }
+  };
+
   /* ── Gradient bars ────────────────────────────── */
   (function() {
     const NUM_BARS = 18;
@@ -3530,32 +3562,6 @@ END V1 COMMENTED OUT
     });
   });
 })();
-
-/* ── BRAND WAITLIST MODAL SCRIPT ── */
-function openBrandWaitlistModal(e) {
-  if (e) e.preventDefault();
-  var modal = document.getElementById('waitlist-modal');
-  if (modal) {
-    if (typeof modal.showModal === 'function') {
-      modal.showModal();
-    } else {
-      modal.setAttribute('open', '');
-    }
-    document.body.style.overflow = 'hidden';
-  }
-}
-
-function closeBrandWaitlistModal() {
-  var modal = document.getElementById('waitlist-modal');
-  if (modal) {
-    if (typeof modal.close === 'function') {
-      modal.close();
-    } else {
-      modal.removeAttribute('open');
-    }
-    document.body.style.overflow = '';
-  }
-}
 
 document.addEventListener('DOMContentLoaded', function() {
   var modal = document.getElementById('waitlist-modal');

@@ -139,9 +139,50 @@ export default function AdminDashboard() {
     { label: 'Pending Actions', value: platformCounts?.pendingActions ?? '—', icon: AlertTriangle, path: '/recruitment', color: 'text-red-500' },
   ];
 
+  const [voltsquadOpen, setVoltsquadOpen] = useState<boolean>(false);
+  const [togglingVS, setTogglingVS] = useState(false);
+
+  useEffect(() => {
+    supabase.from('platform_config').select('value').eq('key', 'voltsquad_open').single().then(({ data }: any) => {
+      if (data) setVoltsquadOpen(data.value !== 'false');
+    });
+  }, []);
+
+  const toggleVoltSquadDashboard = async () => {
+    setTogglingVS(true);
+    const nextVal = !voltsquadOpen;
+    const { error } = await supabase.from('platform_config').upsert({ key: 'voltsquad_open', value: String(nextVal) }, { onConflict: 'key' });
+    if (!error) {
+      setVoltsquadOpen(nextVal);
+    }
+    setTogglingVS(false);
+  };
+
   return (
     <div className="space-y-6">
-      <h2 className="text-2xl font-bold">Dashboard Overview</h2>
+      <div className="flex items-center justify-between flex-wrap gap-4">
+        <h2 className="text-2xl font-bold">Dashboard Overview</h2>
+        
+        {/* Single-Click VoltSquad Activation Badge & Toggle */}
+        <div className="flex items-center gap-3 bg-card border border-border px-4 py-2 rounded-xl shadow-sm">
+          <Zap className={`h-4 w-4 ${voltsquadOpen ? 'text-green-500' : 'text-yellow-500'}`} />
+          <div className="flex flex-col">
+            <span className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground">VoltSquad Feature Status</span>
+            <span className={`text-xs font-extrabold ${voltsquadOpen ? 'text-green-500' : 'text-yellow-500'}`}>
+              {voltsquadOpen ? 'Active (Live)' : 'Pended (Coming Soon)'}
+            </span>
+          </div>
+          <Button
+            size="sm"
+            variant={voltsquadOpen ? "outline" : "default"}
+            onClick={toggleVoltSquadDashboard}
+            disabled={togglingVS}
+            className="h-8 text-xs font-bold ml-2"
+          >
+            {voltsquadOpen ? 'Set Coming Soon' : 'Activate VoltSquad'}
+          </Button>
+        </div>
+      </div>
 
       {/* Platform-wide overview */}
       <div>

@@ -399,12 +399,59 @@ function PlatformTab() {
   const boolControls: { key: keyof PlatformConfig; label: string; desc: string }[] = [
     { key: 'talent_signups_open', label: 'Talent Signups', desc: 'Allow new talent to create accounts' },
     { key: 'brand_signups_open', label: 'Brand Signups', desc: 'Allow new brands to create accounts' },
-    { key: 'voltsquad_open', label: 'VoltSquad Open', desc: 'Allow new sellers to join VoltSquad' },
     { key: 'maintenance_mode', label: 'Maintenance Mode', desc: 'Show a maintenance banner across all apps' },
   ];
 
   return (
     <div className="space-y-5">
+      {/* Dedicated VoltSquad Feature Activation Card */}
+      <div className="rounded-xl border border-yellow-500/30 bg-gradient-to-r from-yellow-500/5 via-card to-card p-6 space-y-4">
+        <div className="flex items-center justify-between flex-wrap gap-4">
+          <div className="flex items-center gap-3">
+            <div className="h-10 w-10 rounded-xl bg-yellow-500/10 text-yellow-500 flex items-center justify-center">
+              <ToggleRight className="h-5 w-5" />
+            </div>
+            <div>
+              <div className="flex items-center gap-2">
+                <h3 className="text-base font-bold text-foreground">VoltSquad Feature Management</h3>
+                <span className={`text-[10px] font-extrabold uppercase px-2.5 py-0.5 rounded-full ${config.voltsquad_open ? 'bg-emerald-500/10 text-emerald-500 border border-emerald-500/30' : 'bg-amber-500/10 text-amber-500 border border-amber-500/30'}`}>
+                  {config.voltsquad_open ? 'Active & Live' : 'Pended (Coming Soon)'}
+                </span>
+              </div>
+              <p className="text-xs text-muted-foreground mt-0.5">
+                Single-button control to activate or pend the VoltSquad seller campaign marketplace platform-wide.
+              </p>
+            </div>
+          </div>
+
+          <button
+            type="button"
+            onClick={() => {
+              const nextVal = !config.voltsquad_open;
+              toggleBool('voltsquad_open', nextVal);
+              toast.success(nextVal ? 'VoltSquad Activated Platform-Wide!' : 'VoltSquad set to Coming Soon!');
+            }}
+            disabled={savingKey === 'voltsquad_open'}
+            className={`flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-bold shadow-sm transition-all ${
+              config.voltsquad_open
+                ? 'bg-amber-500/10 text-amber-600 dark:text-amber-400 border border-amber-500/30 hover:bg-amber-500/20'
+                : 'bg-yellow-500 text-slate-950 hover:bg-yellow-400 shadow-yellow-500/20'
+            }`}
+          >
+            {savingKey === 'voltsquad_open' ? (
+              <>
+                <Loader2 className="h-4 w-4 animate-spin" /> Saving…
+              </>
+            ) : (
+              <>
+                <ToggleRight className="h-4 w-4" />
+                {config.voltsquad_open ? 'Deactivate VoltSquad (Set Coming Soon)' : 'Activate VoltSquad (Single-Click Launch)'}
+              </>
+            )}
+          </button>
+        </div>
+      </div>
+
       <SectionCard title="Feature Flags" description="Instantly toggle platform-wide features. Changes take effect immediately.">
         {boolControls.map(({ key, label, desc }) => (
           <FieldRow key={key} label={label} description={desc}>

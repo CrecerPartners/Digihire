@@ -147,12 +147,17 @@ export function TalentSidebar() {
 
         {/* VoltSquad */}
         <SidebarGroup>
-          {!collapsed && <SidebarGroupLabel>VoltSquad</SidebarGroupLabel>}
+          {!collapsed && (
+            <SidebarGroupLabel className="flex items-center justify-between">
+              <span>VoltSquad</span>
+              <span className="text-[9px] font-extrabold uppercase px-1.5 py-0.5 rounded bg-amber-500/10 text-amber-500 border border-amber-500/20">Coming Soon</span>
+            </SidebarGroupLabel>
+          )}
           <SidebarGroupContent>
             <SidebarMenu>
               {isModuleActive('voltsquad')
                 ? renderItems(VOLTSQUAD_ITEMS)
-                : renderLockedItem('VoltSquad', 'voltsquad')}
+                : renderLockedItem('VoltSquad (Coming Soon)', 'voltsquad')}
             </SidebarMenu>
           </SidebarGroupContent>
         </SidebarGroup>

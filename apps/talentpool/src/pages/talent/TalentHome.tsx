@@ -44,10 +44,10 @@ const MODULE_CONFIG: Record<ModuleKey, {
   },
   voltsquad: {
     label: 'VoltSquad',
-    description: 'Join campaigns, sell products, earn commissions, and grow your income.',
+    description: 'Join campaigns, sell products, earn commissions, and grow your income. (Coming Soon)',
     icon: <Zap size={22} />,
-    color: 'text-yellow-500',
-    activateLabel: 'Join VoltSquad',
+    color: 'text-amber-500',
+    activateLabel: 'Join VoltSquad (Coming Soon)',
     actions: [
       { label: 'Campaigns', path: '/talent/voltsquad/campaigns', icon: <Zap size={14} /> },
       { label: 'Marketplace', path: '/talent/voltsquad/marketplace', icon: <ShoppingBag size={14} /> },
@@ -290,21 +290,47 @@ export default function TalentHome() {
         </div>
       </div>
 
-      {/* VoltSquad registration modal */}
+      {/* VoltSquad Coming Soon modal */}
       <Dialog open={openModal === 'voltsquad'} onOpenChange={open => { if (!open) setOpenModal(null); }}>
-        <DialogContent className="max-w-lg max-h-[90vh] overflow-y-auto">
+        <DialogContent className="max-w-md">
           <DialogHeader>
             <div className="flex items-center gap-3 mb-1">
-              <div className="h-10 w-10 rounded-xl bg-yellow-500/10 flex items-center justify-center text-yellow-500">
-                <Zap size={20} />
+              <div className="h-10 w-10 rounded-xl bg-amber-500/10 flex items-center justify-center text-amber-500">
+                <Zap size={22} />
               </div>
               <div>
-                <DialogTitle>Join VoltSquad</DialogTitle>
-                <p className="text-xs text-muted-foreground mt-0.5">Tell us about yourself so we can match you to the best campaigns</p>
+                <div className="flex items-center gap-2">
+                  <DialogTitle>VoltSquad Marketplace</DialogTitle>
+                  <span className="text-[10px] font-extrabold uppercase px-2 py-0.5 rounded-full bg-amber-500/10 text-amber-500 border border-amber-500/30">Coming Soon</span>
+                </div>
+                <p className="text-xs text-muted-foreground mt-0.5">Performance sales campaigns are launching soon</p>
               </div>
             </div>
           </DialogHeader>
-          <VoltSquadRegistrationForm onSubmit={handleVoltSquadSubmit} submitting={activating === 'voltsquad'} />
+          <div className="space-y-4 pt-2">
+            <p className="text-xs text-muted-foreground leading-relaxed">
+              VoltSquad is currently pended and preparing for campaign launch across Nigeria. You'll be notified automatically as soon as seller campaigns open.
+            </p>
+            <div className="rounded-xl border border-border bg-secondary/50 p-4 space-y-2">
+              <p className="text-xs font-semibold text-foreground">Join our Sales Talent Community</p>
+              <p className="text-[11px] text-muted-foreground">Stay updated on launch dates, gig opportunities, and sales resources.</p>
+              <a
+                href="https://chat.whatsapp.com/DigihireTalentCommunity"
+                target="_blank"
+                rel="noreferrer"
+                className="inline-flex items-center justify-center gap-2 w-full mt-2 rounded-lg bg-emerald-600 text-white text-xs font-bold py-2.5 hover:bg-emerald-500 transition-colors"
+              >
+                Join WhatsApp Channel →
+              </a>
+            </div>
+            <button
+              type="button"
+              onClick={() => setOpenModal(null)}
+              className="w-full text-center text-xs font-semibold text-muted-foreground hover:text-foreground py-1"
+            >
+              Close
+            </button>
+          </div>
         </DialogContent>
       </Dialog>
 
