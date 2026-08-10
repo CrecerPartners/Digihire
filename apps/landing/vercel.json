@@ -23,6 +23,7 @@
     { "source": "/sales-activations", "destination": "/sales-activations.html" },
     { "source": "/jobs", "destination": "/jobs.html" },
     { "source": "/jobs/:id", "destination": "/jobs.html" },
+    { "source": "/brand-waitlist", "destination": "/brand-waitlist.html" },
     { "source": "/admin/:path*", "destination": "https://digihire-admin.vercel.app/admin/:path*" }
   ],
   "redirects": [
