@@ -315,7 +315,7 @@ export default function TalentHome() {
               <p className="text-xs font-semibold text-foreground">Join our Sales Talent Community</p>
               <p className="text-[11px] text-muted-foreground">Stay updated on launch dates, gig opportunities, and sales resources.</p>
               <a
-                href="https://chat.whatsapp.com/DigihireTalentCommunity"
+                href="https://whatsapp.com/channel/0029VbDD4jyLNSaBGzovxp3R"
                 target="_blank"
                 rel="noreferrer"
                 className="inline-flex items-center justify-center gap-2 w-full mt-2 rounded-lg bg-emerald-600 text-white text-xs font-bold py-2.5 hover:bg-emerald-500 transition-colors"

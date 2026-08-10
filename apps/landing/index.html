@@ -2428,7 +2428,7 @@ END V1 TALENT MODE COMMENTED OUT
         <div class="twc-tag" style="color:#00875A;font-weight:700;">Instant Job Alerts</div>
         <h3 class="twc-title" style="color:#0D1B33;margin-top:6px;font-size:22px;">Join WhatsApp Channel</h3>
         <p class="twc-desc" style="color:#475569;font-size:15px;margin-top:10px;margin-bottom:20px;">Find jobs and gigs in tech sales, software sales, SDR, BDR, full-time, part-time, contract, merchandiser, field and event roles.</p>
-        <a href="https://chat.whatsapp.com/DigihireTalentCommunity" class="btn btn-cyan" style="background:#00875A;color:#fff;">Join WhatsApp →</a>
+        <a href="https://whatsapp.com/channel/0029VbDD4jyLNSaBGzovxp3R" target="_blank" rel="noopener noreferrer" class="btn btn-cyan" style="background:#00875A;color:#fff;">Join WhatsApp →</a>
       </div>
 
     </div>
@@ -3210,7 +3210,7 @@ END V1 COMMENTED OUT
       cta: 'Join Talent Pool',
       href: 'https://talents.digihire.io/signup?module=talent_pool',
       secCtaText: 'Join WhatsApp channel',
-      secCtaHref: 'https://chat.whatsapp.com/DigihireTalentCommunity'
+      secCtaHref: 'https://whatsapp.com/channel/0029VbDD4jyLNSaBGzovxp3R'
     },
     'employer': {
       headline: 'Hire High-Performing Sales, Activation & Field Teams.',
@@ -3244,10 +3244,16 @@ END V1 COMMENTED OUT
       }
       if (key === 'employer') {
         cta.onclick = openBrandWaitlistModal;
-        if (secCta) secCta.onclick = openBrandWaitlistModal;
+        if (secCta) {
+          secCta.onclick = openBrandWaitlistModal;
+          secCta.target = '_self';
+        }
       } else {
         cta.onclick = null;
-        if (secCta) secCta.onclick = null;
+        if (secCta) {
+          secCta.onclick = null;
+          secCta.target = '_blank';
+        }
       }
       hl.style.transition = 'opacity 0.4s, transform 0.4s';
       hl.style.opacity = 1; hl.style.transform = 'none';
@@ -3291,10 +3297,16 @@ END V1 COMMENTED OUT
         }
         if (isEmployer) {
           cta.onclick = openBrandWaitlistModal;
-          if (secCta) secCta.onclick = openBrandWaitlistModal;
+          if (secCta) {
+            secCta.onclick = openBrandWaitlistModal;
+            secCta.target = '_self';
+          }
         } else {
           cta.onclick = null;
-          if (secCta) secCta.onclick = null;
+          if (secCta) {
+            secCta.onclick = null;
+            secCta.target = '_blank';
+          }
         }
       }
     }
