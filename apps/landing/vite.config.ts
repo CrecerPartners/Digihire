@@ -25,7 +25,6 @@ export default defineConfig({
         "blog-remote-hiring": path.resolve(__dirname, "blog-remote-hiring.html"),
         "blog-tech-sales": path.resolve(__dirname, "blog-tech-sales.html"),
         jobs: path.resolve(__dirname, "jobs.html"),
-        "brand-waitlist": path.resolve(__dirname, "brand-waitlist.html"),
         "request-talent": path.resolve(__dirname, "request-talent.html"),
         services: path.resolve(__dirname, "services.html"),
         "404": path.resolve(__dirname, "404.html"),

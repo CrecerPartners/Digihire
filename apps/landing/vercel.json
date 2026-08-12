@@ -23,10 +23,12 @@
     { "source": "/sales-activations", "destination": "/sales-activations.html" },
     { "source": "/jobs", "destination": "/jobs.html" },
     { "source": "/jobs/:id", "destination": "/jobs.html" },
-    { "source": "/brand-waitlist", "destination": "/brand-waitlist.html" },
+    { "source": "/request-talent", "destination": "/request-talent.html" },
+    { "source": "/services", "destination": "/services.html" },
     { "source": "/admin/:path*", "destination": "https://digihire-admin.vercel.app/admin/:path*" }
   ],
   "redirects": [
+    { "source": "/brand-waitlist", "destination": "/request-talent", "permanent": true },
     { "source": "/login", "destination": "https://talents.digihire.io/login", "permanent": false },
     { "source": "/signup", "destination": "https://talents.digihire.io/join-now", "permanent": false },
     { "source": "/join-now", "destination": "https://talents.digihire.io/join-now", "permanent": false },
