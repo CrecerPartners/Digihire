@@ -185,26 +185,6 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
       display: block;
     }
 
-    /* ── TRUST STRIP ── */
-    .trust-strip {
-      background: var(--gray-bg);
-      padding: 48px 0;
-      text-align: center;
-    }
-    .trust-strip-label {
-      font-size: 11px; font-weight: 800; letter-spacing: 0.1em; text-transform: uppercase;
-      color: var(--gray-2); margin-bottom: 20px;
-    }
-    .trust-strip-items {
-      display: flex; align-items: center; justify-content: center;
-      gap: 36px; flex-wrap: wrap;
-    }
-    .trust-strip-item {
-      display: flex; align-items: center; gap: 8px;
-      font-size: 13px; font-weight: 600; color: #5B7A9E;
-    }
-    .trust-strip-item i { color: var(--cyan-dim); }
-
     /* ── FOOTER ── */
     footer { background: var(--navy); border-top: 1px solid rgba(0,194,255,0.1); padding: 36px 0 24px; }
     .footer-bottom { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 16px; }
@@ -300,185 +280,22 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     <p class="waitlist-hero-sub">Fill in the form below to request sales professionals, activation teams, merchandisers, and field reps for your business.</p>
   </div>
 </section>
-    .waitlist-hero-sub {
-      font-size: clamp(15px, 1.7vw, 17px); color: rgba(255,255,255,0.6);
-      max-width: 540px; margin: 0 auto; line-height: 1.7;
-    }
-
-    /* ── FORM SECTION ── */
-    .waitlist-form-section {
-      background: var(--white);
-      padding: 64px 0 100px;
-      flex: 1;
-    }
-    .waitlist-form-inner {
-      max-width: 720px;
-      margin: 0 auto;
-    }
-    .waitlist-form-card {
-      background: #ffffff;
-      border: 1px solid #E2ECF5;
-      border-radius: 24px;
-      padding: 40px 36px;
-      box-shadow: 0 8px 40px -8px rgba(6,17,31,0.12);
-    }
-    .waitlist-form-header {
-      margin-bottom: 28px;
-      text-align: center;
-    }
-    .waitlist-form-title {
-      font-size: 26px;
-      font-weight: 800;
-      color: #0D1B33;
-      margin-bottom: 8px;
-      line-height: 1.2;
-    }
-    .waitlist-form-subtitle {
-      font-size: 14px;
-      color: #64748B;
-      line-height: 1.6;
-    }
-    .waitlist-form-iframe {
-      width: 100%;
-      border: none;
-      border-radius: 12px;
-      min-height: 560px;
-      background: #F8FAFC;
-      display: block;
-    }
-
-    /* ── TRUST STRIP ── */
-    .trust-strip {
-      background: var(--gray-bg);
-      padding: 48px 0;
-      text-align: center;
-    }
-    .trust-strip-label {
-      font-size: 11px; font-weight: 800; letter-spacing: 0.1em; text-transform: uppercase;
-      color: var(--gray-2); margin-bottom: 20px;
-    }
-    .trust-strip-items {
-      display: flex; align-items: center; justify-content: center;
-      gap: 36px; flex-wrap: wrap;
-    }
-    .trust-strip-item {
-      display: flex; align-items: center; gap: 8px;
-      font-size: 13px; font-weight: 600; color: #5B7A9E;
-    }
-    .trust-strip-item i { color: var(--cyan-dim); }
-
-    /* ── FOOTER ── */
-    footer { background: var(--navy); border-top: 1px solid rgba(0,194,255,0.1); padding: 36px 0 24px; }
-    .footer-bottom { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 16px; }
-    .footer-copy { font-size: 12px; color: rgba(255,255,255,0.3); }
-    .footer-links { display: flex; gap: 20px; }
-    .footer-links a { font-size: 12px; color: rgba(255,255,255,0.35); text-decoration: none; transition: color 0.2s; }
-    .footer-links a:hover { color: rgba(255,255,255,0.7); }
-
-    /* Mobile nav overlay */
-    .nav-mobile-overlay {
-      position: fixed; inset: 0; z-index: 198; background: #06111F;
-      transform: translateX(100%); transition: transform 0.38s cubic-bezier(0.4,0,0.2,1);
-      display: flex; flex-direction: column; overflow: hidden;
-    }
-    .nav-mobile-overlay.nm-open { transform: translateX(0); }
-    .nm-top {
-      display: flex; align-items: center; justify-content: space-between;
-      padding: 0 24px; height: 68px; flex-shrink: 0; border-bottom: 1px solid rgba(0,194,255,0.1);
-    }
-    .nm-close-btn {
-      background: transparent; border: none; cursor: pointer; color: rgba(255,255,255,0.65);
-      padding: 6px; border-radius: 6px; display: flex; transition: color 0.2s, background 0.2s;
-    }
-    .nm-close-btn:hover { color: #fff; background: rgba(255,255,255,0.08); }
-    .nm-body { flex: 1; overflow-y: auto; padding: 8px 24px 32px; display: flex; flex-direction: column; }
-    .nm-link {
-      display: block; padding: 16px 0; font-family: 'Instrument Sans', sans-serif; font-size: 17px;
-      font-weight: 700; color: rgba(255,255,255,0.85); text-decoration: none;
-      border-bottom: 1px solid rgba(255,255,255,0.07); transition: color 0.2s;
-    }
-    .nm-link:hover { color: #00C2FF; }
-    .nm-actions { margin-top: auto; padding-top: 28px; display: flex; flex-direction: column; gap: 12px; }
-    .nm-btn-outline {
-      display: flex; align-items: center; justify-content: center; padding: 14px; border-radius: 10px;
-      text-decoration: none; font-family: 'Instrument Sans', sans-serif; font-size: 15px; font-weight: 700;
-      border: 1.5px solid rgba(255,255,255,0.25); background: transparent; color: rgba(255,255,255,0.85); transition: all 0.2s;
-    }
-    .nm-btn-outline:hover { border-color: #00C2FF; color: #00C2FF; }
-    .nm-btn-whatsapp {
-      display: flex; align-items: center; justify-content: center; gap: 8px; padding: 14px; border-radius: 10px;
-      text-decoration: none; font-family: 'Instrument Sans', sans-serif; font-size: 15px; font-weight: 800;
-      background: #25D366; color: #fff; border: none; transition: background 0.22s;
-    }
-    .nm-btn-whatsapp:hover { background: #1ebe5a; }
-
-    @media (max-width: 640px) {
-      .waitlist-form-card { padding: 28px 20px; }
-      .waitlist-hero { padding: 120px 0 56px; }
-    }
-  </style>
-</head>
-<body>
-<!-- Google Tag Manager (noscript) -->
-<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-TGT8VMLJ"
-height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
-<!-- End Google Tag Manager (noscript) -->
-
-<!-- ════ NAVBAR ════════════════════════════════════ -->
-<nav id="navbar">
-  <div class="nav-inner">
-    <div class="nav-left">
-      <a href="/" class="nav-logo">
-        <div class="nav-logo-wrap-img">
-          <img src="assets/logo-white.png" alt="DigiHire" class="nav-logo-img logo-white" />
-          <img src="assets/logo-color.png" alt="DigiHire" class="nav-logo-img logo-color" />
-        </div>
-      </a>
-      <ul class="nav-links">
-        <li><a href="/">Why DigiHire?</a></li>
-        <li><a href="/">Brands</a></li>
-        <li><a href="/">For Talents</a></li>
-        <li><a href="/about">About</a></li>
-        <li><a href="/contact">Contact</a></li>
-      </ul>
-    </div>
-    <div class="nav-right">
-      <a href="/login?role=talent" class="btn-get-started">Get Started</a>
-      <a href="https://wa.me/2347073848138" target="_blank" class="btn-whatsapp-nav">
-        <i data-lucide="message-circle" class="lucide ic-sm"></i>
-        WhatsApp
-      </a>
-    </div>
-    <button class="nav-hamburger" id="nav-hamburger-btn" aria-label="Open menu">
-      <svg viewBox="0 0 24 24" fill="none" width="22" height="22" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 7h18M3 12h18M3 17h18"/></svg>
-    </button>
-  </div>
-</nav>
-
-<!-- ════ HERO ════════════════════════════════════ -->
-<section class="waitlist-hero">
-  <div class="container">
-    <p class="waitlist-hero-label">For Brands</p>
-    <h1 class="waitlist-hero-title">Join the Brand Waitlist</h1>
-    <p class="waitlist-hero-sub">Fill in the form below to request talent and talk to sales.</p>
-  </div>
-</section>
 
 <!-- ════ FORM SECTION ════════════════════════════ -->
-<section class="waitlist-form-section">
+<section class="waitlist-form-section" id="request-form-card">
   <div class="container">
     <div class="waitlist-form-inner">
       <div class="waitlist-form-card">
         <div class="waitlist-form-header">
-          <h2 class="waitlist-form-title">Tell us about your needs</h2>
-          <p class="waitlist-form-subtitle">Fill in the form below to request talent and talk to sales.</p>
+          <h2 class="waitlist-form-title">Tell us about your staffing needs</h2>
+          <p class="waitlist-form-subtitle">Submit your request below and our team will get in touch within 24 hours.</p>
         </div>
         <iframe
           id="fluentform"
           class="waitlist-form-iframe"
           frameborder="0"
           src="https://segun.innoveal.com.ng/?fluent-form=28&embedded=1"
-          title="Brand Waitlist Form"
+          title="Request Sales Talent Form"
         ></iframe>
       </div>
 
@@ -500,12 +317,12 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
       <!-- WhatsApp CTA below form -->
       <div style="margin-top:28px; text-align:center; padding:28px; background:#F4F8FF; border-radius:16px; border:1px solid #E2ECF5;">
-        <p style="font-size:14px;color:#5B7A9E;margin-bottom:14px;line-height:1.6;">Prefer to talk directly? Chat with our sales team on WhatsApp right now.</p>
-        <a href="https://wa.me/2347073848138" target="_blank"
+        <p style="font-size:14px;color:#5B7A9E;margin-bottom:14px;line-height:1.6;">Prefer to talk directly? Join our official WhatsApp group or speak with our sales team.</p>
+        <a href="https://chat.whatsapp.com/Eq7TlCDMTuF566MXjOrI3Z?mode=gi_t" target="_blank" rel="noopener noreferrer"
           style="display:inline-flex;align-items:center;gap:8px;background:#25D366;color:#fff;font-family:'Instrument Sans',sans-serif;font-size:15px;font-weight:800;padding:12px 28px;border-radius:10px;text-decoration:none;transition:background 0.2s;box-shadow:0 4px 16px rgba(37,211,102,0.3);"
           onmouseover="this.style.background='#1ebe5a'" onmouseout="this.style.background='#25D366'">
-          <i data-lucide="message-circle" class="lucide ic-md"></i>
-          Chat on WhatsApp
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-circle"><path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z"/></svg>
+          Join WhatsApp Group
         </a>
       </div>
     </div>
@@ -518,6 +335,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     <div class="footer-bottom">
       <p class="footer-copy">© 2025 DigiHire Africa Ltd. All rights reserved.</p>
       <div class="footer-links">
+        <a href="/services">Services</a>
         <a href="/contact">Contact</a>
         <a href="/about">About</a>
         <a href="/blog">Blog</a>
@@ -537,16 +355,15 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     </button>
   </div>
   <div class="nm-body">
-    <a href="/" class="nm-link">Why DigiHire?</a>
-    <a href="/" class="nm-link">Brands</a>
-    <a href="/" class="nm-link">For Talents</a>
+    <a href="/services" class="nm-link">Services</a>
+    <a href="/" class="nm-link">Solutions</a>
     <a href="/about" class="nm-link">About</a>
     <a href="/contact" class="nm-link">Contact</a>
     <div class="nm-actions">
-      <a href="/login?role=talent" class="nm-btn-outline">Get Started</a>
-      <a href="https://wa.me/2347073848138" target="_blank" class="nm-btn-whatsapp">
-        <i data-lucide="message-circle" class="lucide ic-sm"></i>
-        Chat on WhatsApp
+      <a href="#request-form-card" class="nm-btn-outline">Get Started</a>
+      <a href="https://chat.whatsapp.com/Eq7TlCDMTuF566MXjOrI3Z?mode=gi_t" target="_blank" rel="noopener noreferrer" class="nm-btn-whatsapp">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-circle"><path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z"/></svg>
+        Join WhatsApp Group
       </a>
     </div>
   </div>
